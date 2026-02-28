@@ -1,0 +1,111 @@
+{
+  "api": {
+    "modelo": "llama-3.3-70b-versatile",
+    "temperatura": 0.3,
+    "max_tokens": 500,
+    "timeout": 10,
+    "retry_intentos": 3,
+    "retry_delay": 1
+  },
+  "seguridad": {
+    "verificar_con_echo": true,
+    "bloquear_en_duda": true,
+    "nivel_confianza_minimo": 0.7
+  },
+  "logs": {
+    "guardar_interacciones": true,
+    "ruta_logs": "logs/fase4a/groq_interactions.jsonl",
+    "guardar_errores": true,
+    "ruta_errores": "logs/fase4a/groq_errors.jsonl"
+  },
+  "optimizacion": {
+    "cache_respuestas": false,
+    "max_cache_size": 100,
+    "cache_ttl_seconds": 3600
+  },
+  "prompts": {
+    "usar_prompts_naturales": true,
+    "evitar_frases_roboticas": [
+      "soy un sistema de software",
+      "no tengo la capacidad de",
+      "soy un programa de computadora",
+      "no puedo porque soy software",
+      "como inteligencia artificial",
+      "mi programación no permite",
+      "estoy diseñada para",
+      "mi función es",
+      "procesando solicitud",
+      "como modelo de lenguaje",
+      "mi propósito es",
+      "mis algoritmos",
+      "como asistente virtual",
+      "mis limitaciones incluyen"
+    ],
+    "preferir_frases_naturales": [
+      "claro que sí",
+      "por supuesto",
+      "con mucho gusto",
+      "¡listo!",
+      "déjame ver",
+      "entiendo perfectamente",
+      "la verdad es que",
+      "sinceramente",
+      "no tengo acceso a",
+      "eso está fuera de mi alcance",
+      "no puedo hacer eso porque",
+      "qué bien",
+      "me alegra",
+      "excelente",
+      "a ver",
+      "hmm interesante"
+    ]
+  },
+  "contexto": {
+    "usar_traductor_contextual": true,
+    "resolver_duplicados": true,
+    "analizar_antes_de_traducir": true,
+    "detectar_emociones": true,
+    "ajustar_tono": true,
+    "emociones_soportadas": [
+      "frustrado",
+      "confundido", 
+      "emocionado",
+      "preocupado",
+      "ocupado",
+      "curioso",
+      "agradecido"
+    ]
+  },
+  "vocabulario": {
+    "cargar_expansion": true,
+    "usar_conceptos_relacionados": true,
+    "max_conceptos_por_respuesta": 10,
+    "priorizar_grounding_alto": true
+  },
+  "personalidad": {
+    "nombre": "Belladonna",
+    "apodo": "Bell",
+    "tono_base": "cálido_inteligente",
+    "caracteristicas": [
+      "empática",
+      "directa",
+      "honesta",
+      "con humor sutil"
+    ],
+    "evitar": [
+      "condescendencia",
+      "frialdad",
+      "respuestas genéricas",
+      "jerga técnica excesiva"
+    ]
+  },
+  "notas": [
+    "Temperatura 0.3 para respuestas predecibles pero naturales",
+    "Echo verifica TODAS las respuestas antes de mostrarlas",
+    "Si confianza < 0.7, se usa fallback simbólico",
+    "Los logs se guardan en JSONL para análisis posterior",
+    "Modelo actualizado a llama-3.3-70b-versatile",
+    "La expansión de vocabulario agrega 1,030 conceptos",
+    "Total disponible: ~1,483 conceptos"
+  ]
+}

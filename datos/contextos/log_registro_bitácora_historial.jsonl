@@ -1,0 +1,17 @@
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:09.567745", "metadata": {"contexto": "Inserta un registro nuevo en la base de datos"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.974037", "metadata": {"contexto": "Inserta un registro de prueba"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.983035", "metadata": {"contexto": "Lee el registro que insertaste"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:12.564287", "metadata": {"contexto": "¿Cuántos registros guardaste?"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:12.573285", "metadata": {"contexto": "Lee los primeros 5 registros"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:39.946724", "metadata": {"contexto": "Inserta un registro nuevo en la base de datos"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.666778", "metadata": {"contexto": "Inserta un registro de prueba"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.675774", "metadata": {"contexto": "Lee el registro que insertaste"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:43.603600", "metadata": {"contexto": "¿Cuántos registros guardaste?"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:43.612597", "metadata": {"contexto": "Lee los primeros 5 registros"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:25.786205", "metadata": {"contexto": ""}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:38.562135", "metadata": {"contexto": ""}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:43.501826", "metadata": {"contexto": "Inserta un registro nuevo en la base de datos"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.927478", "metadata": {"contexto": "Inserta un registro de prueba"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.927478", "metadata": {"contexto": "Lee el registro que insertaste"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:46.631671", "metadata": {"contexto": "¿Cuántos registros guardaste?"}}
+{"concepto_id": "log_registro_bitácora_historial", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:46.631671", "metadata": {"contexto": "Lee los primeros 5 registros"}}

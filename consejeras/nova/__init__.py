@@ -1,0 +1,1 @@
+from .ingeniera import Nova  # ← ESTO FALTABA

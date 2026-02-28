@@ -1,0 +1,218 @@
+[
+  {
+    "timestamp": "2026-02-05T00:13:37.086558",
+    "concepto_id": "CONCEPTO_COMO",
+    "grounding_anterior": 0.8,
+    "grounding_nuevo": 0.75,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:13:37.086558",
+    "concepto_id": "CONCEPTO_ESTE",
+    "grounding_anterior": 0.6,
+    "grounding_nuevo": 0.5499999999999999,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:13:45.396956",
+    "concepto_id": "CONCEPTO_HOLA",
+    "grounding_anterior": 0.9,
+    "grounding_nuevo": 0.85,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:13:55.302308",
+    "concepto_id": "CONCEPTO_COMO",
+    "grounding_anterior": 0.75,
+    "grounding_nuevo": 0.7,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:13:55.317931",
+    "concepto_id": "CONCEPTO_ESTE",
+    "grounding_anterior": 0.5499999999999999,
+    "grounding_nuevo": 0.49999999999999994,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:14:14.923565",
+    "concepto_id": "CONCEPTO_QUE",
+    "grounding_anterior": 0.8,
+    "grounding_nuevo": 0.75,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:14:14.939191",
+    "concepto_id": "CONCEPTO_HACER",
+    "grounding_anterior": 0.7,
+    "grounding_nuevo": 0.6499999999999999,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:15:04.033656",
+    "concepto_id": "CONCEPTO_PODER",
+    "grounding_anterior": 0.8,
+    "grounding_nuevo": 0.75,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:15:26.563472",
+    "concepto_id": "CONCEPTO_QUE",
+    "grounding_anterior": 0.75,
+    "grounding_nuevo": 0.7,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:15:26.563472",
+    "concepto_id": "CONCEPTO_HACER",
+    "grounding_anterior": 0.6499999999999999,
+    "grounding_nuevo": 0.5999999999999999,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:36:30.032280",
+    "concepto_id": "CONCEPTO_HOLA",
+    "grounding_anterior": 0.9,
+    "grounding_nuevo": 0.85,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:36:39.868833",
+    "concepto_id": "CONCEPTO_PODER",
+    "grounding_anterior": 0.8,
+    "grounding_nuevo": 0.8300000000000001,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:36:56.727839",
+    "concepto_id": "CONCEPTO_PODER",
+    "grounding_anterior": 0.8300000000000001,
+    "grounding_nuevo": 0.8600000000000001,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:37:10.776759",
+    "concepto_id": "CONCEPTO_PODER",
+    "grounding_anterior": 0.8600000000000001,
+    "grounding_nuevo": 0.81,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:38:53.936382",
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "grounding_anterior": 0.9,
+    "grounding_nuevo": 0.85,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:39:13.364599",
+    "concepto_id": "CONCEPTO_PODER",
+    "grounding_anterior": 0.81,
+    "grounding_nuevo": 0.8400000000000001,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:39:36.189413",
+    "concepto_id": "CONCEPTO_PODER",
+    "grounding_anterior": 0.8400000000000001,
+    "grounding_nuevo": 0.8700000000000001,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:39:36.189413",
+    "concepto_id": "CONCEPTO_Y",
+    "grounding_anterior": 0.7,
+    "grounding_nuevo": 0.73,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:41:18.776746",
+    "concepto_id": "CONCEPTO_PODER",
+    "grounding_anterior": 0.8700000000000001,
+    "grounding_nuevo": 0.9000000000000001,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:41:18.902382",
+    "concepto_id": "CONCEPTO_PODER",
+    "grounding_anterior": 0.9000000000000001,
+    "grounding_nuevo": 0.9300000000000002,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:41:19.034191",
+    "concepto_id": "CONCEPTO_PODER",
+    "grounding_anterior": 0.9300000000000002,
+    "grounding_nuevo": 0.9600000000000002,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:41:19.168300",
+    "concepto_id": "CONCEPTO_PODER",
+    "grounding_anterior": 0.9600000000000002,
+    "grounding_nuevo": 0.9900000000000002,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:41:43.979986",
+    "concepto_id": "CONCEPTO_CREAR",
+    "grounding_anterior": 0.8,
+    "grounding_nuevo": 0.8300000000000001,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:41:44.089364",
+    "concepto_id": "CONCEPTO_ELIMINAR",
+    "grounding_anterior": 0.8,
+    "grounding_nuevo": 0.8300000000000001,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:41:44.229977",
+    "concepto_id": "CONCEPTO_COPIAR",
+    "grounding_anterior": 0.9,
+    "grounding_nuevo": 0.93,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:41:44.354978",
+    "concepto_id": "CONCEPTO_MOVER",
+    "grounding_anterior": 0.9,
+    "grounding_nuevo": 0.93,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  },
+  {
+    "timestamp": "2026-02-05T00:41:44.495609",
+    "concepto_id": "CONCEPTO_MOVER",
+    "grounding_anterior": 0.93,
+    "grounding_nuevo": 0.9600000000000001,
+    "razon": "Ajuste por uso",
+    "aplicado": true
+  }
+]

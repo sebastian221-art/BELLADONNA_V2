@@ -1,0 +1,3440 @@
+[
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-05T00:13:37.039653",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTE",
+    "timestamp": "2026-02-05T00:13:37.039653",
+    "veces_usado": 1,
+    "ultima_certeza": 0.6
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-05T00:13:45.381302",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-05T00:13:55.192948",
+    "veces_usado": 1,
+    "ultima_certeza": 0.75
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTE",
+    "timestamp": "2026-02-05T00:13:55.208548",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5499999999999999
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-05T00:14:14.892356",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-05T00:14:14.892356",
+    "veces_usado": 1,
+    "ultima_certeza": 0.7
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:15:04.018034",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-05T00:15:26.485328",
+    "veces_usado": 1,
+    "ultima_certeza": 0.75
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-05T00:15:26.500927",
+    "veces_usado": 1,
+    "ultima_certeza": 0.6499999999999999
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-05T00:36:30.001159",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:36:39.775081",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T00:36:39.790707",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:36:39.821960",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:36:56.583032",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8300000000000001
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T00:36:56.591166",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:36:56.615882",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:37:10.761101",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8600000000000001
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:37:29.270364",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:38:18.161196",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-05T00:38:53.920797",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:39:13.293212",
+    "veces_usado": 1,
+    "ultima_certeza": 0.81
+  },
+  {
+    "concepto_id": "CONCEPTO_DIRECTORIO",
+    "timestamp": "2026-02-05T00:39:13.308836",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:39:36.017548",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8400000000000001
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T00:39:36.033165",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_Y",
+    "timestamp": "2026-02-05T00:39:36.095662",
+    "veces_usado": 1,
+    "ultima_certeza": 0.7
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T00:39:36.126913",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:39:36.142537",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:41:18.698585",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8700000000000001
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T00:41:18.698585",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:41:18.729870",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:41:18.792334",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9000000000000001
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T00:41:18.814990",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:41:18.839881",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:41:18.930577",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9300000000000002
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T00:41:18.964513",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:41:18.980184",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:41:19.058899",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9600000000000002
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T00:41:19.090170",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:41:19.121464",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:41:24.014760",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9900000000000002
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T00:41:24.030256",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:41:24.045919",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:41:43.886239",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9900000000000002
+  },
+  {
+    "concepto_id": "CONCEPTO_CREAR",
+    "timestamp": "2026-02-05T00:41:43.901853",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:41:43.933110",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:41:43.995628",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9900000000000002
+  },
+  {
+    "concepto_id": "CONCEPTO_ELIMINAR",
+    "timestamp": "2026-02-05T00:41:44.011261",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:41:44.042488",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:41:44.120613",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9900000000000002
+  },
+  {
+    "concepto_id": "CONCEPTO_COPIAR",
+    "timestamp": "2026-02-05T00:41:44.136237",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:41:44.167492",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:41:44.245646",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9900000000000002
+  },
+  {
+    "concepto_id": "CONCEPTO_MOVER",
+    "timestamp": "2026-02-05T00:41:44.276850",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:41:44.292489",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T00:41:44.370603",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9900000000000002
+  },
+  {
+    "concepto_id": "CONCEPTO_MOVER",
+    "timestamp": "2026-02-05T00:41:44.401851",
+    "veces_usado": 1,
+    "ultima_certeza": 0.93
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T00:41:44.417486",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T02:20:15.110192",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T02:20:15.141475",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-05T02:20:16.157061",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T02:20:16.203938",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T02:20:16.250814",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T02:20:16.282061",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T02:20:16.344564",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T02:20:16.391437",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-05T02:20:16.469992",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T02:27:13.928714",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T02:27:13.944326",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-05T02:27:15.060927",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T02:27:15.139051",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T02:27:15.185920",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T02:27:15.232796",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T02:27:15.310919",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T02:27:15.357797",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-05T02:27:15.451545",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T02:30:51.890402",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T02:30:51.921645",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-05T02:30:53.000287",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T02:30:53.125285",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T02:30:53.172194",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T02:30:53.219032",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T02:30:53.297156",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T02:30:53.344032",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-05T02:30:53.422155",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T02:31:40.235412",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T02:31:40.266665",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-05T02:31:41.315200",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T02:31:41.393300",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T02:31:41.430238",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T02:31:41.475091",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T02:31:41.568806",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T02:31:41.615719",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-05T02:31:41.709499",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T23:03:56.752543",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T23:03:56.799409",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-05T23:03:57.969102",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T23:03:58.047219",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-05T23:03:58.094104",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-05T23:03:58.140975",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-05T23:03:58.250346",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-05T23:03:58.297219",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-05T23:03:58.406598",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-06T00:11:46.866050",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-06T00:11:46.932051",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-06T00:11:48.048069",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-06T00:11:48.199123",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-06T00:11:48.259188",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-06T00:11:48.315188",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-06T00:11:48.444189",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-06T00:11:48.500187",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-06T00:11:48.618190",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-06T00:41:24.649588",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-06T00:41:24.765587",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-06T00:41:25.813623",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-06T00:41:25.920588",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-06T00:41:25.990588",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-06T00:41:26.060706",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-06T00:41:26.185708",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-06T00:41:26.247706",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-06T00:41:26.369707",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-06T05:49:43.296758",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-06T05:49:43.687505",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-06T05:49:45.204881",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-06T05:49:45.344029",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-06T05:49:45.433868",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-06T05:49:45.516447",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-06T05:49:45.670494",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-06T05:49:45.755846",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-06T05:49:45.957345",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-06T13:27:50.054575",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-06T13:27:50.273362",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-06T13:27:51.442642",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-06T13:27:51.567645",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-06T13:27:51.630150",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-06T13:27:51.708275",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-06T13:27:51.833268",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-06T13:27:51.911401",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-06T13:27:52.067646",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-07T01:49:52.628724",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-07T01:49:52.820061",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-07T01:49:54.041558",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-07T01:49:54.166557",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-07T01:49:54.244683",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-07T01:49:54.322807",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-07T01:49:54.479064",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-07T01:49:54.541555",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-07T01:49:54.697819",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-09T00:23:38.379431",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-09T00:23:38.707515",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-09T00:23:40.202600",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-09T00:23:40.374448",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-09T00:23:40.452563",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-09T00:23:40.530687",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-09T00:23:40.718203",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-09T00:23:40.796319",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-09T00:23:40.968194",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-09T02:37:10.826045",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-09T02:37:11.164059",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-09T02:37:12.120488",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-09T02:37:12.834186",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-09T03:14:34.808140",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-09T03:14:34.955853",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-09T03:14:36.213195",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-09T03:14:36.991927",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-09T23:01:39.164169",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-09T23:01:39.647617",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-09T23:01:41.314205",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-09T23:01:41.680887",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-09T23:01:41.931060",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-09T23:01:42.130931",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-09T23:01:42.514227",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-09T23:01:42.742995",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-09T23:01:43.147612",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-09T23:24:31.027481",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-09T23:24:31.245874",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-09T23:24:32.932952",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-09T23:24:33.400723",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-09T23:24:33.699270",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-09T23:24:33.946768",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-09T23:24:34.590105",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-09T23:24:34.828823",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-09T23:24:35.336913",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-09T23:51:52.364570",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-09T23:51:52.655523",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-09T23:51:54.329197",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-09T23:51:54.873301",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-09T23:51:55.121297",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-09T23:51:55.366401",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-09T23:51:55.863532",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-09T23:51:56.113511",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-09T23:51:56.661645",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-10T00:08:00.748170",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-10T00:08:01.048380",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-10T00:08:02.798401",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-10T00:08:03.365113",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-10T00:08:03.631787",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-10T00:08:03.898414",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-10T00:08:04.431757",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-10T00:08:04.681799",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-10T00:08:05.215166",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-10T07:09:46.905975",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-10T07:09:47.199018",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-10T07:09:49.902304",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-10T07:09:50.768839",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-10T07:09:51.128788",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-10T07:09:51.444489",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-10T07:09:52.060175",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-10T07:09:52.360118",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-10T07:09:52.975843",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-11T02:23:58.773430",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-11T02:24:00.607396",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-11T02:24:04.380973",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-11T02:24:06.193436",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-11T02:24:06.913171",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-11T02:24:07.350698",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-11T02:24:08.158973",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-11T02:24:08.603849",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-11T02:24:09.551104",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-11T11:05:28.050349",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-11T11:05:28.533156",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-11T11:05:30.919459",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-11T11:05:32.142950",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-11T11:05:32.484017",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-11T11:05:33.092659",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-11T11:05:34.065144",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-11T11:05:34.446821",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-11T11:05:35.180236",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-11T22:49:13.028999",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-11T22:49:13.772359",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-11T22:49:15.927261",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-11T22:49:16.809960",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-11T22:49:17.228123",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-11T22:49:17.595877",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-11T22:49:18.455222",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-11T22:49:18.913583",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-11T22:49:19.670696",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-11T23:02:11.689439",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-11T23:02:12.514932",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-11T23:02:15.097306",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-11T23:02:15.852252",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-11T23:02:16.229731",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-11T23:02:16.597319",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-11T23:02:17.467209",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-11T23:02:17.888799",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-11T23:02:18.792828",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-14T13:55:26.494422",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-14T13:55:27.132609",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-14T13:55:29.504287",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-14T13:55:30.394906",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-14T13:55:30.912421",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-14T13:55:31.421262",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-14T13:55:32.315947",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-14T13:55:32.935836",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_GRACIAS",
+    "timestamp": "2026-02-14T13:55:33.886782",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-15T00:01:11.624702",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-15T00:01:42.360103",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTE",
+    "timestamp": "2026-02-15T00:01:42.961619",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-15T00:02:21.144015",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-15T00:02:21.770421",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-15T00:03:48.122448",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-15T00:04:09.435826",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-15T00:04:10.186549",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-15T00:57:13.821526",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-15T00:57:33.485700",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-15T00:57:34.143466",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-15T00:57:47.377525",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_RAZONAR",
+    "timestamp": "2026-02-15T00:57:48.002019",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-15T01:35:28.235903",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-15T01:39:03.048181",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTE",
+    "timestamp": "2026-02-15T01:39:05.083905",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-15T01:44:53.900321",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-15T02:07:14.274779",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-15T02:08:24.872570",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTE",
+    "timestamp": "2026-02-15T02:08:25.670366",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-15T02:08:43.586260",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-15T02:08:44.300303",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-15T02:08:45.040222",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-15T02:09:27.407881",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-15T02:09:28.049543",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-15T02:10:40.374793",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-15T02:16:07.413027",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-15T02:16:08.123609",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-15T02:16:36.445341",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESCRIBIR",
+    "timestamp": "2026-02-15T02:16:37.177620",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-15T02:20:18.715356",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-15T02:20:19.441185",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ECUACION",
+    "timestamp": "2026-02-15T02:20:20.095852",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-15T02:21:19.040499",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-15T02:21:19.752052",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-15T02:21:20.432292",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-15T02:24:16.050688",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-15T02:25:30.103353",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-15T02:27:15.204017",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-15T02:27:16.001474",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_VARIABLE",
+    "timestamp": "2026-02-15T02:27:16.657712",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-15T02:27:54.694704",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-15T02:27:55.390532",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-15T02:28:11.018004",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-15T02:28:19.772688",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-16T06:47:04.926623",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-16T06:59:02.050853",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-16T07:07:15.463014",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-16T07:13:12.474345",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-16T07:13:30.973239",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTE",
+    "timestamp": "2026-02-16T07:13:31.839514",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-16T07:13:49.924984",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-16T07:13:50.806677",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-16T07:14:08.442999",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-16T07:14:09.191442",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-16T07:14:09.990699",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-16T07:14:25.143277",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTE",
+    "timestamp": "2026-02-16T07:14:26.225257",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-16T07:14:26.957688",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_FOR",
+    "timestamp": "2026-02-16T07:16:17.546364",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-16T19:32:10.153803",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-16T19:32:26.904501",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTE",
+    "timestamp": "2026-02-16T19:32:27.720924",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-16T19:32:39.489692",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-16T19:32:40.354825",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-16T19:32:54.955282",
+    "veces_usado": 1,
+    "ultima_certeza": 0.85
+  },
+  {
+    "concepto_id": "CONCEPTO_EN",
+    "timestamp": "2026-02-16T19:33:08.525309",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-16T19:33:09.322038",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_RAZONAR",
+    "timestamp": "2026-02-16T19:33:10.109779",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-16T19:33:45.260115",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-16T19:33:59.957371",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-16T19:34:00.777053",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-16T19:34:10.459571",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-16T19:34:11.472501",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-16T19:34:12.257261",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-16T19:35:36.146660",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-16T19:35:36.992547",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-16T19:35:37.792442",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-16T19:35:49.044751",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-16T23:52:36.828859",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-16T23:52:55.730171",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTE",
+    "timestamp": "2026-02-16T23:52:56.827025",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-17T00:00:20.309077",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-17T01:23:36.766037",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-17T01:34:08.583752",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-17T01:34:44.619947",
+    "veces_usado": 1,
+    "ultima_certeza": 0.85
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-17T01:35:05.710357",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-17T01:35:06.524829",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-17T01:35:07.364701",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-17T09:46:35.525320",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTE",
+    "timestamp": "2026-02-17T09:46:36.808306",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-17T09:47:51.944144",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-17T09:48:03.009587",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTE",
+    "timestamp": "2026-02-17T09:48:03.944090",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-17T09:48:32.317515",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_TENER_V",
+    "timestamp": "2026-02-17T09:48:33.310984",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-17T09:48:53.313655",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_TU",
+    "timestamp": "2026-02-17T09:48:54.244458",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_LLAMAR",
+    "timestamp": "2026-02-17T09:48:55.196087",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-17T09:49:14.496976",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_TU",
+    "timestamp": "2026-02-17T09:49:15.460696",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-17T09:49:48.883148",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_TENER_V",
+    "timestamp": "2026-02-17T09:49:49.864073",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-18T09:00:43.760916",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-18T09:00:56.761719",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-18T09:00:58.591556",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-18T09:02:06.215258",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-18T09:02:07.164003",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-18T09:02:28.332349",
+    "veces_usado": 1,
+    "ultima_certeza": 0.85
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-18T09:02:51.966552",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-18T09:02:52.982854",
+    "veces_usado": 1,
+    "ultima_certeza": 0.9
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-19T01:35:20.896318",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-19T01:35:33.067630",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-19T01:35:34.031292",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-19T01:35:49.330826",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-19T01:36:06.201622",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-19T01:36:07.114726",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-19T01:36:08.064508",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-19T01:36:34.584928",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-19T01:36:35.548647",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_RESPONDER_V",
+    "timestamp": "2026-02-19T01:36:36.465596",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-19T01:36:58.833462",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_LEER",
+    "timestamp": "2026-02-19T01:37:02.787224",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-19T01:37:33.768941",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-19T01:37:34.717201",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-19T01:37:35.949273",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-19T01:40:15.676346",
+    "veces_usado": 1,
+    "ultima_certeza": 0.33
+  },
+  {
+    "concepto_id": "CONCEPTO_TODO_REF",
+    "timestamp": "2026-02-19T01:41:57.191606",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_EL",
+    "timestamp": "2026-02-19T01:41:58.108360",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-19T01:41:59.008312",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PREFERIR",
+    "timestamp": "2026-02-19T01:44:09.148962",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_IDEA",
+    "timestamp": "2026-02-19T01:44:10.128957",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-19T01:44:11.195726",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_IDEA",
+    "timestamp": "2026-02-19T01:57:17.356312",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-19T01:58:02.920599",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_SI",
+    "timestamp": "2026-02-19T01:59:11.591566",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-21T03:17:38.377606",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-21T03:17:53.132888",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-21T03:17:54.026912",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-21T03:18:26.772109",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_LLAMAR",
+    "timestamp": "2026-02-21T03:18:27.816860",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-21T03:18:49.423005",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:19:16.245860",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-21T03:19:17.243493",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:21:06.043649",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_TU",
+    "timestamp": "2026-02-21T03:21:07.046473",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-21T03:21:07.994890",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-21T03:23:16.532724",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-21T03:23:17.572725",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-21T03:24:04.704051",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_EL",
+    "timestamp": "2026-02-21T03:24:05.668034",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:24:07.033122",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-21T03:24:58.158806",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_UNO_NUM",
+    "timestamp": "2026-02-21T03:26:33.471042",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-21T03:26:34.501272",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-21T03:26:35.394775",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-21T03:26:53.805799",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:26:54.798289",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_TU",
+    "timestamp": "2026-02-21T03:26:55.757649",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_MULTIPLICACION",
+    "timestamp": "2026-02-21T03:27:33.827071",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:27:34.931521",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_NO",
+    "timestamp": "2026-02-21T03:27:35.831522",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-21T03:27:51.506201",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-21T03:28:28.750225",
+    "veces_usado": 1,
+    "ultima_certeza": 0.83
+  },
+  {
+    "concepto_id": "CONCEPTO_EL",
+    "timestamp": "2026-02-21T03:28:30.072223",
+    "veces_usado": 1,
+    "ultima_certeza": 0.83
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:28:31.419105",
+    "veces_usado": 1,
+    "ultima_certeza": 0.83
+  },
+  {
+    "concepto_id": "CONCEPTO_TODO_REF",
+    "timestamp": "2026-02-21T03:29:15.096020",
+    "veces_usado": 1,
+    "ultima_certeza": 0.75
+  },
+  {
+    "concepto_id": "CONCEPTO_EL",
+    "timestamp": "2026-02-21T03:29:16.419021",
+    "veces_usado": 1,
+    "ultima_certeza": 0.75
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:29:17.951128",
+    "veces_usado": 1,
+    "ultima_certeza": 0.75
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-21T03:29:48.490085",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_ENTENDER_V",
+    "timestamp": "2026-02-21T03:29:49.660271",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_TODO_REF",
+    "timestamp": "2026-02-21T03:29:50.704676",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-21T03:31:40.973049",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-21T03:31:41.972788",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_SEGURO_VALORACION",
+    "timestamp": "2026-02-21T03:31:42.889193",
+    "veces_usado": 1,
+    "ultima_certeza": 0.95
+  },
+  {
+    "concepto_id": "CONCEPTO_ABSOLUTAMENTE",
+    "timestamp": "2026-02-21T03:32:19.773541",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_TODO_REF",
+    "timestamp": "2026-02-21T03:32:20.723453",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_EL",
+    "timestamp": "2026-02-21T03:32:21.662419",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:33:20.153579",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-21T03:33:21.219519",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-21T03:33:22.107889",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-21T03:33:57.565064",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_MODIFICAR",
+    "timestamp": "2026-02-21T03:33:58.505046",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-21T03:35:12.741664",
+    "veces_usado": 1,
+    "ultima_certeza": 0.33
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:35:39.601478",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PARA",
+    "timestamp": "2026-02-21T03:35:40.631991",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_TU",
+    "timestamp": "2026-02-21T03:35:41.821705",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:36:22.879752",
+    "veces_usado": 1,
+    "ultima_certeza": 0.75
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-21T03:36:23.887715",
+    "veces_usado": 1,
+    "ultima_certeza": 0.75
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-21T03:36:24.812170",
+    "veces_usado": 1,
+    "ultima_certeza": 0.75
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:36:54.790025",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_PODER",
+    "timestamp": "2026-02-21T03:36:55.732299",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_RECORDAR_ACCION",
+    "timestamp": "2026-02-21T03:36:56.644575",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_CONTEXTO",
+    "timestamp": "2026-02-21T03:37:42.030923",
+    "veces_usado": 1,
+    "ultima_certeza": 0.6
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-21T03:37:43.000995",
+    "veces_usado": 1,
+    "ultima_certeza": 0.6
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-21T03:37:44.060720",
+    "veces_usado": 1,
+    "ultima_certeza": 0.6
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-21T03:38:40.122986",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-21T03:38:41.105315",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-21T03:38:52.190491",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-21T03:38:53.145003",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-21T03:38:54.048861",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-21T03:39:05.295385",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_LLAMAR",
+    "timestamp": "2026-02-21T03:39:06.289363",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-21T03:39:25.478749",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-21T03:39:33.986806",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-21T03:39:34.960011",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:39:49.778261",
+    "veces_usado": 1,
+    "ultima_certeza": 0.33
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:39:59.011278",
+    "veces_usado": 1,
+    "ultima_certeza": 0.33
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-21T03:40:28.020766",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_EL",
+    "timestamp": "2026-02-21T03:40:28.964400",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_LLAMAR",
+    "timestamp": "2026-02-21T03:40:29.920476",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_UNO_NUM",
+    "timestamp": "2026-02-21T03:41:17.918015",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_LLM",
+    "timestamp": "2026-02-21T03:41:18.901288",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-21T03:41:58.153702",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-21T03:41:59.110165",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-21T03:42:43.500977",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_LLAMAR",
+    "timestamp": "2026-02-21T03:42:44.495630",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_TENER_V",
+    "timestamp": "2026-02-21T03:43:21.747475",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ANO",
+    "timestamp": "2026-02-21T03:43:22.772651",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-21T03:44:34.019597",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-21T03:44:35.032371",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_UNO_NUM",
+    "timestamp": "2026-02-21T03:44:55.561229",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_LLM",
+    "timestamp": "2026-02-21T03:44:56.462698",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:45:13.254084",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-21T03:45:23.394798",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-21T03:45:50.841118",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_EL",
+    "timestamp": "2026-02-21T03:45:51.844545",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_LLAMAR",
+    "timestamp": "2026-02-21T03:45:52.803427",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-21T03:46:30.903824",
+    "veces_usado": 1,
+    "ultima_certeza": 0.4
+  },
+  {
+    "concepto_id": "CONCEPTO_IMPORTANTE",
+    "timestamp": "2026-02-21T03:46:31.814651",
+    "veces_usado": 1,
+    "ultima_certeza": 0.4
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:47:35.827419",
+    "veces_usado": 1,
+    "ultima_certeza": 0.4
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-21T03:47:36.814409",
+    "veces_usado": 1,
+    "ultima_certeza": 0.4
+  },
+  {
+    "concepto_id": "CONCEPTO_FALSO_RESP",
+    "timestamp": "2026-02-21T03:48:25.475669",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_NO",
+    "timestamp": "2026-02-21T03:48:38.905332",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_VERDAD_RESP",
+    "timestamp": "2026-02-21T03:48:39.959277",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:49:04.490720",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-21T03:49:05.442390",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_INCORRECTO",
+    "timestamp": "2026-02-21T03:49:06.376627",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:49:28.830075",
+    "veces_usado": 1,
+    "ultima_certeza": 0.71
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-21T03:49:29.897232",
+    "veces_usado": 1,
+    "ultima_certeza": 0.71
+  },
+  {
+    "concepto_id": "CONCEPTO_NO",
+    "timestamp": "2026-02-21T03:49:30.860819",
+    "veces_usado": 1,
+    "ultima_certeza": 0.71
+  },
+  {
+    "concepto_id": "CONCEPTO_EL",
+    "timestamp": "2026-02-21T03:49:46.597374",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:49:47.637990",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-21T03:49:48.613349",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_EL",
+    "timestamp": "2026-02-21T03:50:15.721378",
+    "veces_usado": 1,
+    "ultima_certeza": 0.86
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:50:16.677453",
+    "veces_usado": 1,
+    "ultima_certeza": 0.86
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-21T03:50:17.689906",
+    "veces_usado": 1,
+    "ultima_certeza": 0.86
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-21T03:50:46.574040",
+    "veces_usado": 1,
+    "ultima_certeza": 0.83
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-21T03:50:47.584723",
+    "veces_usado": 1,
+    "ultima_certeza": 0.83
+  },
+  {
+    "concepto_id": "CONCEPTO_EL",
+    "timestamp": "2026-02-21T03:50:48.575600",
+    "veces_usado": 1,
+    "ultima_certeza": 0.83
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-22T23:19:28.391050",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-22T23:19:29.601425",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-22T23:19:58.304325",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-22T23:19:59.303050",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-22T23:20:21.212798",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_LLAMAR",
+    "timestamp": "2026-02-22T23:20:22.374138",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-22T23:21:11.557053",
+    "veces_usado": 1,
+    "ultima_certeza": 0.33
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-22T23:21:34.023770",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-22T23:21:35.015354",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_ESO_REF",
+    "timestamp": "2026-02-22T23:21:57.243883",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_FALSO_RESP",
+    "timestamp": "2026-02-22T23:21:58.309182",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_UNO_NUM",
+    "timestamp": "2026-02-22T23:23:22.758526",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-22T23:23:23.766740",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-22T23:23:24.734550",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-22T23:23:56.256080",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-22T23:23:57.212764",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-22T23:23:58.275383",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-23T12:38:35.791164",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-23T12:38:36.936317",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-23T13:34:42.543502",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-23T13:34:55.111471",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-23T13:34:56.193160",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-23T13:35:17.327959",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_LLAMAR",
+    "timestamp": "2026-02-23T13:35:18.418111",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-23T13:35:48.803508",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-23T13:35:49.805879",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-23T13:36:57.596421",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_ESTO_REF",
+    "timestamp": "2026-02-23T13:36:58.592527",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-23T13:37:47.643440",
+    "veces_usado": 1,
+    "ultima_certeza": 0.33
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-23T13:38:15.563266",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-23T13:38:16.548073",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_UNO_NUM",
+    "timestamp": "2026-02-23T13:38:17.547253",
+    "veces_usado": 1,
+    "ultima_certeza": 0.8
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-23T13:39:06.200379",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_TENER_V",
+    "timestamp": "2026-02-23T13:39:07.365384",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ANO",
+    "timestamp": "2026-02-23T13:39:08.628445",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-23T13:40:38.457146",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-23T13:40:39.473111",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-23T13:40:40.660826",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-23T13:41:42.431793",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-23T13:41:43.684377",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_ANO",
+    "timestamp": "2026-02-23T13:42:03.251395",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_TENER_V",
+    "timestamp": "2026-02-23T13:42:04.329712",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_TENER_V",
+    "timestamp": "2026-02-23T13:43:13.282161",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ANO",
+    "timestamp": "2026-02-23T13:43:14.386462",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-23T13:43:32.661650",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-23T13:43:33.661993",
+    "veces_usado": 1,
+    "ultima_certeza": 0.5
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-23T13:45:29.597185",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_COMO",
+    "timestamp": "2026-02-23T13:45:30.597652",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-23T13:45:31.644694",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-23T13:46:43.655803",
+    "veces_usado": 1,
+    "ultima_certeza": 0.33
+  },
+  {
+    "concepto_id": "CONCEPTO_YO",
+    "timestamp": "2026-02-23T13:47:29.299577",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_NOMBRE_ARCHIVO",
+    "timestamp": "2026-02-23T13:47:30.324380",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-25T02:28:41.916653",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-25T02:29:01.558615",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-25T02:29:02.706490",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_HOLA",
+    "timestamp": "2026-02-25T02:29:43.326070",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-25T02:29:57.145442",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-25T02:29:58.359746",
+    "veces_usado": 1,
+    "ultima_certeza": 0.67
+  },
+  {
+    "concepto_id": "CONCEPTO_QUIEN",
+    "timestamp": "2026-02-25T02:30:32.433298",
+    "veces_usado": 1,
+    "ultima_certeza": 0.33
+  },
+  {
+    "concepto_id": "CONCEPTO_Y",
+    "timestamp": "2026-02-25T02:30:55.006710",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_SABER",
+    "timestamp": "2026-02-25T02:30:56.286377",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-25T02:30:57.463868",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_Y",
+    "timestamp": "2026-02-25T02:31:23.618707",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_QUE",
+    "timestamp": "2026-02-25T02:31:24.734214",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_HACER",
+    "timestamp": "2026-02-25T02:31:25.863026",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_UNO_NUM",
+    "timestamp": "2026-02-25T02:31:42.519474",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_ARCHIVO",
+    "timestamp": "2026-02-25T02:31:43.742094",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  },
+  {
+    "concepto_id": "CONCEPTO_DE",
+    "timestamp": "2026-02-25T02:31:45.002103",
+    "veces_usado": 1,
+    "ultima_certeza": 1.0
+  }
+]

@@ -1,0 +1,3630 @@
+{
+  "proyecto": "Belladonna",
+  "version_analisis": "2.0",
+  "timestamp": "GENERADO_AUTOMATICAMENTE",
+  "resumen": {
+    "total_archivos": 200,
+    "archivos_activos": 124,
+    "archivos_legacy": 12,
+    "archivos_test": 45,
+    "total_modulos": 19,
+    "codigo_obsoleto": 23,
+    "archivos_huerfanos": 14
+  },
+  "modulos": {
+    "analisis": {
+      "total_archivos": 2,
+      "total_clases": 2,
+      "total_funciones": 0,
+      "total_lineas": 330,
+      "dependencias": [],
+      "estado": "AUXILIAR"
+    },
+    "root": {
+      "total_archivos": 8,
+      "total_clases": 10,
+      "total_funciones": 22,
+      "total_lineas": 2550,
+      "dependencias": [
+        "base_datos",
+        "operaciones.shell_executor",
+        "memoria.gestor_memoria",
+        "traduccion.traductor_entrada",
+        "razonamiento.motor_razonamiento",
+        "consejeras.gestor_consejeras",
+        "generacion.generador_salida",
+        "vocabulario.gestor_vocabulario",
+        "bucles.gestor_bucles",
+        "grounding",
+        "aprendizaje.motor_aprendizaje",
+        "grounding.calculadores",
+        "llm",
+        "vocabulario.semana10_bd"
+      ],
+      "estado": "AUXILIAR"
+    },
+    "aprendizaje": {
+      "total_archivos": 5,
+      "total_clases": 9,
+      "total_funciones": 0,
+      "total_lineas": 981,
+      "dependencias": [
+        "aprendizaje.ajustador_grounding",
+        "aprendizaje.aplicador_insights",
+        "aprendizaje.estrategias",
+        "aprendizaje.motor_aprendizaje"
+      ],
+      "estado": "ACTIVO"
+    },
+    "base_datos": {
+      "total_archivos": 3,
+      "total_clases": 3,
+      "total_funciones": 0,
+      "total_lineas": 671,
+      "dependencias": [],
+      "estado": "ACTIVO"
+    },
+    "bucles": {
+      "total_archivos": 6,
+      "total_clases": 5,
+      "total_funciones": 0,
+      "total_lineas": 763,
+      "dependencias": [
+        "bucles.bucle_corto",
+        "bucles.base_bucle",
+        "bucles.bucle_medio",
+        "bucles.bucle_largo",
+        "bucles.gestor_bucles"
+      ],
+      "estado": "ACTIVO"
+    },
+    "consejeras": {
+      "total_archivos": 18,
+      "total_clases": 10,
+      "total_funciones": 0,
+      "total_lineas": 1057,
+      "dependencias": [
+        "consejeras.sage",
+        "consejeras.echo",
+        "core.principios",
+        "razonamiento.tipos_decision",
+        "consejeras.luna",
+        "consejeras.nova",
+        "consejeras.vega",
+        "consejeras.lyra",
+        "consejeras.iris",
+        "consejeras.base_consejera"
+      ],
+      "estado": "ACTIVO"
+    },
+    "core": {
+      "total_archivos": 5,
+      "total_clases": 6,
+      "total_funciones": 2,
+      "total_lineas": 262,
+      "dependencias": [
+        "core.tipos"
+      ],
+      "estado": "ACTIVO"
+    },
+    "expresion": {
+      "total_archivos": 4,
+      "total_clases": 0,
+      "total_funciones": 0,
+      "total_lineas": 0,
+      "dependencias": [],
+      "estado": "AUXILIAR"
+    },
+    "generacion": {
+      "total_archivos": 3,
+      "total_clases": 2,
+      "total_funciones": 0,
+      "total_lineas": 305,
+      "dependencias": [
+        "generacion.templates_respuesta",
+        "generacion.generador_salida",
+        "razonamiento.tipos_decision"
+      ],
+      "estado": "ACTIVO"
+    },
+    "grounding": {
+      "total_archivos": 20,
+      "total_clases": 20,
+      "total_funciones": 7,
+      "total_lineas": 2208,
+      "dependencias": [
+        "grounding.gestor_grounding",
+        "grounding.dimensiones.computacional",
+        "grounding.dimensiones.contextual",
+        "grounding.dimensiones.pragmatico",
+        "grounding.base_dimension",
+        "grounding.dimensiones.semantico",
+        "grounding.dimensiones.social",
+        "grounding.calculadores.extension_calculador",
+        "grounding.integracion.integrador_bell",
+        "grounding.dimensiones.metacognitivo",
+        "grounding.dimensiones.predictivo",
+        "grounding.reportes.generador_reportes",
+        "grounding.dimensiones.temporal",
+        "grounding.calculadores.calculador_9d",
+        "grounding.dimensiones.causal"
+      ],
+      "estado": "ACTIVO"
+    },
+    "llm": {
+      "total_archivos": 5,
+      "total_clases": 4,
+      "total_funciones": 1,
+      "total_lineas": 875,
+      "dependencias": [
+        "llm.generador_respuestas",
+        "llm.verificador_coherencia",
+        "llm.gestor_llm"
+      ],
+      "estado": "ACTIVO"
+    },
+    "matematicas": {
+      "total_archivos": 2,
+      "total_clases": 2,
+      "total_funciones": 0,
+      "total_lineas": 409,
+      "dependencias": [],
+      "estado": "AUXILIAR"
+    },
+    "memoria": {
+      "total_archivos": 4,
+      "total_clases": 9,
+      "total_funciones": 0,
+      "total_lineas": 623,
+      "dependencias": [
+        "memoria.almacen",
+        "memoria.tipos_memoria",
+        "memoria.gestor_memoria"
+      ],
+      "estado": "ACTIVO"
+    },
+    "operaciones": {
+      "total_archivos": 2,
+      "total_clases": 2,
+      "total_funciones": 0,
+      "total_lineas": 225,
+      "dependencias": [],
+      "estado": "ACTIVO"
+    },
+    "planificacion": {
+      "total_archivos": 3,
+      "total_clases": 6,
+      "total_funciones": 0,
+      "total_lineas": 672,
+      "dependencias": [],
+      "estado": "ACTIVO"
+    },
+    "razonamiento": {
+      "total_archivos": 5,
+      "total_clases": 6,
+      "total_funciones": 0,
+      "total_lineas": 336,
+      "dependencias": [
+        "razonamiento.motor_razonamiento",
+        "razonamiento.evaluador_capacidades",
+        "razonamiento.tipos_decision",
+        "razonamiento.generador_decisiones",
+        "core.concepto_anclado"
+      ],
+      "estado": "ACTIVO"
+    },
+    "red": {
+      "total_archivos": 3,
+      "total_clases": 4,
+      "total_funciones": 0,
+      "total_lineas": 597,
+      "dependencias": [],
+      "estado": "AUXILIAR"
+    },
+    "traduccion": {
+      "total_archivos": 3,
+      "total_clases": 2,
+      "total_funciones": 0,
+      "total_lineas": 190,
+      "dependencias": [
+        "vocabulario.gestor_vocabulario",
+        "core.concepto_anclado",
+        "traduccion.analizador_español",
+        "traduccion.traductor_entrada"
+      ],
+      "estado": "ACTIVO"
+    },
+    "vocabulario": {
+      "total_archivos": 23,
+      "total_clases": 1,
+      "total_funciones": 31,
+      "total_lineas": 5838,
+      "dependencias": [
+        "vocabulario.semana1_operaciones",
+        "vocabulario.semana4_emociones",
+        "vocabulario.semana2_verbos",
+        "vocabulario.semana1_acciones",
+        "vocabulario.semana6_analisis",
+        "vocabulario.semana3_conversacion_expandida",
+        "core.tipos",
+        "vocabulario.semana1_conversacion",
+        "vocabulario.semana2_python",
+        "vocabulario.semana9_red",
+        "vocabulario.semana5_sistema",
+        "vocabulario.semana1_cognitivos",
+        "vocabulario.semana2_adjetivos",
+        "vocabulario.semana3_matematicas",
+        "vocabulario.semana3_sistema_avanzado",
+        "vocabulario.semana2_conectores",
+        "vocabulario.semana8_planificacion",
+        "vocabulario.semana4_acciones",
+        "core.capacidades_bell",
+        "vocabulario.semana4_tiempo",
+        "vocabulario.gestor_vocabulario",
+        "vocabulario.semana3_python_avanzado",
+        "vocabulario.semana7_matematicas",
+        "core.concepto_anclado",
+        "vocabulario.semana10_bd"
+      ],
+      "estado": "ACTIVO"
+    }
+  },
+  "archivos": {
+    "analisis\\__init__.py": {
+      "modulo": "analisis",
+      "estado": "ACTIVO",
+      "lineas_codigo": 6,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "python_analyzer"
+      ]
+    },
+    "analisis\\python_analyzer.py": {
+      "modulo": "analisis",
+      "estado": "ACTIVO",
+      "lineas_codigo": 324,
+      "total_clases": 2,
+      "clases": [
+        {
+          "nombre": "AnalysisResult",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "es_exitoso"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "PythonAnalyzer",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "analizar",
+            "analizar_archivo",
+            "obtener_nombres_funciones",
+            "obtener_nombres_clases",
+            "generar_reporte"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "sys",
+        "ast",
+        "pathlib",
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "analizar_codigo_obsoleto.py": {
+      "modulo": "root",
+      "estado": "ACTIVO",
+      "lineas_codigo": 234,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "AnalizadorCodigo",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "analizar_proyecto",
+            "generar_reporte",
+            "generar_recomendaciones"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [
+        "main"
+      ],
+      "imports_internos": [],
+      "imports_externos": [
+        "os",
+        "argparse",
+        "collections",
+        "ast",
+        "pathlib",
+        "typing"
+      ]
+    },
+    "aprendizaje\\__init__.py": {
+      "modulo": "aprendizaje",
+      "estado": "ACTIVO",
+      "lineas_codigo": 32,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "aprendizaje.ajustador_grounding",
+        "aprendizaje.aplicador_insights",
+        "aprendizaje.estrategias",
+        "aprendizaje.motor_aprendizaje"
+      ],
+      "imports_externos": []
+    },
+    "aprendizaje\\ajustador_grounding.py": {
+      "modulo": "aprendizaje",
+      "estado": "ACTIVO",
+      "lineas_codigo": 216,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "AjustadorGrounding",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "proponer_ajuste",
+            "aplicar_ajuste",
+            "obtener_historial",
+            "obtener_estadisticas",
+            "configurar_limites"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "aprendizaje.estrategias"
+      ],
+      "imports_externos": [
+        "typing",
+        "datetime"
+      ]
+    },
+    "aprendizaje\\aplicador_insights.py": {
+      "modulo": "aprendizaje",
+      "estado": "ACTIVO",
+      "lineas_codigo": 242,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "AplicadorInsights",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "procesar_insight",
+            "procesar_multiples_insights",
+            "obtener_acciones_pendientes",
+            "marcar_accion_aplicada",
+            "obtener_estadisticas"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "typing",
+        "datetime"
+      ]
+    },
+    "aprendizaje\\estrategias.py": {
+      "modulo": "aprendizaje",
+      "estado": "ACTIVO",
+      "lineas_codigo": 203,
+      "total_clases": 6,
+      "clases": [
+        {
+          "nombre": "EstrategiaAprendizaje",
+          "hereda_de": [
+            "ABC"
+          ],
+          "metodos_publicos": [
+            "calcular_ajuste"
+          ],
+          "es_abstracta": true,
+          "tiene_init": false
+        },
+        {
+          "nombre": "EstrategiaUsoFrecuente",
+          "hereda_de": [
+            "EstrategiaAprendizaje"
+          ],
+          "metodos_publicos": [
+            "calcular_ajuste"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        },
+        {
+          "nombre": "EstrategiaExitoFallido",
+          "hereda_de": [
+            "EstrategiaAprendizaje"
+          ],
+          "metodos_publicos": [
+            "calcular_ajuste"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        },
+        {
+          "nombre": "EstrategiaInsights",
+          "hereda_de": [
+            "EstrategiaAprendizaje"
+          ],
+          "metodos_publicos": [
+            "calcular_ajuste"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "EstrategiaConservadora",
+          "hereda_de": [
+            "EstrategiaAprendizaje"
+          ],
+          "metodos_publicos": [
+            "calcular_ajuste"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        },
+        {
+          "nombre": "EstrategiaComposite",
+          "hereda_de": [
+            "EstrategiaAprendizaje"
+          ],
+          "metodos_publicos": [
+            "calcular_ajuste"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "typing",
+        "abc"
+      ]
+    },
+    "aprendizaje\\motor_aprendizaje.py": {
+      "modulo": "aprendizaje",
+      "estado": "ACTIVO",
+      "lineas_codigo": 288,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "MotorAprendizaje",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "configurar_integraciones",
+            "ejecutar_ciclo_aprendizaje",
+            "procesar_uso_concepto",
+            "procesar_turno",
+            "obtener_estadisticas",
+            "obtener_historial_ajustes",
+            "obtener_acciones_pendientes",
+            "reiniciar_estadisticas"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "aprendizaje.ajustador_grounding",
+        "aprendizaje.aplicador_insights",
+        "aprendizaje.estrategias"
+      ],
+      "imports_externos": [
+        "typing",
+        "datetime"
+      ]
+    },
+    "base_datos\\__init__.py": {
+      "modulo": "base_datos",
+      "estado": "ACTIVO",
+      "lineas_codigo": 11,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "cliente_sqlite",
+        "gestor_bd"
+      ]
+    },
+    "base_datos\\cliente_sqlite.py": {
+      "modulo": "base_datos",
+      "estado": "ACTIVO",
+      "lineas_codigo": 323,
+      "total_clases": 2,
+      "clases": [
+        {
+          "nombre": "ResultadoQuery",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "ClienteSQLite",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "conectar",
+            "desconectar",
+            "ejecutar_sql",
+            "crear_tabla",
+            "insertar",
+            "seleccionar",
+            "actualizar",
+            "eliminar",
+            "contar",
+            "listar_tablas",
+            "obtener_esquema",
+            "existe_tabla",
+            "eliminar_tabla",
+            "vaciar_tabla"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "dataclasses",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ]
+    },
+    "base_datos\\gestor_bd.py": {
+      "modulo": "base_datos",
+      "estado": "ACTIVO",
+      "lineas_codigo": 337,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GestorBD",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "conectar",
+            "desconectar",
+            "iniciar_transaccion",
+            "commit",
+            "rollback",
+            "ejecutar_transaccion",
+            "crear_indice",
+            "eliminar_indice",
+            "listar_indices",
+            "respaldar",
+            "restaurar",
+            "validar_datos",
+            "buscar",
+            "agrupar",
+            "unir_tablas",
+            "obtener_estadisticas",
+            "obtener_estadisticas_bd",
+            "agregar_columna",
+            "renombrar_tabla"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "cliente_sqlite",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ]
+    },
+    "Bell_Inventory.py": {
+      "modulo": "root",
+      "estado": "ACTIVO",
+      "lineas_codigo": 573,
+      "total_clases": 4,
+      "clases": [
+        {
+          "nombre": "ClaseInfo",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "ArchivoInfo",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "ModuloInfo",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "AnalizadorBelladonna",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "analizar_todo",
+            "generar_reporte_markdown",
+            "generar_datos_json",
+            "generar_health_check"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [
+        "main"
+      ],
+      "imports_internos": [],
+      "imports_externos": [
+        "os",
+        "ast",
+        "collections",
+        "json",
+        "pathlib",
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "bucles\\__init__.py": {
+      "modulo": "bucles",
+      "estado": "ACTIVO",
+      "lineas_codigo": 23,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "bucles.bucle_corto",
+        "bucles.bucle_medio",
+        "bucles.base_bucle",
+        "bucles.bucle_largo",
+        "bucles.gestor_bucles"
+      ],
+      "imports_externos": []
+    },
+    "bucles\\base_bucle.py": {
+      "modulo": "bucles",
+      "estado": "ACTIVO",
+      "lineas_codigo": 139,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "BaseBucle",
+          "hereda_de": [
+            "ABC"
+          ],
+          "metodos_publicos": [
+            "iniciar",
+            "detener",
+            "procesar",
+            "esta_activo",
+            "obtener_estadisticas",
+            "obtener_historial"
+          ],
+          "es_abstracta": true,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "time",
+        "datetime",
+        "abc",
+        "threading",
+        "typing"
+      ]
+    },
+    "bucles\\bucle_corto.py": {
+      "modulo": "bucles",
+      "estado": "ACTIVO",
+      "lineas_codigo": 75,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "BucleCorto",
+          "hereda_de": [
+            "BaseBucle"
+          ],
+          "metodos_publicos": [
+            "registrar_concepto_usado",
+            "procesar",
+            "obtener_conceptos_calientes",
+            "limpiar_historial"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "bucles.base_bucle"
+      ],
+      "imports_externos": [
+        "typing",
+        "collections"
+      ]
+    },
+    "bucles\\bucle_largo.py": {
+      "modulo": "bucles",
+      "estado": "ACTIVO",
+      "lineas_codigo": 186,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "BucleLargo",
+          "hereda_de": [
+            "BaseBucle"
+          ],
+          "metodos_publicos": [
+            "configurar_bucles",
+            "procesar",
+            "obtener_insights",
+            "obtener_ajustes_recomendados",
+            "limpiar_historial"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "bucles.base_bucle"
+      ],
+      "imports_externos": [
+        "typing",
+        "datetime"
+      ]
+    },
+    "bucles\\bucle_medio.py": {
+      "modulo": "bucles",
+      "estado": "ACTIVO",
+      "lineas_codigo": 141,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "BucleMedio",
+          "hereda_de": [
+            "BaseBucle"
+          ],
+          "metodos_publicos": [
+            "registrar_decision",
+            "procesar",
+            "obtener_estadisticas_conversacion",
+            "obtener_patrones",
+            "limpiar_historial"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "bucles.base_bucle"
+      ],
+      "imports_externos": [
+        "datetime",
+        "typing",
+        "collections"
+      ]
+    },
+    "bucles\\gestor_bucles.py": {
+      "modulo": "bucles",
+      "estado": "ACTIVO",
+      "lineas_codigo": 199,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GestorBucles",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "iniciar_todos",
+            "detener_todos",
+            "iniciar_bucle",
+            "detener_bucle",
+            "registrar_concepto_usado",
+            "registrar_decision",
+            "obtener_estadisticas",
+            "obtener_conceptos_calientes",
+            "obtener_patrones",
+            "obtener_insights",
+            "obtener_ajustes_recomendados",
+            "estado_sistema",
+            "limpiar_historial_todos"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "bucles.bucle_medio",
+        "bucles.bucle_largo",
+        "bucles.base_bucle",
+        "bucles.bucle_corto"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "consejeras\\__init__.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 25,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "echo",
+        "gestor_consejeras",
+        "vega",
+        "base_consejera",
+        "nova",
+        "sage",
+        "iris",
+        "luna",
+        "lyra"
+      ]
+    },
+    "consejeras\\base_consejera.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 74,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "Consejera",
+          "hereda_de": [
+            "ABC"
+          ],
+          "metodos_publicos": [
+            "revisar",
+            "activar",
+            "desactivar",
+            "registrar_revision",
+            "estadisticas"
+          ],
+          "es_abstracta": true,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "razonamiento.tipos_decision"
+      ],
+      "imports_externos": [
+        "typing",
+        "abc"
+      ]
+    },
+    "consejeras\\echo\\__init__.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 1,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "logica"
+      ]
+    },
+    "consejeras\\echo\\logica.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 85,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "Echo",
+          "hereda_de": [
+            "Consejera"
+          ],
+          "metodos_publicos": [
+            "revisar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "razonamiento.tipos_decision",
+        "consejeras.base_consejera"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "consejeras\\gestor_consejeras.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 107,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GestorConsejeras",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "consultar_todas",
+            "obtener_consejera",
+            "estadisticas_globales"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "consejeras.sage",
+        "consejeras.echo",
+        "razonamiento.tipos_decision",
+        "consejeras.luna",
+        "consejeras.nova",
+        "consejeras.vega",
+        "consejeras.base_consejera",
+        "consejeras.iris",
+        "consejeras.lyra"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "consejeras\\iris\\__init__.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 5,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "vision"
+      ]
+    },
+    "consejeras\\iris\\vision.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 115,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "Iris",
+          "hereda_de": [
+            "Consejera"
+          ],
+          "metodos_publicos": [
+            "revisar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "core.principios",
+        "razonamiento.tipos_decision",
+        "consejeras.base_consejera"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "consejeras\\luna\\__init__.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 5,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "intuicion"
+      ]
+    },
+    "consejeras\\luna\\intuicion.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 115,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "Luna",
+          "hereda_de": [
+            "Consejera"
+          ],
+          "metodos_publicos": [
+            "revisar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "core.principios",
+        "razonamiento.tipos_decision",
+        "consejeras.base_consejera"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "consejeras\\lyra\\__init__.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 5,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "empatia"
+      ]
+    },
+    "consejeras\\lyra\\empatia.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 106,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "Lyra",
+          "hereda_de": [
+            "Consejera"
+          ],
+          "metodos_publicos": [
+            "revisar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "core.principios",
+        "razonamiento.tipos_decision",
+        "consejeras.base_consejera"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "consejeras\\nova\\__init__.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 1,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "ingeniera"
+      ]
+    },
+    "consejeras\\nova\\ingeniera.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 84,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "Nova",
+          "hereda_de": [
+            "Consejera"
+          ],
+          "metodos_publicos": [
+            "revisar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "razonamiento.tipos_decision",
+        "consejeras.base_consejera"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "consejeras\\sage\\__init__.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 5,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "sintesis"
+      ]
+    },
+    "consejeras\\sage\\sintesis.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 118,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "Sage",
+          "hereda_de": [
+            "Consejera"
+          ],
+          "metodos_publicos": [
+            "revisar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "core.principios",
+        "razonamiento.tipos_decision",
+        "consejeras.base_consejera"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "consejeras\\vega\\__init__.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 1,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "guardiana"
+      ]
+    },
+    "consejeras\\vega\\guardiana.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 95,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "Vega",
+          "hereda_de": [
+            "Consejera"
+          ],
+          "metodos_publicos": [
+            "revisar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "core.principios",
+        "razonamiento.tipos_decision",
+        "consejeras.base_consejera"
+      ],
+      "imports_externos": [
+        "patrones",
+        "typing"
+      ]
+    },
+    "consejeras\\vega\\patrones.py": {
+      "modulo": "consejeras",
+      "estado": "ACTIVO",
+      "lineas_codigo": 110,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "PatronesPeligrosos",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "es_accion_destructiva",
+            "es_auto_modificacion",
+            "viola_privacidad",
+            "detectar_todos_los_riesgos"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "core\\__init__.py": {
+      "modulo": "core",
+      "estado": "ACTIVO",
+      "lineas_codigo": 0,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": []
+    },
+    "core\\capacidades_bell.py": {
+      "modulo": "core",
+      "estado": "ACTIVO",
+      "lineas_codigo": 36,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "CapacidadesBell",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "leer_archivo",
+            "escribir_archivo",
+            "archivo_existe",
+            "obtener_tamaño_archivo",
+            "listar_directorio"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "pathlib",
+        "typing"
+      ]
+    },
+    "core\\concepto_anclado.py": {
+      "modulo": "core",
+      "estado": "ACTIVO",
+      "lineas_codigo": 62,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "ConceptoAnclado",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "puede_ejecutar",
+            "ejecutar",
+            "esta_relacionado_con",
+            "obtener_propiedad"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "core.tipos"
+      ],
+      "imports_externos": [
+        "dataclasses",
+        "typing",
+        "datetime"
+      ]
+    },
+    "core\\principios.py": {
+      "modulo": "core",
+      "estado": "ACTIVO",
+      "lineas_codigo": 145,
+      "total_clases": 2,
+      "clases": [
+        {
+          "nombre": "Principio",
+          "hereda_de": [
+            "Enum"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "DescripcionPrincipio",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [
+        "obtener_principio",
+        "obtener_principios_criticos"
+      ],
+      "imports_internos": [],
+      "imports_externos": [
+        "typing",
+        "enum",
+        "dataclasses"
+      ]
+    },
+    "core\\tipos.py": {
+      "modulo": "core",
+      "estado": "ACTIVO",
+      "lineas_codigo": 19,
+      "total_clases": 2,
+      "clases": [
+        {
+          "nombre": "TipoConcepto",
+          "hereda_de": [
+            "Enum"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "NivelGrounding",
+          "hereda_de": [
+            "Enum"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "enum"
+      ]
+    },
+    "desinstalar_gpt2_ingles.py": {
+      "modulo": "root",
+      "estado": "ACTIVO",
+      "lineas_codigo": 91,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "limpiar_cache_huggingface",
+        "limpiar_modelos_locales",
+        "mostrar_resumen",
+        "main"
+      ],
+      "imports_internos": [],
+      "imports_externos": [
+        "shutil",
+        "os",
+        "sys",
+        "pathlib"
+      ]
+    },
+    "expresion\\__init__.py": {
+      "modulo": "expresion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 0,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": []
+    },
+    "expresion\\ajustador_tono.py": {
+      "modulo": "expresion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 0,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": []
+    },
+    "expresion\\expresion_hibrida.py": {
+      "modulo": "expresion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 0,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": []
+    },
+    "expresion\\verificador.py": {
+      "modulo": "expresion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 0,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": []
+    },
+    "generacion\\__init__.py": {
+      "modulo": "generacion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 10,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "generacion.templates_respuesta",
+        "generacion.generador_salida"
+      ],
+      "imports_externos": []
+    },
+    "generacion\\generador_salida.py": {
+      "modulo": "generacion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 207,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GeneradorSalida",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "generar",
+            "generar_con_razonamiento"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "generacion.templates_respuesta",
+        "razonamiento.tipos_decision"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "generacion\\templates_respuesta.py": {
+      "modulo": "generacion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 88,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "TemplatesRespuesta",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "obtener_template"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "razonamiento.tipos_decision"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "grounding\\__init__.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 66,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "version",
+        "ayuda"
+      ],
+      "imports_internos": [
+        "grounding.gestor_grounding",
+        "grounding.dimensiones.computacional",
+        "grounding.dimensiones.contextual",
+        "grounding.dimensiones.pragmatico",
+        "grounding.base_dimension",
+        "grounding.dimensiones.semantico",
+        "grounding.dimensiones.social",
+        "grounding.dimensiones.metacognitivo",
+        "grounding.dimensiones.predictivo",
+        "grounding.dimensiones.temporal",
+        "grounding.dimensiones.causal"
+      ],
+      "imports_externos": []
+    },
+    "grounding\\base_dimension.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 106,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "DimensionGrounding",
+          "hereda_de": [
+            "ABC"
+          ],
+          "metodos_publicos": [
+            "nombre",
+            "descripcion",
+            "evaluar",
+            "evaluar_con_cache",
+            "limpiar_cache",
+            "obtener_estadisticas"
+          ],
+          "es_abstracta": true,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "typing",
+        "abc"
+      ]
+    },
+    "grounding\\calculadores\\__init__.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 11,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.calculadores.extension_calculador",
+        "grounding.calculadores.calculador_9d"
+      ],
+      "imports_externos": []
+    },
+    "grounding\\calculadores\\calculador_9d.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 150,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "Calculador9D",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "calcular_concepto",
+            "calcular_todos",
+            "calcular_promedio",
+            "guardar_resultados",
+            "cargar_resultados",
+            "limpiar_cache",
+            "obtener_estadisticas"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.gestor_grounding",
+        "grounding.dimensiones.semantico"
+      ],
+      "imports_externos": [
+        "json",
+        "pathlib",
+        "typing",
+        "datetime"
+      ]
+    },
+    "grounding\\calculadores\\extension_calculador.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 214,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "ExtensionGrounding",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "obtener_grounding",
+            "obtener_dimension",
+            "obtener_promedio",
+            "obtener_resumen",
+            "calcular_grounding_total",
+            "generar_reporte",
+            "invalidar_cache",
+            "grounding_computacional",
+            "grounding_semantico",
+            "grounding_contextual",
+            "grounding_pragmatico",
+            "grounding_social",
+            "grounding_temporal",
+            "grounding_causal",
+            "grounding_metacognitivo",
+            "grounding_predictivo"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [
+        "crear_extension"
+      ],
+      "imports_internos": [
+        "grounding.gestor_grounding",
+        "grounding.calculadores.calculador_9d"
+      ],
+      "imports_externos": [
+        "typing",
+        "datetime"
+      ]
+    },
+    "grounding\\dimensiones\\__init__.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 114,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "listar_dimensiones",
+        "obtener_dimension",
+        "crear_todas_dimensiones"
+      ],
+      "imports_internos": [
+        "grounding.dimensiones.computacional",
+        "grounding.dimensiones.contextual",
+        "grounding.dimensiones.pragmatico",
+        "grounding.dimensiones.semantico",
+        "grounding.dimensiones.social",
+        "grounding.dimensiones.metacognitivo",
+        "grounding.dimensiones.predictivo",
+        "grounding.dimensiones.temporal",
+        "grounding.dimensiones.causal"
+      ],
+      "imports_externos": []
+    },
+    "grounding\\dimensiones\\causal.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 68,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GroundingCausal",
+          "hereda_de": [
+            "DimensionGrounding"
+          ],
+          "metodos_publicos": [
+            "nombre",
+            "descripcion",
+            "evaluar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.base_dimension"
+      ],
+      "imports_externos": [
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "grounding\\dimensiones\\computacional.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 64,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GroundingComputacional",
+          "hereda_de": [
+            "DimensionGrounding"
+          ],
+          "metodos_publicos": [
+            "nombre",
+            "descripcion",
+            "evaluar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.base_dimension"
+      ],
+      "imports_externos": [
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "grounding\\dimensiones\\contextual.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 87,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GroundingContextual",
+          "hereda_de": [
+            "DimensionGrounding"
+          ],
+          "metodos_publicos": [
+            "nombre",
+            "descripcion",
+            "evaluar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.base_dimension"
+      ],
+      "imports_externos": [
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "grounding\\dimensiones\\metacognitivo.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 87,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GroundingMetacognitivo",
+          "hereda_de": [
+            "DimensionGrounding"
+          ],
+          "metodos_publicos": [
+            "nombre",
+            "descripcion",
+            "evaluar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.base_dimension"
+      ],
+      "imports_externos": [
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "grounding\\dimensiones\\pragmatico.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 84,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GroundingPragmatico",
+          "hereda_de": [
+            "DimensionGrounding"
+          ],
+          "metodos_publicos": [
+            "nombre",
+            "descripcion",
+            "evaluar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.base_dimension"
+      ],
+      "imports_externos": [
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "grounding\\dimensiones\\predictivo.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 89,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GroundingPredictivo",
+          "hereda_de": [
+            "DimensionGrounding"
+          ],
+          "metodos_publicos": [
+            "nombre",
+            "descripcion",
+            "evaluar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.base_dimension"
+      ],
+      "imports_externos": [
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "grounding\\dimensiones\\semantico.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 223,
+      "total_clases": 3,
+      "clases": [
+        {
+          "nombre": "_SingletonGestorEmbeddings",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "generar_embedding",
+            "similitud_coseno"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        },
+        {
+          "nombre": "CalculadorSemantico",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "calcular"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        },
+        {
+          "nombre": "GroundingSemantico",
+          "hereda_de": [
+            "DimensionGrounding"
+          ],
+          "metodos_publicos": [
+            "nombre",
+            "descripcion",
+            "evaluar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.base_dimension"
+      ],
+      "imports_externos": [
+        "datetime",
+        "numpy",
+        "sentence_transformers",
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "grounding\\dimensiones\\social.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 86,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GroundingSocial",
+          "hereda_de": [
+            "DimensionGrounding"
+          ],
+          "metodos_publicos": [
+            "nombre",
+            "descripcion",
+            "evaluar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.base_dimension"
+      ],
+      "imports_externos": [
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "grounding\\dimensiones\\temporal.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 75,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GroundingTemporal",
+          "hereda_de": [
+            "DimensionGrounding"
+          ],
+          "metodos_publicos": [
+            "nombre",
+            "descripcion",
+            "evaluar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.base_dimension"
+      ],
+      "imports_externos": [
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "grounding\\gestor_grounding.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 241,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GestorGrounding",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "evaluar_9d",
+            "evaluar_dimension",
+            "agregar_dimension",
+            "eliminar_dimension",
+            "listar_dimensiones",
+            "obtener_dimension",
+            "limpiar_caches",
+            "obtener_estadisticas",
+            "calcular_promedio",
+            "generar_reporte"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [
+        "crear_gestor"
+      ],
+      "imports_internos": [
+        "grounding.dimensiones.computacional",
+        "grounding.dimensiones.contextual",
+        "grounding.dimensiones.pragmatico",
+        "grounding.base_dimension",
+        "grounding.dimensiones.semantico",
+        "grounding.dimensiones.social",
+        "grounding.dimensiones.metacognitivo",
+        "grounding.dimensiones.predictivo",
+        "grounding.dimensiones.temporal",
+        "grounding.dimensiones.causal"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "grounding\\integracion\\__init__.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 6,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.integracion.integrador_bell"
+      ],
+      "imports_externos": []
+    },
+    "grounding\\integracion\\integrador_bell.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 159,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "IntegradorGroundingBell",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "obtener_grounding",
+            "obtener_dimension",
+            "obtener_promedio",
+            "verificar_grounding_minimo",
+            "generar_reporte_simple",
+            "calcular_todos_async"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.gestor_grounding",
+        "grounding.calculadores.calculador_9d"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "grounding\\reportes\\__init__.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 16,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "grounding.reportes.generador_reportes"
+      ],
+      "imports_externos": []
+    },
+    "grounding\\reportes\\generador_reportes.py": {
+      "modulo": "grounding",
+      "estado": "ACTIVO",
+      "lineas_codigo": 262,
+      "total_clases": 4,
+      "clases": [
+        {
+          "nombre": "EstadoDimension",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "nivel"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "ReporteConcepto",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "salud",
+            "dimensiones_inactivas",
+            "dimension_mas_debil",
+            "dimension_mas_fuerte",
+            "recomendaciones"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "ReporteSistema",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "total_conceptos",
+            "score_promedio",
+            "conceptos_excelentes",
+            "conceptos_deficientes",
+            "distribucion_salud",
+            "dimension_mas_debil_global",
+            "resumen_texto"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "GeneradorReporteGrounding",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "generar_para_concepto",
+            "generar_para_sistema"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "dataclasses",
+        "typing",
+        "datetime"
+      ]
+    },
+    "instalar_gpt2_español.py": {
+      "modulo": "root",
+      "estado": "ACTIVO",
+      "lineas_codigo": 227,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "instalar_dependencias",
+        "crear_estructura",
+        "descargar_gpt2_español",
+        "crear_test",
+        "validar_instalacion",
+        "mostrar_resumen",
+        "main"
+      ],
+      "imports_internos": [],
+      "imports_externos": [
+        "pathlib",
+        "subprocess",
+        "os",
+        "sys",
+        "transformers"
+      ]
+    },
+    "instalar_llm.py": {
+      "modulo": "root",
+      "estado": "ACTIVO",
+      "lineas_codigo": 192,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "instalar_dependencias",
+        "crear_estructura",
+        "descargar_gpt2",
+        "descargar_llama",
+        "validar_instalacion",
+        "main"
+      ],
+      "imports_internos": [],
+      "imports_externos": [
+        "pathlib",
+        "subprocess",
+        "os",
+        "argparse",
+        "sys",
+        "transformers"
+      ]
+    },
+    "llm\\__init__.py": {
+      "modulo": "llm",
+      "estado": "ACTIVO",
+      "lineas_codigo": 25,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "llm.generador_respuestas",
+        "llm.verificador_coherencia",
+        "llm.gestor_llm"
+      ],
+      "imports_externos": []
+    },
+    "llm\\dataset_bell.py": {
+      "modulo": "llm",
+      "estado": "ACTIVO",
+      "lineas_codigo": 0,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": []
+    },
+    "llm\\generador_respuestas.py": {
+      "modulo": "llm",
+      "estado": "ACTIVO",
+      "lineas_codigo": 279,
+      "total_clases": 2,
+      "clases": [
+        {
+          "nombre": "RespuestaGenerada",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "GeneradorRespuestasHibrido",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "generar",
+            "obtener_estadisticas"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [
+        "crear_generador_hibrido"
+      ],
+      "imports_internos": [],
+      "imports_externos": [
+        "re",
+        "types",
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "llm\\gestor_llm.py": {
+      "modulo": "llm",
+      "estado": "ACTIVO",
+      "lineas_codigo": 210,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GestorLLM",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "generar",
+            "generar_con_contexto",
+            "fine_tune",
+            "obtener_estadisticas",
+            "limpiar_cache"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "warnings",
+        "transformers",
+        "typing",
+        "torch"
+      ]
+    },
+    "llm\\verificador_coherencia.py": {
+      "modulo": "llm",
+      "estado": "ACTIVO",
+      "lineas_codigo": 361,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "VerificadorCoherencia",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "verificar",
+            "obtener_estadisticas"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "re",
+        "types",
+        "typing"
+      ]
+    },
+    "main.py": {
+      "modulo": "root",
+      "estado": "ACTIVO",
+      "lineas_codigo": 533,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "Belladonna",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "iniciar_fase2",
+            "detener_fase2",
+            "procesar",
+            "loop_conversacional"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [
+        "main"
+      ],
+      "imports_internos": [
+        "base_datos",
+        "memoria.gestor_memoria",
+        "traduccion.traductor_entrada",
+        "operaciones.shell_executor",
+        "razonamiento.motor_razonamiento",
+        "grounding.calculadores",
+        "vocabulario.semana10_bd",
+        "consejeras.gestor_consejeras",
+        "generacion.generador_salida",
+        "vocabulario.gestor_vocabulario",
+        "grounding",
+        "bucles.gestor_bucles",
+        "llm",
+        "aprendizaje.motor_aprendizaje"
+      ],
+      "imports_externos": [
+        "pathlib",
+        "sys",
+        "argparse",
+        "traceback"
+      ]
+    },
+    "matematicas\\__init__.py": {
+      "modulo": "matematicas",
+      "estado": "ACTIVO",
+      "lineas_codigo": 6,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "calculadora_avanzada"
+      ]
+    },
+    "matematicas\\calculadora_avanzada.py": {
+      "modulo": "matematicas",
+      "estado": "ACTIVO",
+      "lineas_codigo": 403,
+      "total_clases": 2,
+      "clases": [
+        {
+          "nombre": "ResultadoMatematico",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "CalculadoraAvanzada",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "derivar",
+            "integrar",
+            "resolver_ecuacion",
+            "simplificar",
+            "expandir",
+            "factorizar",
+            "limite",
+            "serie_taylor",
+            "evaluar"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "sympy",
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "memoria\\__init__.py": {
+      "modulo": "memoria",
+      "estado": "ACTIVO",
+      "lineas_codigo": 16,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "memoria.almacen",
+        "memoria.tipos_memoria",
+        "memoria.gestor_memoria"
+      ],
+      "imports_externos": []
+    },
+    "memoria\\almacen.py": {
+      "modulo": "memoria",
+      "estado": "ACTIVO",
+      "lineas_codigo": 223,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "AlmacenJSON",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "guardar",
+            "cargar",
+            "buscar",
+            "buscar_por_rango_fecha",
+            "contar",
+            "limpiar",
+            "limpiar_todo",
+            "exportar",
+            "importar",
+            "obtener_estadisticas"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "os",
+        "datetime",
+        "json",
+        "pathlib",
+        "typing"
+      ]
+    },
+    "memoria\\gestor_memoria.py": {
+      "modulo": "memoria",
+      "estado": "ACTIVO",
+      "lineas_codigo": 324,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GestorMemoria",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "iniciar_sesion",
+            "finalizar_sesion",
+            "guardar_concepto_usado",
+            "obtener_conceptos_mas_usados",
+            "guardar_decision",
+            "obtener_decisiones_recientes",
+            "obtener_estadisticas_decisiones",
+            "guardar_patron",
+            "obtener_patrones_recientes",
+            "guardar_insight",
+            "obtener_insights_recientes",
+            "guardar_ajuste_grounding",
+            "obtener_ajustes_concepto",
+            "obtener_resumen_sesion",
+            "obtener_estadisticas_globales",
+            "limpiar_memoria",
+            "exportar_memoria",
+            "importar_memoria"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "memoria.almacen",
+        "memoria.tipos_memoria"
+      ],
+      "imports_externos": [
+        "uuid",
+        "typing",
+        "datetime"
+      ]
+    },
+    "memoria\\tipos_memoria.py": {
+      "modulo": "memoria",
+      "estado": "ACTIVO",
+      "lineas_codigo": 60,
+      "total_clases": 7,
+      "clases": [
+        {
+          "nombre": "TipoMemoria",
+          "hereda_de": [
+            "Enum"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "RegistroConcepto",
+          "hereda_de": [
+            "TypedDict"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "RegistroDecision",
+          "hereda_de": [
+            "TypedDict"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "RegistroPatron",
+          "hereda_de": [
+            "TypedDict"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "RegistroInsight",
+          "hereda_de": [
+            "TypedDict"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "RegistroAjuste",
+          "hereda_de": [
+            "TypedDict"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "RegistroSesion",
+          "hereda_de": [
+            "TypedDict"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "enum",
+        "typing"
+      ]
+    },
+    "operaciones\\__init__.py": {
+      "modulo": "operaciones",
+      "estado": "ACTIVO",
+      "lineas_codigo": 6,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "shell_executor"
+      ]
+    },
+    "operaciones\\shell_executor.py": {
+      "modulo": "operaciones",
+      "estado": "ACTIVO",
+      "lineas_codigo": 219,
+      "total_clases": 2,
+      "clases": [
+        {
+          "nombre": "SecurityError",
+          "hereda_de": [
+            "Exception"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "ShellExecutor",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "ejecutar",
+            "es_seguro",
+            "listar_comandos_disponibles",
+            "obtener_info_sistema"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "pathlib",
+        "platform",
+        "subprocess",
+        "typing"
+      ]
+    },
+    "planificacion\\__init__.py": {
+      "modulo": "planificacion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 22,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "ejecutor_planes",
+        "motor_planificacion"
+      ]
+    },
+    "planificacion\\ejecutor_planes.py": {
+      "modulo": "planificacion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 300,
+      "total_clases": 2,
+      "clases": [
+        {
+          "nombre": "ResultadoEjecucion",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "EjecutorPlanes",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "ejecutar_plan",
+            "ejecutar_paso",
+            "ejecutar_paralelo",
+            "rollback_plan",
+            "ejecutar_con_reintentos",
+            "simular_ejecucion",
+            "obtener_log",
+            "limpiar_log"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "motor_planificacion",
+        "time",
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "planificacion\\motor_planificacion.py": {
+      "modulo": "planificacion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 350,
+      "total_clases": 4,
+      "clases": [
+        {
+          "nombre": "EstadoPaso",
+          "hereda_de": [
+            "Enum"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "Paso",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "Plan",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "obtener_paso",
+            "pasos_completados",
+            "pasos_pendientes",
+            "actualizar_progreso"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "MotorPlanificacion",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "registrar_accion",
+            "crear_plan",
+            "validar_plan",
+            "optimizar_plan",
+            "obtener_siguiente_paso",
+            "puede_ejecutar_en_paralelo",
+            "estimar_tiempo",
+            "generar_resumen"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "enum",
+        "dataclasses",
+        "typing",
+        "uuid"
+      ]
+    },
+    "razonamiento\\__init__.py": {
+      "modulo": "razonamiento",
+      "estado": "ACTIVO",
+      "lineas_codigo": 16,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "razonamiento.motor_razonamiento",
+        "razonamiento.evaluador_capacidades",
+        "razonamiento.generador_decisiones",
+        "razonamiento.tipos_decision"
+      ],
+      "imports_externos": []
+    },
+    "razonamiento\\evaluador_capacidades.py": {
+      "modulo": "razonamiento",
+      "estado": "ACTIVO",
+      "lineas_codigo": 113,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "EvaluadorCapacidades",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "evaluar_capacidad_accion",
+            "verificar_requisitos",
+            "calcular_confianza_total"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "core.concepto_anclado"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "razonamiento\\generador_decisiones.py": {
+      "modulo": "razonamiento",
+      "estado": "ACTIVO",
+      "lineas_codigo": 93,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GeneradorDecisiones",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "generar_decision_capacidad",
+            "generar_decision_saludo",
+            "generar_decision_agradecimiento",
+            "generar_decision_no_entendido"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "razonamiento.evaluador_capacidades",
+        "core.concepto_anclado",
+        "razonamiento.tipos_decision"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "razonamiento\\motor_razonamiento.py": {
+      "modulo": "razonamiento",
+      "estado": "ACTIVO",
+      "lineas_codigo": 58,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "MotorRazonamiento",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "razonar",
+            "explicar_decision"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "razonamiento.generador_decisiones",
+        "razonamiento.tipos_decision"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "razonamiento\\tipos_decision.py": {
+      "modulo": "razonamiento",
+      "estado": "ACTIVO",
+      "lineas_codigo": 56,
+      "total_clases": 3,
+      "clases": [
+        {
+          "nombre": "TipoDecision",
+          "hereda_de": [
+            "Enum"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "RazonRechazo",
+          "hereda_de": [
+            "Enum"
+          ],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "Decision",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "es_ejecutable",
+            "es_rechazo"
+          ],
+          "es_abstracta": false,
+          "tiene_init": false
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "typing",
+        "enum",
+        "dataclasses"
+      ]
+    },
+    "red\\__init__.py": {
+      "modulo": "red",
+      "estado": "ACTIVO",
+      "lineas_codigo": 12,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "manejador_requests",
+        "cliente_http"
+      ]
+    },
+    "red\\cliente_http.py": {
+      "modulo": "red",
+      "estado": "ACTIVO",
+      "lineas_codigo": 311,
+      "total_clases": 2,
+      "clases": [
+        {
+          "nombre": "Respuesta",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "ClienteHTTP",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "get",
+            "post",
+            "put",
+            "delete",
+            "get_json",
+            "post_json"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "urllib",
+        "time",
+        "json",
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "red\\manejador_requests.py": {
+      "modulo": "red",
+      "estado": "ACTIVO",
+      "lineas_codigo": 274,
+      "total_clases": 2,
+      "clases": [
+        {
+          "nombre": "ConfiguracionAPI",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "ManejadorRequests",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "configurar_api",
+            "request_api",
+            "get_con_cache",
+            "validar_respuesta",
+            "parsear_json_respuesta",
+            "hacer_batch_requests",
+            "obtener_estadisticas",
+            "limpiar_cache",
+            "limpiar_historial"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "json",
+        "cliente_http",
+        "dataclasses",
+        "typing"
+      ]
+    },
+    "traduccion\\__init__.py": {
+      "modulo": "traduccion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 10,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "traduccion.analizador_español",
+        "traduccion.traductor_entrada"
+      ],
+      "imports_externos": []
+    },
+    "traduccion\\analizador_español.py": {
+      "modulo": "traduccion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 66,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "AnalizadorEspañol",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "analizar",
+            "es_frase_simple",
+            "tiene_verbo",
+            "palabras_clave"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [],
+      "imports_externos": [
+        "spacy",
+        "typing"
+      ]
+    },
+    "traduccion\\traductor_entrada.py": {
+      "modulo": "traduccion",
+      "estado": "ACTIVO",
+      "lineas_codigo": 114,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "TraductorEntrada",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "traducir",
+            "estadisticas"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "traduccion.analizador_español",
+        "core.concepto_anclado",
+        "vocabulario.gestor_vocabulario"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "ver_estructura_detallada.py": {
+      "modulo": "root",
+      "estado": "ACTIVO",
+      "lineas_codigo": 252,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "AnalizadorDetallado",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "analizar_proyecto",
+            "generar_reporte_modulo",
+            "generar_reporte_completo",
+            "generar_mapa_clases"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [
+        "main"
+      ],
+      "imports_internos": [],
+      "imports_externos": [
+        "os",
+        "collections",
+        "ast",
+        "pathlib",
+        "typing"
+      ]
+    },
+    "vocabulario\\__init__.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 8,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "vocabulario.gestor_vocabulario"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\gestor_vocabulario.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 142,
+      "total_clases": 1,
+      "clases": [
+        {
+          "nombre": "GestorVocabulario",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "obtener_todos",
+            "total_conceptos",
+            "buscar_por_palabra",
+            "buscar_por_id",
+            "filtrar_por_tipo",
+            "estadisticas"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [],
+      "imports_internos": [
+        "vocabulario.semana1_operaciones",
+        "vocabulario.semana4_emociones",
+        "vocabulario.semana2_verbos",
+        "vocabulario.semana1_acciones",
+        "vocabulario.semana6_analisis",
+        "vocabulario.semana3_conversacion_expandida",
+        "vocabulario.semana1_conversacion",
+        "vocabulario.semana2_python",
+        "vocabulario.semana9_red",
+        "vocabulario.semana5_sistema",
+        "vocabulario.semana1_cognitivos",
+        "vocabulario.semana2_adjetivos",
+        "vocabulario.semana3_matematicas",
+        "vocabulario.semana3_sistema_avanzado",
+        "vocabulario.semana2_conectores",
+        "vocabulario.semana8_planificacion",
+        "vocabulario.semana4_acciones",
+        "vocabulario.semana4_tiempo",
+        "vocabulario.semana3_python_avanzado",
+        "vocabulario.semana7_matematicas",
+        "core.concepto_anclado",
+        "vocabulario.semana10_bd"
+      ],
+      "imports_externos": [
+        "typing"
+      ]
+    },
+    "vocabulario\\semana10_bd.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 251,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "configurar_bd",
+        "obtener_conceptos_bd"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": [
+        "sys",
+        "pathlib"
+      ]
+    },
+    "vocabulario\\semana1_acciones.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 58,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_acciones"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana1_cognitivos.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 85,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_cognitivos"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana1_conversacion.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 95,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_conversacion"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana1_operaciones.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 85,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_operaciones"
+      ],
+      "imports_internos": [
+        "core.capacidades_bell",
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana2_adjetivos.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 66,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_adjetivos"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana2_conectores.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 111,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_conectores"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana2_python.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 157,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_python"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana2_verbos.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 111,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_verbos"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana3_conversacion_expandida.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 288,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_conversacion_expandida"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana3_matematicas.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 217,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_matematicas"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana3_python_avanzado.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 406,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_python_avanzado"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana3_sistema_avanzado.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 296,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_sistema_avanzado"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana4_acciones.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 121,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_acciones"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana4_emociones.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 177,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_emociones"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana4_tiempo.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 120,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "obtener_conceptos_tiempo"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": []
+    },
+    "vocabulario\\semana5_sistema.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 730,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "configurar_executor",
+        "obtener_conceptos_sistema",
+        "obtener_concepto_por_palabra"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": [
+        "sys",
+        "pathlib"
+      ]
+    },
+    "vocabulario\\semana6_analisis.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 746,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "configurar_analyzer",
+        "obtener_conceptos_analisis",
+        "obtener_concepto_por_palabra"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": [
+        "sys",
+        "pathlib"
+      ]
+    },
+    "vocabulario\\semana7_matematicas.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 680,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "configurar_calculadora",
+        "obtener_conceptos_matematicas_avanzadas",
+        "obtener_concepto_por_palabra"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": [
+        "sys",
+        "pathlib"
+      ]
+    },
+    "vocabulario\\semana8_planificacion.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 608,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "configurar_planificacion",
+        "obtener_conceptos_planificacion",
+        "obtener_concepto_por_palabra"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": [
+        "sys",
+        "pathlib"
+      ]
+    },
+    "vocabulario\\semana9_red.py": {
+      "modulo": "vocabulario",
+      "estado": "ACTIVO",
+      "lineas_codigo": 280,
+      "total_clases": 0,
+      "clases": [],
+      "funciones_publicas": [
+        "configurar_red",
+        "obtener_conceptos_red"
+      ],
+      "imports_internos": [
+        "core.concepto_anclado",
+        "core.tipos"
+      ],
+      "imports_externos": [
+        "sys",
+        "pathlib"
+      ]
+    },
+    "Vocabulario_Audit.py": {
+      "modulo": "root",
+      "estado": "ACTIVO",
+      "lineas_codigo": 448,
+      "total_clases": 3,
+      "clases": [
+        {
+          "nombre": "EstadisticasConcepto",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "EstadisticasVocabulario",
+          "hereda_de": [],
+          "metodos_publicos": [],
+          "es_abstracta": false,
+          "tiene_init": false
+        },
+        {
+          "nombre": "AuditorVocabulario",
+          "hereda_de": [],
+          "metodos_publicos": [
+            "inicializar_gestor",
+            "auditar_todo",
+            "generar_reporte_markdown",
+            "generar_datos_json",
+            "generar_health_check"
+          ],
+          "es_abstracta": false,
+          "tiene_init": true
+        }
+      ],
+      "funciones_publicas": [
+        "main"
+      ],
+      "imports_internos": [
+        "vocabulario.gestor_vocabulario"
+      ],
+      "imports_externos": [
+        "sys",
+        "collections",
+        "json",
+        "pathlib",
+        "dataclasses",
+        "typing"
+      ]
+    }
+  },
+  "herencia": {
+    "ABC": [
+      "EstrategiaAprendizaje",
+      "BaseBucle",
+      "Consejera",
+      "DimensionGrounding"
+    ],
+    "BaseBucle": [
+      "BucleCorto",
+      "BucleLargo",
+      "BucleMedio",
+      "BucleTest"
+    ],
+    "Consejera": [
+      "Echo",
+      "Iris",
+      "Luna",
+      "Lyra",
+      "Nova",
+      "Sage",
+      "Vega"
+    ],
+    "DimensionGrounding": [
+      "GroundingCausal",
+      "GroundingComputacional",
+      "GroundingContextual",
+      "GroundingMetacognitivo",
+      "GroundingPragmatico",
+      "GroundingPredictivo",
+      "GroundingSemantico",
+      "GroundingSocial",
+      "GroundingTemporal"
+    ]
+  },
+  "codigo_obsoleto": [
+    {
+      "ruta": "_legacy\\extension_grounding.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "_legacy\\grounding_causal.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "_legacy\\grounding_contextual.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "_legacy\\grounding_metacognitivo.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "_legacy\\grounding_pragmatico.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "_legacy\\grounding_predictivo.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "_legacy\\grounding_semantico.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "_legacy\\grounding_social.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "_legacy\\grounding_temporal.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "_legacy\\integracion_grounding_bell.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "_legacy\\reporte_grounding.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "aprendizaje\\__init__.py",
+      "razon": "Sin clases ni funciones públicas"
+    },
+    {
+      "ruta": "base_datos\\__init__.py",
+      "razon": "Sin clases ni funciones públicas"
+    },
+    {
+      "ruta": "bucles\\__init__.py",
+      "razon": "Sin clases ni funciones públicas"
+    },
+    {
+      "ruta": "consejeras\\__init__.py",
+      "razon": "Sin clases ni funciones públicas"
+    },
+    {
+      "ruta": "grounding\\calculadores\\__init__.py",
+      "razon": "Sin clases ni funciones públicas"
+    },
+    {
+      "ruta": "grounding\\reportes\\__init__.py",
+      "razon": "Sin clases ni funciones públicas"
+    },
+    {
+      "ruta": "limpiar_legacy.py",
+      "razon": "Carpeta _legacy"
+    },
+    {
+      "ruta": "llm\\__init__.py",
+      "razon": "Sin clases ni funciones públicas"
+    },
+    {
+      "ruta": "memoria\\__init__.py",
+      "razon": "Sin clases ni funciones públicas"
+    },
+    {
+      "ruta": "planificacion\\__init__.py",
+      "razon": "Sin clases ni funciones públicas"
+    },
+    {
+      "ruta": "razonamiento\\__init__.py",
+      "razon": "Sin clases ni funciones públicas"
+    },
+    {
+      "ruta": "red\\__init__.py",
+      "razon": "Sin clases ni funciones públicas"
+    }
+  ]
+}

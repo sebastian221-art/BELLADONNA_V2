@@ -1,0 +1,6731 @@
+{
+  "proyecto": "Belladonna",
+  "modulo": "Vocabulario",
+  "version_analisis": "2.0",
+  "estadisticas_globales": {
+    "total_conceptos": 465,
+    "grounding_promedio": 0.856,
+    "grounding_mediana": 0.9,
+    "conceptos_ejecutables": 83,
+    "conceptos_grounding_1_0": 87,
+    "conceptos_grounding_bajo": 0,
+    "duplicados": 123
+  },
+  "distribucion_por_tipo": {
+    "1": 106,
+    "2": 9,
+    "6": 51,
+    "3": 46,
+    "5": 229,
+    "4": 24
+  },
+  "distribucion_por_archivo": {
+    "desconocido": 465
+  },
+  "distribucion_por_grounding": {
+    "1.0 (Perfecto)": 87,
+    "0.9-0.99 (Excelente)": 193,
+    "0.8-0.89 (Muy bueno)": 79,
+    "0.7-0.79 (Bueno)": 85,
+    "0.5-0.69 (Regular)": 21,
+    "< 0.5 (Bajo)": 0
+  },
+  "conceptos": [
+    {
+      "id": "CONCEPTO_LEER",
+      "palabras": [
+        "leer",
+        "read",
+        "cargar"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ESCRIBIR",
+      "palabras": [
+        "escribir",
+        "write",
+        "guardar"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ARCHIVO",
+      "palabras": [
+        "archivo",
+        "file",
+        "documento"
+      ],
+      "tipo": 2,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DIRECTORIO",
+      "palabras": [
+        "directorio",
+        "carpeta",
+        "folder"
+      ],
+      "tipo": 2,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EXISTE",
+      "palabras": [
+        "existe",
+        "hay",
+        "está"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HOLA",
+      "palabras": [
+        "hola",
+        "hi",
+        "hello",
+        "hey"
+      ],
+      "tipo": 6,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_GRACIAS",
+      "palabras": [
+        "gracias",
+        "thanks",
+        "thank you"
+      ],
+      "tipo": 6,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SI",
+      "palabras": [
+        "sí",
+        "si",
+        "yes",
+        "afirmativo"
+      ],
+      "tipo": 6,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_NO",
+      "palabras": [
+        "no",
+        "nope",
+        "negativo"
+      ],
+      "tipo": 6,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_QUE",
+      "palabras": [
+        "qué",
+        "que",
+        "what"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COMO",
+      "palabras": [
+        "cómo",
+        "como",
+        "how"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_QUIEN",
+      "palabras": [
+        "quién",
+        "quien",
+        "who"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DONDE",
+      "palabras": [
+        "dónde",
+        "donde",
+        "where"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CUANDO",
+      "palabras": [
+        "cuándo",
+        "cuando",
+        "when"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_POR_QUE",
+      "palabras": [
+        "por qué",
+        "porque",
+        "why"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_AYUDA",
+      "palabras": [
+        "ayuda",
+        "help",
+        "ayudar",
+        "asistir"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PODER",
+      "palabras": [
+        "poder",
+        "puedes",
+        "puedo",
+        "capacidad"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HACER",
+      "palabras": [
+        "hacer",
+        "realizar",
+        "ejecutar"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CREAR",
+      "palabras": [
+        "crear",
+        "create",
+        "generar"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RAZONAR",
+      "palabras": [
+        "razonar",
+        "pensar",
+        "analizar"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DECIDIR",
+      "palabras": [
+        "decidir",
+        "determinar",
+        "elegir"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ENTENDER",
+      "palabras": [
+        "entender",
+        "comprender",
+        "captar"
+      ],
+      "tipo": 3,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SABER",
+      "palabras": [
+        "saber",
+        "conocer"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EXPLICAR",
+      "palabras": [
+        "explicar",
+        "explain",
+        "aclarar"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CERTEZA",
+      "palabras": [
+        "certeza",
+        "seguridad",
+        "confianza"
+      ],
+      "tipo": 5,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MOSTRAR",
+      "palabras": [
+        "mostrar",
+        "show",
+        "enseñar",
+        "display"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MODIFICAR",
+      "palabras": [
+        "modificar",
+        "cambiar",
+        "editar",
+        "actualizar"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ELIMINAR",
+      "palabras": [
+        "eliminar",
+        "borrar",
+        "delete",
+        "remover"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PREGUNTA",
+      "palabras": [
+        "pregunta",
+        "preguntar",
+        "cuestión",
+        "consulta"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RESPUESTA",
+      "palabras": [
+        "respuesta",
+        "responder",
+        "contestar",
+        "reply"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_VARIABLE",
+      "palabras": [
+        "variable",
+        "var"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FUNCION",
+      "palabras": [
+        "función",
+        "function",
+        "def"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CLASE",
+      "palabras": [
+        "clase",
+        "class"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LISTA",
+      "palabras": [
+        "lista",
+        "list",
+        "array"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DICCIONARIO",
+      "palabras": [
+        "diccionario",
+        "dict",
+        "map"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_IF",
+      "palabras": [
+        "if",
+        "si",
+        "condicional"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FOR",
+      "palabras": [
+        "for",
+        "bucle",
+        "loop"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_WHILE",
+      "palabras": [
+        "while",
+        "mientras"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RETURN",
+      "palabras": [
+        "return",
+        "retornar",
+        "devolver"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_IMPORT",
+      "palabras": [
+        "import",
+        "importar"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PRINT",
+      "palabras": [
+        "print",
+        "imprimir",
+        "mostrar"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INPUT",
+      "palabras": [
+        "input",
+        "entrada",
+        "leer"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LEN",
+      "palabras": [
+        "len",
+        "longitud",
+        "tamaño"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TYPE",
+      "palabras": [
+        "type",
+        "tipo"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_STR",
+      "palabras": [
+        "str",
+        "string",
+        "texto",
+        "cadena"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_NECESITAR",
+      "palabras": [
+        "necesitar",
+        "necesito",
+        "requiero",
+        "preciso"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_QUERER",
+      "palabras": [
+        "querer",
+        "quiero",
+        "desear",
+        "deseo"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_BUSCAR",
+      "palabras": [
+        "buscar",
+        "encontrar",
+        "localizar"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DECIR",
+      "palabras": [
+        "decir",
+        "mencionar",
+        "comentar",
+        "expresar"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PREGUNTAR",
+      "palabras": [
+        "preguntar",
+        "consultar",
+        "indagar"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DAR",
+      "palabras": [
+        "dar",
+        "proporcionar",
+        "proveer",
+        "entregar"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_USAR",
+      "palabras": [
+        "usar",
+        "utilizar",
+        "emplear"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_VER",
+      "palabras": [
+        "ver",
+        "mirar",
+        "observar",
+        "revisar"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TENER",
+      "palabras": [
+        "tener",
+        "poseer",
+        "contar"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_OBTENER",
+      "palabras": [
+        "obtener",
+        "conseguir",
+        "adquirir",
+        "lograr"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PARA",
+      "palabras": [
+        "para",
+        "hacia"
+      ],
+      "tipo": 6,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CON",
+      "palabras": [
+        "con"
+      ],
+      "tipo": 6,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SIN",
+      "palabras": [
+        "sin"
+      ],
+      "tipo": 6,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SOBRE",
+      "palabras": [
+        "sobre",
+        "acerca"
+      ],
+      "tipo": 6,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EN",
+      "palabras": [
+        "en"
+      ],
+      "tipo": 6,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DE",
+      "palabras": [
+        "de"
+      ],
+      "tipo": 6,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_Y",
+      "palabras": [
+        "y",
+        "e"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_O",
+      "palabras": [
+        "o",
+        "u"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ESTE",
+      "palabras": [
+        "este",
+        "esta",
+        "esto",
+        "estos",
+        "estas"
+      ],
+      "tipo": 6,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ESE",
+      "palabras": [
+        "ese",
+        "esa",
+        "eso",
+        "esos",
+        "esas",
+        "aquel",
+        "aquella"
+      ],
+      "tipo": 6,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_NUEVO",
+      "palabras": [
+        "nuevo",
+        "nueva",
+        "reciente"
+      ],
+      "tipo": 4,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_VIEJO",
+      "palabras": [
+        "viejo",
+        "vieja",
+        "antiguo",
+        "antigua"
+      ],
+      "tipo": 4,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_BUENO",
+      "palabras": [
+        "bueno",
+        "buena",
+        "correcto",
+        "bien"
+      ],
+      "tipo": 4,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MALO",
+      "palabras": [
+        "malo",
+        "mala",
+        "incorrecto",
+        "mal"
+      ],
+      "tipo": 4,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_GRANDE",
+      "palabras": [
+        "grande",
+        "mayor",
+        "amplio",
+        "extenso"
+      ],
+      "tipo": 4,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DECORATOR",
+      "palabras": [
+        "decorator",
+        "decorador",
+        "@"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LAMBDA",
+      "palabras": [
+        "lambda",
+        "función anónima"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_GENERATOR",
+      "palabras": [
+        "generator",
+        "generador",
+        "yield"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COMPREHENSION",
+      "palabras": [
+        "comprehension",
+        "list comprehension"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CLOSURE",
+      "palabras": [
+        "closure",
+        "clausura"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MAP",
+      "palabras": [
+        "map",
+        "mapear"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FILTER",
+      "palabras": [
+        "filter",
+        "filtrar"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REDUCE",
+      "palabras": [
+        "reduce",
+        "reducir"
+      ],
+      "tipo": 1,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ASYNC",
+      "palabras": [
+        "async",
+        "asíncrono"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_AWAIT",
+      "palabras": [
+        "await",
+        "esperar"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COROUTINE",
+      "palabras": [
+        "coroutine",
+        "corrutina"
+      ],
+      "tipo": 5,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ASYNCIO",
+      "palabras": [
+        "asyncio"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TASK",
+      "palabras": [
+        "task",
+        "tarea"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FUTURE",
+      "palabras": [
+        "future",
+        "futuro"
+      ],
+      "tipo": 5,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PROPERTY",
+      "palabras": [
+        "property",
+        "propiedad",
+        "@property"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_STATICMETHOD",
+      "palabras": [
+        "staticmethod",
+        "@staticmethod"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CLASSMETHOD",
+      "palabras": [
+        "classmethod",
+        "@classmethod"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INHERITANCE",
+      "palabras": [
+        "inheritance",
+        "herencia"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SUPER",
+      "palabras": [
+        "super",
+        "padre"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ABSTRACT",
+      "palabras": [
+        "abstract",
+        "abstracto",
+        "ABC"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DATACLASS",
+      "palabras": [
+        "dataclass",
+        "@dataclass"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DUNDER",
+      "palabras": [
+        "dunder",
+        "__init__",
+        "magic method"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TRY",
+      "palabras": [
+        "try",
+        "intentar"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EXCEPT",
+      "palabras": [
+        "except",
+        "exception"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FINALLY",
+      "palabras": [
+        "finally",
+        "finalmente"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RAISE",
+      "palabras": [
+        "raise",
+        "lanzar"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EXCEPTION_CLASS",
+      "palabras": [
+        "exception",
+        "error"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_WITH",
+      "palabras": [
+        "with",
+        "context manager"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ENTER",
+      "palabras": [
+        "__enter__",
+        "enter"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EXIT",
+      "palabras": [
+        "__exit__",
+        "exit"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MODULE",
+      "palabras": [
+        "module",
+        "módulo"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PACKAGE",
+      "palabras": [
+        "package",
+        "paquete"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FROM",
+      "palabras": [
+        "from",
+        "desde"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_AS",
+      "palabras": [
+        "as",
+        "como",
+        "alias"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INIT_PY",
+      "palabras": [
+        "__init__.py",
+        "init"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TYPE_HINT",
+      "palabras": [
+        "type hint",
+        "typing"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_OPTIONAL",
+      "palabras": [
+        "Optional",
+        "opcional"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_UNION",
+      "palabras": [
+        "Union",
+        "unión"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_GENERIC",
+      "palabras": [
+        "Generic",
+        "genérico"
+      ],
+      "tipo": 5,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PROTOCOL",
+      "palabras": [
+        "Protocol",
+        "protocolo"
+      ],
+      "tipo": 5,
+      "grounding": 0.6,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COPIAR",
+      "palabras": [
+        "copiar",
+        "copy",
+        "duplicar"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MOVER",
+      "palabras": [
+        "mover",
+        "move",
+        "renombrar"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CREAR_DIRECTORIO",
+      "palabras": [
+        "crear directorio",
+        "mkdir",
+        "nueva carpeta"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PERMISOS",
+      "palabras": [
+        "permisos",
+        "permissions",
+        "chmod"
+      ],
+      "tipo": 4,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EXTENSION",
+      "palabras": [
+        "extensión",
+        "extension",
+        "tipo archivo"
+      ],
+      "tipo": 4,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RUTA",
+      "palabras": [
+        "ruta",
+        "path",
+        "ubicación"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ABSOLUTA",
+      "palabras": [
+        "absoluta",
+        "absolute",
+        "ruta completa"
+      ],
+      "tipo": 4,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RELATIVA",
+      "palabras": [
+        "relativa",
+        "relative"
+      ],
+      "tipo": 4,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_NOMBRE_ARCHIVO",
+      "palabras": [
+        "nombre",
+        "filename",
+        "nombre archivo"
+      ],
+      "tipo": 4,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FECHA_MODIFICACION",
+      "palabras": [
+        "fecha modificación",
+        "mtime",
+        "timestamp"
+      ],
+      "tipo": 4,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PROCESO",
+      "palabras": [
+        "proceso",
+        "process"
+      ],
+      "tipo": 2,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_THREAD",
+      "palabras": [
+        "thread",
+        "hilo"
+      ],
+      "tipo": 2,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PID",
+      "palabras": [
+        "pid",
+        "process id"
+      ],
+      "tipo": 4,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TERMINAR",
+      "palabras": [
+        "terminar",
+        "kill",
+        "detener"
+      ],
+      "tipo": 1,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PAUSAR",
+      "palabras": [
+        "pausar",
+        "pause",
+        "sleep"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REANUDAR",
+      "palabras": [
+        "reanudar",
+        "resume",
+        "continuar"
+      ],
+      "tipo": 1,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MEMORIA_RAM",
+      "palabras": [
+        "memoria",
+        "RAM",
+        "memoria principal"
+      ],
+      "tipo": 2,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CPU",
+      "palabras": [
+        "CPU",
+        "procesador"
+      ],
+      "tipo": 2,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DISCO",
+      "palabras": [
+        "disco",
+        "disk",
+        "almacenamiento"
+      ],
+      "tipo": 2,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RED",
+      "palabras": [
+        "red",
+        "network"
+      ],
+      "tipo": 2,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_BUSCAR_TEXTO",
+      "palabras": [
+        "buscar",
+        "find",
+        "search"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REEMPLAZAR",
+      "palabras": [
+        "reemplazar",
+        "replace",
+        "sustituir"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DIVIDIR",
+      "palabras": [
+        "dividir",
+        "split",
+        "separar"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_UNIR",
+      "palabras": [
+        "unir",
+        "join",
+        "concatenar"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MAYUSCULAS",
+      "palabras": [
+        "mayúsculas",
+        "upper",
+        "uppercase"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MINUSCULAS",
+      "palabras": [
+        "minúsculas",
+        "lower",
+        "lowercase"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_STRIP",
+      "palabras": [
+        "strip",
+        "limpiar",
+        "trim"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FORMATO",
+      "palabras": [
+        "formato",
+        "format"
+      ],
+      "tipo": 1,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ENCODING",
+      "palabras": [
+        "encoding",
+        "codificación",
+        "utf-8"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REGEX",
+      "palabras": [
+        "regex",
+        "expresión regular",
+        "pattern"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SUMA",
+      "palabras": [
+        "suma",
+        "adición",
+        "más"
+      ],
+      "tipo": 3,
+      "grounding": 0.85,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RESTA",
+      "palabras": [
+        "resta",
+        "sustracción",
+        "menos"
+      ],
+      "tipo": 3,
+      "grounding": 0.85,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MULTIPLICACION",
+      "palabras": [
+        "multiplicación",
+        "producto",
+        "por"
+      ],
+      "tipo": 3,
+      "grounding": 0.85,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DIVISION",
+      "palabras": [
+        "división",
+        "dividir",
+        "entre"
+      ],
+      "tipo": 3,
+      "grounding": 0.85,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ENTERO",
+      "palabras": [
+        "entero",
+        "integer",
+        "número entero"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DECIMAL",
+      "palabras": [
+        "decimal",
+        "flotante",
+        "float"
+      ],
+      "tipo": 5,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_POSITIVO",
+      "palabras": [
+        "positivo",
+        "mayor que cero"
+      ],
+      "tipo": 4,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_NEGATIVO",
+      "palabras": [
+        "negativo",
+        "menor que cero"
+      ],
+      "tipo": 4,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_POTENCIA",
+      "palabras": [
+        "potencia",
+        "exponente",
+        "elevado"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RAIZ",
+      "palabras": [
+        "raíz",
+        "raíz cuadrada",
+        "sqrt"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MODULO",
+      "palabras": [
+        "módulo",
+        "resto",
+        "mod"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ABS",
+      "palabras": [
+        "absoluto",
+        "abs",
+        "valor absoluto"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REDONDEO",
+      "palabras": [
+        "redondear",
+        "round",
+        "aproximar"
+      ],
+      "tipo": 3,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MAXIMO",
+      "palabras": [
+        "máximo",
+        "max",
+        "mayor"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PROMEDIO",
+      "palabras": [
+        "promedio",
+        "media",
+        "average"
+      ],
+      "tipo": 3,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MINIMO",
+      "palabras": [
+        "mínimo",
+        "min",
+        "menor"
+      ],
+      "tipo": 3,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RANGO",
+      "palabras": [
+        "rango",
+        "range",
+        "intervalo"
+      ],
+      "tipo": 5,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PORCENTAJE",
+      "palabras": [
+        "porcentaje",
+        "por ciento",
+        "percent"
+      ],
+      "tipo": 5,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FRACCION",
+      "palabras": [
+        "fracción",
+        "quebrado",
+        "racional"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ECUACION",
+      "palabras": [
+        "ecuación",
+        "igualdad",
+        "fórmula"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_AHORA",
+      "palabras": [
+        "ahora",
+        "now",
+        "actualmente"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DESPUES",
+      "palabras": [
+        "después",
+        "luego",
+        "later"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ANTES",
+      "palabras": [
+        "antes",
+        "before",
+        "previamente"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SIEMPRE",
+      "palabras": [
+        "siempre",
+        "always"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_NUNCA",
+      "palabras": [
+        "nunca",
+        "never",
+        "jamás"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_A_VECES",
+      "palabras": [
+        "a veces",
+        "sometimes"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FRECUENTE",
+      "palabras": [
+        "frecuente",
+        "often",
+        "seguido"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RARO",
+      "palabras": [
+        "raro",
+        "rare",
+        "poco común"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MUCHO",
+      "palabras": [
+        "mucho",
+        "muchos",
+        "many"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_POCO",
+      "palabras": [
+        "poco",
+        "pocos",
+        "few"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_NINGUNO",
+      "palabras": [
+        "ninguno",
+        "ninguna",
+        "none"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ALGUNOS",
+      "palabras": [
+        "algunos",
+        "algunas",
+        "some"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MAS",
+      "palabras": [
+        "más",
+        "more"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MENOS",
+      "palabras": [
+        "menos",
+        "less"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_IGUAL",
+      "palabras": [
+        "igual",
+        "same",
+        "equivalente"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DIFERENTE",
+      "palabras": [
+        "diferente",
+        "different",
+        "distinto"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DEBE",
+      "palabras": [
+        "debe",
+        "deber",
+        "should",
+        "must"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PUEDE",
+      "palabras": [
+        "puede",
+        "podría",
+        "might"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_QUIZA",
+      "palabras": [
+        "quizá",
+        "quizás",
+        "maybe",
+        "tal vez"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SEGURO",
+      "palabras": [
+        "seguro",
+        "certainly",
+        "definitivamente"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PROBABLE",
+      "palabras": [
+        "probable",
+        "likely"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_POSIBLE",
+      "palabras": [
+        "posible",
+        "possible"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_IMPOSIBLE",
+      "palabras": [
+        "imposible",
+        "impossible"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DIFICIL",
+      "palabras": [
+        "difícil",
+        "difficult",
+        "complicado"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CORRECTO",
+      "palabras": [
+        "correcto",
+        "correct",
+        "right"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INCORRECTO",
+      "palabras": [
+        "incorrecto",
+        "wrong",
+        "equivocado"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MEJOR",
+      "palabras": [
+        "mejor",
+        "best",
+        "óptimo"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PEOR",
+      "palabras": [
+        "peor",
+        "worst"
+      ],
+      "tipo": 6,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RAPIDO",
+      "palabras": [
+        "rápido",
+        "fast",
+        "veloz"
+      ],
+      "tipo": 4,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LENTO",
+      "palabras": [
+        "lento",
+        "slow"
+      ],
+      "tipo": 4,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CAMINAR",
+      "palabras": [
+        "caminar",
+        "andar",
+        "walk"
+      ],
+      "tipo": 3,
+      "grounding": 0.65,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CORRER",
+      "palabras": [
+        "correr",
+        "run"
+      ],
+      "tipo": 3,
+      "grounding": 0.65,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DORMIR",
+      "palabras": [
+        "dormir",
+        "descansar",
+        "sleep"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COMER",
+      "palabras": [
+        "comer",
+        "eat"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_BEBER",
+      "palabras": [
+        "beber",
+        "tomar",
+        "drink"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HABLAR",
+      "palabras": [
+        "hablar",
+        "conversar",
+        "speak"
+      ],
+      "tipo": 3,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ESCUCHAR",
+      "palabras": [
+        "escuchar",
+        "oír",
+        "listen"
+      ],
+      "tipo": 3,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MIRAR",
+      "palabras": [
+        "mirar",
+        "ver",
+        "look",
+        "watch"
+      ],
+      "tipo": 3,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RECORDAR",
+      "palabras": [
+        "recordar",
+        "acordarse",
+        "remember"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_OLVIDAR",
+      "palabras": [
+        "olvidar",
+        "forget"
+      ],
+      "tipo": 3,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FELIZ",
+      "palabras": [
+        "feliz",
+        "contento",
+        "alegre",
+        "happy"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TRISTE",
+      "palabras": [
+        "triste",
+        "deprimido",
+        "melancólico",
+        "sad"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ENOJADO",
+      "palabras": [
+        "enojado",
+        "molesto",
+        "furioso",
+        "angry"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MIEDO",
+      "palabras": [
+        "miedo",
+        "temor",
+        "asustado",
+        "fear"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SORPRESA",
+      "palabras": [
+        "sorpresa",
+        "asombro",
+        "surprised"
+      ],
+      "tipo": 5,
+      "grounding": 0.65,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONFUNDIDO",
+      "palabras": [
+        "confundido",
+        "desconcertado",
+        "perplejo"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FRUSTRADO",
+      "palabras": [
+        "frustrado",
+        "desesperado",
+        "impaciente"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ANSIOSO",
+      "palabras": [
+        "ansioso",
+        "nervioso",
+        "preocupado"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CALMADO",
+      "palabras": [
+        "calmado",
+        "tranquilo",
+        "sereno",
+        "calm"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ABURRIDO",
+      "palabras": [
+        "aburrido",
+        "hastiado",
+        "bored"
+      ],
+      "tipo": 5,
+      "grounding": 0.65,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INTERESADO",
+      "palabras": [
+        "interesado",
+        "curioso",
+        "intrigado"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SEGURO_EMOCION",
+      "palabras": [
+        "seguro",
+        "confiado",
+        "confident"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INSEGURO",
+      "palabras": [
+        "inseguro",
+        "dudoso",
+        "insecure"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_OPTIMISTA",
+      "palabras": [
+        "optimista",
+        "esperanzado",
+        "positivo"
+      ],
+      "tipo": 5,
+      "grounding": 0.65,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SATISFECHO",
+      "palabras": [
+        "satisfecho",
+        "complacido",
+        "satisfied"
+      ],
+      "tipo": 5,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HOY",
+      "palabras": [
+        "hoy",
+        "today"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_AYER",
+      "palabras": [
+        "ayer",
+        "yesterday"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MAÑANA",
+      "palabras": [
+        "mañana",
+        "tomorrow"
+      ],
+      "tipo": 6,
+      "grounding": 0.8,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SEGUNDO",
+      "palabras": [
+        "segundo",
+        "segundos"
+      ],
+      "tipo": 5,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MINUTO",
+      "palabras": [
+        "minuto",
+        "minutos"
+      ],
+      "tipo": 5,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HORA",
+      "palabras": [
+        "hora",
+        "horas"
+      ],
+      "tipo": 5,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DIA",
+      "palabras": [
+        "día",
+        "dias"
+      ],
+      "tipo": 5,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SEMANA",
+      "palabras": [
+        "semana",
+        "semanas"
+      ],
+      "tipo": 5,
+      "grounding": 0.75,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RAPIDO_TIEMPO",
+      "palabras": [
+        "pronto",
+        "rápido"
+      ],
+      "tipo": 4,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LENTO_TIEMPO",
+      "palabras": [
+        "tarde",
+        "despacio"
+      ],
+      "tipo": 4,
+      "grounding": 0.7,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LS",
+      "palabras": [
+        "listar",
+        "ls",
+        "dir",
+        "mostrar archivos",
+        "listar archivos",
+        "ver archivos"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PWD",
+      "palabras": [
+        "pwd",
+        "directorio actual",
+        "dónde estoy",
+        "ruta actual",
+        "ubicación actual"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TREE",
+      "palabras": [
+        "tree",
+        "árbol de directorios",
+        "estructura",
+        "mostrar estructura",
+        "árbol"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HEAD",
+      "palabras": [
+        "head",
+        "primeras líneas",
+        "inicio archivo",
+        "ver inicio",
+        "top"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TAIL",
+      "palabras": [
+        "tail",
+        "últimas líneas",
+        "final archivo",
+        "ver final",
+        "bottom"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LESS",
+      "palabras": [
+        "less",
+        "more",
+        "paginar",
+        "ver archivo",
+        "mostrar archivo"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FIND",
+      "palabras": [
+        "find",
+        "buscar archivo",
+        "encontrar",
+        "search",
+        "localizar"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_GREP",
+      "palabras": [
+        "grep",
+        "buscar en archivo",
+        "buscar texto",
+        "search in file",
+        "filtrar"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MKDIR",
+      "palabras": [
+        "mkdir",
+        "crear directorio",
+        "nueva carpeta",
+        "crear carpeta",
+        "make directory"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ELIMINAR_DIRECTORIO",
+      "palabras": [
+        "rmdir",
+        "eliminar directorio",
+        "borrar carpeta",
+        "remove directory"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CAMBIAR_DIRECTORIO",
+      "palabras": [
+        "cd",
+        "cambiar directorio",
+        "ir a",
+        "navegar a",
+        "change directory"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DIRECTORIO_SHELL",
+      "palabras": [
+        "directorio",
+        "carpeta",
+        "folder",
+        "directory",
+        "dir"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PATH",
+      "palabras": [
+        "ruta",
+        "path",
+        "camino",
+        "ubicación",
+        "dirección"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PATH_ABSOLUTO",
+      "palabras": [
+        "ruta absoluta",
+        "path absoluto",
+        "full path",
+        "camino completo"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ECHO",
+      "palabras": [
+        "echo",
+        "imprimir",
+        "mostrar texto",
+        "print",
+        "display"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_WHOAMI",
+      "palabras": [
+        "whoami",
+        "usuario actual",
+        "quién soy",
+        "current user",
+        "mi usuario"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HOSTNAME",
+      "palabras": [
+        "hostname",
+        "nombre del equipo",
+        "nombre máquina",
+        "computer name"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DATE",
+      "palabras": [
+        "date",
+        "fecha",
+        "hora",
+        "fecha y hora",
+        "timestamp"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_UNAME",
+      "palabras": [
+        "uname",
+        "información del sistema",
+        "system info",
+        "os info",
+        "sistema operativo"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_UPTIME",
+      "palabras": [
+        "uptime",
+        "tiempo encendido",
+        "tiempo activo",
+        "system uptime"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DF",
+      "palabras": [
+        "df",
+        "disk free",
+        "espacio en disco",
+        "disk usage",
+        "storage"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DU",
+      "palabras": [
+        "du",
+        "disk usage",
+        "uso de disco",
+        "tamaño directorio",
+        "space used"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FREE",
+      "palabras": [
+        "free",
+        "memoria libre",
+        "ram disponible",
+        "memory usage",
+        "memoria"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ENV",
+      "palabras": [
+        "env",
+        "variables de entorno",
+        "environment",
+        "variables ambientales",
+        "environment variables"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PS",
+      "palabras": [
+        "ps",
+        "procesos",
+        "process status",
+        "listar procesos",
+        "processes"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TOP",
+      "palabras": [
+        "top",
+        "monitor procesos",
+        "task manager",
+        "system monitor",
+        "htop"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_KILL",
+      "palabras": [
+        "kill",
+        "terminar proceso",
+        "matar proceso",
+        "stop process",
+        "kill process"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PROCESO_SHELL",
+      "palabras": [
+        "proceso",
+        "process",
+        "programa en ejecución",
+        "running program"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PID_SHELL",
+      "palabras": [
+        "pid",
+        "process id",
+        "identificador proceso",
+        "process identifier"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CPU_SHELL",
+      "palabras": [
+        "cpu",
+        "procesador",
+        "processor",
+        "central processing unit"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MEMORIA",
+      "palabras": [
+        "memoria",
+        "ram",
+        "memory",
+        "memoria ram"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SWAP",
+      "palabras": [
+        "swap",
+        "memoria swap",
+        "swap space",
+        "virtual memory"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CAT",
+      "palabras": [
+        "cat",
+        "concatenate",
+        "mostrar contenido",
+        "ver archivo",
+        "leer archivo"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TOUCH",
+      "palabras": [
+        "touch",
+        "crear archivo",
+        "nuevo archivo",
+        "create file",
+        "make file"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_WC",
+      "palabras": [
+        "wc",
+        "word count",
+        "contar líneas",
+        "contar palabras",
+        "count"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FILE",
+      "palabras": [
+        "file",
+        "tipo de archivo",
+        "file type",
+        "tipo archivo",
+        "determinar tipo"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_STAT",
+      "palabras": [
+        "stat",
+        "estadísticas archivo",
+        "file stats",
+        "info archivo",
+        "metadata"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ARCHIVO_SHELL",
+      "palabras": [
+        "archivo",
+        "file",
+        "fichero",
+        "documento"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EXTENSION_SHELL",
+      "palabras": [
+        "extensión",
+        "extension",
+        "tipo",
+        "sufijo",
+        "formato"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PERMISOS_SHELL",
+      "palabras": [
+        "permisos",
+        "permissions",
+        "chmod",
+        "acceso",
+        "derechos"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ANALIZAR_CODIGO",
+      "palabras": [
+        "analizar código",
+        "parsear código",
+        "analizar python",
+        "revisar código",
+        "inspeccionar código"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_AST",
+      "palabras": [
+        "ast",
+        "abstract syntax tree",
+        "árbol sintáctico",
+        "árbol de sintaxis abstracta"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PARSEAR",
+      "palabras": [
+        "parsear",
+        "parse",
+        "analizar sintaxis",
+        "convertir a ast"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SYNTAX_ERROR",
+      "palabras": [
+        "syntax error",
+        "error de sintaxis",
+        "error sintáctico",
+        "sintaxis incorrecta"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FUNCION_DEF",
+      "palabras": [
+        "definición de función",
+        "def",
+        "function def",
+        "declarar función"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CLASS_DEF",
+      "palabras": [
+        "definición de clase",
+        "class",
+        "class def",
+        "declarar clase"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_IMPORT_CODE",
+      "palabras": [
+        "import",
+        "importar",
+        "importación",
+        "import statement"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DOCSTRING",
+      "palabras": [
+        "docstring",
+        "documentation string",
+        "cadena de documentación",
+        "doc string"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TYPE_HINTS",
+      "palabras": [
+        "type hints",
+        "type annotations",
+        "anotaciones de tipo",
+        "hints de tipo"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_NODO_AST",
+      "palabras": [
+        "nodo ast",
+        "ast node",
+        "nodo del árbol",
+        "elemento ast"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONTAR_FUNCIONES",
+      "palabras": [
+        "contar funciones",
+        "número de funciones",
+        "cuántas funciones",
+        "cantidad funciones"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONTAR_CLASES",
+      "palabras": [
+        "contar clases",
+        "número de clases",
+        "cuántas clases",
+        "cantidad clases"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LINEAS_CODIGO",
+      "palabras": [
+        "líneas de código",
+        "loc",
+        "lines of code",
+        "cantidad de líneas"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LINEAS_NO_VACIAS",
+      "palabras": [
+        "líneas no vacías",
+        "sloc",
+        "líneas con código",
+        "líneas efectivas"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RATIO_COMENTARIOS",
+      "palabras": [
+        "ratio de comentarios",
+        "proporción comentarios",
+        "comentarios vs código"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_NOMBRE_FUNCION",
+      "palabras": [
+        "nombre de función",
+        "función llamada",
+        "identificador función"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_NOMBRE_CLASE",
+      "palabras": [
+        "nombre de clase",
+        "clase llamada",
+        "identificador clase"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ARGUMENTOS",
+      "palabras": [
+        "argumentos",
+        "parámetros",
+        "args",
+        "parameters"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RETURN_TYPE",
+      "palabras": [
+        "tipo de retorno",
+        "return type",
+        "valor retornado"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_METODO",
+      "palabras": [
+        "método",
+        "method",
+        "función de clase"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COMPLEJIDAD_CICLOMATICA",
+      "palabras": [
+        "complejidad ciclomática",
+        "cyclomatic complexity",
+        "complejidad de mccabe"
+      ],
+      "tipo": 5,
+      "grounding": 1.0,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CALCULAR_COMPLEJIDAD",
+      "palabras": [
+        "calcular complejidad",
+        "medir complejidad",
+        "obtener complejidad"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DECISION",
+      "palabras": [
+        "decisión",
+        "punto de decisión",
+        "bifurcación",
+        "branch point"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_IF_STATEMENT",
+      "palabras": [
+        "if",
+        "condicional",
+        "if statement",
+        "sentencia if"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LOOP",
+      "palabras": [
+        "loop",
+        "bucle",
+        "ciclo",
+        "iteración"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COMPREHENSION_CODE",
+      "palabras": [
+        "comprehension",
+        "comprensión de lista",
+        "list comp",
+        "comprensión"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_BOOL_OP",
+      "palabras": [
+        "operador booleano",
+        "and",
+        "or",
+        "bool op"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COMPLEJIDAD_ALTA",
+      "palabras": [
+        "complejidad alta",
+        "código complejo",
+        "alta complejidad"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_VARIABLE_SIN_USAR",
+      "palabras": [
+        "variable sin usar",
+        "unused variable",
+        "variable no usada"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_IMPORT_SIN_USAR",
+      "palabras": [
+        "import sin usar",
+        "unused import",
+        "import no usado"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DOCSTRING_FALTANTE",
+      "palabras": [
+        "sin docstring",
+        "falta docstring",
+        "docstring missing"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CODE_SMELL",
+      "palabras": [
+        "code smell",
+        "mal olor",
+        "indicador de problema"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REFACTORIZACION",
+      "palabras": [
+        "refactorización",
+        "refactoring",
+        "refactorizar",
+        "mejorar código"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LINT",
+      "palabras": [
+        "lint",
+        "linting",
+        "análisis estático",
+        "linter"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PEP8",
+      "palabras": [
+        "pep8",
+        "pep 8",
+        "style guide",
+        "guía de estilo"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MANTENIBILIDAD",
+      "palabras": [
+        "mantenibilidad",
+        "maintainability",
+        "fácil de mantener"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LEGIBILIDAD",
+      "palabras": [
+        "legibilidad",
+        "readability",
+        "fácil de leer"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_BUENAS_PRACTICAS",
+      "palabras": [
+        "buenas prácticas",
+        "best practices",
+        "prácticas recomendadas"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ENCONTRAR_VARIABLES_SIN_USAR",
+      "palabras": [
+        "encontrar variables sin usar",
+        "detectar variables no usadas"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ENCONTRAR_IMPORTS_SIN_USAR",
+      "palabras": [
+        "encontrar imports sin usar",
+        "detectar imports no usados"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ENCONTRAR_DOCSTRINGS_FALTANTES",
+      "palabras": [
+        "encontrar sin docstring",
+        "funciones sin documentar"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ERROR",
+      "palabras": [
+        "error",
+        "fallo",
+        "bug",
+        "problema crítico"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ADVERTENCIA",
+      "palabras": [
+        "advertencia",
+        "warning",
+        "aviso"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_VALIDACION",
+      "palabras": [
+        "validación",
+        "validation",
+        "verificación"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REPORTE",
+      "palabras": [
+        "reporte",
+        "report",
+        "informe",
+        "resumen"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_METRICAS",
+      "palabras": [
+        "métricas",
+        "metrics",
+        "medidas",
+        "estadísticas"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ANALISIS_ESTATICO",
+      "palabras": [
+        "análisis estático",
+        "static analysis",
+        "análisis sin ejecutar"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CODIGO_VALIDO",
+      "palabras": [
+        "código válido",
+        "sintaxis correcta",
+        "sin errores"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CODIGO_INVALIDO",
+      "palabras": [
+        "código inválido",
+        "sintaxis incorrecta",
+        "con errores"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_GENERAR_REPORTE",
+      "palabras": [
+        "generar reporte",
+        "crear informe",
+        "producir resumen"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DERIVAR",
+      "palabras": [
+        "derivar",
+        "derivada",
+        "calcular derivada",
+        "diferencial",
+        "derivación"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DERIVADA",
+      "palabras": [
+        "derivada",
+        "derivative",
+        "tasa de cambio",
+        "pendiente instantánea"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DERIVADA_PRIMERA",
+      "palabras": [
+        "primera derivada",
+        "derivada de primer orden",
+        "velocidad",
+        "tasa de cambio"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DERIVADA_SEGUNDA",
+      "palabras": [
+        "segunda derivada",
+        "derivada de segundo orden",
+        "aceleración",
+        "concavidad"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REGLA_CADENA",
+      "palabras": [
+        "regla de la cadena",
+        "chain rule",
+        "derivada de composición"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REGLA_PRODUCTO",
+      "palabras": [
+        "regla del producto",
+        "product rule",
+        "derivada de producto"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REGLA_COCIENTE",
+      "palabras": [
+        "regla del cociente",
+        "quotient rule",
+        "derivada de cociente"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DERIVADA_SIMBOLICA",
+      "palabras": [
+        "derivada simbólica",
+        "symbolic derivative",
+        "derivación simbólica"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INTEGRAR",
+      "palabras": [
+        "integrar",
+        "integral",
+        "calcular integral",
+        "integración",
+        "antiderivada"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INTEGRAL",
+      "palabras": [
+        "integral",
+        "integración",
+        "antiderivada",
+        "primitiva"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INTEGRAL_DEFINIDA",
+      "palabras": [
+        "integral definida",
+        "definite integral",
+        "área bajo la curva"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INTEGRAL_INDEFINIDA",
+      "palabras": [
+        "integral indefinida",
+        "indefinite integral",
+        "antiderivada",
+        "primitiva"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONSTANTE_INTEGRACION",
+      "palabras": [
+        "constante de integración",
+        "c",
+        "constante arbitraria"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TEOREMA_FUNDAMENTAL_CALCULO",
+      "palabras": [
+        "teorema fundamental del cálculo",
+        "fundamental theorem of calculus"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SUSTITUCION",
+      "palabras": [
+        "sustitución",
+        "u-substitution",
+        "cambio de variable"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INTEGRACION_POR_PARTES",
+      "palabras": [
+        "integración por partes",
+        "integration by parts"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RESOLVER_ECUACION",
+      "palabras": [
+        "resolver ecuación",
+        "solve",
+        "encontrar solución",
+        "hallar raíces"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ECUACION_AVANZADA",
+      "palabras": [
+        "ecuación",
+        "equation",
+        "igualdad matemática"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RAIZ_AVANZADA",
+      "palabras": [
+        "raíz",
+        "root",
+        "solución",
+        "cero"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ECUACION_CUADRATICA",
+      "palabras": [
+        "ecuación cuadrática",
+        "quadratic equation",
+        "ecuación de segundo grado"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DISCRIMINANTE",
+      "palabras": [
+        "discriminante",
+        "discriminant"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SISTEMA_ECUACIONES",
+      "palabras": [
+        "sistema de ecuaciones",
+        "system of equations",
+        "ecuaciones simultáneas"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ECUACION_DIFERENCIAL",
+      "palabras": [
+        "ecuación diferencial",
+        "differential equation",
+        "ode"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SIMPLIFICAR",
+      "palabras": [
+        "simplificar",
+        "simplify",
+        "reducir expresión"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EXPANDIR",
+      "palabras": [
+        "expandir",
+        "expand",
+        "desarrollar expresión"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FACTORIZAR",
+      "palabras": [
+        "factorizar",
+        "factor",
+        "factorear"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FACTOR",
+      "palabras": [
+        "factor",
+        "divisor"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TERMINO_COMUN",
+      "palabras": [
+        "término común",
+        "factor común",
+        "common factor"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EXPRESION_ALGEBRAICA",
+      "palabras": [
+        "expresión algebraica",
+        "algebraic expression"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LIMITE",
+      "palabras": [
+        "límite",
+        "limit",
+        "calcular límite"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INFINITO",
+      "palabras": [
+        "infinito",
+        "infinity",
+        "∞"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONTINUIDAD",
+      "palabras": [
+        "continuidad",
+        "continuous",
+        "función continua"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SERIE_TAYLOR",
+      "palabras": [
+        "serie de taylor",
+        "taylor series",
+        "expansión de taylor"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SERIE",
+      "palabras": [
+        "serie",
+        "series",
+        "suma infinita"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONVERGENCIA",
+      "palabras": [
+        "convergencia",
+        "convergent",
+        "converge"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DIVERGENCIA",
+      "palabras": [
+        "divergencia",
+        "divergent",
+        "diverge"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_APROXIMACION",
+      "palabras": [
+        "aproximación",
+        "approximation",
+        "valor aproximado"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EVALUAR",
+      "palabras": [
+        "evaluar",
+        "evaluate",
+        "calcular valor",
+        "sustituir"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SUSTITUCION_AVANZADA",
+      "palabras": [
+        "sustitución",
+        "substitution",
+        "reemplazo"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_VARIABLE_MATEMATICA",
+      "palabras": [
+        "variable",
+        "incógnita",
+        "x"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONSTANTE",
+      "palabras": [
+        "constante",
+        "constant",
+        "valor fijo"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PI",
+      "palabras": [
+        "pi",
+        "π",
+        "3.14159"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_E",
+      "palabras": [
+        "e",
+        "número de euler",
+        "2.71828"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EXPRESION",
+      "palabras": [
+        "expresión matemática",
+        "expression",
+        "fórmula"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SIMBOLICO",
+      "palabras": [
+        "simbólico",
+        "symbolic",
+        "algebraico"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CREAR_PLAN",
+      "palabras": [
+        "crear plan",
+        "nuevo plan",
+        "planificar",
+        "hacer plan",
+        "plan"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PLAN",
+      "palabras": [
+        "plan",
+        "planificación",
+        "strategy",
+        "estrategia"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_OBJETIVO",
+      "palabras": [
+        "objetivo",
+        "goal",
+        "meta",
+        "propósito"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_VALIDAR_PLAN",
+      "palabras": [
+        "validar plan",
+        "verificar plan",
+        "comprobar plan"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_OPTIMIZAR_PLAN",
+      "palabras": [
+        "optimizar plan",
+        "mejorar plan",
+        "optimización"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RESUMEN_PLAN",
+      "palabras": [
+        "resumen del plan",
+        "describir plan",
+        "mostrar plan"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PROGRESO",
+      "palabras": [
+        "progreso",
+        "avance",
+        "completado"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_METADATA",
+      "palabras": [
+        "metadata",
+        "metadatos",
+        "información adicional"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PASO",
+      "palabras": [
+        "paso",
+        "step",
+        "etapa",
+        "fase"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ACCION",
+      "palabras": [
+        "acción",
+        "action",
+        "operación",
+        "tarea"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REGISTRAR_ACCION",
+      "palabras": [
+        "registrar acción",
+        "agregar acción",
+        "definir acción"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PARAMETROS",
+      "palabras": [
+        "parámetros",
+        "parameters",
+        "argumentos",
+        "inputs"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RESULTADO",
+      "palabras": [
+        "resultado",
+        "result",
+        "output",
+        "retorno"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DESCRIPCION",
+      "palabras": [
+        "descripción",
+        "description",
+        "explicación"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ORDEN",
+      "palabras": [
+        "orden",
+        "secuencia",
+        "order",
+        "posición"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DEPENDENCIA",
+      "palabras": [
+        "dependencia",
+        "dependency",
+        "prerequisito",
+        "requerimiento"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ORDENAR_DEPENDENCIAS",
+      "palabras": [
+        "ordenar por dependencias",
+        "topological sort",
+        "ordenamiento topológico"
+      ],
+      "tipo": 1,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CICLO",
+      "palabras": [
+        "ciclo",
+        "cycle",
+        "dependencia circular",
+        "circular dependency"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_GRAFO_DEPENDENCIAS",
+      "palabras": [
+        "grafo de dependencias",
+        "dependency graph",
+        "grafo"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CAMINO_CRITICO",
+      "palabras": [
+        "camino crítico",
+        "critical path",
+        "ruta crítica"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PREREQUISITO",
+      "palabras": [
+        "prerequisito",
+        "prerequisite",
+        "previo"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EJECUTAR_PLAN",
+      "palabras": [
+        "ejecutar plan",
+        "run plan",
+        "correr plan",
+        "iniciar plan"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EJECUTAR_PASO",
+      "palabras": [
+        "ejecutar paso",
+        "run step",
+        "correr paso"
+      ],
+      "tipo": 1,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EJECUTOR",
+      "palabras": [
+        "ejecutor",
+        "executor",
+        "runner"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RESULTADO_EJECUCION",
+      "palabras": [
+        "resultado ejecución",
+        "execution result",
+        "resultado del plan"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONTEXTO",
+      "palabras": [
+        "contexto",
+        "context",
+        "entorno"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LOG",
+      "palabras": [
+        "log",
+        "registro",
+        "bitácora",
+        "historial"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DRY_RUN",
+      "palabras": [
+        "dry run",
+        "simulación",
+        "prueba",
+        "test run"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ROLLBACK_PLAN",
+      "palabras": [
+        "rollback",
+        "revertir",
+        "deshacer",
+        "volver atrás"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ESTADO",
+      "palabras": [
+        "estado",
+        "state",
+        "status"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PENDIENTE",
+      "palabras": [
+        "pendiente",
+        "pending",
+        "por hacer"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EN_PROGRESO",
+      "palabras": [
+        "en progreso",
+        "in progress",
+        "ejecutando"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COMPLETADO",
+      "palabras": [
+        "completado",
+        "completed",
+        "done",
+        "terminado"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_FALLIDO",
+      "palabras": [
+        "fallido",
+        "failed",
+        "error",
+        "fracasado"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_OMITIDO",
+      "palabras": [
+        "omitido",
+        "skipped",
+        "saltado"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PARALELIZACION",
+      "palabras": [
+        "paralelización",
+        "parallel",
+        "paralelo",
+        "concurrencia"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_EJECUTAR_PARALELO",
+      "palabras": [
+        "ejecutar en paralelo",
+        "run parallel"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ESTIMAR_TIEMPO",
+      "palabras": [
+        "estimar tiempo",
+        "estimate time",
+        "calcular duración"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REINTENTOS_PLAN",
+      "palabras": [
+        "reintentos",
+        "retry",
+        "volver a intentar"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PAUSAR_PLAN",
+      "palabras": [
+        "pausar",
+        "pause",
+        "detener temporalmente"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HTTP_GET",
+      "palabras": [
+        "get request",
+        "obtener",
+        "consultar",
+        "leer http"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HTTP_POST",
+      "palabras": [
+        "post request",
+        "crear",
+        "enviar",
+        "publicar"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HTTP_PUT",
+      "palabras": [
+        "put request",
+        "actualizar completo",
+        "reemplazar"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HTTP_DELETE",
+      "palabras": [
+        "delete request",
+        "eliminar",
+        "borrar recurso"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REQUEST",
+      "palabras": [
+        "request",
+        "petición",
+        "solicitud http"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RESPUESTA_HTTP",
+      "palabras": [
+        "respuesta",
+        "response",
+        "resultado http"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CODIGO_ESTADO",
+      "palabras": [
+        "código de estado",
+        "status code",
+        "código http"
+      ],
+      "tipo": 4,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_200_OK",
+      "palabras": [
+        "200",
+        "ok",
+        "éxito"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_404_NOT_FOUND",
+      "palabras": [
+        "404",
+        "not found",
+        "no encontrado"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_500_ERROR",
+      "palabras": [
+        "500",
+        "server error",
+        "error servidor"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONTENIDO",
+      "palabras": [
+        "contenido",
+        "body",
+        "cuerpo respuesta"
+      ],
+      "tipo": 4,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_JSON",
+      "palabras": [
+        "json",
+        "javascript object notation"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PARSEAR_JSON",
+      "palabras": [
+        "parsear json",
+        "decodificar json",
+        "convertir json"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_GET_JSON",
+      "palabras": [
+        "get json",
+        "obtener json",
+        "consultar json"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_POST_JSON",
+      "palabras": [
+        "post json",
+        "enviar json",
+        "crear con json"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HEADERS",
+      "palabras": [
+        "headers",
+        "cabeceras",
+        "encabezados http"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONTENT_TYPE",
+      "palabras": [
+        "content-type",
+        "tipo de contenido"
+      ],
+      "tipo": 4,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_USER_AGENT",
+      "palabras": [
+        "user-agent",
+        "agente usuario"
+      ],
+      "tipo": 4,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_AUTHORIZATION",
+      "palabras": [
+        "authorization",
+        "autorización",
+        "auth header"
+      ],
+      "tipo": 4,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_URL",
+      "palabras": [
+        "url",
+        "dirección web",
+        "uniform resource locator"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ENDPOINT",
+      "palabras": [
+        "endpoint",
+        "ruta api",
+        "path"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_QUERY_PARAMS",
+      "palabras": [
+        "query parameters",
+        "parámetros url",
+        "params"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_BASE_URL",
+      "palabras": [
+        "base url",
+        "url base",
+        "dominio api"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONFIGURAR_API",
+      "palabras": [
+        "configurar api",
+        "setup api",
+        "definir api"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TIMEOUT",
+      "palabras": [
+        "timeout",
+        "tiempo límite",
+        "expiración"
+      ],
+      "tipo": 4,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REINTENTOS_HTTP",
+      "palabras": [
+        "reintentos",
+        "retry",
+        "intentos"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CACHE",
+      "palabras": [
+        "cache",
+        "caché",
+        "almacenar respuestas"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ERROR_RED",
+      "palabras": [
+        "error de red",
+        "network error",
+        "fallo conexión"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_HTTP_ERROR",
+      "palabras": [
+        "error http",
+        "http error",
+        "status error"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_VALIDAR_RESPUESTA",
+      "palabras": [
+        "validar respuesta",
+        "verificar respuesta",
+        "comprobar respuesta"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_MANEJO_ERRORES",
+      "palabras": [
+        "manejo de errores",
+        "error handling",
+        "gestión errores"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_API",
+      "palabras": [
+        "api",
+        "application programming interface",
+        "interfaz"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REST_API",
+      "palabras": [
+        "rest api",
+        "restful",
+        "api rest"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RECURSO",
+      "palabras": [
+        "recurso",
+        "resource",
+        "entidad api"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CLIENTE_HTTP",
+      "palabras": [
+        "cliente http",
+        "http client"
+      ],
+      "tipo": 5,
+      "grounding": 1.0,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONECTAR_BD",
+      "palabras": [
+        "conectar base de datos",
+        "abrir bd",
+        "connect database"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DESCONECTAR_BD",
+      "palabras": [
+        "desconectar",
+        "cerrar bd",
+        "disconnect"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CONEXION",
+      "palabras": [
+        "conexión",
+        "connection",
+        "sesión bd"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TABLA",
+      "palabras": [
+        "tabla",
+        "table",
+        "relación"
+      ],
+      "tipo": 2,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CREAR_TABLA",
+      "palabras": [
+        "crear tabla",
+        "create table",
+        "nueva tabla"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ELIMINAR_TABLA",
+      "palabras": [
+        "eliminar tabla",
+        "drop table",
+        "borrar tabla"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LISTAR_TABLAS",
+      "palabras": [
+        "listar tablas",
+        "show tables",
+        "tablas existentes"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ESQUEMA",
+      "palabras": [
+        "esquema",
+        "schema",
+        "estructura tabla"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INSERT",
+      "palabras": [
+        "insert",
+        "insertar",
+        "agregar registro"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SELECT",
+      "palabras": [
+        "select",
+        "seleccionar",
+        "consultar",
+        "leer"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_UPDATE",
+      "palabras": [
+        "update",
+        "actualizar",
+        "modificar registro"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_DELETE",
+      "palabras": [
+        "delete",
+        "eliminar",
+        "borrar registro"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COLUMNA",
+      "palabras": [
+        "columna",
+        "column",
+        "campo"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_PRIMARY_KEY",
+      "palabras": [
+        "primary key",
+        "clave primaria",
+        "pk"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TIPO_DATO",
+      "palabras": [
+        "tipo de dato",
+        "data type",
+        "tipo columna"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_NULL",
+      "palabras": [
+        "null",
+        "nulo",
+        "sin valor"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_WHERE",
+      "palabras": [
+        "where",
+        "condición",
+        "filtro"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ORDER_BY",
+      "palabras": [
+        "order by",
+        "ordenar",
+        "sort"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_LIMIT",
+      "palabras": [
+        "limit",
+        "límite",
+        "top"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COUNT",
+      "palabras": [
+        "count",
+        "contar",
+        "total registros"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_TRANSACCION",
+      "palabras": [
+        "transacción",
+        "transaction",
+        "operación atómica"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_COMMIT",
+      "palabras": [
+        "commit",
+        "confirmar",
+        "guardar cambios"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_ROLLBACK",
+      "palabras": [
+        "rollback",
+        "revertir",
+        "deshacer"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_INDICE",
+      "palabras": [
+        "índice",
+        "index",
+        "indexación"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_CREAR_INDICE",
+      "palabras": [
+        "crear índice",
+        "create index"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SQLITE",
+      "palabras": [
+        "sqlite",
+        "base de datos embebida"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_SQL",
+      "palabras": [
+        "sql",
+        "structured query language",
+        "lenguaje consultas"
+      ],
+      "tipo": 5,
+      "grounding": 0.95,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_REGISTRO",
+      "palabras": [
+        "registro",
+        "fila",
+        "row",
+        "tupla"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RESULTADO_QUERY",
+      "palabras": [
+        "resultado query",
+        "resultset",
+        "resultado consulta"
+      ],
+      "tipo": 5,
+      "grounding": 0.9,
+      "puede_ejecutar": false,
+      "archivo_origen": "desconocido"
+    },
+    {
+      "id": "CONCEPTO_RESPALDAR",
+      "palabras": [
+        "respaldar",
+        "backup",
+        "copia de seguridad"
+      ],
+      "tipo": 1,
+      "grounding": 1.0,
+      "puede_ejecutar": true,
+      "archivo_origen": "desconocido"
+    }
+  ],
+  "duplicados": [
+    {
+      "palabra": "leer",
+      "conceptos_afectados": [
+        "CONCEPTO_LEER",
+        "CONCEPTO_INPUT",
+        "CONCEPTO_SELECT"
+      ]
+    },
+    {
+      "palabra": "archivo",
+      "conceptos_afectados": [
+        "CONCEPTO_ARCHIVO",
+        "CONCEPTO_ARCHIVO_SHELL"
+      ]
+    },
+    {
+      "palabra": "file",
+      "conceptos_afectados": [
+        "CONCEPTO_ARCHIVO",
+        "CONCEPTO_FILE",
+        "CONCEPTO_ARCHIVO_SHELL"
+      ]
+    },
+    {
+      "palabra": "documento",
+      "conceptos_afectados": [
+        "CONCEPTO_ARCHIVO",
+        "CONCEPTO_ARCHIVO_SHELL"
+      ]
+    },
+    {
+      "palabra": "directorio",
+      "conceptos_afectados": [
+        "CONCEPTO_DIRECTORIO",
+        "CONCEPTO_DIRECTORIO_SHELL"
+      ]
+    },
+    {
+      "palabra": "carpeta",
+      "conceptos_afectados": [
+        "CONCEPTO_DIRECTORIO",
+        "CONCEPTO_DIRECTORIO_SHELL"
+      ]
+    },
+    {
+      "palabra": "folder",
+      "conceptos_afectados": [
+        "CONCEPTO_DIRECTORIO",
+        "CONCEPTO_DIRECTORIO_SHELL"
+      ]
+    },
+    {
+      "palabra": "si",
+      "conceptos_afectados": [
+        "CONCEPTO_SI",
+        "CONCEPTO_IF"
+      ]
+    },
+    {
+      "palabra": "negativo",
+      "conceptos_afectados": [
+        "CONCEPTO_NO",
+        "CONCEPTO_NEGATIVO"
+      ]
+    },
+    {
+      "palabra": "como",
+      "conceptos_afectados": [
+        "CONCEPTO_COMO",
+        "CONCEPTO_AS"
+      ]
+    },
+    {
+      "palabra": "where",
+      "conceptos_afectados": [
+        "CONCEPTO_DONDE",
+        "CONCEPTO_WHERE"
+      ]
+    },
+    {
+      "palabra": "crear",
+      "conceptos_afectados": [
+        "CONCEPTO_CREAR",
+        "CONCEPTO_HTTP_POST"
+      ]
+    },
+    {
+      "palabra": "mostrar",
+      "conceptos_afectados": [
+        "CONCEPTO_MOSTRAR",
+        "CONCEPTO_PRINT"
+      ]
+    },
+    {
+      "palabra": "display",
+      "conceptos_afectados": [
+        "CONCEPTO_MOSTRAR",
+        "CONCEPTO_ECHO"
+      ]
+    },
+    {
+      "palabra": "actualizar",
+      "conceptos_afectados": [
+        "CONCEPTO_MODIFICAR",
+        "CONCEPTO_UPDATE"
+      ]
+    },
+    {
+      "palabra": "eliminar",
+      "conceptos_afectados": [
+        "CONCEPTO_ELIMINAR",
+        "CONCEPTO_HTTP_DELETE",
+        "CONCEPTO_DELETE"
+      ]
+    },
+    {
+      "palabra": "delete",
+      "conceptos_afectados": [
+        "CONCEPTO_ELIMINAR",
+        "CONCEPTO_DELETE"
+      ]
+    },
+    {
+      "palabra": "preguntar",
+      "conceptos_afectados": [
+        "CONCEPTO_PREGUNTA",
+        "CONCEPTO_PREGUNTAR"
+      ]
+    },
+    {
+      "palabra": "respuesta",
+      "conceptos_afectados": [
+        "CONCEPTO_RESPUESTA",
+        "CONCEPTO_RESPUESTA_HTTP"
+      ]
+    },
+    {
+      "palabra": "variable",
+      "conceptos_afectados": [
+        "CONCEPTO_VARIABLE",
+        "CONCEPTO_VARIABLE_MATEMATICA"
+      ]
+    },
+    {
+      "palabra": "def",
+      "conceptos_afectados": [
+        "CONCEPTO_FUNCION",
+        "CONCEPTO_FUNCION_DEF"
+      ]
+    },
+    {
+      "palabra": "class",
+      "conceptos_afectados": [
+        "CONCEPTO_CLASE",
+        "CONCEPTO_CLASS_DEF"
+      ]
+    },
+    {
+      "palabra": "map",
+      "conceptos_afectados": [
+        "CONCEPTO_DICCIONARIO",
+        "CONCEPTO_MAP"
+      ]
+    },
+    {
+      "palabra": "if",
+      "conceptos_afectados": [
+        "CONCEPTO_IF",
+        "CONCEPTO_IF_STATEMENT"
+      ]
+    },
+    {
+      "palabra": "condicional",
+      "conceptos_afectados": [
+        "CONCEPTO_IF",
+        "CONCEPTO_IF_STATEMENT"
+      ]
+    },
+    {
+      "palabra": "bucle",
+      "conceptos_afectados": [
+        "CONCEPTO_FOR",
+        "CONCEPTO_LOOP"
+      ]
+    },
+    {
+      "palabra": "loop",
+      "conceptos_afectados": [
+        "CONCEPTO_FOR",
+        "CONCEPTO_LOOP"
+      ]
+    },
+    {
+      "palabra": "import",
+      "conceptos_afectados": [
+        "CONCEPTO_IMPORT",
+        "CONCEPTO_IMPORT_CODE"
+      ]
+    },
+    {
+      "palabra": "importar",
+      "conceptos_afectados": [
+        "CONCEPTO_IMPORT",
+        "CONCEPTO_IMPORT_CODE"
+      ]
+    },
+    {
+      "palabra": "print",
+      "conceptos_afectados": [
+        "CONCEPTO_PRINT",
+        "CONCEPTO_ECHO"
+      ]
+    },
+    {
+      "palabra": "imprimir",
+      "conceptos_afectados": [
+        "CONCEPTO_PRINT",
+        "CONCEPTO_ECHO"
+      ]
+    },
+    {
+      "palabra": "tipo",
+      "conceptos_afectados": [
+        "CONCEPTO_TYPE",
+        "CONCEPTO_EXTENSION_SHELL"
+      ]
+    },
+    {
+      "palabra": "buscar",
+      "conceptos_afectados": [
+        "CONCEPTO_BUSCAR",
+        "CONCEPTO_BUSCAR_TEXTO"
+      ]
+    },
+    {
+      "palabra": "encontrar",
+      "conceptos_afectados": [
+        "CONCEPTO_BUSCAR",
+        "CONCEPTO_FIND"
+      ]
+    },
+    {
+      "palabra": "localizar",
+      "conceptos_afectados": [
+        "CONCEPTO_BUSCAR",
+        "CONCEPTO_FIND"
+      ]
+    },
+    {
+      "palabra": "consultar",
+      "conceptos_afectados": [
+        "CONCEPTO_PREGUNTAR",
+        "CONCEPTO_HTTP_GET",
+        "CONCEPTO_SELECT"
+      ]
+    },
+    {
+      "palabra": "ver",
+      "conceptos_afectados": [
+        "CONCEPTO_VER",
+        "CONCEPTO_MIRAR"
+      ]
+    },
+    {
+      "palabra": "mirar",
+      "conceptos_afectados": [
+        "CONCEPTO_VER",
+        "CONCEPTO_MIRAR"
+      ]
+    },
+    {
+      "palabra": "contar",
+      "conceptos_afectados": [
+        "CONCEPTO_TENER",
+        "CONCEPTO_COUNT"
+      ]
+    },
+    {
+      "palabra": "obtener",
+      "conceptos_afectados": [
+        "CONCEPTO_OBTENER",
+        "CONCEPTO_HTTP_GET"
+      ]
+    },
+    {
+      "palabra": "e",
+      "conceptos_afectados": [
+        "CONCEPTO_Y",
+        "CONCEPTO_E"
+      ]
+    },
+    {
+      "palabra": "correcto",
+      "conceptos_afectados": [
+        "CONCEPTO_BUENO",
+        "CONCEPTO_CORRECTO"
+      ]
+    },
+    {
+      "palabra": "incorrecto",
+      "conceptos_afectados": [
+        "CONCEPTO_MALO",
+        "CONCEPTO_INCORRECTO"
+      ]
+    },
+    {
+      "palabra": "mayor",
+      "conceptos_afectados": [
+        "CONCEPTO_GRANDE",
+        "CONCEPTO_MAXIMO"
+      ]
+    },
+    {
+      "palabra": "comprehension",
+      "conceptos_afectados": [
+        "CONCEPTO_COMPREHENSION",
+        "CONCEPTO_COMPREHENSION_CODE"
+      ]
+    },
+    {
+      "palabra": "filtrar",
+      "conceptos_afectados": [
+        "CONCEPTO_FILTER",
+        "CONCEPTO_GREP"
+      ]
+    },
+    {
+      "palabra": "tarea",
+      "conceptos_afectados": [
+        "CONCEPTO_TASK",
+        "CONCEPTO_ACCION"
+      ]
+    },
+    {
+      "palabra": "exception",
+      "conceptos_afectados": [
+        "CONCEPTO_EXCEPT",
+        "CONCEPTO_EXCEPTION_CLASS"
+      ]
+    },
+    {
+      "palabra": "error",
+      "conceptos_afectados": [
+        "CONCEPTO_EXCEPTION_CLASS",
+        "CONCEPTO_ERROR",
+        "CONCEPTO_FALLIDO"
+      ]
+    },
+    {
+      "palabra": "módulo",
+      "conceptos_afectados": [
+        "CONCEPTO_MODULE",
+        "CONCEPTO_MODULO"
+      ]
+    },
+    {
+      "palabra": "crear directorio",
+      "conceptos_afectados": [
+        "CONCEPTO_CREAR_DIRECTORIO",
+        "CONCEPTO_MKDIR"
+      ]
+    },
+    {
+      "palabra": "mkdir",
+      "conceptos_afectados": [
+        "CONCEPTO_CREAR_DIRECTORIO",
+        "CONCEPTO_MKDIR"
+      ]
+    },
+    {
+      "palabra": "nueva carpeta",
+      "conceptos_afectados": [
+        "CONCEPTO_CREAR_DIRECTORIO",
+        "CONCEPTO_MKDIR"
+      ]
+    },
+    {
+      "palabra": "permisos",
+      "conceptos_afectados": [
+        "CONCEPTO_PERMISOS",
+        "CONCEPTO_PERMISOS_SHELL"
+      ]
+    },
+    {
+      "palabra": "permissions",
+      "conceptos_afectados": [
+        "CONCEPTO_PERMISOS",
+        "CONCEPTO_PERMISOS_SHELL"
+      ]
+    },
+    {
+      "palabra": "chmod",
+      "conceptos_afectados": [
+        "CONCEPTO_PERMISOS",
+        "CONCEPTO_PERMISOS_SHELL"
+      ]
+    },
+    {
+      "palabra": "extensión",
+      "conceptos_afectados": [
+        "CONCEPTO_EXTENSION",
+        "CONCEPTO_EXTENSION_SHELL"
+      ]
+    },
+    {
+      "palabra": "extension",
+      "conceptos_afectados": [
+        "CONCEPTO_EXTENSION",
+        "CONCEPTO_EXTENSION_SHELL"
+      ]
+    },
+    {
+      "palabra": "tipo archivo",
+      "conceptos_afectados": [
+        "CONCEPTO_EXTENSION",
+        "CONCEPTO_FILE"
+      ]
+    },
+    {
+      "palabra": "ruta",
+      "conceptos_afectados": [
+        "CONCEPTO_RUTA",
+        "CONCEPTO_PATH"
+      ]
+    },
+    {
+      "palabra": "path",
+      "conceptos_afectados": [
+        "CONCEPTO_RUTA",
+        "CONCEPTO_PATH",
+        "CONCEPTO_ENDPOINT"
+      ]
+    },
+    {
+      "palabra": "ubicación",
+      "conceptos_afectados": [
+        "CONCEPTO_RUTA",
+        "CONCEPTO_PATH"
+      ]
+    },
+    {
+      "palabra": "timestamp",
+      "conceptos_afectados": [
+        "CONCEPTO_FECHA_MODIFICACION",
+        "CONCEPTO_DATE"
+      ]
+    },
+    {
+      "palabra": "proceso",
+      "conceptos_afectados": [
+        "CONCEPTO_PROCESO",
+        "CONCEPTO_PROCESO_SHELL"
+      ]
+    },
+    {
+      "palabra": "process",
+      "conceptos_afectados": [
+        "CONCEPTO_PROCESO",
+        "CONCEPTO_PROCESO_SHELL"
+      ]
+    },
+    {
+      "palabra": "pid",
+      "conceptos_afectados": [
+        "CONCEPTO_PID",
+        "CONCEPTO_PID_SHELL"
+      ]
+    },
+    {
+      "palabra": "process id",
+      "conceptos_afectados": [
+        "CONCEPTO_PID",
+        "CONCEPTO_PID_SHELL"
+      ]
+    },
+    {
+      "palabra": "kill",
+      "conceptos_afectados": [
+        "CONCEPTO_TERMINAR",
+        "CONCEPTO_KILL"
+      ]
+    },
+    {
+      "palabra": "pausar",
+      "conceptos_afectados": [
+        "CONCEPTO_PAUSAR",
+        "CONCEPTO_PAUSAR_PLAN"
+      ]
+    },
+    {
+      "palabra": "pause",
+      "conceptos_afectados": [
+        "CONCEPTO_PAUSAR",
+        "CONCEPTO_PAUSAR_PLAN"
+      ]
+    },
+    {
+      "palabra": "sleep",
+      "conceptos_afectados": [
+        "CONCEPTO_PAUSAR",
+        "CONCEPTO_DORMIR"
+      ]
+    },
+    {
+      "palabra": "memoria",
+      "conceptos_afectados": [
+        "CONCEPTO_MEMORIA_RAM",
+        "CONCEPTO_FREE",
+        "CONCEPTO_MEMORIA"
+      ]
+    },
+    {
+      "palabra": "ram",
+      "conceptos_afectados": [
+        "CONCEPTO_MEMORIA_RAM",
+        "CONCEPTO_MEMORIA"
+      ]
+    },
+    {
+      "palabra": "cpu",
+      "conceptos_afectados": [
+        "CONCEPTO_CPU",
+        "CONCEPTO_CPU_SHELL"
+      ]
+    },
+    {
+      "palabra": "procesador",
+      "conceptos_afectados": [
+        "CONCEPTO_CPU",
+        "CONCEPTO_CPU_SHELL"
+      ]
+    },
+    {
+      "palabra": "find",
+      "conceptos_afectados": [
+        "CONCEPTO_BUSCAR_TEXTO",
+        "CONCEPTO_FIND"
+      ]
+    },
+    {
+      "palabra": "search",
+      "conceptos_afectados": [
+        "CONCEPTO_BUSCAR_TEXTO",
+        "CONCEPTO_FIND"
+      ]
+    },
+    {
+      "palabra": "reemplazar",
+      "conceptos_afectados": [
+        "CONCEPTO_REEMPLAZAR",
+        "CONCEPTO_HTTP_PUT"
+      ]
+    },
+    {
+      "palabra": "sustituir",
+      "conceptos_afectados": [
+        "CONCEPTO_REEMPLAZAR",
+        "CONCEPTO_EVALUAR"
+      ]
+    },
+    {
+      "palabra": "dividir",
+      "conceptos_afectados": [
+        "CONCEPTO_DIVIDIR",
+        "CONCEPTO_DIVISION"
+      ]
+    },
+    {
+      "palabra": "formato",
+      "conceptos_afectados": [
+        "CONCEPTO_FORMATO",
+        "CONCEPTO_EXTENSION_SHELL"
+      ]
+    },
+    {
+      "palabra": "más",
+      "conceptos_afectados": [
+        "CONCEPTO_SUMA",
+        "CONCEPTO_MAS"
+      ]
+    },
+    {
+      "palabra": "menos",
+      "conceptos_afectados": [
+        "CONCEPTO_RESTA",
+        "CONCEPTO_MENOS"
+      ]
+    },
+    {
+      "palabra": "positivo",
+      "conceptos_afectados": [
+        "CONCEPTO_POSITIVO",
+        "CONCEPTO_OPTIMISTA"
+      ]
+    },
+    {
+      "palabra": "raíz",
+      "conceptos_afectados": [
+        "CONCEPTO_RAIZ",
+        "CONCEPTO_RAIZ_AVANZADA"
+      ]
+    },
+    {
+      "palabra": "ecuación",
+      "conceptos_afectados": [
+        "CONCEPTO_ECUACION",
+        "CONCEPTO_ECUACION_AVANZADA"
+      ]
+    },
+    {
+      "palabra": "fórmula",
+      "conceptos_afectados": [
+        "CONCEPTO_ECUACION",
+        "CONCEPTO_EXPRESION"
+      ]
+    },
+    {
+      "palabra": "more",
+      "conceptos_afectados": [
+        "CONCEPTO_MAS",
+        "CONCEPTO_LESS"
+      ]
+    },
+    {
+      "palabra": "less",
+      "conceptos_afectados": [
+        "CONCEPTO_MENOS",
+        "CONCEPTO_LESS"
+      ]
+    },
+    {
+      "palabra": "seguro",
+      "conceptos_afectados": [
+        "CONCEPTO_SEGURO",
+        "CONCEPTO_SEGURO_EMOCION"
+      ]
+    },
+    {
+      "palabra": "rápido",
+      "conceptos_afectados": [
+        "CONCEPTO_RAPIDO",
+        "CONCEPTO_RAPIDO_TIEMPO"
+      ]
+    },
+    {
+      "palabra": "hora",
+      "conceptos_afectados": [
+        "CONCEPTO_HORA",
+        "CONCEPTO_DATE"
+      ]
+    },
+    {
+      "palabra": "dir",
+      "conceptos_afectados": [
+        "CONCEPTO_LS",
+        "CONCEPTO_DIRECTORIO_SHELL"
+      ]
+    },
+    {
+      "palabra": "top",
+      "conceptos_afectados": [
+        "CONCEPTO_HEAD",
+        "CONCEPTO_TOP",
+        "CONCEPTO_LIMIT"
+      ]
+    },
+    {
+      "palabra": "ver archivo",
+      "conceptos_afectados": [
+        "CONCEPTO_LESS",
+        "CONCEPTO_CAT"
+      ]
+    },
+    {
+      "palabra": "disk usage",
+      "conceptos_afectados": [
+        "CONCEPTO_DF",
+        "CONCEPTO_DU"
+      ]
+    },
+    {
+      "palabra": "count",
+      "conceptos_afectados": [
+        "CONCEPTO_WC",
+        "CONCEPTO_COUNT"
+      ]
+    },
+    {
+      "palabra": "metadata",
+      "conceptos_afectados": [
+        "CONCEPTO_STAT",
+        "CONCEPTO_METADATA"
+      ]
+    },
+    {
+      "palabra": "sintaxis incorrecta",
+      "conceptos_afectados": [
+        "CONCEPTO_SYNTAX_ERROR",
+        "CONCEPTO_CODIGO_INVALIDO"
+      ]
+    },
+    {
+      "palabra": "argumentos",
+      "conceptos_afectados": [
+        "CONCEPTO_ARGUMENTOS",
+        "CONCEPTO_PARAMETROS"
+      ]
+    },
+    {
+      "palabra": "parámetros",
+      "conceptos_afectados": [
+        "CONCEPTO_ARGUMENTOS",
+        "CONCEPTO_PARAMETROS"
+      ]
+    },
+    {
+      "palabra": "parameters",
+      "conceptos_afectados": [
+        "CONCEPTO_ARGUMENTOS",
+        "CONCEPTO_PARAMETROS"
+      ]
+    },
+    {
+      "palabra": "ciclo",
+      "conceptos_afectados": [
+        "CONCEPTO_LOOP",
+        "CONCEPTO_CICLO"
+      ]
+    },
+    {
+      "palabra": "análisis estático",
+      "conceptos_afectados": [
+        "CONCEPTO_LINT",
+        "CONCEPTO_ANALISIS_ESTATICO"
+      ]
+    },
+    {
+      "palabra": "derivada",
+      "conceptos_afectados": [
+        "CONCEPTO_DERIVAR",
+        "CONCEPTO_DERIVADA"
+      ]
+    },
+    {
+      "palabra": "tasa de cambio",
+      "conceptos_afectados": [
+        "CONCEPTO_DERIVADA",
+        "CONCEPTO_DERIVADA_PRIMERA"
+      ]
+    },
+    {
+      "palabra": "integral",
+      "conceptos_afectados": [
+        "CONCEPTO_INTEGRAR",
+        "CONCEPTO_INTEGRAL"
+      ]
+    },
+    {
+      "palabra": "integración",
+      "conceptos_afectados": [
+        "CONCEPTO_INTEGRAR",
+        "CONCEPTO_INTEGRAL"
+      ]
+    },
+    {
+      "palabra": "antiderivada",
+      "conceptos_afectados": [
+        "CONCEPTO_INTEGRAR",
+        "CONCEPTO_INTEGRAL",
+        "CONCEPTO_INTEGRAL_INDEFINIDA"
+      ]
+    },
+    {
+      "palabra": "primitiva",
+      "conceptos_afectados": [
+        "CONCEPTO_INTEGRAL",
+        "CONCEPTO_INTEGRAL_INDEFINIDA"
+      ]
+    },
+    {
+      "palabra": "sustitución",
+      "conceptos_afectados": [
+        "CONCEPTO_SUSTITUCION",
+        "CONCEPTO_SUSTITUCION_AVANZADA"
+      ]
+    },
+    {
+      "palabra": "factor",
+      "conceptos_afectados": [
+        "CONCEPTO_FACTORIZAR",
+        "CONCEPTO_FACTOR"
+      ]
+    },
+    {
+      "palabra": "límite",
+      "conceptos_afectados": [
+        "CONCEPTO_LIMITE",
+        "CONCEPTO_LIMIT"
+      ]
+    },
+    {
+      "palabra": "limit",
+      "conceptos_afectados": [
+        "CONCEPTO_LIMITE",
+        "CONCEPTO_LIMIT"
+      ]
+    },
+    {
+      "palabra": "plan",
+      "conceptos_afectados": [
+        "CONCEPTO_CREAR_PLAN",
+        "CONCEPTO_PLAN"
+      ]
+    },
+    {
+      "palabra": "completado",
+      "conceptos_afectados": [
+        "CONCEPTO_PROGRESO",
+        "CONCEPTO_COMPLETADO"
+      ]
+    },
+    {
+      "palabra": "prerequisito",
+      "conceptos_afectados": [
+        "CONCEPTO_DEPENDENCIA",
+        "CONCEPTO_PREREQUISITO"
+      ]
+    },
+    {
+      "palabra": "registro",
+      "conceptos_afectados": [
+        "CONCEPTO_LOG",
+        "CONCEPTO_REGISTRO"
+      ]
+    },
+    {
+      "palabra": "rollback",
+      "conceptos_afectados": [
+        "CONCEPTO_ROLLBACK_PLAN",
+        "CONCEPTO_ROLLBACK"
+      ]
+    },
+    {
+      "palabra": "revertir",
+      "conceptos_afectados": [
+        "CONCEPTO_ROLLBACK_PLAN",
+        "CONCEPTO_ROLLBACK"
+      ]
+    },
+    {
+      "palabra": "deshacer",
+      "conceptos_afectados": [
+        "CONCEPTO_ROLLBACK_PLAN",
+        "CONCEPTO_ROLLBACK"
+      ]
+    },
+    {
+      "palabra": "reintentos",
+      "conceptos_afectados": [
+        "CONCEPTO_REINTENTOS_PLAN",
+        "CONCEPTO_REINTENTOS_HTTP"
+      ]
+    },
+    {
+      "palabra": "retry",
+      "conceptos_afectados": [
+        "CONCEPTO_REINTENTOS_PLAN",
+        "CONCEPTO_REINTENTOS_HTTP"
+      ]
+    }
+  ],
+  "conceptos_prioritarios": {
+    "grounding_perfecto": [
+      "CONCEPTO_LEER",
+      "CONCEPTO_ESCRIBIR",
+      "CONCEPTO_ARCHIVO",
+      "CONCEPTO_DIRECTORIO",
+      "CONCEPTO_EXISTE",
+      "CONCEPTO_LS",
+      "CONCEPTO_PWD",
+      "CONCEPTO_TREE",
+      "CONCEPTO_HEAD",
+      "CONCEPTO_TAIL",
+      "CONCEPTO_LESS",
+      "CONCEPTO_FIND",
+      "CONCEPTO_GREP",
+      "CONCEPTO_MKDIR",
+      "CONCEPTO_ELIMINAR_DIRECTORIO",
+      "CONCEPTO_CAMBIAR_DIRECTORIO",
+      "CONCEPTO_ECHO",
+      "CONCEPTO_WHOAMI",
+      "CONCEPTO_HOSTNAME",
+      "CONCEPTO_DATE",
+      "CONCEPTO_UNAME",
+      "CONCEPTO_UPTIME",
+      "CONCEPTO_DF",
+      "CONCEPTO_DU",
+      "CONCEPTO_FREE",
+      "CONCEPTO_ENV",
+      "CONCEPTO_PS",
+      "CONCEPTO_TOP",
+      "CONCEPTO_KILL",
+      "CONCEPTO_CAT",
+      "CONCEPTO_TOUCH",
+      "CONCEPTO_WC",
+      "CONCEPTO_FILE",
+      "CONCEPTO_STAT",
+      "CONCEPTO_ANALIZAR_CODIGO",
+      "CONCEPTO_PARSEAR",
+      "CONCEPTO_CONTAR_FUNCIONES",
+      "CONCEPTO_CONTAR_CLASES",
+      "CONCEPTO_COMPLEJIDAD_CICLOMATICA",
+      "CONCEPTO_CALCULAR_COMPLEJIDAD",
+      "CONCEPTO_ENCONTRAR_VARIABLES_SIN_USAR",
+      "CONCEPTO_ENCONTRAR_IMPORTS_SIN_USAR",
+      "CONCEPTO_ENCONTRAR_DOCSTRINGS_FALTANTES",
+      "CONCEPTO_GENERAR_REPORTE",
+      "CONCEPTO_DERIVAR",
+      "CONCEPTO_INTEGRAR",
+      "CONCEPTO_RESOLVER_ECUACION",
+      "CONCEPTO_SIMPLIFICAR",
+      "CONCEPTO_EXPANDIR",
+      "CONCEPTO_FACTORIZAR",
+      "CONCEPTO_LIMITE",
+      "CONCEPTO_SERIE_TAYLOR",
+      "CONCEPTO_EVALUAR",
+      "CONCEPTO_CREAR_PLAN",
+      "CONCEPTO_VALIDAR_PLAN",
+      "CONCEPTO_OPTIMIZAR_PLAN",
+      "CONCEPTO_RESUMEN_PLAN",
+      "CONCEPTO_REGISTRAR_ACCION",
+      "CONCEPTO_EJECUTAR_PLAN",
+      "CONCEPTO_ROLLBACK_PLAN",
+      "CONCEPTO_EJECUTAR_PARALELO",
+      "CONCEPTO_ESTIMAR_TIEMPO",
+      "CONCEPTO_PAUSAR_PLAN",
+      "CONCEPTO_HTTP_GET",
+      "CONCEPTO_HTTP_POST",
+      "CONCEPTO_HTTP_PUT",
+      "CONCEPTO_HTTP_DELETE",
+      "CONCEPTO_PARSEAR_JSON",
+      "CONCEPTO_GET_JSON",
+      "CONCEPTO_POST_JSON",
+      "CONCEPTO_CONFIGURAR_API",
+      "CONCEPTO_VALIDAR_RESPUESTA",
+      "CONCEPTO_CLIENTE_HTTP",
+      "CONCEPTO_CONECTAR_BD",
+      "CONCEPTO_DESCONECTAR_BD",
+      "CONCEPTO_CREAR_TABLA",
+      "CONCEPTO_ELIMINAR_TABLA",
+      "CONCEPTO_LISTAR_TABLAS",
+      "CONCEPTO_INSERT",
+      "CONCEPTO_SELECT",
+      "CONCEPTO_UPDATE",
+      "CONCEPTO_DELETE",
+      "CONCEPTO_COUNT",
+      "CONCEPTO_COMMIT",
+      "CONCEPTO_ROLLBACK",
+      "CONCEPTO_CREAR_INDICE",
+      "CONCEPTO_RESPALDAR"
+    ],
+    "grounding_bajo": [],
+    "ejecutables": [
+      "CONCEPTO_LEER",
+      "CONCEPTO_ESCRIBIR",
+      "CONCEPTO_ARCHIVO",
+      "CONCEPTO_DIRECTORIO",
+      "CONCEPTO_EXISTE",
+      "CONCEPTO_LS",
+      "CONCEPTO_PWD",
+      "CONCEPTO_TREE",
+      "CONCEPTO_HEAD",
+      "CONCEPTO_TAIL",
+      "CONCEPTO_LESS",
+      "CONCEPTO_FIND",
+      "CONCEPTO_GREP",
+      "CONCEPTO_MKDIR",
+      "CONCEPTO_ELIMINAR_DIRECTORIO",
+      "CONCEPTO_CAMBIAR_DIRECTORIO",
+      "CONCEPTO_ECHO",
+      "CONCEPTO_WHOAMI",
+      "CONCEPTO_HOSTNAME",
+      "CONCEPTO_DATE",
+      "CONCEPTO_UNAME",
+      "CONCEPTO_UPTIME",
+      "CONCEPTO_DF",
+      "CONCEPTO_DU",
+      "CONCEPTO_FREE",
+      "CONCEPTO_ENV",
+      "CONCEPTO_PS",
+      "CONCEPTO_TOP",
+      "CONCEPTO_KILL",
+      "CONCEPTO_CAT",
+      "CONCEPTO_TOUCH",
+      "CONCEPTO_WC",
+      "CONCEPTO_FILE",
+      "CONCEPTO_STAT",
+      "CONCEPTO_ANALIZAR_CODIGO",
+      "CONCEPTO_CONTAR_FUNCIONES",
+      "CONCEPTO_CONTAR_CLASES",
+      "CONCEPTO_CALCULAR_COMPLEJIDAD",
+      "CONCEPTO_ENCONTRAR_VARIABLES_SIN_USAR",
+      "CONCEPTO_ENCONTRAR_IMPORTS_SIN_USAR",
+      "CONCEPTO_ENCONTRAR_DOCSTRINGS_FALTANTES",
+      "CONCEPTO_GENERAR_REPORTE",
+      "CONCEPTO_DERIVAR",
+      "CONCEPTO_INTEGRAR",
+      "CONCEPTO_RESOLVER_ECUACION",
+      "CONCEPTO_SIMPLIFICAR",
+      "CONCEPTO_EXPANDIR",
+      "CONCEPTO_FACTORIZAR",
+      "CONCEPTO_LIMITE",
+      "CONCEPTO_SERIE_TAYLOR",
+      "CONCEPTO_EVALUAR",
+      "CONCEPTO_CREAR_PLAN",
+      "CONCEPTO_VALIDAR_PLAN",
+      "CONCEPTO_OPTIMIZAR_PLAN",
+      "CONCEPTO_RESUMEN_PLAN",
+      "CONCEPTO_REGISTRAR_ACCION",
+      "CONCEPTO_EJECUTAR_PLAN",
+      "CONCEPTO_ROLLBACK_PLAN",
+      "CONCEPTO_EJECUTAR_PARALELO",
+      "CONCEPTO_ESTIMAR_TIEMPO",
+      "CONCEPTO_PAUSAR_PLAN",
+      "CONCEPTO_HTTP_GET",
+      "CONCEPTO_HTTP_POST",
+      "CONCEPTO_HTTP_PUT",
+      "CONCEPTO_HTTP_DELETE",
+      "CONCEPTO_GET_JSON",
+      "CONCEPTO_POST_JSON",
+      "CONCEPTO_CONFIGURAR_API",
+      "CONCEPTO_VALIDAR_RESPUESTA",
+      "CONCEPTO_CONECTAR_BD",
+      "CONCEPTO_DESCONECTAR_BD",
+      "CONCEPTO_CREAR_TABLA",
+      "CONCEPTO_ELIMINAR_TABLA",
+      "CONCEPTO_LISTAR_TABLAS",
+      "CONCEPTO_INSERT",
+      "CONCEPTO_SELECT",
+      "CONCEPTO_UPDATE",
+      "CONCEPTO_DELETE",
+      "CONCEPTO_COUNT",
+      "CONCEPTO_COMMIT",
+      "CONCEPTO_ROLLBACK",
+      "CONCEPTO_CREAR_INDICE",
+      "CONCEPTO_RESPALDAR"
+    ]
+  }
+}

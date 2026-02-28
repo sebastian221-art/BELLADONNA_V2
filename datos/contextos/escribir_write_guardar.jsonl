@@ -1,0 +1,14 @@
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:56.884618", "metadata": {"contexto": "Escribe algo en un archivo"}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.213302", "metadata": {"contexto": "¿Puedes escribir archivos?"}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.154817", "metadata": {"contexto": "Escribe datos en archivo_salida.txt"}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:12.459282", "metadata": {"contexto": "Guarda los resultados en SQLite"}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:27.769274", "metadata": {"contexto": "Escribe algo en un archivo"}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.286019", "metadata": {"contexto": "¿Puedes escribir archivos?"}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.226001", "metadata": {"contexto": "Escribe datos en archivo_salida.txt"}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:43.298288", "metadata": {"contexto": "Guarda los resultados en SQLite"}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:23.653840", "metadata": {"contexto": ""}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:36.598287", "metadata": {"contexto": ""}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:40.869730", "metadata": {"contexto": "Escribe algo en un archivo"}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.416607", "metadata": {"contexto": "¿Puedes escribir archivos?"}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.291650", "metadata": {"contexto": "Escribe datos en archivo_salida.txt"}}
+{"concepto_id": "escribir_write_guardar", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:46.162877", "metadata": {"contexto": "Guarda los resultados en SQLite"}}

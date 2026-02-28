@@ -1,0 +1,11 @@
+{"concepto_id": "CONCEPTO_LEER", "exito": true, "duracion_ms": 100, "recursos": {"tamaño_archivo_kb": 10}, "timestamp": "2026-02-11T01:59:39.497704", "metadata": {}}
+{"concepto_id": "CONCEPTO_LEER", "exito": true, "duracion_ms": 110, "recursos": {"tamaño_archivo_kb": 11}, "timestamp": "2026-02-11T01:59:39.498702", "metadata": {}}
+{"concepto_id": "CONCEPTO_LEER", "exito": true, "duracion_ms": 120, "recursos": {"tamaño_archivo_kb": 12}, "timestamp": "2026-02-11T01:59:39.498702", "metadata": {}}
+{"concepto_id": "CONCEPTO_LEER", "exito": true, "duracion_ms": 130, "recursos": {"tamaño_archivo_kb": 13}, "timestamp": "2026-02-11T01:59:39.499703", "metadata": {}}
+{"concepto_id": "CONCEPTO_LEER", "exito": true, "duracion_ms": 140, "recursos": {"tamaño_archivo_kb": 14}, "timestamp": "2026-02-11T01:59:39.499703", "metadata": {}}
+{"concepto_id": "CONCEPTO_LEER", "exito": false, "duracion_ms": 5000, "recursos": {"tamaño_archivo_kb": 10000}, "timestamp": "2026-02-11T01:59:39.500701", "metadata": {}}
+{"concepto_id": "CONCEPTO_LEER", "exito": false, "duracion_ms": 6000, "recursos": {"tamaño_archivo_kb": 11000}, "timestamp": "2026-02-11T01:59:39.500701", "metadata": {}}
+{"concepto_id": "CONCEPTO_LEER", "exito": false, "duracion_ms": 7000, "recursos": {"tamaño_archivo_kb": 12000}, "timestamp": "2026-02-11T01:59:39.501707", "metadata": {}}
+{"concepto_id": "CONCEPTO_LEER", "exito": true, "duracion_ms": 120, "recursos": {"tamaño_archivo_kb": 20}, "timestamp": "2026-02-11T01:59:51.825835", "metadata": {}}
+{"concepto_id": "CONCEPTO_LEER", "exito": true, "duracion_ms": 120, "recursos": {"tamaño_archivo_kb": 20}, "timestamp": "2026-02-11T01:59:51.826860", "metadata": {}}
+{"concepto_id": "CONCEPTO_LEER", "exito": true, "duracion_ms": 120, "recursos": {"tamaño_archivo_kb": 20}, "timestamp": "2026-02-11T01:59:51.827840", "metadata": {}}

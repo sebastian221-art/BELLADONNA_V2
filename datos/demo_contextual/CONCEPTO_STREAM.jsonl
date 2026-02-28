@@ -1,0 +1,6 @@
+{"concepto_id": "CONCEPTO_STREAM", "exito": true, "duracion_ms": 50, "recursos": {"chunk_size": 4096}, "timestamp": "2026-02-11T01:59:59.736748", "metadata": {}}
+{"concepto_id": "CONCEPTO_STREAM", "exito": true, "duracion_ms": 60, "recursos": {"chunk_size": 4096}, "timestamp": "2026-02-11T01:59:59.737743", "metadata": {}}
+{"concepto_id": "CONCEPTO_STREAM", "exito": true, "duracion_ms": 70, "recursos": {"chunk_size": 4096}, "timestamp": "2026-02-11T01:59:59.737743", "metadata": {}}
+{"concepto_id": "CONCEPTO_STREAM", "exito": true, "duracion_ms": 80, "recursos": {"chunk_size": 4096}, "timestamp": "2026-02-11T01:59:59.738746", "metadata": {}}
+{"concepto_id": "CONCEPTO_STREAM", "exito": true, "duracion_ms": 90, "recursos": {"chunk_size": 4096}, "timestamp": "2026-02-11T01:59:59.739740", "metadata": {}}
+{"concepto_id": "CONCEPTO_STREAM", "exito": true, "duracion_ms": 100, "recursos": {"chunk_size": 4096}, "timestamp": "2026-02-11T01:59:59.739740", "metadata": {}}

@@ -1,0 +1,2958 @@
+[
+  {
+    "timestamp": "2026-02-05T00:13:37.070900",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_COMO",
+      "CONCEPTO_ESTE"
+    ],
+    "grounding_promedio": 0.8
+  },
+  {
+    "timestamp": "2026-02-05T00:13:45.381302",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T00:13:55.224171",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [
+      "CONCEPTO_COMO",
+      "CONCEPTO_ESTE"
+    ],
+    "grounding_promedio": 0.75
+  },
+  {
+    "timestamp": "2026-02-05T00:14:14.923565",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.8
+  },
+  {
+    "timestamp": "2026-02-05T00:15:04.033656",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_PODER"
+    ],
+    "grounding_promedio": 0.8
+  },
+  {
+    "timestamp": "2026-02-05T00:15:26.547844",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.75
+  },
+  {
+    "timestamp": "2026-02-05T00:36:30.016659",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T00:36:39.853206",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:36:56.699147",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:37:10.761101",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8600000000000001,
+    "conceptos_principales": [
+      "CONCEPTO_PODER"
+    ],
+    "grounding_promedio": 0.8600000000000001
+  },
+  {
+    "timestamp": "2026-02-05T00:37:29.270364",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:38:18.176688",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:38:53.920797",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T00:39:13.340088",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_DIRECTORIO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:39:36.158173",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_Y"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:41:18.761122",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:41:18.855505",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:41:19.008333",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:41:19.137083",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:41:24.077173",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:41:43.964364",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_CREAR",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:41:44.073734",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ELIMINAR",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:41:44.198727",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_COPIAR",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:41:44.323740",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_MOVER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T00:41:44.448736",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_MOVER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T02:20:15.172685",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-05T02:20:16.172748",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T02:20:16.313321",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T02:20:16.437286",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T02:20:16.501268",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T02:27:13.975578",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-05T02:27:15.092173",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T02:27:15.264046",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T02:27:15.404669",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T02:27:15.498422",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T02:30:51.952895",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-05T02:30:53.031533",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T02:30:53.265905",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T02:30:53.375285",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T02:30:53.469031",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T02:31:40.297896",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-05T02:31:41.346985",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T02:31:41.521932",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T02:31:41.662596",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T02:31:41.756311",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T23:03:56.861910",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-05T23:03:58.000343",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-05T23:03:58.187845",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T23:03:58.359719",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-05T23:03:58.453473",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-06T00:11:46.999799",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-06T00:11:48.127271",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-06T00:11:48.381187",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-06T00:11:48.555187",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-06T00:11:48.690188",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-06T00:41:24.823606",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-06T00:41:25.862587",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-06T00:41:26.119707",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-06T00:41:26.305706",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-06T00:41:26.543708",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-06T05:49:43.760910",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-06T05:49:45.276863",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-06T05:49:45.590500",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-06T05:49:45.853436",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-06T05:49:46.024214",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-06T13:27:50.335819",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-06T13:27:51.505142",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-06T13:27:51.770768",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-06T13:27:51.973892",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-06T13:27:52.114518",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-07T01:49:52.882553",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-07T01:49:54.104056",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-07T01:49:54.400930",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-07T01:49:54.619681",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-07T01:49:54.795755",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T00:23:38.785641",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-09T00:23:40.296321",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T00:23:40.608820",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-09T00:23:40.890065",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-09T00:23:41.046316",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T02:37:11.258087",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-09T02:37:12.215103",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T02:37:12.951092",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T03:14:35.118536",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-09T03:14:36.352884",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T03:14:37.153866",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T23:01:39.897456",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-09T23:01:41.480823",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T23:01:42.330861",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-09T23:01:42.947671",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-09T23:01:43.347591",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T23:24:31.502384",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-09T23:24:33.165047",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T23:24:34.337316",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-09T23:24:35.069717",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-09T23:24:35.591397",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T23:51:52.886264",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-09T23:51:54.566601",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-09T23:51:55.613610",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-09T23:51:56.406651",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-09T23:51:56.905723",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-10T00:08:01.381705",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-10T00:08:03.048430",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-10T00:08:04.164063",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-10T00:08:04.948401",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-10T00:08:05.548429",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-10T07:09:47.491388",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-10T07:09:50.193559",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-10T07:09:51.741879",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-10T07:09:52.654361",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-10T07:09:53.326844",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-11T02:24:01.193615",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-11T02:24:05.054778",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-11T02:24:07.787171",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-11T02:24:09.140186",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-11T02:24:09.987215",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-11T11:05:29.086328",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-11T11:05:31.399007",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-11T11:05:33.658530",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-11T11:05:34.806183",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-11T11:05:35.678397",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-11T22:49:14.142985",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-11T22:49:16.318589",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-11T22:49:18.050093",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-11T22:49:19.300207",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-11T22:49:20.024488",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-11T23:02:13.155328",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-11T23:02:15.478726",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-11T23:02:17.063059",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-11T23:02:18.263966",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-11T23:02:19.220087",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-14T13:55:27.570111",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.95
+  },
+  {
+    "timestamp": "2026-02-14T13:55:29.957407",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-14T13:55:31.862823",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER",
+      "CONCEPTO_ARCHIVO"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-14T13:55:33.376788",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 1.0
+  },
+  {
+    "timestamp": "2026-02-14T13:55:34.324276",
+    "tipo": "AGRADECIMIENTO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_GRACIAS"
+    ],
+    "grounding_promedio": 0.9
+  },
+  {
+    "timestamp": "2026-02-15T00:01:12.375225",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-15T00:01:43.584508",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_COMO",
+      "CONCEPTO_ESTE"
+    ],
+    "grounding_promedio": 0.17961026238070593
+  },
+  {
+    "timestamp": "2026-02-15T00:02:22.601601",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17513941327730814
+  },
+  {
+    "timestamp": "2026-02-15T00:03:48.774516",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-15T00:04:10.843301",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17513941327730814
+  },
+  {
+    "timestamp": "2026-02-15T00:57:16.063916",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-15T00:57:34.768465",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17513941327730814
+  },
+  {
+    "timestamp": "2026-02-15T00:57:48.534998",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_RAZONAR"
+    ],
+    "grounding_promedio": 0.1757518079545763
+  },
+  {
+    "timestamp": "2026-02-15T01:35:29.069425",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-15T01:39:05.750707",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_COMO",
+      "CONCEPTO_ESTE"
+    ],
+    "grounding_promedio": 0.17961026238070593
+  },
+  {
+    "timestamp": "2026-02-15T01:44:54.575446",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-15T02:07:15.056569",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-15T02:08:26.404767",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_COMO",
+      "CONCEPTO_ESTE"
+    ],
+    "grounding_promedio": 0.17961026238070593
+  },
+  {
+    "timestamp": "2026-02-15T02:08:45.763963",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_PODER",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17763734570255987
+  },
+  {
+    "timestamp": "2026-02-15T02:09:28.722228",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17513941327730814
+  },
+  {
+    "timestamp": "2026-02-15T02:10:41.081373",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-15T02:16:08.882263",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.23226040535502965
+  },
+  {
+    "timestamp": "2026-02-15T02:16:37.852538",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_ESCRIBIR"
+    ],
+    "grounding_promedio": 0.2347362432214949
+  },
+  {
+    "timestamp": "2026-02-15T02:20:20.769661",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_HACER",
+      "CONCEPTO_ECUACION"
+    ],
+    "grounding_promedio": 0.17405785763705217
+  },
+  {
+    "timestamp": "2026-02-15T02:21:21.118906",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_PODER",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17763734570255987
+  },
+  {
+    "timestamp": "2026-02-15T02:24:16.999011",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUE"
+    ],
+    "grounding_promedio": 0.17994500001271566
+  },
+  {
+    "timestamp": "2026-02-15T02:25:04.939731",
+    "tipo": "NO_ENTENDIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-15T02:25:30.818502",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_PODER"
+    ],
+    "grounding_promedio": 0.1826332105530633
+  },
+  {
+    "timestamp": "2026-02-15T02:27:17.440158",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_SABER",
+      "CONCEPTO_QUE",
+      "CONCEPTO_VARIABLE"
+    ],
+    "grounding_promedio": 0.17778057831305047
+  },
+  {
+    "timestamp": "2026-02-15T02:27:56.038048",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_PODER",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17648351854748198
+  },
+  {
+    "timestamp": "2026-02-15T02:28:11.715646",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_COMO"
+    ],
+    "grounding_promedio": 0.17603872087266711
+  },
+  {
+    "timestamp": "2026-02-15T02:28:20.460995",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUIEN"
+    ],
+    "grounding_promedio": 0.17921821806165908
+  },
+  {
+    "timestamp": "2026-02-15T02:28:36.564316",
+    "tipo": "NO_ENTENDIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-16T06:47:05.706621",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-16T06:59:02.831851",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-16T07:07:16.345823",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-16T07:13:13.257629",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-16T07:13:32.573760",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_COMO",
+      "CONCEPTO_ESTE"
+    ],
+    "grounding_promedio": 0.17961026238070593
+  },
+  {
+    "timestamp": "2026-02-16T07:13:51.574379",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [
+      "CONCEPTO_SABER",
+      "CONCEPTO_LEER"
+    ],
+    "grounding_promedio": 0.22540683547655743
+  },
+  {
+    "timestamp": "2026-02-16T07:14:10.781962",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_PODER",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17763734570255987
+  },
+  {
+    "timestamp": "2026-02-16T07:14:27.691843",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_ESTE",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17782021014778704
+  },
+  {
+    "timestamp": "2026-02-16T07:16:18.294981",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [
+      "CONCEPTO_FOR"
+    ],
+    "grounding_promedio": 0.17233834134207832
+  },
+  {
+    "timestamp": "2026-02-16T07:16:26.181418",
+    "tipo": "NO_ENTENDIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-16T19:32:11.003534",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-16T19:32:28.537788",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_COMO",
+      "CONCEPTO_ESTE"
+    ],
+    "grounding_promedio": 0.17961026238070593
+  },
+  {
+    "timestamp": "2026-02-16T19:32:41.188030",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17513941327730814
+  },
+  {
+    "timestamp": "2026-02-16T19:32:55.920860",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.85,
+    "conceptos_principales": [
+      "CONCEPTO_QUIEN"
+    ],
+    "grounding_promedio": 0.17921821806165908
+  },
+  {
+    "timestamp": "2026-02-16T19:33:10.921235",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_EN",
+      "CONCEPTO_QUE",
+      "CONCEPTO_RAZONAR"
+    ],
+    "grounding_promedio": 0.18198268678453233
+  },
+  {
+    "timestamp": "2026-02-16T19:33:46.139748",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_COMO"
+    ],
+    "grounding_promedio": 0.17603872087266711
+  },
+  {
+    "timestamp": "2026-02-16T19:34:01.524557",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_PODER"
+    ],
+    "grounding_promedio": 0.1812891052828895
+  },
+  {
+    "timestamp": "2026-02-16T19:34:13.074005",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_PODER",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17763734570255987
+  },
+  {
+    "timestamp": "2026-02-16T19:35:38.543245",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_PODER",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17763734570255987
+  },
+  {
+    "timestamp": "2026-02-16T19:35:49.909415",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_QUE"
+    ],
+    "grounding_promedio": 0.17994500001271566
+  },
+  {
+    "timestamp": "2026-02-16T23:52:39.696201",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-16T23:52:58.513552",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_COMO",
+      "CONCEPTO_ESTE"
+    ],
+    "grounding_promedio": 0.17961026238070593
+  },
+  {
+    "timestamp": "2026-02-17T00:00:21.324236",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-17T01:23:37.946945",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-17T01:34:09.417041",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-17T01:34:45.454288",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.85,
+    "conceptos_principales": [
+      "CONCEPTO_QUIEN"
+    ],
+    "grounding_promedio": 0.17921821806165908
+  },
+  {
+    "timestamp": "2026-02-17T01:35:08.149048",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_PODER",
+      "CONCEPTO_HACER"
+    ],
+    "grounding_promedio": 0.17763734570255987
+  },
+  {
+    "timestamp": "2026-02-17T09:46:38.075129",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_COMO",
+      "CONCEPTO_ESTE"
+    ],
+    "grounding_promedio": 0.17929823928409153
+  },
+  {
+    "timestamp": "2026-02-17T09:47:52.843823",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [
+      "CONCEPTO_HOLA"
+    ],
+    "grounding_promedio": 0.18069101704491508
+  },
+  {
+    "timestamp": "2026-02-17T09:48:04.860794",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_COMO",
+      "CONCEPTO_ESTE"
+    ],
+    "grounding_promedio": 0.17929823928409153
+  },
+  {
+    "timestamp": "2026-02-17T09:48:34.211477",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_TENER_V"
+    ],
+    "grounding_promedio": 0.1758653011586931
+  },
+  {
+    "timestamp": "2026-02-17T09:48:56.545442",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_COMO",
+      "CONCEPTO_TU",
+      "CONCEPTO_LLAMAR"
+    ],
+    "grounding_promedio": 0.1750958021481832
+  },
+  {
+    "timestamp": "2026-02-17T09:49:16.579561",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_TU"
+    ],
+    "grounding_promedio": 0.17787701043817733
+  },
+  {
+    "timestamp": "2026-02-17T09:49:50.807651",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [
+      "CONCEPTO_QUE",
+      "CONCEPTO_TENER_V"
+    ],
+    "grounding_promedio": 0.1758653011586931
+  },
+  {
+    "timestamp": "2026-02-18T09:00:45.311825",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-18T09:01:03.945706",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-18T09:02:08.130811",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-18T09:02:29.384360",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.85,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-18T09:02:54.033317",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.9,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:35:23.211885",
+    "tipo": "SOCIAL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:35:35.163476",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:35:50.364466",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:36:09.297595",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:36:37.432191",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:37:03.749486",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:37:37.033990",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:40:16.978431",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.33,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:41:59.974701",
+    "tipo": "ACCION_COGNITIVA",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:44:12.095574",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:57:18.385899",
+    "tipo": "NO_ENTENDIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:58:03.886367",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-19T01:59:12.539436",
+    "tipo": "NO_ENTENDIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:17:39.349432",
+    "tipo": "SOCIAL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:17:55.039217",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:18:28.762023",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:18:50.403001",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:19:18.372122",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:21:08.965680",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:23:18.633055",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:24:08.124281",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:24:59.149292",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:26:36.760343",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:26:56.804544",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:27:36.852890",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:27:52.736782",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:28:32.875896",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.83,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:29:19.383771",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:29:51.722908",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:31:43.884786",
+    "tipo": "NEGATIVA",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:32:22.593420",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:33:23.251540",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:33:59.499234",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:35:13.741842",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.33,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:35:42.853846",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:36:25.934705",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:36:57.633085",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:37:45.038014",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.6,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:38:42.043330",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:38:55.210790",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:39:07.194375",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:39:26.472203",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:39:35.889114",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:39:50.778972",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.33,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:40:00.661693",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.33,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:40:10.142723",
+    "tipo": "NO_ENTENDIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:40:30.813582",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:41:19.850221",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:42:00.056368",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:42:45.429014",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:43:23.730338",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:44:35.960091",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:44:57.437075",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:45:14.477292",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:45:24.337286",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:45:53.883539",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:46:32.790816",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.4,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:47:37.721081",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.4,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:48:26.465063",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:48:40.885087",
+    "tipo": "CONFIRMACION",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:49:07.409981",
+    "tipo": "CONFIRMACION",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:49:31.866252",
+    "tipo": "CONFIRMACION",
+    "puede_ejecutar": false,
+    "certeza": 0.71,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:49:51.114300",
+    "tipo": "CONFIRMACION",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:50:18.904399",
+    "tipo": "CONFIRMACION",
+    "puede_ejecutar": false,
+    "certeza": 0.86,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-21T03:50:49.546462",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.83,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-22T23:19:30.743377",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-22T23:20:00.281281",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-22T23:20:23.394919",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-22T23:21:12.581335",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.33,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-22T23:21:36.040148",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-22T23:21:59.240609",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-22T23:23:25.934200",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-22T23:23:34.621297",
+    "tipo": "NO_ENTENDIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-22T23:23:59.231555",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T12:38:37.979311",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:34:43.984150",
+    "tipo": "SOCIAL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:34:57.640054",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:35:19.623401",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:35:50.751525",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:36:59.581973",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:37:24.033619",
+    "tipo": "NO_ENTENDIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:37:48.721864",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.33,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:38:18.642561",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:39:09.700581",
+    "tipo": "ESTADO_USUARIO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:40:41.598774",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:41:44.682852",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:42:05.376577",
+    "tipo": "ESTADO_USUARIO",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:43:15.324445",
+    "tipo": "ESTADO_USUARIO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:43:34.844946",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:45:32.613910",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:46:10.025186",
+    "tipo": "NO_ENTENDIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:46:44.625058",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.33,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-23T13:47:31.519480",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-25T02:28:43.393071",
+    "tipo": "SOCIAL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-25T02:29:03.967407",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-25T02:29:44.691730",
+    "tipo": "SOCIAL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-25T02:29:59.716987",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-25T02:30:33.612346",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.33,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-25T02:30:58.623826",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-25T02:31:26.979661",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-25T02:31:46.077444",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  }
+]

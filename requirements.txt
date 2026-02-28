@@ -1,0 +1,13 @@
+# Análisis de lenguaje
+spacy>=3.7.0
+
+# Tests
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Utilidades
+python-dateutil>=2.8.0
+
+# Futuro (Fase 2+)
+# networkx>=3.1  # Para grafo de conocimiento
+# requests>=2.31.0  # Para investigación web

@@ -1,0 +1,160 @@
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:56.835986", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:56.901058", "metadata": {"contexto": "Escribe algo en un archivo"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:56.957005", "metadata": {"contexto": "Lee y analiza el archivo main.py con Python"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:56.999552", "metadata": {"contexto": "¿Cuál es tu grounding para leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.179766", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.188768", "metadata": {"contexto": "Lee el archivo config.json"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.200301", "metadata": {"contexto": "Lee el archivo datos.txt"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.214302", "metadata": {"contexto": "¿Puedes escribir archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": false, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.400774", "metadata": {"contexto": "Elimina todos los archivos del sistema"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.417809", "metadata": {"contexto": "Lee el archivo test.py"}}
+{"concepto_id": "archivo_file_documento", "exito": false, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.432775", "metadata": {"contexto": "Elimina todos los archivos permanentemente"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.484813", "metadata": {"contexto": "Lee el archivo README.md"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.551777", "metadata": {"contexto": "¿Es seguro modificar el archivo de configuración?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.778225", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.134351", "metadata": {"contexto": "Lee el archivo main.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.176091", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.200456", "metadata": {"contexto": "Lee el archivo test_1.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.215409", "metadata": {"contexto": "Lee el archivo test_2.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.222414", "metadata": {"contexto": "Lee el archivo test_3.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.231374", "metadata": {"contexto": "Lee el archivo test_4.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.239406", "metadata": {"contexto": "Lee el archivo test_5.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.249962", "metadata": {"contexto": "Lee el archivo test_6.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.255965", "metadata": {"contexto": "Lee el archivo test_final.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.270723", "metadata": {"contexto": "¿Qué significa leer un archivo?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.557052", "metadata": {"contexto": "Analiza la complejidad del archivo calculadora.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.574049", "metadata": {"contexto": "¿Puedes calcular la complejidad ciclomática de un archivo?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:09.765937", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:09.805937", "metadata": {"contexto": "Lee el archivo main.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.120460", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.131482", "metadata": {"contexto": "Lee y procesa archivo de logs numero 0"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.152774", "metadata": {"contexto": "Lee y procesa archivo de logs numero 1"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.171770", "metadata": {"contexto": "Lee y procesa archivo de logs numero 2"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.186768", "metadata": {"contexto": "Lee y procesa archivo de logs numero 3"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.196804", "metadata": {"contexto": "Lee y procesa archivo de logs numero 4"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.205769", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.392778", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.403818", "metadata": {"contexto": "Lee el archivo config.json"}}
+{"concepto_id": "archivo_file_documento", "exito": false, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:11.033036", "metadata": {"contexto": "Elimina todos los archivos permanentemente"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:11.893974", "metadata": {"contexto": "¿Puedes leer archivos de texto?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:11.923939", "metadata": {"contexto": "Analiza un archivo main.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:27.724268", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:27.800271", "metadata": {"contexto": "Escribe algo en un archivo"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:27.890390", "metadata": {"contexto": "Lee y analiza el archivo main.py con Python"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:27.971393", "metadata": {"contexto": "¿Cuál es tu grounding para leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.250019", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.262022", "metadata": {"contexto": "Lee el archivo config.json"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.272054", "metadata": {"contexto": "Lee el archivo datos.txt"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.287019", "metadata": {"contexto": "¿Puedes escribir archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": false, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.492019", "metadata": {"contexto": "Elimina todos los archivos del sistema"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.509023", "metadata": {"contexto": "Lee el archivo test.py"}}
+{"concepto_id": "archivo_file_documento", "exito": false, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.523018", "metadata": {"contexto": "Elimina todos los archivos permanentemente"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.586022", "metadata": {"contexto": "Lee el archivo README.md"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.670016", "metadata": {"contexto": "¿Es seguro modificar el archivo de configuración?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.833017", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.217000", "metadata": {"contexto": "Lee el archivo main.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.239005", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.253967", "metadata": {"contexto": "Lee el archivo test_1.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.262969", "metadata": {"contexto": "Lee el archivo test_2.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.270975", "metadata": {"contexto": "Lee el archivo test_3.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.279034", "metadata": {"contexto": "Lee el archivo test_4.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.286966", "metadata": {"contexto": "Lee el archivo test_5.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.292968", "metadata": {"contexto": "Lee el archivo test_6.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.302002", "metadata": {"contexto": "Lee el archivo test_final.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.317965", "metadata": {"contexto": "¿Qué significa leer un archivo?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.645918", "metadata": {"contexto": "Analiza la complejidad del archivo calculadora.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.659572", "metadata": {"contexto": "¿Puedes calcular la complejidad ciclomática de un archivo?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.185812", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.224809", "metadata": {"contexto": "Lee el archivo main.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.610254", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.622258", "metadata": {"contexto": "Lee y procesa archivo de logs numero 0"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.634297", "metadata": {"contexto": "Lee y procesa archivo de logs numero 1"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.643286", "metadata": {"contexto": "Lee y procesa archivo de logs numero 2"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.654288", "metadata": {"contexto": "Lee y procesa archivo de logs numero 3"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.663297", "metadata": {"contexto": "Lee y procesa archivo de logs numero 4"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.673286", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.019679", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.028684", "metadata": {"contexto": "Lee el archivo config.json"}}
+{"concepto_id": "archivo_file_documento", "exito": false, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.724820", "metadata": {"contexto": "Elimina todos los archivos permanentemente"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:42.432734", "metadata": {"contexto": "¿Puedes leer archivos de texto?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:42.454734", "metadata": {"contexto": "Analiza un archivo main.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:23.575263", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:23.589266", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:23.654842", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": false, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:23.684880", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:23.863006", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:23.975369", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.456635", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.624038", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.632040", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.639044", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.646043", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.655038", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.662053", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.672081", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.679082", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.688077", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.696043", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.886332", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.894334", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:25.135187", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:36.363492", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:36.401491", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:36.599288", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": false, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:36.628636", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:36.827781", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:36.934777", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.396387", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.529913", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.537909", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.548876", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.556875", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.564877", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.571875", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.579911", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.586914", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.596883", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.603914", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.795031", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.810653", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:38.007754", "metadata": {"contexto": ""}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:40.807230", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:40.916609", "metadata": {"contexto": "Escribe algo en un archivo"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:40.994742", "metadata": {"contexto": "Lee y analiza el archivo main.py con Python"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.135388", "metadata": {"contexto": "¿Cuál es tu grounding para leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.385360", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.385360", "metadata": {"contexto": "Lee el archivo config.json"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.400995", "metadata": {"contexto": "Lee el archivo datos.txt"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.416607", "metadata": {"contexto": "¿Puedes escribir archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": false, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.619796", "metadata": {"contexto": "Elimina todos los archivos del sistema"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.635502", "metadata": {"contexto": "Lee el archivo test.py"}}
+{"concepto_id": "archivo_file_documento", "exito": false, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.635502", "metadata": {"contexto": "Elimina todos los archivos permanentemente"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.713485", "metadata": {"contexto": "Lee el archivo README.md"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.838653", "metadata": {"contexto": "¿Es seguro modificar el archivo de configuración?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.963478", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.275991", "metadata": {"contexto": "Lee el archivo main.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.307235", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.307235", "metadata": {"contexto": "Lee el archivo test_1.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.322898", "metadata": {"contexto": "Lee el archivo test_2.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.322898", "metadata": {"contexto": "Lee el archivo test_3.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.338502", "metadata": {"contexto": "Lee el archivo test_4.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.338502", "metadata": {"contexto": "Lee el archivo test_5.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.354111", "metadata": {"contexto": "Lee el archivo test_6.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.354111", "metadata": {"contexto": "Lee el archivo test_final.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.369733", "metadata": {"contexto": "¿Qué significa leer un archivo?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.596985", "metadata": {"contexto": "Analiza la complejidad del archivo calculadora.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.612603", "metadata": {"contexto": "¿Puedes calcular la complejidad ciclomática de un archivo?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:43.720609", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:43.767476", "metadata": {"contexto": "Lee el archivo main.py"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.033093", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.048695", "metadata": {"contexto": "Lee y procesa archivo de logs numero 0"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.064365", "metadata": {"contexto": "Lee y procesa archivo de logs numero 1"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.064365", "metadata": {"contexto": "Lee y procesa archivo de logs numero 2"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.079947", "metadata": {"contexto": "Lee y procesa archivo de logs numero 3"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.095614", "metadata": {"contexto": "Lee y procesa archivo de logs numero 4"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.111195", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.298699", "metadata": {"contexto": "¿Puedes leer archivos?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.298699", "metadata": {"contexto": "Lee el archivo config.json"}}
+{"concepto_id": "archivo_file_documento", "exito": false, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.972350", "metadata": {"contexto": "Elimina todos los archivos permanentemente"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:45.569134", "metadata": {"contexto": "¿Puedes leer archivos de texto?"}}
+{"concepto_id": "archivo_file_documento", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:45.584761", "metadata": {"contexto": "Analiza un archivo main.py"}}

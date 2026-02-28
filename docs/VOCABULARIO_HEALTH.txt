@@ -1,0 +1,62 @@
+================================================================================
+VOCABULARIO HEALTH CHECK - DIAGNÓSTICO
+================================================================================
+
+MÉTRICAS PRINCIPALES
+--------------------------------------------------------------------------------
+Total de conceptos: 465
+Grounding promedio: 0.856
+Grounding mediana: 0.900
+Conceptos ejecutables: 83
+
+DISTRIBUCIÓN DE GROUNDING
+--------------------------------------------------------------------------------
+1.0 (Perfecto)              87 ( 18.7%)
+0.9-0.99 (Excelente)       193 ( 41.5%)
+0.8-0.89 (Muy bueno)        79 ( 17.0%)
+0.7-0.79 (Bueno)            85 ( 18.3%)
+0.5-0.69 (Regular)          21 (  4.5%)
+< 0.5 (Bajo)                 0 (  0.0%)
+
+ESTADO GENERAL
+--------------------------------------------------------------------------------
+✅ EXCELENTE - Vocabulario robusto
+
+PROBLEMAS DETECTADOS
+--------------------------------------------------------------------------------
+⚠️  123 palabras duplicadas
+⚠️  Solo 18.7% de conceptos tienen grounding perfecto
+
+RECOMENDACIONES PARA FASE 4A
+--------------------------------------------------------------------------------
+✅ 77.2% de conceptos listos para integración LLM
+   Vocabulario suficiente para comenzar Fase 4A
+
+LISTA BLANCA PARA LLM (Grounding ≥ 0.8)
+--------------------------------------------------------------------------------
+Total de conceptos aptos: 359
+
+Primeros 20 conceptos:
+   1. CONCEPTO_LEER        (leer, read) - 1.00
+   2. CONCEPTO_ESCRIBIR    (escribir, write) - 1.00
+   3. CONCEPTO_ARCHIVO     (archivo, file) - 1.00
+   4. CONCEPTO_DIRECTORIO  (directorio, carpeta) - 1.00
+   5. CONCEPTO_EXISTE      (existe, hay) - 1.00
+   6. CONCEPTO_HOLA        (hola, hi) - 0.90
+   7. CONCEPTO_GRACIAS     (gracias, thanks) - 0.90
+   8. CONCEPTO_SI          (sí, si) - 0.90
+   9. CONCEPTO_NO          (no, nope) - 0.90
+  10. CONCEPTO_QUE         (qué, que) - 0.80
+  11. CONCEPTO_COMO        (cómo, como) - 0.80
+  12. CONCEPTO_QUIEN       (quién, quien) - 0.80
+  13. CONCEPTO_DONDE       (dónde, donde) - 0.80
+  14. CONCEPTO_CUANDO      (cuándo, cuando) - 0.80
+  15. CONCEPTO_POR_QUE     (por qué, porque) - 0.80
+  16. CONCEPTO_AYUDA       (ayuda, help) - 0.80
+  17. CONCEPTO_PODER       (poder, puedes) - 0.80
+  18. CONCEPTO_CREAR       (crear, create) - 0.80
+  19. CONCEPTO_MODIFICAR   (modificar, cambiar) - 0.80
+  20. CONCEPTO_ELIMINAR    (eliminar, borrar) - 0.80
+  ... y 339 más
+
+================================================================================

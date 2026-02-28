@@ -1,0 +1,4 @@
+{"concepto_id": "CONCEPTO_ESCRIBIR", "exito": true, "duracion_ms": 200, "recursos": {"buffer_kb": 64}, "timestamp": "2026-02-11T01:59:59.732739", "metadata": {}}
+{"concepto_id": "CONCEPTO_ESCRIBIR", "exito": false, "duracion_ms": 250, "recursos": {"buffer_kb": 64}, "timestamp": "2026-02-11T01:59:59.734771", "metadata": {}}
+{"concepto_id": "CONCEPTO_ESCRIBIR", "exito": true, "duracion_ms": 300, "recursos": {"buffer_kb": 64}, "timestamp": "2026-02-11T01:59:59.735747", "metadata": {}}
+{"concepto_id": "CONCEPTO_ESCRIBIR", "exito": false, "duracion_ms": 350, "recursos": {"buffer_kb": 64}, "timestamp": "2026-02-11T01:59:59.735747", "metadata": {}}

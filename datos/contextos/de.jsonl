@@ -1,0 +1,174 @@
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.089765", "metadata": {"contexto": "Calcula la derivada de x cuadrado"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.139766", "metadata": {"contexto": "Crea un plan de 3 pasos para analizar este código"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:57.953349", "metadata": {"contexto": "Calcula raíz cuadrada de 144"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.572051", "metadata": {"contexto": "¿Puedes calcular la complejidad ciclomática de un archivo?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:22:58.587048", "metadata": {"contexto": "Dame métricas de calidad de este código Python"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:07.991283", "metadata": {"contexto": "¿Puedes calcular la derivada de x al cubo?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:08.004891", "metadata": {"contexto": "Calcula la media y desviación estándar de estos datos"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:08.135336", "metadata": {"contexto": "Planifica cómo migrar una base de datos de SQLite a PostgreSQL"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:08.428362", "metadata": {"contexto": "Descarga datos de la API de GitHub"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:09.318493", "metadata": {"contexto": "Crea una tabla de usuarios con nombre y email en SQLite"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:09.601830", "metadata": {"contexto": "¿Cuál es tu nivel de confianza para leer archivos?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.120460", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.132487", "metadata": {"contexto": "Lee y procesa archivo de logs numero 0"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.153783", "metadata": {"contexto": "Lee y procesa archivo de logs numero 1"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.172770", "metadata": {"contexto": "Lee y procesa archivo de logs numero 2"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.187771", "metadata": {"contexto": "Lee y procesa archivo de logs numero 3"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.197769", "metadata": {"contexto": "Lee y procesa archivo de logs numero 4"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.205769", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.607037", "metadata": {"contexto": "Calcula la media de esos valores"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.804039", "metadata": {"contexto": "Consulta la API de clima"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.813034", "metadata": {"contexto": "¿Cuál es tu tasa de éxito?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.868037", "metadata": {"contexto": "¿Qué dimensiones de grounding tienes?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:10.975039", "metadata": {"contexto": "Inserta un registro de prueba"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:11.001037", "metadata": {"contexto": "Genera un reporte de todo lo que hiciste"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:11.011046", "metadata": {"contexto": "¿Qué mejorarías de ti mismo?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:11.968063", "metadata": {"contexto": "Dame la media de complejidades"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:12.173276", "metadata": {"contexto": "¿Cuál es tu predicción de éxito?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:12.435281", "metadata": {"contexto": "¿Puedes conectarte a la API de GitHub?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:12.620279", "metadata": {"contexto": "¿Qué hace tu consejera de seguridad?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T16:23:12.634278", "metadata": {"contexto": "¿Cuál es tu score de grounding total?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.112322", "metadata": {"contexto": "Calcula la derivada de x cuadrado"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:28.190903", "metadata": {"contexto": "Crea un plan de 3 pasos para analizar este código"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.089951", "metadata": {"contexto": "Calcula raíz cuadrada de 144"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.658562", "metadata": {"contexto": "¿Puedes calcular la complejidad ciclomática de un archivo?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:29.672613", "metadata": {"contexto": "Dame métricas de calidad de este código Python"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:38.752516", "metadata": {"contexto": "¿Puedes calcular la derivada de x al cubo?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:38.767508", "metadata": {"contexto": "Calcula la media y desviación estándar de estos datos"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:38.867917", "metadata": {"contexto": "Planifica cómo migrar una base de datos de SQLite a PostgreSQL"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:39.172758", "metadata": {"contexto": "Descarga datos de la API de GitHub"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:39.674537", "metadata": {"contexto": "Crea una tabla de usuarios con nombre y email en SQLite"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:39.989724", "metadata": {"contexto": "¿Cuál es tu nivel de confianza para leer archivos?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.612258", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.622258", "metadata": {"contexto": "Lee y procesa archivo de logs numero 0"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.634297", "metadata": {"contexto": "Lee y procesa archivo de logs numero 1"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.644253", "metadata": {"contexto": "Lee y procesa archivo de logs numero 2"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.654288", "metadata": {"contexto": "Lee y procesa archivo de logs numero 3"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.665250", "metadata": {"contexto": "Lee y procesa archivo de logs numero 4"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:40.674288", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.156680", "metadata": {"contexto": "Calcula la media de esos valores"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.439572", "metadata": {"contexto": "Consulta la API de clima"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.449661", "metadata": {"contexto": "¿Cuál es tu tasa de éxito?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.527662", "metadata": {"contexto": "¿Qué dimensiones de grounding tienes?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.667779", "metadata": {"contexto": "Inserta un registro de prueba"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.694782", "metadata": {"contexto": "Genera un reporte de todo lo que hiciste"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:41.704815", "metadata": {"contexto": "¿Qué mejorarías de ti mismo?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:42.490732", "metadata": {"contexto": "Dame la media de complejidades"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:42.777273", "metadata": {"contexto": "¿Cuál es tu predicción de éxito?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:43.283293", "metadata": {"contexto": "¿Puedes conectarte a la API de GitHub?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:43.730600", "metadata": {"contexto": "¿Qué hace tu consejera de seguridad?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:37:43.750597", "metadata": {"contexto": "¿Cuál es tu score de grounding total?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.078010", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.160664", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.401501", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.457633", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:24.911377", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:25.320267", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:25.452961", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:25.787234", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:25.806204", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:25.908455", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.214575", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.223576", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.386073", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.393113", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.408078", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.421077", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.435078", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.442075", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.453075", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.461075", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.469074", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.476075", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.484077", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.492075", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.500074", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.508075", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.516074", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.523074", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.534076", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.541074", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.549119", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.556076", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.564076", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.571075", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.578078", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.586117", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.593121", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.601110", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.608119", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.616074", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.623120", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T17:39:26.630121", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.046778", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.125943", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.345477", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.397383", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:37.832685", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:38.177288", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:38.271786", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:38.562135", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:38.583183", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:38.706237", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.065343", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.077379", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.199350", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.208326", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.217308", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.226348", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.235312", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.245357", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.252344", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.262313", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.270309", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.281318", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.290336", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.298348", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.307340", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.314348", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.321348", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.330310", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.337307", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.344344", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.351343", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.359349", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.366349", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.376304", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.390312", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.401306", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.413514", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.423555", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.430505", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.438507", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.445550", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-12T22:37:39.453540", "metadata": {"contexto": ""}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.244797", "metadata": {"contexto": "Calcula la derivada de x cuadrado"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:41.322904", "metadata": {"contexto": "Crea un plan de 3 pasos para analizar este código"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.135438", "metadata": {"contexto": "Calcula raíz cuadrada de 144"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.612603", "metadata": {"contexto": "¿Puedes calcular la complejidad ciclomática de un archivo?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.629523", "metadata": {"contexto": "Dame métricas de calidad de este código Python"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.876825", "metadata": {"contexto": "¿Puedes calcular la derivada de x al cubo?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.892446", "metadata": {"contexto": "Calcula la media y desviación estándar de estos datos"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:42.908070", "metadata": {"contexto": "Planifica cómo migrar una base de datos de SQLite a PostgreSQL"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:43.158113", "metadata": {"contexto": "Descarga datos de la API de GitHub"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:43.236296", "metadata": {"contexto": "Crea una tabla de usuarios con nombre y email en SQLite"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:43.533081", "metadata": {"contexto": "¿Cuál es tu nivel de confianza para leer archivos?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.033093", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.048695", "metadata": {"contexto": "Lee y procesa archivo de logs numero 0"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.064365", "metadata": {"contexto": "Lee y procesa archivo de logs numero 1"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.064365", "metadata": {"contexto": "Lee y procesa archivo de logs numero 2"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.079947", "metadata": {"contexto": "Lee y procesa archivo de logs numero 3"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.095614", "metadata": {"contexto": "Lee y procesa archivo de logs numero 4"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.111195", "metadata": {"contexto": "Lee y procesa archivo de logs"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.439319", "metadata": {"contexto": "Calcula la media de esos valores"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.642489", "metadata": {"contexto": "Consulta la API de clima"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.658073", "metadata": {"contexto": "¿Cuál es tu tasa de éxito?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.761736", "metadata": {"contexto": "¿Qué dimensiones de grounding tienes?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.927478", "metadata": {"contexto": "Inserta un registro de prueba"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.956711", "metadata": {"contexto": "Genera un reporte de todo lo que hiciste"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:44.956711", "metadata": {"contexto": "¿Qué mejorarías de ti mismo?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:45.631625", "metadata": {"contexto": "Dame la media de complejidades"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:45.866004", "metadata": {"contexto": "¿Cuál es tu predicción de éxito?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:46.147251", "metadata": {"contexto": "¿Puedes conectarte a la API de GitHub?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:46.662875", "metadata": {"contexto": "¿Qué hace tu consejera de seguridad?"}}
+{"concepto_id": "de", "exito": true, "duracion_ms": 100, "recursos": {}, "timestamp": "2026-02-14T13:54:46.678544", "metadata": {"contexto": "¿Cuál es tu score de grounding total?"}}

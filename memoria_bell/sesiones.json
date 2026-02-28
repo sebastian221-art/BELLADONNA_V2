@@ -1,0 +1,956 @@
+[
+  {
+    "id_sesion": "1a2f9f5f-7413-4929-962d-531750ef725a",
+    "inicio": "2026-02-04T23:55:14.673390",
+    "fin": "2026-02-04T23:55:36.697549",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "59b4a7f9-da79-4ae3-9b5b-91543cd3397d",
+    "inicio": "2026-02-05T00:13:23.698322",
+    "fin": "2026-02-05T00:17:04.874087",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 6,
+    "conceptos_usados": 10,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "73ed7279-59c6-47e1-af00-5be4fae3b689",
+    "inicio": "2026-02-05T00:36:21.630886",
+    "fin": "2026-02-05T01:53:00.095286",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 19,
+    "conceptos_usados": 48,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "93803020-cd8e-48a0-a496-85ea3ecb5f7d",
+    "inicio": "2026-02-05T02:20:15.110192",
+    "fin": "2026-02-05T02:20:15.235233",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "b1dc44e9-16a5-4583-86c1-a4f73f837a70",
+    "inicio": "2026-02-05T02:20:16.157061",
+    "fin": "2026-02-05T02:20:18.158360",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "57ac6554-2a3e-4c34-9af0-7317d6ca6514",
+    "inicio": "2026-02-05T02:27:13.928714",
+    "fin": "2026-02-05T02:27:14.053698",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "6fff0cad-6f49-4f9b-af34-92815724ef61",
+    "inicio": "2026-02-05T02:27:15.060927",
+    "fin": "2026-02-05T02:27:18.064101",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "8f27808e-457d-45b1-ba6a-3e31e997f245",
+    "inicio": "2026-02-05T02:30:51.890402",
+    "fin": "2026-02-05T02:30:52.045888",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "3b7a09e4-8fee-4f9e-a440-cf8da0bbdc4d",
+    "inicio": "2026-02-05T02:30:53.000287",
+    "fin": "2026-02-05T02:30:56.004209",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "3945df89-ff3b-424f-9eae-bb460e86db57",
+    "inicio": "2026-02-05T02:31:40.235412",
+    "fin": "2026-02-05T02:31:40.376067",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "ae7944d0-330f-4ed4-9570-d771fef11c24",
+    "inicio": "2026-02-05T02:31:41.292418",
+    "fin": "2026-02-05T02:31:42.307433",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "e4f883d2-2e77-4e71-9d11-884e23783a68",
+    "inicio": "2026-02-05T02:32:12.706383",
+    "fin": "2026-02-05T22:59:52.990593",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "f2a9caf3-b27a-4bc6-957a-dea9af89860a",
+    "inicio": "2026-02-05T23:03:56.752543",
+    "fin": "2026-02-05T23:03:56.940048",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "c93b9c51-7369-4147-a253-5992045d0802",
+    "inicio": "2026-02-05T23:03:57.953472",
+    "fin": "2026-02-05T23:03:58.963139",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "f34a68cb-31af-4460-a570-eec69cfbe885",
+    "inicio": "2026-02-06T00:11:46.865054",
+    "fin": "2026-02-06T00:11:47.084772",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "24f9c8e3-8f65-4590-bcef-c8ed3957dbbb",
+    "inicio": "2026-02-06T00:11:48.042068",
+    "fin": "2026-02-06T00:11:49.043801",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "441a4ded-f912-4be3-9100-312d4e60cc9f",
+    "inicio": "2026-02-06T00:41:24.648587",
+    "fin": "2026-02-06T00:41:24.907588",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "872fe03b-122c-477a-a64a-2f1e0713285b",
+    "inicio": "2026-02-06T00:41:25.807590",
+    "fin": "2026-02-06T00:41:27.810041",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "fb8c07ab-b628-4270-87f4-96ecd3fc4839",
+    "inicio": "2026-02-06T05:49:43.296758",
+    "fin": "2026-02-06T05:49:43.953031",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "8d4c1b92-a0ef-4353-ac1c-95788c303fc9",
+    "inicio": "2026-02-06T05:49:45.203883",
+    "fin": "2026-02-06T05:49:47.205381",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "5ede55bf-daff-4f93-a2a6-cef6ca03869f",
+    "inicio": "2026-02-06T13:27:50.038983",
+    "fin": "2026-02-06T13:27:50.460818",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "1a7d35ce-8638-4d13-bc87-19bf021a89b4",
+    "inicio": "2026-02-06T13:27:51.442642",
+    "fin": "2026-02-06T13:27:53.443756",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "09e5a43d-48d3-45e6-beb9-72b470f125fc",
+    "inicio": "2026-02-07T01:49:52.628724",
+    "fin": "2026-02-07T01:49:53.054429",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "3fae0a8a-adc1-4a66-bea3-441e78074140",
+    "inicio": "2026-02-07T01:49:54.025933",
+    "fin": "2026-02-07T01:49:55.039978",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "e147652e-3b4d-4857-9762-846d82edb33b",
+    "inicio": "2026-02-07T03:13:41.092037",
+    "fin": "2026-02-07T03:13:53.115356",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "9eb364f7-1767-4401-8c52-1626beee0414",
+    "inicio": "2026-02-09T00:10:10.376535",
+    "fin": "2026-02-09T00:10:17.518933",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "94e415c3-6198-4e47-8837-ab6a8dd90b70",
+    "inicio": "2026-02-09T00:23:38.348135",
+    "fin": "2026-02-09T00:23:38.988786",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "a6d5dcac-3494-4203-b9f2-c94105e681cc",
+    "inicio": "2026-02-09T00:23:40.202600",
+    "fin": "2026-02-09T00:23:43.208011",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "5dcb0e31-d562-4751-9932-05b000eec414",
+    "inicio": "2026-02-09T00:48:10.869240",
+    "fin": "2026-02-09T00:48:23.211664",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "be8c398b-cf61-4683-9461-470d30d88aa6",
+    "inicio": "2026-02-09T02:37:10.814178",
+    "fin": "2026-02-09T02:37:11.385629",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "947b38bf-98b2-477e-9ee4-f215c51525cd",
+    "inicio": "2026-02-09T02:37:12.094563",
+    "fin": null,
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 1,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "8bf2b8cf-7b6f-494a-9501-b209a90b5a90",
+    "inicio": "2026-02-09T02:37:12.812278",
+    "fin": null,
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 1,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "623083ab-1c55-4083-b31b-de2da04b34ef",
+    "inicio": "2026-02-09T03:14:34.756728",
+    "fin": "2026-02-09T03:14:35.298228",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "5bb418b8-14b9-47da-b9d6-36f92ea2ed20",
+    "inicio": "2026-02-09T03:14:36.192201",
+    "fin": null,
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 1,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "6630c0a1-69c6-46fd-92f6-9bfafdd3b88e",
+    "inicio": "2026-02-09T03:14:36.970890",
+    "fin": null,
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 1,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "473c587b-c630-4a9b-a2e3-98fa7bccf90f",
+    "inicio": "2026-02-09T23:01:39.147461",
+    "fin": "2026-02-09T23:01:40.180836",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "1ad41d32-1914-4367-a3ae-cf3df57676ae",
+    "inicio": "2026-02-09T23:01:41.297590",
+    "fin": "2026-02-09T23:01:45.303455",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "2c52fb3b-7f43-4a07-aa6a-bf772effd6c6",
+    "inicio": "2026-02-09T23:24:31.010482",
+    "fin": "2026-02-09T23:24:31.753030",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "9de9b9b5-9f5e-446e-a467-063e2bae1407",
+    "inicio": "2026-02-09T23:24:32.912561",
+    "fin": "2026-02-09T23:24:36.916826",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "51be9ed3-078f-4029-bacc-4d7c168c913e",
+    "inicio": "2026-02-09T23:51:52.341904",
+    "fin": "2026-02-09T23:51:53.149011",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "d2bb095c-933b-4cdf-a362-a953f8adcc47",
+    "inicio": "2026-02-09T23:51:54.311560",
+    "fin": "2026-02-09T23:51:57.314016",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "a378b39d-a018-4f26-99c1-8ec4c22b1485",
+    "inicio": "2026-02-10T00:08:00.730693",
+    "fin": "2026-02-10T00:08:01.665000",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "12997d5c-0b88-4c6d-91b5-d26fd514827f",
+    "inicio": "2026-02-10T00:08:02.781765",
+    "fin": "2026-02-10T00:08:07.793964",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "75c8389b-cf85-434b-a8e3-28f0d4f1c273",
+    "inicio": "2026-02-10T07:09:46.886397",
+    "fin": "2026-02-10T07:09:48.373717",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "25034722-7f07-4b46-8a62-f8f5ceba085a",
+    "inicio": "2026-02-10T07:09:49.883476",
+    "fin": "2026-02-10T07:09:54.889008",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "7f4abab8-c933-45c5-bc55-db9a6903935d",
+    "inicio": "2026-02-11T02:23:58.307768",
+    "fin": "2026-02-11T02:24:02.384723",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "2870dd92-d88e-442a-b32e-7e921589e27c",
+    "inicio": "2026-02-11T02:24:04.279417",
+    "fin": "2026-02-11T02:24:12.285454",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "f11a3910-c714-4a15-8245-a40fd00099d6",
+    "inicio": "2026-02-11T11:05:27.815712",
+    "fin": "2026-02-11T11:05:29.643942",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "fbb2681a-f6fa-41ae-bb30-195dffe26aa7",
+    "inicio": "2026-02-11T11:05:30.900818",
+    "fin": "2026-02-11T11:05:37.905626",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "9abf155e-aa01-42ce-97bb-54f47322471f",
+    "inicio": "2026-02-11T22:49:12.889272",
+    "fin": "2026-02-11T22:49:14.661365",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "a991a915-eeda-44ca-ad43-d076a66fc9d7",
+    "inicio": "2026-02-11T22:49:15.909458",
+    "fin": "2026-02-11T22:49:21.918219",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "ff077c7d-650a-48af-aab6-dcf832a9208b",
+    "inicio": "2026-02-11T23:02:11.516826",
+    "fin": "2026-02-11T23:02:13.728500",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "4c31ef3a-3cd6-47ca-bef3-f6ca92b9341c",
+    "inicio": "2026-02-11T23:02:15.079610",
+    "fin": "2026-02-11T23:02:20.084158",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "49b25223-67a5-4139-b70a-237206fdc54f",
+    "inicio": "2026-02-12T10:38:09.891233",
+    "fin": "2026-02-12T10:38:16.126917",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "c89396d0-4315-4b4c-a309-0b373a70b4a8",
+    "inicio": "2026-02-12T23:02:52.350404",
+    "fin": "2026-02-12T23:08:52.768214",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "41f57829-a9d2-4e9f-af4f-87e2e5827c87",
+    "inicio": "2026-02-14T13:49:05.091683",
+    "fin": "2026-02-14T13:53:38.479866",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "0c3b0f3f-1914-469d-8d66-07573c0499a0",
+    "inicio": "2026-02-14T13:55:26.478808",
+    "fin": "2026-02-14T13:55:28.116995",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "9c1b7de2-5e2c-4ccf-bbec-c434edb3c517",
+    "inicio": "2026-02-14T13:55:29.488700",
+    "fin": "2026-02-14T13:55:36.505293",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "822a7130-652f-47b9-8924-a4ebb661cdfd",
+    "inicio": "2026-02-14T16:11:47.585867",
+    "fin": "2026-02-14T16:12:30.830672",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "98b09391-633f-4079-b946-7b7de26a7c99",
+    "inicio": "2026-02-14T16:19:05.858083",
+    "fin": "2026-02-14T16:20:31.951201",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "0077ad6e-9728-4a19-95ed-17c881d29c8a",
+    "inicio": "2026-02-14T17:13:05.641734",
+    "fin": "2026-02-14T17:13:59.103588",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "8434dd43-3f52-4d24-b20e-cbb50709301e",
+    "inicio": "2026-02-14T17:15:07.121012",
+    "fin": "2026-02-14T17:15:35.233627",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "d572ad74-a715-48ab-bcf7-960e7e0a6eb1",
+    "inicio": "2026-02-14T17:31:49.465847",
+    "fin": "2026-02-14T17:36:16.232726",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "b84b7fd4-ef3d-4fdf-b9dd-b66cd967b768",
+    "inicio": "2026-02-14T18:14:14.865752",
+    "fin": "2026-02-14T18:14:49.948709",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "4d08a6ef-c5b2-47e7-9a00-8360e6d49587",
+    "inicio": "2026-02-14T19:35:59.446371",
+    "fin": "2026-02-14T23:41:01.817638",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "a3942014-2f9c-4e6c-90fa-bbb8d2466925",
+    "inicio": "2026-02-14T23:42:16.577249",
+    "fin": "2026-02-14T23:43:33.734551",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "f725cefb-bc9e-4e13-987d-dfc5d0be3dfe",
+    "inicio": "2026-02-15T00:00:57.178243",
+    "fin": "2026-02-15T00:03:04.313573",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 3,
+    "conceptos_usados": 5,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "c701cb0c-d22c-45c2-a336-5e890da814dc",
+    "inicio": "2026-02-15T00:03:34.708598",
+    "fin": "2026-02-15T00:04:23.800490",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 2,
+    "conceptos_usados": 3,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "3d513efe-fb34-452d-870d-ce4957593859",
+    "inicio": "2026-02-15T00:56:58.652863",
+    "fin": "2026-02-15T01:00:50.397106",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 3,
+    "conceptos_usados": 5,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "69e2d184-20d8-4b75-99eb-d6f3c996c4e2",
+    "inicio": "2026-02-15T01:04:52.747885",
+    "fin": "2026-02-15T01:20:34.250662",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "d7dfeeca-414c-4fc0-bd06-0fb479a7b3db",
+    "inicio": "2026-02-15T01:27:39.796737",
+    "fin": "2026-02-15T01:30:31.333967",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "7b583c5d-3740-4336-a2c1-cab24be24b18",
+    "inicio": "2026-02-15T01:32:07.700551",
+    "fin": "2026-02-15T01:33:22.875302",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "5e854c69-c62a-463d-9332-c73dd485fd2d",
+    "inicio": "2026-02-15T01:33:44.407992",
+    "fin": "2026-02-15T01:36:30.617210",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 1,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "76020b68-a286-4974-a76f-56b25b86bb3d",
+    "inicio": "2026-02-15T01:37:25.641087",
+    "fin": "2026-02-15T01:40:08.768713",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "3ec0a1c3-4b58-4810-aee8-c9fb13767d15",
+    "inicio": "2026-02-15T01:43:20.073764",
+    "fin": "2026-02-15T01:45:45.282698",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 1,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "53f30de6-ef98-47fd-90ba-2145bccdd2a9",
+    "inicio": "2026-02-15T02:06:21.744016",
+    "fin": "2026-02-15T02:28:48.035964",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 17,
+    "conceptos_usados": 28,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "30a6d67c-07dc-4639-8603-e96219c82ffd",
+    "inicio": "2026-02-16T06:46:25.506667",
+    "fin": "2026-02-16T06:46:35.763281",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "778e0542-2e14-421a-866f-82e2a90cc178",
+    "inicio": "2026-02-16T06:46:56.866711",
+    "fin": "2026-02-16T06:47:22.895856",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 1,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "7c43c098-b3e5-4e27-a03c-73bbc603cfe3",
+    "inicio": "2026-02-16T06:58:22.501367",
+    "fin": "2026-02-16T06:59:13.538597",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 1,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "4c42d866-3ade-4dba-b277-f63b9fe7aa3f",
+    "inicio": "2026-02-16T07:07:12.562808",
+    "fin": "2026-02-16T07:07:21.631851",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 1,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "5c015c53-0446-43ee-a74e-f4d4000b4d67",
+    "inicio": "2026-02-16T07:13:05.905967",
+    "fin": "2026-02-16T07:16:52.053459",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 7,
+    "conceptos_usados": 12,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "f5cb5df3-b840-441a-b351-869c36b23540",
+    "inicio": "2026-02-16T19:30:47.781038",
+    "fin": "2026-02-16T19:30:53.902895",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "33fa640c-eae7-4d4a-a4c2-6c3aafba3a31",
+    "inicio": "2026-02-16T19:31:16.868375",
+    "fin": "2026-02-16T19:36:04.163551",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 10,
+    "conceptos_usados": 19,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "75b3c617-4ca6-497d-bc90-ddcaf25d1935",
+    "inicio": "2026-02-16T23:52:25.231266",
+    "fin": "2026-02-16T23:53:24.698109",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 2,
+    "conceptos_usados": 3,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "5738eaf8-76c6-4d04-b4f1-76b84a756ace",
+    "inicio": "2026-02-16T23:59:46.691128",
+    "fin": "2026-02-17T00:05:56.302944",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 1,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "a7b1e00a-fe33-4785-bf07-61d9acb96517",
+    "inicio": "2026-02-17T01:23:29.310718",
+    "fin": "2026-02-17T01:33:25.967963",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 1,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "3a15cab8-c985-45e2-b0f6-089dfdcbbf85",
+    "inicio": "2026-02-17T01:33:58.211315",
+    "fin": "2026-02-17T01:35:16.272403",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 3,
+    "conceptos_usados": 5,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "7955fa63-fdcf-4ac3-b277-8c62c0e8b9ac",
+    "inicio": "2026-02-17T09:45:57.811614",
+    "fin": "2026-02-17T09:46:50.092064",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "c4759e0e-54d7-498f-b8d0-9a514e257b4e",
+    "inicio": "2026-02-17T09:47:45.777385",
+    "fin": "2026-02-17T09:50:19.932587",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 6,
+    "conceptos_usados": 12,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "9bb94100-1b83-4164-9aa0-bfa544ca0072",
+    "inicio": "2026-02-18T09:00:27.049370",
+    "fin": "2026-02-18T09:01:17.264453",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 2,
+    "conceptos_usados": 3,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "61cf6b46-f2a5-4e13-b60e-dc60135aa2c1",
+    "inicio": "2026-02-18T09:01:55.848370",
+    "fin": "2026-02-19T00:17:15.240978",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 3,
+    "conceptos_usados": 5,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "368942b9-ce18-4e51-9576-d3bf3d2118d3",
+    "inicio": "2026-02-19T01:34:12.661818",
+    "fin": "2026-02-19T01:34:19.812345",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "cb9433cc-ae32-46eb-b2dc-04036994fc90",
+    "inicio": "2026-02-19T01:35:07.662897",
+    "fin": "2026-02-19T01:59:23.590089",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 13,
+    "conceptos_usados": 25,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "b65e0b94-1d43-4227-984f-d16677d401c9",
+    "inicio": "2026-02-21T03:16:25.116145",
+    "fin": "2026-02-21T03:16:53.269281",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "45786bae-e18a-40fc-8520-e6ce0b18c208",
+    "inicio": "2026-02-21T03:17:26.122778",
+    "fin": "2026-02-21T03:37:55.006731",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 25,
+    "conceptos_usados": 60,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "b7597c08-5bcc-44fe-8670-d9cfc7ec216f",
+    "inicio": "2026-02-21T03:38:19.774402",
+    "fin": "2026-02-21T03:41:26.898827",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 10,
+    "conceptos_usados": 17,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "ae412a04-479a-429d-bc42-3ab2ba83e1d1",
+    "inicio": "2026-02-21T03:41:47.127286",
+    "fin": "2026-02-21T03:51:19.610559",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 17,
+    "conceptos_usados": 37,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "d2c41993-8803-4bbd-857c-cff7677cd8de",
+    "inicio": "2026-02-22T23:17:26.997417",
+    "fin": "2026-02-22T23:17:33.153972",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 0,
+    "conceptos_usados": 0,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "d24504e4-6d25-4b25-899e-8dc4b7c32979",
+    "inicio": "2026-02-22T23:19:01.816067",
+    "fin": "2026-02-23T12:33:34.690802",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 9,
+    "conceptos_usados": 17,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "21a032f5-ab29-4fac-b0c3-510ce266c174",
+    "inicio": "2026-02-23T12:38:15.606232",
+    "fin": "2026-02-23T12:38:45.705688",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 1,
+    "conceptos_usados": 2,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "e3eb7974-6183-4d25-b98b-f49eae752e5c",
+    "inicio": "2026-02-23T13:34:32.318710",
+    "fin": "2026-02-23T13:36:09.625231",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 7,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "6e22910a-d115-4d4e-bea8-2570fa38aa1a",
+    "inicio": "2026-02-23T13:36:44.168842",
+    "fin": "2026-02-23T13:41:08.467235",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 6,
+    "conceptos_usados": 12,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "b7d55c48-ad86-407a-a84b-dd675a60d964",
+    "inicio": "2026-02-23T13:41:37.792270",
+    "fin": "2026-02-23T13:43:58.942534",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 8,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "dbc1b8d4-4a8c-4e40-bf66-a1dd20ed0368",
+    "inicio": "2026-02-23T13:44:20.270024",
+    "fin": "2026-02-23T13:47:52.437431",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 4,
+    "conceptos_usados": 6,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "2ee8e214-2b4f-42e5-b6fb-a519b0f87f1b",
+    "inicio": "2026-02-25T02:28:35.580799",
+    "fin": "2026-02-25T02:29:14.816945",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 2,
+    "conceptos_usados": 3,
+    "patrones_detectados": 0
+  },
+  {
+    "id_sesion": "23e2b10f-25e1-4f7c-b3e7-ee0c7ef526ef",
+    "inicio": "2026-02-25T02:29:27.789851",
+    "fin": "2026-02-25T02:41:28.340170",
+    "mensajes_procesados": 0,
+    "decisiones_tomadas": 6,
+    "conceptos_usados": 13,
+    "patrones_detectados": 0
+  }
+]

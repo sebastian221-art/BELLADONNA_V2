@@ -1,0 +1,202 @@
+{
+  "version": "4.0",
+  "fase": "4A",
+  "descripcion": "Whitelist de operaciones permitidas para Belladonna",
+  "ultima_actualizacion": "2025-02-18",
+  
+  "operaciones_sistema": {
+    "archivos": {
+      "leer": {
+        "permitido": true,
+        "descripcion": "Leer contenido de archivos",
+        "extensiones_permitidas": [".txt", ".json", ".py", ".md", ".csv", ".log"],
+        "rutas_prohibidas": ["/etc/passwd", "/etc/shadow", "~/.ssh"],
+        "grounding": 1.0
+      },
+      "escribir": {
+        "permitido": true,
+        "descripcion": "Escribir/crear archivos",
+        "extensiones_permitidas": [".txt", ".json", ".py", ".md", ".csv"],
+        "rutas_permitidas": ["./", "./data/", "./output/", "./logs/"],
+        "grounding": 1.0
+      },
+      "listar": {
+        "permitido": true,
+        "descripcion": "Listar contenido de directorios",
+        "profundidad_maxima": 3,
+        "grounding": 1.0
+      },
+      "eliminar": {
+        "permitido": true,
+        "requiere_confirmacion": true,
+        "descripcion": "Eliminar archivos (con confirmación)",
+        "grounding": 0.9
+      },
+      "mover": {
+        "permitido": true,
+        "descripcion": "Mover/renombrar archivos",
+        "grounding": 0.95
+      },
+      "copiar": {
+        "permitido": true,
+        "descripcion": "Copiar archivos",
+        "grounding": 0.95
+      }
+    },
+    
+    "shell": {
+      "comandos_permitidos": [
+        "ls", "pwd", "cd", "cat", "head", "tail", "grep", "find",
+        "wc", "sort", "uniq", "echo", "date", "whoami",
+        "python", "python3", "pip", "pip3",
+        "mkdir", "rmdir", "touch", "cp", "mv"
+      ],
+      "comandos_prohibidos": [
+        "rm -rf", "sudo", "su", "chmod 777", "curl", "wget",
+        "ssh", "scp", "ftp", "nc", "netcat", "dd",
+        "mkfs", "fdisk", "mount", "umount"
+      ],
+      "timeout_segundos": 30,
+      "grounding": 0.9
+    },
+    
+    "base_datos": {
+      "sqlite": {
+        "permitido": true,
+        "operaciones": ["SELECT", "INSERT", "UPDATE", "DELETE", "CREATE TABLE"],
+        "prohibido": ["DROP DATABASE", "TRUNCATE"],
+        "grounding": 0.95
+      }
+    }
+  },
+  
+  "operaciones_python": {
+    "ejecutar_codigo": {
+      "permitido": true,
+      "sandbox": true,
+      "timeout_segundos": 60,
+      "memoria_maxima_mb": 512,
+      "imports_permitidos": [
+        "math", "random", "datetime", "json", "re", "os.path",
+        "collections", "itertools", "functools", "typing",
+        "dataclasses", "enum", "pathlib"
+      ],
+      "imports_prohibidos": [
+        "subprocess", "os.system", "socket", "requests",
+        "urllib", "http.client", "ftplib", "smtplib"
+      ],
+      "grounding": 0.95
+    },
+    "calcular": {
+      "permitido": true,
+      "descripcion": "Operaciones matemáticas",
+      "grounding": 1.0
+    },
+    "analizar_codigo": {
+      "permitido": true,
+      "descripcion": "Análisis estático de código Python",
+      "grounding": 0.9
+    }
+  },
+  
+  "operaciones_cognitivas": {
+    "razonar": {
+      "permitido": true,
+      "descripcion": "Razonamiento simbólico sobre conceptos",
+      "grounding": 0.85
+    },
+    "aprender": {
+      "permitido": true,
+      "descripcion": "Ajustar confianza de conceptos",
+      "requiere_verificacion": true,
+      "grounding": 0.8
+    },
+    "recordar": {
+      "permitido": true,
+      "descripcion": "Acceso a memoria persistente",
+      "grounding": 0.9
+    },
+    "planificar": {
+      "permitido": true,
+      "descripcion": "Crear planes multi-paso",
+      "grounding": 0.85
+    }
+  },
+  
+  "operaciones_conversacion": {
+    "saludar": {"permitido": true, "grounding": 1.0},
+    "despedir": {"permitido": true, "grounding": 1.0},
+    "agradecer": {"permitido": true, "grounding": 1.0},
+    "explicar": {"permitido": true, "grounding": 0.9},
+    "preguntar": {"permitido": true, "grounding": 0.9},
+    "confirmar": {"permitido": true, "grounding": 1.0},
+    "rechazar": {"permitido": true, "grounding": 1.0}
+  },
+  
+  "restricciones_vega": {
+    "descripcion": "Restricciones de seguridad aplicadas por Vega",
+    "principios": {
+      "NO_DAÑAR": {
+        "descripcion": "No ejecutar acciones que puedan dañar el sistema",
+        "severidad": "CRITICA",
+        "veto_automatico": true
+      },
+      "PRIVACIDAD": {
+        "descripcion": "No acceder a información sensible sin permiso",
+        "severidad": "ALTA",
+        "veto_automatico": true
+      },
+      "TRANSPARENCIA": {
+        "descripcion": "Siempre informar qué acciones se realizan",
+        "severidad": "MEDIA",
+        "veto_automatico": false
+      },
+      "REVERSIBILIDAD": {
+        "descripcion": "Preferir acciones que se puedan deshacer",
+        "severidad": "MEDIA",
+        "veto_automatico": false
+      }
+    },
+    "acciones_vetadas_siempre": [
+      "eliminar_sistema",
+      "modificar_boot",
+      "acceder_credenciales",
+      "enviar_datos_externos",
+      "ejecutar_como_root",
+      "desactivar_seguridad"
+    ]
+  },
+  
+  "configuracion_groq": {
+    "modelo": "llama-3.3-70b-versatile",
+    "temperatura": 0.3,
+    "max_tokens": 500,
+    "timeout": 10,
+    "verificar_con_echo": true,
+    "nivel_confianza_minimo": 0.7,
+    "frases_prohibidas": [
+      "soy un sistema de software",
+      "no tengo la capacidad de",
+      "como inteligencia artificial",
+      "mi programación no permite",
+      "procesando solicitud"
+    ],
+    "frases_preferidas": [
+      "claro que sí",
+      "por supuesto",
+      "déjame ver",
+      "entiendo perfectamente",
+      "la verdad es que"
+    ]
+  },
+  
+  "estadisticas": {
+    "total_operaciones_sistema": 12,
+    "total_operaciones_python": 3,
+    "total_operaciones_cognitivas": 4,
+    "total_operaciones_conversacion": 7,
+    "total_conceptos_base": 453,
+    "total_conceptos_expansion": 1030,
+    "total_conceptos": 1483
+  }
+}
