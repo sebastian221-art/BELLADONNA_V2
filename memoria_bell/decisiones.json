@@ -2954,5 +2954,597 @@
     "certeza": 1.0,
     "conceptos_principales": [],
     "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-28T00:26:43.400168",
+    "tipo": "SOCIAL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-28T00:27:10.403036",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-28T00:27:49.531175",
+    "tipo": "ESTADO_USUARIO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-02-28T00:29:13.060702",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-02T15:18:42.825132",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-02T15:19:16.878453",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-02T15:19:36.115184",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-02T15:20:08.334544",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-02T15:20:39.605611",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.83,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-02T15:21:18.794056",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-02T15:21:56.111647",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-02T15:22:53.894957",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-02T15:23:44.162061",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.54,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-02T15:24:09.016996",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-02T15:43:17.445043",
+    "tipo": "CALCULO",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:07:50.653674",
+    "tipo": "REGISTRO_USUARIO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:08:22.720923",
+    "tipo": "CONSULTA_MEMORIA",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:08:50.438424",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:09:15.939571",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:09:35.222714",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:10:02.440425",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:10:44.012977",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:11:05.475812",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:11:28.509885",
+    "tipo": "CALCULO",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:11:54.209971",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:12:25.461653",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:12:41.500985",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:13:02.145128",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:13:18.363239",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:13:32.730408",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:13:44.613781",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:14:38.164711",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:15:13.369458",
+    "tipo": "SALUDO",
+    "puede_ejecutar": false,
+    "certeza": 0.95,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:16:20.835209",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:16:38.902526",
+    "tipo": "CONFIRMACION",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:17:07.336604",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:17:22.687062",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:17:38.086780",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:18:10.538485",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:19:12.089501",
+    "tipo": "ESTADO_USUARIO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:19:29.657638",
+    "tipo": "ESTADO_USUARIO",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:19:50.013478",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:20:11.174459",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.6,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:20:43.393252",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.33,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:20:57.427168",
+    "tipo": "REGISTRO_USUARIO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:21:15.633469",
+    "tipo": "CONSULTA_MEMORIA",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:21:36.261329",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:21:49.745179",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:23:06.185826",
+    "tipo": "CONSULTA_MEMORIA",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:23:24.499147",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:23:40.298610",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:23:53.830643",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.33,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:24:10.732474",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:25:02.434297",
+    "tipo": "ESTADO_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:25:21.620219",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:25:43.368822",
+    "tipo": "IDENTIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:26:05.886194",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:26:25.353310",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:27:08.321266",
+    "tipo": "ESTADO_USUARIO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:27:46.896124",
+    "tipo": "NO_ENTENDIDO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:28:10.389817",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:28:35.293516",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:29:12.123614",
+    "tipo": "DESCONOCIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:29:41.758889",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:30:04.108959",
+    "tipo": "REGISTRO_USUARIO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:30:21.076141",
+    "tipo": "CONSULTA_MEMORIA",
+    "puede_ejecutar": false,
+    "certeza": 0.67,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:30:37.428920",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:30:53.143785",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:31:25.078065",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.5,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:31:53.862990",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.8,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:32:17.280446",
+    "tipo": "CAPACIDAD_BELL",
+    "puede_ejecutar": false,
+    "certeza": 0.86,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-03T06:32:37.992738",
+    "tipo": "NO_ENTENDIDO",
+    "puede_ejecutar": false,
+    "certeza": 0.75,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-04T11:03:34.863390",
+    "tipo": "REGISTRO_USUARIO",
+    "puede_ejecutar": false,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
+  },
+  {
+    "timestamp": "2026-03-04T11:03:52.619956",
+    "tipo": "AFIRMATIVA",
+    "puede_ejecutar": true,
+    "certeza": 1.0,
+    "conceptos_principales": [],
+    "grounding_promedio": 0.0
   }
 ]

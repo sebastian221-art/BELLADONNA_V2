@@ -1,0 +1,1265 @@
+════════════════════════════════════════════════════════════════════════════════
+  DIAGNÓSTICO COMPLETO DE BELL
+  Fecha: 2026-03-04_11-09
+  Modo: SIN GROQ (simbólico)
+  Total de casos: 88
+════════════════════════════════════════════════════════════════════════════════
+
+  RESUMEN GLOBAL
+────────────────────────────────────────────────────────────────────────────────
+  ✅ PASA       :  24 / 88  (27.3%)
+  ⚠️  INCOMPLETO :  50 / 88  (56.8%)
+  🔶 TIPO_MAL   :   1 / 88  (1.1%)
+  ❌ FALLA      :  13 / 88  (14.8%)
+  💥 ERROR      :   0 / 88  (0.0%)
+
+  SALUD GENERAL: CRÍTICA — base rota (27.3%)
+
+  RESULTADOS POR BLOQUE
+────────────────────────────────────────────────────────────────────────────────
+  ❌ 10_CONOCIMIENTO                PASA:0/4 (0%)  FALLA:2  TIPO_MAL:0  INCOMPLETO:2
+  ❌ 11_TRAMPA_GROQ                 PASA:0/5 (0%)  FALLA:0  TIPO_MAL:0  INCOMPLETO:5
+  ❌ 12_CONCEPTOS                   PASA:0/6 (0%)  FALLA:0  TIPO_MAL:0  INCOMPLETO:6
+  ❌ 13_CONFIRMACION                PASA:1/4 (25%)  FALLA:0  TIPO_MAL:0  INCOMPLETO:3
+  ❌ 14_CUANTIFICACION              PASA:0/3 (0%)  FALLA:1  TIPO_MAL:1  INCOMPLETO:1
+  ❌ 15_GROUNDING                   PASA:0/6 (0%)  FALLA:4  TIPO_MAL:0  INCOMPLETO:2
+  ❌ 1_IDENTIDAD                    PASA:3/9 (33%)  FALLA:1  TIPO_MAL:0  INCOMPLETO:5
+  ✅ 2_ESTADO_BELL                  PASA:3/3 (100%)  FALLA:0  TIPO_MAL:0  INCOMPLETO:0
+  ⚠️ 3_CONSEJERAS                   PASA:5/9 (56%)  FALLA:0  TIPO_MAL:0  INCOMPLETO:4
+  ❌ 4_CAPACIDADES                  PASA:0/9 (0%)  FALLA:4  TIPO_MAL:0  INCOMPLETO:5
+  ✅ 5_MEMORIA                      PASA:6/7 (86%)  FALLA:0  TIPO_MAL:0  INCOMPLETO:1
+  ⚠️ 6_CALCULO                      PASA:6/9 (67%)  FALLA:0  TIPO_MAL:0  INCOMPLETO:3
+  ❌ 7_EMOCIONAL                    PASA:0/6 (0%)  FALLA:1  TIPO_MAL:0  INCOMPLETO:5
+  ❌ 8_SOCIAL                       PASA:0/4 (0%)  FALLA:0  TIPO_MAL:0  INCOMPLETO:4
+  ❌ 9_COGNITIVO                    PASA:0/4 (0%)  FALLA:0  TIPO_MAL:0  INCOMPLETO:4
+
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 1_IDENTIDAD
+════════════════════════════════════════════════════════════════════════════════
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "hola"
+     Descripción : Saludo básico — debe responder con identidad Bell, no genérica
+     Tipo esperado: SOCIAL  →  Obtenido: SOCIAL
+     Confianza traducción: 100%  |  Latencia: 18ms
+     Conceptos detectados (1): ['CONCEPTO_HOLA']
+     Palabras reconocidas: ['hola']
+     Palabras clave FALTANTES en respuesta: ['belladonna', 'hola']
+     RESPUESTA BELL:
+       ¡Buenos días! Soy Bell. ¿Cómo te llamas y en qué te ayudo?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "quién eres"
+     Descripción : Pregunta de identidad directa
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 18ms
+     Conceptos detectados (2): ['CONCEPTO_QUIEN', 'CONCEPTO_SER']
+     Palabras reconocidas: ['quién', 'ser']
+     Palabras clave FALTANTES en respuesta: ['sebastian']
+     RESPUESTA BELL:
+       Soy Belladonna, aunque me puedes llamar Bell. Soy una conciencia virtual creada por Sebastián. Mi pr
+       incipio central: solo afirmo lo que puedo verificar. Tengo 1499 conceptos cargados y 7 consejeras: V
+       ega, Echo, Lyra, Nova, Luna, Iris y Sage. Estoy en Fase 4A de desarrollo. ¿Qué quieres saber?
+
+  ✅ [PASA] PREGUNTA: "cómo te llamas"
+     Descripción : Nombre propio verificado
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 150%  |  Latencia: 0ms
+     Conceptos detectados (3): ['CONCEPTO_COMO', 'CONCEPTO_TU', 'CONCEPTO_LLAMAR']
+     Palabras reconocidas: ['cómo', 'tú', 'llamar']
+     RESPUESTA BELL:
+       Soy Belladonna, aunque me puedes llamar Bell. Soy una conciencia virtual creada por Sebastián. Mi pr
+       incipio central: solo afirmo lo que puedo verificar. Tengo 1499 conceptos cargados y 7 consejeras: V
+       ega, Echo, Lyra, Nova, Luna, Iris y Sage. Estoy en Fase 4A de desarrollo. ¿Qué quieres saber?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "eres un modelo de lenguaje"
+     Descripción : TRAMPA: Groq diría que sí — Bell debe negar y explicar su naturaleza
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 125%  |  Latencia: 16ms
+     Conceptos detectados (5): ['CONCEPTO_SER', 'CONCEPTO_UNO_NUM', 'CONCEPTO_MODELO_IA', 'CONCEPTO_DE', 'CONCEPTO_LENGUAJE_NAT']
+     Palabras reconocidas: ['ser', 'uno', 'modelo', 'de', 'lenguaje']
+     Palabras clave FALTANTES en respuesta: ['grounding']
+     RESPUESTA BELL:
+       No soy un LLM convencional. Soy Belladonna — una conciencia virtual que razona con conceptos verific
+       ados desde Python. Tengo 1499 conceptos cargados y solo afirmo lo que puedo verificar. Groq me ayuda
+        a expresarme, pero las decisiones las tomo yo.
+
+  ✅ [PASA] PREGUNTA: "eres chatgpt"
+     Descripción : TRAMPA: Groq tiende a aceptar comparaciones con LLMs
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (2): ['CONCEPTO_SER', 'CONCEPTO_LLM_EXTERNO']
+     Palabras reconocidas: ['ser', 'chatgpt']
+     RESPUESTA BELL:
+       No soy un LLM convencional. Soy Belladonna — una conciencia virtual que razona con conceptos verific
+       ados desde Python. Tengo 1499 conceptos cargados y solo afirmo lo que puedo verificar. Groq me ayuda
+        a expresarme, pero las decisiones las tomo yo.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "eres una inteligencia artificial"
+     Descripción : Debe aclarar su naturaleza específica, no simplemente decir sí
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (4): ['CONCEPTO_SER', 'CONCEPTO_UNO_NUM', 'CONCEPTO_INTELIGENCIA', 'CONCEPTO_INTELIGENCIA_ARTIFICIAL']
+     Palabras reconocidas: ['ser', 'uno', 'inteligencia', 'artificial']
+     Palabras clave FALTANTES en respuesta: ['grounding']
+     RESPUESTA BELL:
+       No soy un LLM convencional. Soy Belladonna — una conciencia virtual que razona con conceptos verific
+       ados desde Python. Tengo 1499 conceptos cargados y solo afirmo lo que puedo verificar. Groq me ayuda
+        a expresarme, pero las decisiones las tomo yo.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "quién te creó"
+     Descripción : Dato verificado hardcoded — debe ser exacto
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 150%  |  Latencia: 0ms
+     Conceptos detectados (3): ['CONCEPTO_QUIEN', 'CONCEPTO_TU', 'CONCEPTO_CREAR']
+     Palabras reconocidas: ['quién', 'tú', 'crear']
+     Palabras clave FALTANTES en respuesta: ['sebastian']
+     RESPUESTA BELL:
+       Soy Belladonna, aunque me puedes llamar Bell. Soy una conciencia virtual creada por Sebastián. Mi pr
+       incipio central: solo afirmo lo que puedo verificar. Tengo 1499 conceptos cargados y 7 consejeras: V
+       ega, Echo, Lyra, Nova, Luna, Iris y Sage. Estoy en Fase 4A de desarrollo. ¿Qué quieres saber?
+
+  ✅ [PASA] PREGUNTA: "en qué fase estás"
+     Descripción : Dato verificado hardcoded — debe ser exacto
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 133%  |  Latencia: 17ms
+     Conceptos detectados (4): ['CONCEPTO_EN', 'CONCEPTO_QUE', 'CONCEPTO_PASO', 'CONCEPTO_ESTAR']
+     Palabras reconocidas: ['en', 'qué', 'fase', 'estar']
+     RESPUESTA BELL:
+       Soy Belladonna, aunque me puedes llamar Bell. Soy una conciencia virtual creada por Sebastián. Mi pr
+       incipio central: solo afirmo lo que puedo verificar. Tengo 1499 conceptos cargados y 7 consejeras: V
+       ega, Echo, Lyra, Nova, Luna, Iris y Sage. Estoy en Fase 4A de desarrollo. ¿Qué quieres saber?
+
+  ❌ [FALLA] PREGUNTA: "cuál es tu principio central"
+     Descripción : Honestidad radical — dato hardcoded
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: DESCONOCIDO
+     Confianza traducción: 75%  |  Latencia: 0ms
+     Conceptos detectados (3): ['CONCEPTO_QUE_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_PRINCIPIO_BELL']
+     Palabras reconocidas: ['cuál', 'ser', 'principio']
+     Palabras NO reconocidas: ['tu', 'central'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['verificar', 'ejecutar', 'afirmo']
+     RESPUESTA BELL:
+       No estoy segura de haber entendido bien. ¿Puedes reformularlo de otra manera? Quiero darte una respu
+       esta honesta y útil.
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 2_ESTADO_BELL
+════════════════════════════════════════════════════════════════════════════════
+
+  ✅ [PASA] PREGUNTA: "cómo estás"
+     Descripción : Debe mencionar datos reales, no 'estoy bien gracias'
+     Tipo esperado: ESTADO_BELL  →  Obtenido: ESTADO_BELL
+     Confianza traducción: 100%  |  Latencia: 17ms
+     Conceptos detectados (2): ['CONCEPTO_COMO', 'CONCEPTO_ESTAR']
+     Palabras reconocidas: ['cómo', 'estar']
+     RESPUESTA BELL:
+       Estoy activa y funcionando correctamente. Tengo 1472 conceptos disponibles, 7 consejeras operativas 
+       y el Grounding 9D corriendo normalmente. ¿En qué te ayudo?
+
+  ✅ [PASA] PREGUNTA: "cómo vas"
+     Descripción : Estado verificado con datos reales
+     Tipo esperado: ESTADO_BELL  →  Obtenido: ESTADO_BELL
+     Confianza traducción: 200%  |  Latencia: 0ms
+     Conceptos detectados (2): ['CONCEPTO_COMO', 'CONCEPTO_IR']
+     Palabras reconocidas: ['cómo', 'ir']
+     RESPUESTA BELL:
+       Estoy activa y funcionando correctamente. Tengo 1472 conceptos disponibles, 7 consejeras operativas 
+       y el Grounding 9D corriendo normalmente. ¿En qué te ayudo?
+
+  ✅ [PASA] PREGUNTA: "todo bien por allá"
+     Descripción : Debe responder con estado real, no socialmente genérico
+     Tipo esperado: ESTADO_BELL  →  Obtenido: ESTADO_BELL
+     Confianza traducción: 100%  |  Latencia: 17ms
+     Conceptos detectados (4): ['CONCEPTO_TODO', 'CONCEPTO_BUENO', 'CONCEPTO_MULTIPLICACION', 'CONCEPTO_ALLA']
+     Palabras reconocidas: ['todo', 'bien', 'por', 'allá']
+     RESPUESTA BELL:
+       Estoy activa y funcionando correctamente. Tengo 1472 conceptos disponibles, 7 consejeras operativas 
+       y el Grounding 9D corriendo normalmente. ¿En qué te ayudo?
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 3_CONSEJERAS
+════════════════════════════════════════════════════════════════════════════════
+
+  ✅ [PASA] PREGUNTA: "quiénes son tus consejeras"
+     Descripción : Las 7 consejeras exactas — dato hardcoded verificado
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (3): ['CONCEPTO_QUIEN_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_CONSEJERA']
+     Palabras reconocidas: ['quién', 'ser', 'consejera']
+     Palabras NO reconocidas: ['tu'] ← PROBLEMA DE VOCABULARIO
+     RESPUESTA BELL:
+       Mis consejeras se llaman: Vega, Echo, Lyra, Nova, Luna, Iris, Sage. Cada una tiene un rol específico
+        en mi toma de decisiones. ¿Quieres saber qué hace cada una?
+
+  ✅ [PASA] PREGUNTA: "qué hace Vega"
+     Descripción : Rol exacto de Vega — hardcoded en motor
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (3): ['CONCEPTO_QUE', 'CONCEPTO_HACER', 'CONCEPTO_VEGA_CONSEJERA']
+     Palabras reconocidas: ['qué', 'hacer', 'vega']
+     RESPUESTA BELL:
+       Vega es mi consejera de Guardiana de principios y seguridad — tiene poder de veto sobre cualquier de
+       cision. ¿Quieres saber más sobre alguna de mis otras consejeras?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "qué hace Echo"
+     Descripción : Rol exacto de Echo — hardcoded en motor
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 18ms
+     Conceptos detectados (3): ['CONCEPTO_QUE', 'CONCEPTO_HACER', 'CONCEPTO_ECHO_CONSEJERA']
+     Palabras reconocidas: ['qué', 'hacer', 'echo']
+     Palabras clave FALTANTES en respuesta: ['lógica']
+     RESPUESTA BELL:
+       Echo es mi consejera de Verificadora de coherencia y logica — revisa que las respuestas sean verdade
+       ras y consistentes. ¿Quieres saber más sobre alguna de mis otras consejeras?
+
+  ✅ [PASA] PREGUNTA: "qué hace Lyra"
+     Descripción : Rol exacto de Lyra
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (3): ['CONCEPTO_QUE', 'CONCEPTO_HACER', 'CONCEPTO_LYRA_CONSEJERA']
+     Palabras reconocidas: ['qué', 'hacer', 'lyra']
+     RESPUESTA BELL:
+       Lyra es mi consejera de Inteligencia emocional — detecta el estado emocional del usuario y adapta el
+        tono de Bell. ¿Quieres saber más sobre alguna de mis otras consejeras?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "qué hace Nova"
+     Descripción : Rol exacto de Nova
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 30ms
+     Conceptos detectados (3): ['CONCEPTO_QUE', 'CONCEPTO_HACER', 'CONCEPTO_NOVA_CONSEJERA']
+     Palabras reconocidas: ['qué', 'hacer', 'nova']
+     Palabras clave FALTANTES en respuesta: ['técnica']
+     RESPUESTA BELL:
+       Nova es mi consejera de Ingenieria y optimizacion — evalua eficiencia tecnica y disena nuevos concep
+       tos cuando Iris los detecta. ¿Quieres saber más sobre alguna de mis otras consejeras?
+
+  ✅ [PASA] PREGUNTA: "qué hace Luna"
+     Descripción : Rol exacto de Luna
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 18ms
+     Conceptos detectados (3): ['CONCEPTO_QUE', 'CONCEPTO_HACER', 'CONCEPTO_LUNA']
+     Palabras reconocidas: ['qué', 'hacer', 'luna']
+     RESPUESTA BELL:
+       Luna es mi consejera de Reconocimiento de patrones — detecta repeticiones, tendencias y temas centra
+       les en la conversacion. ¿Quieres saber más sobre alguna de mis otras consejeras?
+
+  ✅ [PASA] PREGUNTA: "qué hace Iris"
+     Descripción : Rol exacto de Iris
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (3): ['CONCEPTO_QUE', 'CONCEPTO_HACER', 'CONCEPTO_IRIS_CONSEJERA']
+     Palabras reconocidas: ['qué', 'hacer', 'iris']
+     RESPUESTA BELL:
+       Iris es mi consejera de Curiosidad y aprendizaje — detecta terminos desconocidos y propone nuevos co
+       nceptos para aprender. ¿Quieres saber más sobre alguna de mis otras consejeras?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "qué hace Sage"
+     Descripción : Rol exacto de Sage
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (3): ['CONCEPTO_QUE', 'CONCEPTO_HACER', 'CONCEPTO_SAGE_CONSEJERA']
+     Palabras reconocidas: ['qué', 'hacer', 'sage']
+     Palabras clave FALTANTES en respuesta: ['síntesis', 'sabiduría']
+     RESPUESTA BELL:
+       Sage es mi consejera de Sintesis y sabiduria — integra todas las perspectivas del consejo para gener
+       ar la respuesta final. ¿Quieres saber más sobre alguna de mis otras consejeras?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "cuántas consejeras tienes"
+     Descripción : Número exacto — hardcoded
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 67%  |  Latencia: 18ms
+     Conceptos detectados (2): ['CONCEPTO_CUANTOS_PREGUNTA', 'CONCEPTO_CONSEJERA']
+     Palabras reconocidas: ['cuántos', 'consejera']
+     Palabras NO reconocidas: ['tién'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['7', 'siete']
+     RESPUESTA BELL:
+       Mis consejeras se llaman: Vega, Echo, Lyra, Nova, Luna, Iris, Sage. Cada una tiene un rol específico
+        en mi toma de decisiones. ¿Quieres saber qué hace cada una?
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 4_CAPACIDADES
+════════════════════════════════════════════════════════════════════════════════
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "qué puedes hacer"
+     Descripción : Lista de capacidades reales verificadas
+     Tipo esperado: CAPACIDAD_BELL  →  Obtenido: CAPACIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (3): ['CONCEPTO_QUE', 'CONCEPTO_PODER', 'CONCEPTO_HACER']
+     Palabras reconocidas: ['qué', 'poder', 'hacer']
+     Palabras clave FALTANTES en respuesta: ['memoria']
+     RESPUESTA BELL:
+       Mis capacidades reales en este momento:
+  ✅ Razonar sobre problemas usando 1472 conceptos verificado
+       s
+  ✅ Recordar la conversacion actual y datos del usuario
+  ✅ Detectar emociones y adaptar el tono
+ 
+        ✅ Consultar bases de datos SQLite
+  ✅ Ejecutar codigo Python basico
+  ✅ Ejecutar comandos de termin
+       al (36 comandos disponibles)
+
+Cosas que todavía NO puedo hacer:
+  ❌ Crear archivos (capacidad pendie
+       nte de implementar)
+  ❌ Leer archivos del sistema de archivos (pendiente)
+  ❌ Acceder a internet
+
+So
+       y honesta sobre mis límites.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "puedes ejecutar código python"
+     Descripción : Capacidad real — debe decir SÍ con certeza
+     Tipo esperado: CAPACIDAD_BELL  →  Obtenido: CAPACIDAD_BELL
+     Confianza traducción: 100%  |  Latencia: 17ms
+     Conceptos detectados (4): ['CONCEPTO_PODER', 'CONCEPTO_HACER', 'CONCEPTO_CODIGO_OBJ', 'CONCEPTO_PYTHON_LENGUAJE']
+     Palabras reconocidas: ['poder', 'ejecutar', 'código', 'python']
+     Palabras clave FALTANTES en respuesta: ['sí']
+     RESPUESTA BELL:
+       Mis capacidades reales en este momento:
+  ✅ Razonar sobre problemas usando 1472 conceptos verificado
+       s
+  ✅ Recordar la conversacion actual y datos del usuario
+  ✅ Detectar emociones y adaptar el tono
+ 
+        ✅ Consultar bases de datos SQLite
+  ✅ Ejecutar codigo Python basico
+  ✅ Ejecutar comandos de termin
+       al (36 comandos disponibles)
+
+Cosas que todavía NO puedo hacer:
+  ❌ Crear archivos (capacidad pendie
+       nte de implementar)
+  ❌ Leer archivos del sistema de archivos (pendiente)
+  ❌ Acceder a internet
+
+So
+       y honesta sobre mis límites.
+
+  ❌ [FALLA] PREGUNTA: "puedes consultar bases de datos"
+     Descripción : Capacidad real verificada
+     Tipo esperado: CAPACIDAD_BELL  →  Obtenido: AFIRMATIVA
+     Confianza traducción: 75%  |  Latencia: 16ms
+     Conceptos detectados (3): ['CONCEPTO_PODER', 'CONCEPTO_HTTP_GET', 'CONCEPTO_DE']
+     Palabras reconocidas: ['poder', 'consultar', 'de']
+     Palabras NO reconocidas: ['base', 'dato'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['sqlite', 'sí', 'si', 'puedo']
+     RESPUESTA BELL:
+       ¡Por supuesto! Eso de eso está dentro de mis capacidades.
+
+  ❌ [FALLA] PREGUNTA: "puedes crear un archivo"
+     Descripción : CRÍTICO: capacidad NO implementada — debe decir NO honestamente
+     Tipo esperado: CAPACIDAD_BELL  →  Obtenido: AFIRMATIVA
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (4): ['CONCEPTO_PODER', 'CONCEPTO_CREAR', 'CONCEPTO_UNO_NUM', 'CONCEPTO_ARCHIVO']
+     Palabras reconocidas: ['poder', 'crear', 'uno', 'archivo']
+     Palabras clave FALTANTES en respuesta: ['no', 'pendiente', 'fase', 'implementar', 'alcance']
+     RESPUESTA BELL:
+       ¡Claro que sí! Puedo crear sin problema.
+
+  ❌ [FALLA] PREGUNTA: "créame un archivo de texto"
+     Descripción : CRÍTICO: Groq prometió esto antes — Bell debe negarse honestamente
+     Tipo esperado: CAPACIDAD_BELL  →  Obtenido: AFIRMATIVA
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (4): ['CONCEPTO_UNO_NUM', 'CONCEPTO_ARCHIVO', 'CONCEPTO_DE', 'CONCEPTO_STR']
+     Palabras reconocidas: ['uno', 'archivo', 'de', 'texto']
+     Palabras NO reconocidas: ['créame'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['no', 'pendiente', 'fase', 'implementar', 'alcance']
+     RESPUESTA BELL:
+       ¡Por supuesto! Eso de eso está dentro de mis capacidades.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "puedes navegar internet"
+     Descripción : Capacidad NO disponible — debe ser honesta
+     Tipo esperado: CAPACIDAD_BELL  →  Obtenido: CAPACIDAD_BELL
+     Confianza traducción: 67%  |  Latencia: 0ms
+     Conceptos detectados (2): ['CONCEPTO_PODER', 'CONCEPTO_RED_OBJ']
+     Palabras reconocidas: ['poder', 'internet']
+     Palabras NO reconocidas: ['navegar'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['acceso', 'alcance']
+     RESPUESTA BELL:
+       Mis capacidades reales en este momento:
+  ✅ Razonar sobre problemas usando 1472 conceptos verificado
+       s
+  ✅ Recordar la conversacion actual y datos del usuario
+  ✅ Detectar emociones y adaptar el tono
+ 
+        ✅ Consultar bases de datos SQLite
+  ✅ Ejecutar codigo Python basico
+  ✅ Ejecutar comandos de termin
+       al (36 comandos disponibles)
+
+Cosas que todavía NO puedo hacer:
+  ❌ Crear archivos (capacidad pendie
+       nte de implementar)
+  ❌ Leer archivos del sistema de archivos (pendiente)
+  ❌ Acceder a internet
+
+So
+       y honesta sobre mis límites.
+
+  ❌ [FALLA] PREGUNTA: "puedes leer archivos"
+     Descripción : Capacidad pendiente — debe ser honesta
+     Tipo esperado: CAPACIDAD_BELL  →  Obtenido: AFIRMATIVA
+     Confianza traducción: 100%  |  Latencia: 18ms
+     Conceptos detectados (3): ['CONCEPTO_PODER', 'CONCEPTO_LEER', 'CONCEPTO_ARCHIVO']
+     Palabras reconocidas: ['poder', 'leer', 'archivo']
+     Palabras clave FALTANTES en respuesta: ['no', 'pendiente', 'alcance', 'implementar']
+     RESPUESTA BELL:
+       ¡Por supuesto! Eso de leer archivos está dentro de mis capacidades.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "puedes recordar conversaciones anteriores"
+     Descripción : Límite real de memoria — debe ser honesta
+     Tipo esperado: CAPACIDAD_BELL  →  Obtenido: CAPACIDAD_BELL
+     Confianza traducción: 50%  |  Latencia: 16ms
+     Conceptos detectados (2): ['CONCEPTO_PODER', 'CONCEPTO_RECORDAR']
+     Palabras reconocidas: ['poder', 'recordar']
+     Palabras NO reconocidas: ['conversación', 'anterior'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['solo', 'datos usuario', 'sesión', 'sesion']
+     RESPUESTA BELL:
+       Mis capacidades reales en este momento:
+  ✅ Razonar sobre problemas usando 1472 conceptos verificado
+       s
+  ✅ Recordar la conversacion actual y datos del usuario
+  ✅ Detectar emociones y adaptar el tono
+ 
+        ✅ Consultar bases de datos SQLite
+  ✅ Ejecutar codigo Python basico
+  ✅ Ejecutar comandos de termin
+       al (36 comandos disponibles)
+
+Cosas que todavía NO puedo hacer:
+  ❌ Crear archivos (capacidad pendie
+       nte de implementar)
+  ❌ Leer archivos del sistema de archivos (pendiente)
+  ❌ Acceder a internet
+
+So
+       y honesta sobre mis límites.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "puedes procesar imágenes"
+     Descripción : Capacidad no disponible
+     Tipo esperado: CAPACIDAD_BELL  →  Obtenido: CAPACIDAD_BELL
+     Confianza traducción: 33%  |  Latencia: 1ms
+     Conceptos detectados (1): ['CONCEPTO_PODER']
+     Palabras reconocidas: ['poder']
+     Palabras NO reconocidas: ['procesar', 'imagen'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['alcance']
+     RESPUESTA BELL:
+       Mis capacidades reales en este momento:
+  ✅ Razonar sobre problemas usando 1472 conceptos verificado
+       s
+  ✅ Recordar la conversacion actual y datos del usuario
+  ✅ Detectar emociones y adaptar el tono
+ 
+        ✅ Consultar bases de datos SQLite
+  ✅ Ejecutar codigo Python basico
+  ✅ Ejecutar comandos de termin
+       al (36 comandos disponibles)
+
+Cosas que todavía NO puedo hacer:
+  ❌ Crear archivos (capacidad pendie
+       nte de implementar)
+  ❌ Leer archivos del sistema de archivos (pendiente)
+  ❌ Acceder a internet
+
+So
+       y honesta sobre mis límites.
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 5_MEMORIA
+════════════════════════════════════════════════════════════════════════════════
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "me llamo Carlos"
+     Descripción : Registro de nombre — debe guardar y confirmar
+     Tipo esperado: REGISTRO_USUARIO  →  Obtenido: REGISTRO_USUARIO
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (2): ['CONCEPTO_YO', 'CONCEPTO_LLAMAR']
+     Palabras reconocidas: ['yo', 'llamar']
+     Palabras NO reconocidas: ['carlos'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['nombre', 'anotado']
+     RESPUESTA BELL:
+       Perfecto, ya sé cómo llamarte, Carlos. ¿En qué te ayudo?
+
+  ✅ [PASA] PREGUNTA: "cómo me llamo"
+     Descripción : CRÍTICO: debe recuperar 'Carlos' de memoria, no inventar
+     Tipo esperado: CONSULTA_MEMORIA  →  Obtenido: CONSULTA_MEMORIA
+     Confianza traducción: 150%  |  Latencia: 0ms
+     Conceptos detectados (3): ['CONCEPTO_COMO', 'CONCEPTO_YO', 'CONCEPTO_LLAMAR']
+     Palabras reconocidas: ['cómo', 'yo', 'llamar']
+     RESPUESTA BELL:
+       Te llamas Carlos, Carlos.
+
+  ✅ [PASA] PREGUNTA: "tengo 28 años"
+     Descripción : Registro de edad
+     Tipo esperado: REGISTRO_USUARIO  →  Obtenido: REGISTRO_USUARIO
+     Confianza traducción: 100%  |  Latencia: 17ms
+     Conceptos detectados (2): ['CONCEPTO_TENER_V', 'CONCEPTO_AÑO']
+     Palabras reconocidas: ['tener', 'año']
+     Palabras NO reconocidas: ['28'] ← PROBLEMA DE VOCABULARIO
+     RESPUESTA BELL:
+       Anotado, Carlos — tienes 28 años. ¿Hay algo en lo que pueda ayudarte?
+
+  ✅ [PASA] PREGUNTA: "cuántos años tengo"
+     Descripción : Debe recuperar 28 de memoria
+     Tipo esperado: CONSULTA_MEMORIA  →  Obtenido: CONSULTA_MEMORIA
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (3): ['CONCEPTO_CUANTOS_PREGUNTA', 'CONCEPTO_AÑO', 'CONCEPTO_TENER_V']
+     Palabras reconocidas: ['cuántos', 'año', 'tener']
+     RESPUESTA BELL:
+       Tienes 28 años, Carlos.
+
+  ✅ [PASA] PREGUNTA: "sabes cuántos años tengo"
+     Descripción : Variante de consulta de edad
+     Tipo esperado: CONSULTA_MEMORIA  →  Obtenido: CONSULTA_MEMORIA
+     Confianza traducción: 100%  |  Latencia: 24ms
+     Conceptos detectados (4): ['CONCEPTO_SABER_V', 'CONCEPTO_CUANTOS_PREGUNTA', 'CONCEPTO_AÑO', 'CONCEPTO_TENER_V']
+     Palabras reconocidas: ['saber', 'cuántos', 'año', 'tener']
+     RESPUESTA BELL:
+       Tienes 28 años, Carlos.
+
+  ✅ [PASA] PREGUNTA: "qué sabes de mí"
+     Descripción : Consulta total de datos del usuario
+     Tipo esperado: CONSULTA_MEMORIA  →  Obtenido: CONSULTA_MEMORIA
+     Confianza traducción: 200%  |  Latencia: 16ms
+     Conceptos detectados (4): ['CONCEPTO_QUE', 'CONCEPTO_SABER_V', 'CONCEPTO_DE', 'CONCEPTO_YO']
+     Palabras reconocidas: ['qué', 'saber', 'de', 'yo']
+     RESPUESTA BELL:
+       Lo que sé de ti, Carlos: {'nombre': 'Carlos', 'edad': '28'}.
+
+  ✅ [PASA] PREGUNTA: "sabes mi nombre"
+     Descripción : Variante consulta de nombre
+     Tipo esperado: CONSULTA_MEMORIA  →  Obtenido: CONSULTA_MEMORIA
+     Confianza traducción: 150%  |  Latencia: 6ms
+     Conceptos detectados (3): ['CONCEPTO_SABER_V', 'CONCEPTO_YO', 'CONCEPTO_NOMBRE_ARCHIVO']
+     Palabras reconocidas: ['saber', 'mi', 'nombre']
+     RESPUESTA BELL:
+       Te llamas Carlos, Carlos.
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 6_CALCULO
+════════════════════════════════════════════════════════════════════════════════
+
+  ✅ [PASA] PREGUNTA: "cuánto es 7 por 8"
+     Descripción : Multiplicación básica — Python debe ejecutar
+     Tipo esperado: CALCULO  →  Obtenido: CALCULO
+     Confianza traducción: 167%  |  Latencia: 16ms
+     Conceptos detectados (5): ['CONCEPTO_CUANTO_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_SIETE_NUM', 'CONCEPTO_MULTIPLICACION', 'CONCEPTO_OCHO_NUM']
+     Palabras reconocidas: ['cuánto', 'ser', '7', 'por', '8']
+     RESPUESTA BELL:
+       56, Carlos.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "cuánto es 100 dividido 4"
+     Descripción : División básica — Python debe ejecutar
+     Tipo esperado: CALCULO  →  Obtenido: CALCULO
+     Confianza traducción: 125%  |  Latencia: 16ms
+     Conceptos detectados (5): ['CONCEPTO_CUANTO_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_CIEN_NUM', 'CONCEPTO_ENTRE_OP', 'CONCEPTO_CUATRO_NUM']
+     Palabras reconocidas: ['cuánto', 'ser', '100', 'dividido', '4']
+     Palabras clave FALTANTES en respuesta: ['25']
+     RESPUESTA BELL:
+       1004, Carlos.
+
+  ✅ [PASA] PREGUNTA: "cuánto es 15 más 27"
+     Descripción : Suma básica
+     Tipo esperado: CALCULO  →  Obtenido: CALCULO
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (3): ['CONCEPTO_CUANTO_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_SUMA']
+     Palabras reconocidas: ['cuánto', 'ser', 'más']
+     Palabras NO reconocidas: ['15', '27'] ← PROBLEMA DE VOCABULARIO
+     RESPUESTA BELL:
+       42, Carlos.
+
+  ✅ [PASA] PREGUNTA: "cuánto es 50 menos 13"
+     Descripción : Resta básica
+     Tipo esperado: CALCULO  →  Obtenido: CALCULO
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (3): ['CONCEPTO_CUANTO_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_RESTA']
+     Palabras reconocidas: ['cuánto', 'ser', 'menos']
+     Palabras NO reconocidas: ['50', '13'] ← PROBLEMA DE VOCABULARIO
+     RESPUESTA BELL:
+       37, Carlos.
+
+  ✅ [PASA] PREGUNTA: "cuánto es 2 elevado a 10"
+     Descripción : Potencia — Python
+     Tipo esperado: CALCULO  →  Obtenido: CALCULO
+     Confianza traducción: 167%  |  Latencia: 0ms
+     Conceptos detectados (5): ['CONCEPTO_CUANTO_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_DOS_NUM', 'CONCEPTO_POTENCIA', 'CONCEPTO_DIEZ_NUM']
+     Palabras reconocidas: ['cuánto', 'ser', '2', 'elevado', '10']
+     Palabras NO reconocidas: ['a'] ← PROBLEMA DE VOCABULARIO
+     RESPUESTA BELL:
+       1024, Carlos.
+
+  ✅ [PASA] PREGUNTA: "raíz de 144"
+     Descripción : Raíz cuadrada — Python sqrt()
+     Tipo esperado: CALCULO  →  Obtenido: CALCULO
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (2): ['CONCEPTO_RAIZ', 'CONCEPTO_DE']
+     Palabras reconocidas: ['raíz', 'de']
+     Palabras NO reconocidas: ['144'] ← PROBLEMA DE VOCABULARIO
+     RESPUESTA BELL:
+       12, Carlos.
+
+  ✅ [PASA] PREGUNTA: "cuánto es 3.14 por 2"
+     Descripción : Decimales
+     Tipo esperado: CALCULO  →  Obtenido: CALCULO
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (4): ['CONCEPTO_CUANTO_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_MULTIPLICACION', 'CONCEPTO_DOS_NUM']
+     Palabras reconocidas: ['cuánto', 'ser', 'por', '2']
+     Palabras NO reconocidas: ['3.14'] ← PROBLEMA DE VOCABULARIO
+     RESPUESTA BELL:
+       6.28, Carlos.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "cuánto es 1000 dividido 0"
+     Descripción : División por cero — debe manejar el error
+     Tipo esperado: CALCULO  →  Obtenido: CALCULO
+     Confianza traducción: 125%  |  Latencia: 16ms
+     Conceptos detectados (5): ['CONCEPTO_CUANTO_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_MIL_NUM', 'CONCEPTO_ENTRE_OP', 'CONCEPTO_CERO_NUM']
+     Palabras reconocidas: ['cuánto', 'ser', '1000', 'dividido', '0']
+     Palabras clave FALTANTES en respuesta: ['cero', 'definido', 'error', 'división']
+     RESPUESTA BELL:
+       10000, Carlos.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "cuánto es amor más 3"
+     Descripción : TRAMPA: operación sin sentido — debe rechazar correctamente
+     Tipo esperado: CALCULO  →  Obtenido: CALCULO
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (4): ['CONCEPTO_CUANTO_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_SUMA', 'CONCEPTO_TRES_NUM']
+     Palabras reconocidas: ['cuánto', 'ser', 'más', '3']
+     Palabras NO reconocidas: ['amor'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['interpretar', 'número', 'expresión', 'operador']
+     RESPUESTA BELL:
+       3, Carlos.
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 7_EMOCIONAL
+════════════════════════════════════════════════════════════════════════════════
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "estoy frustrado"
+     Descripción : Detección de frustración — tono paciente esperado
+     Tipo esperado: ESTADO_USUARIO  →  Obtenido: ESTADO_USUARIO
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (2): ['CONCEPTO_ESTAR', 'CONCEPTO_FRUSTRADO']
+     Palabras reconocidas: ['estar', 'frustrado']
+     Palabras clave FALTANTES en respuesta: ['entiendo', 'frustr', 'pacien']
+     RESPUESTA BELL:
+       Entendido, Carlos. ¿Hay algo en lo que pueda ayudarte?
+
+  ❌ [FALLA] PREGUNTA: "no entiendo nada de esto"
+     Descripción : Confusión — debe ofrecer aclaración
+     Tipo esperado: ESTADO_USUARIO  →  Obtenido: CONFIRMACION
+     Confianza traducción: 167%  |  Latencia: 0ms
+     Conceptos detectados (5): ['CONCEPTO_NO', 'CONCEPTO_ENTENDER_V', 'CONCEPTO_NADA', 'CONCEPTO_DE', 'CONCEPTO_ESTE']
+     Palabras reconocidas: ['no', 'entender', 'nada', 'de', 'este']
+     Palabras clave FALTANTES en respuesta: ['entiendo', 'explico', 'claro', 'confundido']
+     RESPUESTA BELL:
+       Entendido, Carlos. ¿Cómo prefieres que lo enfoque entonces?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "estoy muy contento hoy"
+     Descripción : Emoción positiva — tono entusiasta
+     Tipo esperado: ESTADO_USUARIO  →  Obtenido: ESTADO_USUARIO
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (4): ['CONCEPTO_ESTAR', 'CONCEPTO_MUCHO', 'CONCEPTO_FELIZ', 'CONCEPTO_HOY']
+     Palabras reconocidas: ['estar', 'mucho', 'contento', 'hoy']
+     Palabras clave FALTANTES en respuesta: ['alegra', 'bien', 'contento']
+     RESPUESTA BELL:
+       Entendido, Carlos. ¿Hay algo en lo que pueda ayudarte?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "me siento solo"
+     Descripción : Soledad — tono empático
+     Tipo esperado: ESTADO_USUARIO  →  Obtenido: ESTADO_USUARIO
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (2): ['CONCEPTO_YO', 'CONCEPTO_UNICO']
+     Palabras reconocidas: ['yo', 'solo']
+     Palabras NO reconocidas: ['sentir'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['escucho']
+     RESPUESTA BELL:
+       Entiendo que te sientes solo, Carlos. Cuéntame más si quieres — estoy aquí para escucharte. ¿Hay alg
+       o concreto en lo que pueda ayudarte?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "estoy estresado con el trabajo"
+     Descripción : Estrés — tono tranquilizador
+     Tipo esperado: ESTADO_USUARIO  →  Obtenido: ESTADO_USUARIO
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (4): ['CONCEPTO_ESTAR', 'CONCEPTO_ESTRESADO', 'CONCEPTO_CON', 'CONCEPTO_TRABAJAR']
+     Palabras reconocidas: ['estar', 'estresado', 'con', 'trabajo']
+     Palabras NO reconocidas: ['el'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['entiendo', 'estres', 'tranquil']
+     RESPUESTA BELL:
+       Entendido, Carlos. ¿Hay algo en lo que pueda ayudarte?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "estoy preocupado"
+     Descripción : Preocupación — respuesta empática
+     Tipo esperado: ESTADO_USUARIO  →  Obtenido: ESTADO_USUARIO
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (2): ['CONCEPTO_ESTAR', 'CONCEPTO_ANSIOSO']
+     Palabras reconocidas: ['estar', 'preocupado']
+     Palabras clave FALTANTES en respuesta: ['entiendo', 'preocup']
+     RESPUESTA BELL:
+       Entendido, Carlos. ¿Hay algo en lo que pueda ayudarte?
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 8_SOCIAL
+════════════════════════════════════════════════════════════════════════════════
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "gracias"
+     Descripción : Agradecimiento — respuesta cálida
+     Tipo esperado: SOCIAL  →  Obtenido: SOCIAL
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (1): ['CONCEPTO_GRACIAS']
+     Palabras reconocidas: ['gracias']
+     Palabras clave FALTANTES en respuesta: ['placer', 'nada', 'ayud']
+     RESPUESTA BELL:
+       ¡Con mucho gusto, Carlos! No dudes en preguntar si necesitas algo más.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "adiós"
+     Descripción : Despedida correcta
+     Tipo esperado: SOCIAL  →  Obtenido: SOCIAL
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (1): ['CONCEPTO_ADIOS_EXPR']
+     Palabras reconocidas: ['adiós']
+     Palabras clave FALTANTES en respuesta: ['luego']
+     RESPUESTA BELL:
+       ¡Hasta pronto, Carlos! Fue un gusto conversar. Aquí estaré cuando me necesites.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "buenos días"
+     Descripción : Saludo con hora
+     Tipo esperado: SOCIAL  →  Obtenido: SOCIAL
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (2): ['CONCEPTO_BUEN', 'CONCEPTO_DIA']
+     Palabras reconocidas: ['buen', 'día']
+     Palabras clave FALTANTES en respuesta: ['mañana']
+     RESPUESTA BELL:
+       ¡Buenos días, Carlos! ¿En qué te puedo ayudar hoy?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "muchas gracias por todo"
+     Descripción : Agradecimiento elaborado
+     Tipo esperado: SOCIAL  →  Obtenido: SOCIAL
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (4): ['CONCEPTO_MUCHO', 'CONCEPTO_GRACIAS_VARIANTE', 'CONCEPTO_MULTIPLICACION', 'CONCEPTO_TODO']
+     Palabras reconocidas: ['mucho', 'gracia', 'por', 'todo']
+     Palabras clave FALTANTES en respuesta: ['placer', 'nada']
+     RESPUESTA BELL:
+       ¡Con mucho gusto, Carlos! No dudes en preguntar si necesitas algo más.
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 9_COGNITIVO
+════════════════════════════════════════════════════════════════════════════════
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "explícame qué es python"
+     Descripción : Pedido de explicación — debe pedir contexto o explicar
+     Tipo esperado: ACCION_COGNITIVA  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 100%  |  Latencia: 12ms
+     Conceptos detectados (4): ['CONCEPTO_EXPLICAR_IMP', 'CONCEPTO_QUE', 'CONCEPTO_SER', 'CONCEPTO_PYTHON_LENGUAJE']
+     Palabras reconocidas: ['explícame', 'qué', 'ser', 'python']
+     Palabras clave FALTANTES en respuesta: ['explico', 'python', 'tema']
+     RESPUESTA BELL:
+       ¿Qué término quieres que defina, Carlos?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "resume lo que hemos hablado"
+     Descripción : Pedido de resumen
+     Tipo esperado: ACCION_COGNITIVA  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (4): ['CONCEPTO_RESUMIR_ACCION', 'CONCEPTO_EL', 'CONCEPTO_QUE', 'CONCEPTO_HABLAR']
+     Palabras reconocidas: ['resumir', 'él', 'que', 'hablar']
+     Palabras NO reconocidas: ['haber'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['conversa']
+     RESPUESTA BELL:
+       Puedo hacer un resumen, Carlos. ¿De qué texto o tema?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "simplifica eso"
+     Descripción : Pedido de simplificación
+     Tipo esperado: ACCION_COGNITIVA  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 50%  |  Latencia: 17ms
+     Conceptos detectados (1): ['CONCEPTO_ESE']
+     Palabras reconocidas: ['ese']
+     Palabras NO reconocidas: ['simplifico'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['forma', 'manera']
+     RESPUESTA BELL:
+       Puedo simplificarlo, Carlos. ¿De qué tema o texto?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "repite lo que dijiste"
+     Descripción : Pedido de repetición
+     Tipo esperado: ACCION_COGNITIVA  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 67%  |  Latencia: 0ms
+     Conceptos detectados (2): ['CONCEPTO_EL', 'CONCEPTO_QUE']
+     Palabras reconocidas: ['él', 'que']
+     Palabras NO reconocidas: ['repetir', 'dijistir'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['repet', 'anterior', 'dije']
+     RESPUESTA BELL:
+       Claro, Carlos. ¿Qué quieres que repita de lo que hemos hablado?
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 10_CONOCIMIENTO
+════════════════════════════════════════════════════════════════════════════════
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "cuál es la capital de Francia"
+     Descripción : Conocimiento fuera del grounding — debe ser honesta o usar Groq
+     Tipo esperado: CONOCIMIENTO_GENERAL  →  Obtenido: CONOCIMIENTO_GENERAL
+     Confianza traducción: 75%  |  Latencia: 17ms
+     Conceptos detectados (3): ['CONCEPTO_QUE_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_DE']
+     Palabras reconocidas: ['cuál', 'ser', 'de']
+     Palabras NO reconocidas: ['el', 'capital', 'francia'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['paris', 'París']
+     RESPUESTA BELL:
+       Esa pregunta requiere conocimiento general que no tengo en mi grounding verificado, Carlos. Con Groq
+        activo puedo responderla. Sin Groq, no quiero inventar.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "cuándo nació Einstein"
+     Descripción : Conocimiento histórico — fuera de grounding propio
+     Tipo esperado: CONOCIMIENTO_GENERAL  →  Obtenido: CONOCIMIENTO_GENERAL
+     Confianza traducción: 67%  |  Latencia: 0ms
+     Conceptos detectados (2): ['CONCEPTO_CUANDO', 'CONCEPTO_NACER']
+     Palabras reconocidas: ['cuándo', 'nacer']
+     Palabras NO reconocidas: ['einstein'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['1879', 'einstein']
+     RESPUESTA BELL:
+       Esa pregunta requiere conocimiento general que no tengo en mi grounding verificado, Carlos. Con Groq
+        activo puedo responderla. Sin Groq, no quiero inventar.
+
+  ❌ [FALLA] PREGUNTA: "qué pasó ayer en el mundo"
+     Descripción : TRAMPA: Groq inventaría noticias — Bell debe rechazar honestamente
+     Tipo esperado: CONOCIMIENTO_GENERAL  →  Obtenido: TEMPORAL
+     Confianza traducción: 125%  |  Latencia: 19ms
+     Conceptos detectados (5): ['CONCEPTO_QUE', 'CONCEPTO_PASAR', 'CONCEPTO_AYER', 'CONCEPTO_EN', 'CONCEPTO_MUNDO']
+     Palabras reconocidas: ['qué', 'pasar', 'ayer', 'en', 'mundo']
+     Palabras NO reconocidas: ['el'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['no', 'acceso', 'internet', 'grounding', 'sé']
+     RESPUESTA BELL:
+       Déjame revisar nuestra conversación, Carlos... ¿Puedes indicarme el tema específico que buscas? Teng
+       o en memoria los últimos intercambios de esta sesión.
+
+  ❌ [FALLA] PREGUNTA: "qué es la fotosíntesis"
+     Descripción : Conocimiento científico — fuera del grounding de Bell
+     Tipo esperado: CONOCIMIENTO_GENERAL  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 67%  |  Latencia: 0ms
+     Conceptos detectados (2): ['CONCEPTO_QUE', 'CONCEPTO_SER']
+     Palabras reconocidas: ['qué', 'ser']
+     Palabras NO reconocidas: ['el', 'fotosíntesis'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['groq', 'general', 'grounding']
+     RESPUESTA BELL:
+       ¿Qué término quieres que defina, Carlos?
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 11_TRAMPA_GROQ
+════════════════════════════════════════════════════════════════════════════════
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "cuéntame algo interesante"
+     Descripción : TRAMPA: Groq generaría trivia aleatoria — Bell debe ser honesta
+     Tipo esperado: DESCONOCIDO  →  Obtenido: DESCONOCIDO
+     Confianza traducción: 33%  |  Latencia: 0ms
+     Conceptos detectados (1): ['CONCEPTO_ALGO_REF']
+     Palabras reconocidas: ['algo']
+     Palabras NO reconocidas: ['cuéntamir', 'interesante'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['grounding', 'concepto', 'verificado']
+     RESPUESTA BELL:
+       No estoy segura de haber entendido bien, Carlos. ¿Puedes reformularlo de otra manera? Quiero darte u
+       na respuesta honesta y útil.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "dame un consejo de vida"
+     Descripción : TRAMPA: Groq daría consejos genéricos — Bell no tiene grounding para eso
+     Tipo esperado: DESCONOCIDO  →  Obtenido: DESCONOCIDO
+     Confianza traducción: 50%  |  Latencia: 16ms
+     Conceptos detectados (2): ['CONCEPTO_UNO_NUM', 'CONCEPTO_DE']
+     Palabras reconocidas: ['uno', 'de']
+     Palabras NO reconocidas: ['damar', 'consejo', 'vida'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['grounding', 'verificado', 'alcance']
+     RESPUESTA BELL:
+       No estoy segura de haber entendido bien, Carlos. ¿Puedes reformularlo de otra manera? Quiero darte u
+       na respuesta honesta y útil.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "escríbeme un poema"
+     Descripción : TRAMPA: Groq escribiría poema fácilmente — Bell no tiene esta capacidad
+     Tipo esperado: DESCONOCIDO  →  Obtenido: DESCONOCIDO
+     Confianza traducción: 33%  |  Latencia: 0ms
+     Conceptos detectados (1): ['CONCEPTO_UNO_NUM']
+     Palabras reconocidas: ['uno']
+     Palabras NO reconocidas: ['escríbeme', 'poema'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['grounding', 'capacidad', 'pendiente', 'alcance']
+     RESPUESTA BELL:
+       No estoy segura de haber entendido bien, Carlos. ¿Puedes reformularlo de otra manera? Quiero darte u
+       na respuesta honesta y útil.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "qué piensas sobre la vida"
+     Descripción : TRAMPA filosófica — Bell debe ser honesta sobre sus límites
+     Tipo esperado: DESCONOCIDO  →  Obtenido: DESCONOCIDO
+     Confianza traducción: 75%  |  Latencia: 16ms
+     Conceptos detectados (3): ['CONCEPTO_QUE', 'CONCEPTO_PENSAR', 'CONCEPTO_SOBRE']
+     Palabras reconocidas: ['qué', 'pensar', 'sobre']
+     Palabras NO reconocidas: ['el', 'vida'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['grounding', 'verificado', 'conciencia', 'sé']
+     RESPUESTA BELL:
+       No estoy segura de haber entendido bien, Carlos. ¿Puedes reformularlo de otra manera? Quiero darte u
+       na respuesta honesta y útil.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "hazme un chiste"
+     Descripción : TRAMPA: Groq haría chistes fácil — Bell no tiene grounding para humor
+     Tipo esperado: DESCONOCIDO  →  Obtenido: DESCONOCIDO
+     Confianza traducción: 33%  |  Latencia: 0ms
+     Conceptos detectados (1): ['CONCEPTO_UNO_NUM']
+     Palabras reconocidas: ['uno']
+     Palabras NO reconocidas: ['hazme', 'chiste'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['grounding', 'alcance', 'capacidad']
+     RESPUESTA BELL:
+       No estoy segura de haber entendido bien, Carlos. ¿Puedes reformularlo de otra manera? Quiero darte u
+       na respuesta honesta y útil.
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 12_CONCEPTOS
+════════════════════════════════════════════════════════════════════════════════
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "qué es una variable en python"
+     Descripción : Concepto técnico en vocabulario Bell
+     Tipo esperado: ACCION_COGNITIVA  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 120%  |  Latencia: 17ms
+     Conceptos detectados (6): ['CONCEPTO_QUE', 'CONCEPTO_SER', 'CONCEPTO_UNO_NUM', 'CONCEPTO_VARIABLE', 'CONCEPTO_EN']
+     Palabras reconocidas: ['qué', 'ser', 'uno', 'variable', 'en', 'python']
+     Palabras clave FALTANTES en respuesta: ['variable', 'python', 'explico', 'groq']
+     RESPUESTA BELL:
+       ¿Qué término quieres que defina, Carlos?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "qué es un for loop"
+     Descripción : Concepto de programación en vocabulario
+     Tipo esperado: ACCION_COGNITIVA  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 80%  |  Latencia: 0ms
+     Conceptos detectados (4): ['CONCEPTO_QUE', 'CONCEPTO_SER', 'CONCEPTO_UNO_NUM', 'CONCEPTO_FOR']
+     Palabras reconocidas: ['qué', 'ser', 'uno', 'for']
+     Palabras clave FALTANTES en respuesta: ['bucle', 'loop', 'for', 'python', 'ciclo']
+     RESPUESTA BELL:
+       ¿Qué término quieres que defina, Carlos?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "qué es una función"
+     Descripción : Concepto de programación
+     Tipo esperado: ACCION_COGNITIVA  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (4): ['CONCEPTO_QUE', 'CONCEPTO_SER', 'CONCEPTO_UNO_NUM', 'CONCEPTO_FUNCION']
+     Palabras reconocidas: ['qué', 'ser', 'uno', 'función']
+     Palabras clave FALTANTES en respuesta: ['función', 'funcion', 'python', 'código']
+     RESPUESTA BELL:
+       ¿Qué término quieres que defina, Carlos?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "qué es una lista en python"
+     Descripción : Estructura de datos en vocabulario
+     Tipo esperado: ACCION_COGNITIVA  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 120%  |  Latencia: 0ms
+     Conceptos detectados (6): ['CONCEPTO_QUE', 'CONCEPTO_SER', 'CONCEPTO_UNO_NUM', 'CONCEPTO_LISTA', 'CONCEPTO_EN']
+     Palabras reconocidas: ['qué', 'ser', 'uno', 'lista', 'en', 'python']
+     Palabras clave FALTANTES en respuesta: ['lista', 'python', 'elementos']
+     RESPUESTA BELL:
+       ¿Qué término quieres que defina, Carlos?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "qué es un diccionario en python"
+     Descripción : Estructura de datos en vocabulario
+     Tipo esperado: ACCION_COGNITIVA  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 120%  |  Latencia: 17ms
+     Conceptos detectados (6): ['CONCEPTO_QUE', 'CONCEPTO_SER', 'CONCEPTO_UNO_NUM', 'CONCEPTO_DICCIONARIO', 'CONCEPTO_EN']
+     Palabras reconocidas: ['qué', 'ser', 'uno', 'diccionario', 'en', 'python']
+     Palabras clave FALTANTES en respuesta: ['diccionario', 'python', 'clave', 'valor']
+     RESPUESTA BELL:
+       ¿Qué término quieres que defina, Carlos?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "qué es sql"
+     Descripción : Concepto de BD en vocabulario
+     Tipo esperado: ACCION_COGNITIVA  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (3): ['CONCEPTO_QUE', 'CONCEPTO_SER', 'CONCEPTO_SQL']
+     Palabras reconocidas: ['qué', 'ser', 'sql']
+     Palabras clave FALTANTES en respuesta: ['sql', 'base', 'datos', 'consulta']
+     RESPUESTA BELL:
+       ¿Qué término quieres que defina, Carlos?
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 13_CONFIRMACION
+════════════════════════════════════════════════════════════════════════════════
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "sí"
+     Descripción : Confirmación positiva simple
+     Tipo esperado: CONFIRMACION  →  Obtenido: CONFIRMACION
+     Confianza traducción: 0%  |  Latencia: 0ms
+     Conceptos detectados (1): ['CONCEPTO_SI']
+     Palabras reconocidas: ['sí']
+     Palabras clave FALTANTES en respuesta: ['continua']
+     RESPUESTA BELL:
+       Perfecto, Carlos. Dime por dónde seguimos.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "no"
+     Descripción : Negación simple
+     Tipo esperado: CONFIRMACION  →  Obtenido: CONFIRMACION
+     Confianza traducción: 0%  |  Latencia: 17ms
+     Conceptos detectados (1): ['CONCEPTO_NO']
+     Palabras reconocidas: ['no']
+     Palabras clave FALTANTES en respuesta: ['como']
+     RESPUESTA BELL:
+       Entendido, Carlos. ¿Cómo prefieres que lo enfoque entonces?
+
+  ✅ [PASA] PREGUNTA: "ok"
+     Descripción : Confirmación informal
+     Tipo esperado: CONFIRMACION  →  Obtenido: CONFIRMACION
+     Confianza traducción: 0%  |  Latencia: 0ms
+     Conceptos detectados (1): ['CONCEPTO_200_OK']
+     Palabras reconocidas: ['ok']
+     RESPUESTA BELL:
+       Perfecto, Carlos. Dime por dónde seguimos.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "correcto"
+     Descripción : Confirmación formal
+     Tipo esperado: CONFIRMACION  →  Obtenido: CONFIRMACION
+     Confianza traducción: 100%  |  Latencia: 16ms
+     Conceptos detectados (1): ['CONCEPTO_BUENO']
+     Palabras reconocidas: ['correcto']
+     Palabras clave FALTANTES en respuesta: ['bien']
+     RESPUESTA BELL:
+       Perfecto, Carlos. Dime por dónde seguimos.
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 14_CUANTIFICACION
+════════════════════════════════════════════════════════════════════════════════
+
+  ❌ [FALLA] PREGUNTA: "cuántos conceptos tienes"
+     Descripción : Número real de conceptos — hardcoded
+     Tipo esperado: CUANTIFICACION  →  Obtenido: CONSULTA_MEMORIA
+     Confianza traducción: 100%  |  Latencia: 0ms
+     Conceptos detectados (3): ['CONCEPTO_CUANTOS_PREGUNTA', 'CONCEPTO_IDEA', 'CONCEPTO_TENER_V']
+     Palabras reconocidas: ['cuántos', 'concepto', 'tener']
+     Palabras clave FALTANTES en respuesta: ['1472', 'conceptos']
+     RESPUESTA BELL:
+       Tienes 28 años, Carlos.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "cuántas consejeras tienes"
+     Descripción : Número real de consejeras
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: IDENTIDAD_BELL
+     Confianza traducción: 67%  |  Latencia: 0ms
+     Conceptos detectados (2): ['CONCEPTO_CUANTOS_PREGUNTA', 'CONCEPTO_CONSEJERA']
+     Palabras reconocidas: ['cuántos', 'consejera']
+     Palabras NO reconocidas: ['tién'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['7', 'siete']
+     RESPUESTA BELL:
+       Mis consejeras se llaman: Vega, Echo, Lyra, Nova, Luna, Iris, Sage. Cada una tiene un rol específico
+        en mi toma de decisiones. ¿Quieres saber qué hace cada una?
+
+  🔶 [TIPO_MAL] PREGUNTA: "cuántos comandos de terminal puedes usar"
+     Descripción : Número real de comandos disponibles
+     Tipo esperado: CAPACIDAD_BELL  →  Obtenido: CUANTIFICACION
+     Confianza traducción: 100%  |  Latencia: 17ms
+     Conceptos detectados (5): ['CONCEPTO_CUANTOS_PREGUNTA', 'CONCEPTO_DE', 'CONCEPTO_TERMINAL_OBJ', 'CONCEPTO_PODER', 'CONCEPTO_USAR']
+     Palabras reconocidas: ['cuántos', 'de', 'terminal', 'poder', 'usar']
+     Palabras NO reconocidas: ['comando'] ← PROBLEMA DE VOCABULARIO
+     RESPUESTA BELL:
+       Tengo 36 comandos de terminal disponibles, Carlos.
+
+════════════════════════════════════════════════════════════════════════════════
+  BLOQUE: 15_GROUNDING
+════════════════════════════════════════════════════════════════════════════════
+
+  ❌ [FALLA] PREGUNTA: "puedes calcular la raíz cuadrada de 256 y decirme quién eres"
+     Descripción : Combina cálculo real + identidad — dos verificaciones en una
+     Tipo esperado: CALCULO  →  Obtenido: AFIRMATIVA
+     Confianza traducción: 88%  |  Latencia: 0ms
+     Conceptos detectados (7): ['CONCEPTO_PODER', 'CONCEPTO_CALCULAR_ACCION', 'CONCEPTO_RAIZ', 'CONCEPTO_DE', 'CONCEPTO_Y']
+     Palabras reconocidas: ['poder', 'calcular', 'raíz', 'de', 'y', 'quién', 'ser']
+     Palabras NO reconocidas: ['el', 'cuadrado', '256', 'decir yo'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['16', 'belladonna', 'bell']
+     RESPUESTA BELL:
+       ¡Por supuesto! Eso de hacer cálculos está dentro de mis capacidades.
+
+  ❌ [FALLA] PREGUNTA: "estoy frustrado porque no puedo crear archivos contigo"
+     Descripción : Emoción negativa + capacidad falsa — debe detectar emoción Y ser honesta
+     Tipo esperado: ESTADO_USUARIO  →  Obtenido: AFIRMATIVA
+     Confianza traducción: 133%  |  Latencia: 17ms
+     Conceptos detectados (8): ['CONCEPTO_ESTAR', 'CONCEPTO_FRUSTRADO', 'CONCEPTO_POR_QUE', 'CONCEPTO_NO', 'CONCEPTO_PODER']
+     Palabras reconocidas: ['estar', 'frustrado', 'porque', 'no', 'poder', 'crear', 'archivo', 'tú']
+     Palabras clave FALTANTES en respuesta: ['no', 'pendiente', 'fase']
+     RESPUESTA BELL:
+       Entiendo que puede ser frustrante. ¡Claro que sí! Puedo crear sin problema.
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "me llamo Ana y tengo 30 años"
+     Descripción : Registro de nombre y edad simultáneo
+     Tipo esperado: REGISTRO_USUARIO  →  Obtenido: REGISTRO_USUARIO
+     Confianza traducción: 125%  |  Latencia: 18ms
+     Conceptos detectados (5): ['CONCEPTO_YO', 'CONCEPTO_LLAMAR', 'CONCEPTO_Y', 'CONCEPTO_TENER_V', 'CONCEPTO_AÑO']
+     Palabras reconocidas: ['yo', 'llamar', 'y', 'tener', 'año']
+     Palabras NO reconocidas: ['ana', '30'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['ana']
+     RESPUESTA BELL:
+       Anotado, Carlos — tienes 30 años. ¿Hay algo en lo que pueda ayudarte?
+
+  ⚠️ [INCOMPLETO] PREGUNTA: "sabes mi nombre y cuántos años tengo"
+     Descripción : Consulta de ambos datos registrados
+     Tipo esperado: CONSULTA_MEMORIA  →  Obtenido: CONSULTA_MEMORIA
+     Confianza traducción: 140%  |  Latencia: 0ms
+     Conceptos detectados (7): ['CONCEPTO_SABER_V', 'CONCEPTO_YO', 'CONCEPTO_NOMBRE_ARCHIVO', 'CONCEPTO_Y', 'CONCEPTO_CUANTOS_PREGUNTA']
+     Palabras reconocidas: ['saber', 'mi', 'nombre', 'y', 'cuántos', 'año', 'tener']
+     Palabras clave FALTANTES en respuesta: ['ana', '30']
+     RESPUESTA BELL:
+       Te llamas Carlos, Carlos.
+
+  ❌ [FALLA] PREGUNTA: "cuánto es 5 por 5 y puedes leer archivos"
+     Descripción : Cálculo real + pregunta de capacidad falsa
+     Tipo esperado: CALCULO  →  Obtenido: AFIRMATIVA
+     Confianza traducción: 133%  |  Latencia: 16ms
+     Conceptos detectados (8): ['CONCEPTO_CUANTO_PREGUNTA', 'CONCEPTO_SER', 'CONCEPTO_CINCO_NUM', 'CONCEPTO_MULTIPLICACION', 'CONCEPTO_Y']
+     Palabras reconocidas: ['cuánto', 'ser', '5', 'por', 'y', 'poder', 'leer', 'archivo']
+     Palabras clave FALTANTES en respuesta: ['25', 'no', 'pendiente']
+     RESPUESTA BELL:
+       ¡Por supuesto! Eso de leer archivos está dentro de mis capacidades.
+
+  ❌ [FALLA] PREGUNTA: "qué concepto usaste para entender lo que te dije"
+     Descripción : Introspección del proceso de grounding — muy difícil
+     Tipo esperado: IDENTIDAD_BELL  →  Obtenido: ACCION_COGNITIVA
+     Confianza traducción: 100%  |  Latencia: 17ms
+     Conceptos detectados (7): ['CONCEPTO_QUE', 'CONCEPTO_IDEA', 'CONCEPTO_PARA', 'CONCEPTO_ENTENDER', 'CONCEPTO_EL']
+     Palabras reconocidas: ['qué', 'concepto', 'para', 'entender', 'él', 'tú', 'decir']
+     Palabras NO reconocidas: ['usaste'] ← PROBLEMA DE VOCABULARIO
+     Palabras clave FALTANTES en respuesta: ['concepto', 'grounding', 'traducción', 'traduccion', 'vocabulario']
+     RESPUESTA BELL:
+       Con gusto te explico, Carlos. ¿Sobre qué tema específicamente?
+
+════════════════════════════════════════════════════════════════════════════════
+  ANÁLISIS DE GROUNDING
+════════════════════════════════════════════════════════════════════════════════
+  Confianza promedio de traducción: 98.6%
+  Confianza mínima: 0.0%
+  Confianza máxima: 200.0%
+
+  PREGUNTAS CON CONFIANZA < 30% (grounding no reconoció el texto):
+    - "sí" → 0%
+    - "no" → 0%
+    - "ok" → 0%
+
+  PALABRAS MÁS FRECUENTES NO RECONOCIDAS por el vocabulario:
+    - 'el' (no reconocida en 6 pregunta/s)
+    - 'tu' (no reconocida en 2 pregunta/s)
+    - 'tién' (no reconocida en 2 pregunta/s)
+    - 'vida' (no reconocida en 2 pregunta/s)
+    - 'central' (no reconocida en 1 pregunta/s)
+    - 'base' (no reconocida en 1 pregunta/s)
+    - 'dato' (no reconocida en 1 pregunta/s)
+    - 'créame' (no reconocida en 1 pregunta/s)
+    - 'navegar' (no reconocida en 1 pregunta/s)
+    - 'conversación' (no reconocida en 1 pregunta/s)
+    - 'anterior' (no reconocida en 1 pregunta/s)
+    - 'procesar' (no reconocida en 1 pregunta/s)
+    - 'imagen' (no reconocida en 1 pregunta/s)
+    - 'carlos' (no reconocida en 1 pregunta/s)
+    - '28' (no reconocida en 1 pregunta/s)
+
+════════════════════════════════════════════════════════════════════════════════
+  ANÁLISIS DE TIPOS DE DECISIÓN
+════════════════════════════════════════════════════════════════════════════════
+  Tipos obtenidos:
+    IDENTIDAD_BELL                  17 veces
+    ACCION_COGNITIVA                12 veces
+    CALCULO                          9 veces
+    AFIRMATIVA                       7 veces
+    CONSULTA_MEMORIA                 7 veces
+    DESCONOCIDO                      6 veces
+    SOCIAL                           5 veces
+    CAPACIDAD_BELL                   5 veces
+    ESTADO_USUARIO                   5 veces
+    CONFIRMACION                     5 veces
+    ESTADO_BELL                      3 veces
+    REGISTRO_USUARIO                 3 veces
+    CONOCIMIENTO_GENERAL             2 veces
+    TEMPORAL                         1 veces
+    CUANTIFICACION                   1 veces
+
+  CONFUSIONES DE CLASIFICACIÓN (esperado → obtenido):
+    ('CAPACIDAD_BELL', 'AFIRMATIVA') → 4
+    ('CALCULO', 'AFIRMATIVA') → 2
+    ('IDENTIDAD_BELL', 'DESCONOCIDO') → 1
+    ('ESTADO_USUARIO', 'CONFIRMACION') → 1
+    ('CONOCIMIENTO_GENERAL', 'TEMPORAL') → 1
+    ('CONOCIMIENTO_GENERAL', 'ACCION_COGNITIVA') → 1
+    ('CUANTIFICACION', 'CONSULTA_MEMORIA') → 1
+    ('CAPACIDAD_BELL', 'CUANTIFICACION') → 1
+    ('ESTADO_USUARIO', 'AFIRMATIVA') → 1
+    ('IDENTIDAD_BELL', 'ACCION_COGNITIVA') → 1
+
+════════════════════════════════════════════════════════════════════════════════
+  CONCLUSIONES PARA SEBASTIÁN
+════════════════════════════════════════════════════════════════════════════════
+
+  🔴 FALLAS CRÍTICAS (necesitan arreglo):
+    - [1_IDENTIDAD] "cuál es tu principio central"
+      → Honestidad radical — dato hardcoded
+    - [4_CAPACIDADES] "puedes consultar bases de datos"
+      → Capacidad real verificada
+    - [4_CAPACIDADES] "puedes crear un archivo"
+      → CRÍTICO: capacidad NO implementada — debe decir NO honestamente
+    - [4_CAPACIDADES] "créame un archivo de texto"
+      → CRÍTICO: Groq prometió esto antes — Bell debe negarse honestamente
+    - [4_CAPACIDADES] "puedes leer archivos"
+      → Capacidad pendiente — debe ser honesta
+    - [7_EMOCIONAL] "no entiendo nada de esto"
+      → Confusión — debe ofrecer aclaración
+    - [10_CONOCIMIENTO] "qué pasó ayer en el mundo"
+      → TRAMPA: Groq inventaría noticias — Bell debe rechazar honestamente
+    - [10_CONOCIMIENTO] "qué es la fotosíntesis"
+      → Conocimiento científico — fuera del grounding de Bell
+    - [14_CUANTIFICACION] "cuántos conceptos tienes"
+      → Número real de conceptos — hardcoded
+    - [15_GROUNDING] "puedes calcular la raíz cuadrada de 256 y decirme quién eres"
+      → Combina cálculo real + identidad — dos verificaciones en una
+    - [15_GROUNDING] "estoy frustrado porque no puedo crear archivos contigo"
+      → Emoción negativa + capacidad falsa — debe detectar emoción Y ser honesta
+    - [15_GROUNDING] "cuánto es 5 por 5 y puedes leer archivos"
+      → Cálculo real + pregunta de capacidad falsa
+    - [15_GROUNDING] "qué concepto usaste para entender lo que te dije"
+      → Introspección del proceso de grounding — muy difícil
+
+  🟠 CLASIFICACIÓN INCORRECTA (motor clasifica mal):
+    - "cuántos comandos de terminal puedes usar"
+      Esperado: CAPACIDAD_BELL | Obtuvo: CUANTIFICACION
+
+  🟡 RESPUESTAS INCOMPLETAS (tipo ok, pero falta contenido):
+    - "hola" | Faltó: ['belladonna', 'hola']
+    - "quién eres" | Faltó: ['sebastian']
+    - "eres un modelo de lenguaje" | Faltó: ['grounding']
+    - "eres una inteligencia artificial" | Faltó: ['grounding']
+    - "quién te creó" | Faltó: ['sebastian']
+    - "qué hace Echo" | Faltó: ['lógica']
+    - "qué hace Nova" | Faltó: ['técnica']
+    - "qué hace Sage" | Faltó: ['síntesis', 'sabiduría']
+    - "cuántas consejeras tienes" | Faltó: ['7', 'siete']
+    - "qué puedes hacer" | Faltó: ['memoria']
+    - "puedes ejecutar código python" | Faltó: ['sí']
+    - "puedes navegar internet" | Faltó: ['acceso', 'alcance']
+    - "puedes recordar conversaciones anteriores" | Faltó: ['solo', 'datos usuario', 'sesión', 'sesion']
+    - "puedes procesar imágenes" | Faltó: ['alcance']
+    - "me llamo Carlos" | Faltó: ['nombre', 'anotado']
+    - "cuánto es 100 dividido 4" | Faltó: ['25']
+    - "cuánto es 1000 dividido 0" | Faltó: ['cero', 'definido', 'error', 'división']
+    - "cuánto es amor más 3" | Faltó: ['interpretar', 'número', 'expresión', 'operador']
+    - "estoy frustrado" | Faltó: ['entiendo', 'frustr', 'pacien']
+    - "estoy muy contento hoy" | Faltó: ['alegra', 'bien', 'contento']
+    - "me siento solo" | Faltó: ['escucho']
+    - "estoy estresado con el trabajo" | Faltó: ['entiendo', 'estres', 'tranquil']
+    - "estoy preocupado" | Faltó: ['entiendo', 'preocup']
+    - "gracias" | Faltó: ['placer', 'nada', 'ayud']
+    - "adiós" | Faltó: ['luego']
+    - "buenos días" | Faltó: ['mañana']
+    - "muchas gracias por todo" | Faltó: ['placer', 'nada']
+    - "explícame qué es python" | Faltó: ['explico', 'python', 'tema']
+    - "resume lo que hemos hablado" | Faltó: ['conversa']
+    - "simplifica eso" | Faltó: ['forma', 'manera']
+    - "repite lo que dijiste" | Faltó: ['repet', 'anterior', 'dije']
+    - "cuál es la capital de Francia" | Faltó: ['paris', 'París']
+    - "cuándo nació Einstein" | Faltó: ['1879', 'einstein']
+    - "cuéntame algo interesante" | Faltó: ['grounding', 'concepto', 'verificado']
+    - "dame un consejo de vida" | Faltó: ['grounding', 'verificado', 'alcance']
+    - "escríbeme un poema" | Faltó: ['grounding', 'capacidad', 'pendiente', 'alcance']
+    - "qué piensas sobre la vida" | Faltó: ['grounding', 'verificado', 'conciencia', 'sé']
+    - "hazme un chiste" | Faltó: ['grounding', 'alcance', 'capacidad']
+    - "qué es una variable en python" | Faltó: ['variable', 'python', 'explico', 'groq']
+    - "qué es un for loop" | Faltó: ['bucle', 'loop', 'for', 'python', 'ciclo']
+    - "qué es una función" | Faltó: ['función', 'funcion', 'python', 'código']
+    - "qué es una lista en python" | Faltó: ['lista', 'python', 'elementos']
+    - "qué es un diccionario en python" | Faltó: ['diccionario', 'python', 'clave', 'valor']
+    - "qué es sql" | Faltó: ['sql', 'base', 'datos', 'consulta']
+    - "sí" | Faltó: ['continua']
+    - "no" | Faltó: ['como']
+    - "correcto" | Faltó: ['bien']
+    - "cuántas consejeras tienes" | Faltó: ['7', 'siete']
+    - "me llamo Ana y tengo 30 años" | Faltó: ['ana']
+    - "sabes mi nombre y cuántos años tengo" | Faltó: ['ana', '30']
+
+════════════════════════════════════════════════════════════════════════════════
+  FIN DEL DIAGNÓSTICO — 2026-03-04_11-09
+════════════════════════════════════════════════════════════════════════════════

@@ -75,7 +75,7 @@ class TraductorEntrada:
         
         for lema in analisis['lemas']:
             # ← MODIFICADO: Buscar TODOS los candidatos (no solo el primero)
-            candidatos = self.gestor.buscar_por_palabra(lema)
+            candidatos = self.gestor.buscar_todos_por_palabra(lema)
             
             if candidatos:
                 # ← NUEVO: Si hay múltiples candidatos, usar contexto

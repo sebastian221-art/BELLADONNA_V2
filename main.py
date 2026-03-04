@@ -1,22 +1,59 @@
 """
-Belladonna v4.0 — FASE 4A COMPLETA
+Belladonna v5.0 — FASE 4A COMPLETA
 
 ARQUITECTURA MENTE PURA:
-    Bell (Python)  = Razona con 1,483 conceptos verificados
+    Bell (Python)  = Razona con conceptos verificados
     Groq  (API)    = SOLO embellece texto
     Echo  (Python) = Verifica que Groq no invente nada
 
-FIX v3 CRÍTICO:
-    Memoria compartida inyectada al generador en iniciar_sesion().
-    Sin esto: el generador crea su propia instancia de GestorMemoria
-    → dos objetos separados en RAM → Groq nunca ve el historial → inventa libremente.
-    Con esto: generador.memoria = self.gestor_memoria → una sola instancia.
+CAMBIOS v5 sobre v4:
+═══════════════════════════════════════════════════════════════════════
+
+1. MOTOR CONECTADO A MEMORIA (FIX ARQUITECTURAL CRÍTICO)
+   ──────────────────────────────────────────────────────
+   self.motor.gestor_memoria = self.gestor_memoria
+
+   Por qué importa: el motor v5 guarda datos de REGISTRO_USUARIO
+   DIRECTAMENTE en memoria antes de que llegue al generador.
+   Sin esta línea, el dato se extrae pero nunca se persiste.
+
+2. IDENTIDAD_BELL CARGADA Y MOSTRADA EN BANNER
+   ─────────────────────────────────────────────
+   Importa identidad_bell.py para mostrar el nombre correcto
+   en el saludo inicial y en el banner.
+
+3. NOMBRES PERSONALIZADOS (integración con identidad_bell.py)
+   ─────────────────────────────────────────────────────────
+   El saludo inicial usa obtener_nombre_a_usar() del gestor de memoria
+   para saber si decir "Sebas" o "Sebastián" según el tipo de momento.
+
+4. NUEVO COMANDO 'identidad'
+   ──────────────────────────
+   Muestra PRINCIPIO_CENTRAL, VOZ y NARRATIVA_PROPIA de Bell.
+
+5. NUEVO COMANDO 'personas'
+   ─────────────────────────
+   Muestra los modelos mentales de personas que Bell ha construido
+   (Sara, etc.) usando los nuevos métodos de GestorMemoria v5.
+
+6. _cmd_memoria() ENRIQUECIDO
+   ────────────────────────────
+   Muestra además temas abiertos y predicciones de Bell
+   (nuevos campos de GestorMemoria v5).
+
+7. VERSION STRING actualizado a v5.0
+
+CAMBIOS v4 PRESERVADOS:
+- FIX v3: memoria compartida inyectada al generador en iniciar_sesion()
+- Todos los módulos obligatorios y opcionales sin cambios
+- Todos los comandos existentes sin cambios en comportamiento
 
 USO:
     python main.py              → Sin Groq (honesta, simbólica)
     python main.py --use-groq   → Con Groq (honesta, natural)
-    python main.py -v           → Verbose (metadata de cada paso)
+    python main.py -v           → Verbose
     python main.py --use-groq -v
+═══════════════════════════════════════════════════════════════════════
 """
 
 import sys
@@ -32,7 +69,6 @@ logging.basicConfig(level=logging.WARNING, format="%(levelname)s [%(name)s] %(me
 for _lib in ("httpx", "groq", "openai", "urllib3"):
     logging.getLogger(_lib).setLevel(logging.ERROR)
 
-
 # ─── Colores terminal ─────────────────────────────────────────────────────────
 BOLD  = "\033[1m"
 CYAN  = "\033[96m"
@@ -42,11 +78,27 @@ RED   = "\033[91m"
 DIM   = "\033[2m"
 RST   = "\033[0m"
 
+# ─── Carga identidad_bell.py (opcional — no aborta si no existe) ──────────────
+try:
+    from identidad_bell import (
+        PRINCIPIO_CENTRAL,
+        NARRATIVA_PROPIA,
+        VOZ_BELL,
+        NOMBRES_SEBASTIAN,
+        obtener_nombre,
+    )
+    _IDENTIDAD_OK = True
+except ImportError:
+    _IDENTIDAD_OK = False
+    PRINCIPIO_CENTRAL = "solo afirmo lo que puedo ejecutar o verificar"
+    NARRATIVA_PROPIA  = ""
+    VOZ_BELL          = {}
+    NOMBRES_SEBASTIAN = {}
+
 
 # ─── Helpers de importación ───────────────────────────────────────────────────
 
 def _importar(ruta: str, clase: str):
-    """Importa una clase; devuelve None si el módulo no existe."""
     try:
         m = __import__(ruta, fromlist=[clase])
         return getattr(m, clase)
@@ -55,7 +107,6 @@ def _importar(ruta: str, clase: str):
 
 
 def _importar_obligatorio(ruta: str, clase: str):
-    """Importa una clase crítica; aborta con mensaje claro si falla."""
     cls = _importar(ruta, clase)
     if cls is None:
         print(f"\n{RED}✗ No se pudo cargar {ruta}.{clase}{RST}")
@@ -70,26 +121,27 @@ def _importar_obligatorio(ruta: str, clase: str):
 
 class Belladonna:
     """
-    Belladonna v4.0 — Sistema Conversacional Completo.
+    Belladonna v5.0 — Sistema Conversacional Completo.
 
     Flujo por mensaje:
         1. TraductorEntrada   → español → ConceptosAnclados
-        2. MotorRazonamiento  → clasificar intención → Decision + hechos reales
-        3. Consejeras deliberan (Vega puede vetar cualquier decisión)
+        2. MotorRazonamiento  → clasificar intención → Decision + hechos
+           · v5: el motor actualiza memoria de estado en tiempo real
+           · v5: para REGISTRO_USUARIO guarda el dato en memoria ANTES del generador
+        3. Consejeras deliberan (Vega puede vetar)
         4. GeneradorSalida    → Decision → español natural (Groq + Echo si activo)
-        5. GestorMemoria      → persiste historial de la sesión
-
-    Módulos opcionales (el sistema funciona sin ellos):
-        bucles/, aprendizaje/, grounding/, operaciones/, base_datos/
+           · v5: _TIPOS_CONVERSACIONALES incluye los 5 tipos nuevos
+           · v5: CALCULO se resuelve en Python sin Groq
+        5. GestorMemoria      → persiste historial, episodios, personas, predicciones
     """
 
     def __init__(self, usar_groq: bool = False, verbose: bool = False):
-        self.usar_groq       = usar_groq
-        self.verbose         = verbose
-        self.turnos          = 0
-        self._fase2_activa   = False
+        self.usar_groq     = usar_groq
+        self.verbose       = verbose
+        self.turnos        = 0
+        self._fase2_activa = False
         self._emociones: dict = {}
-        self.id_sesion       = None
+        self.id_sesion     = None
 
         self._banner()
 
@@ -115,9 +167,9 @@ class Belladonna:
 
         # ── Razonamiento ──────────────────────────────────────────────────────
         self.motor = MotorRazonamiento()
-        # Inyectar vocabulario para conteos dinámicos en _hechos_identidad()
         self.motor.gestor_vocabulario = self.gestor_vocab
-        print(f"  {GREEN}✅ Motor:{RST}         razonamiento v3")
+        # ── v5: gestor_memoria se inyecta en iniciar_sesion() (después de crearlo)
+        print(f"  {GREEN}✅ Motor:{RST}         razonamiento v5")
 
         # ── Consejeras ────────────────────────────────────────────────────────
         self._cargar_consejeras()
@@ -130,6 +182,12 @@ class Belladonna:
         # ── Memoria ───────────────────────────────────────────────────────────
         self.gestor_memoria = GestorMemoria()
         print(f"  {GREEN}✅ Memoria:{RST}       persistente lista")
+
+        # ── identidad_bell.py ─────────────────────────────────────────────────
+        if _IDENTIDAD_OK:
+            print(f"  {GREEN}✅ Identidad:{RST}     Bell cargada")
+        else:
+            print(f"  {YELL}⚠  Identidad:{RST}     identidad_bell.py no encontrado")
 
         # ── Módulos opcionales ────────────────────────────────────────────────
         self._cargar_opcionales()
@@ -145,18 +203,20 @@ class Belladonna:
     # ──────────────────────────────────────────────────────────────────────────
 
     def _banner(self):
+        version = "v5.0"
+        nombre  = "Belladonna" if not _IDENTIDAD_OK else "Belladonna (Bell)"
         print()
         print(f"  {'═'*58}")
-        print(f"  {BOLD}{CYAN}{'🌺  BELLADONNA  v4.0  🌺':^58}{RST}")
+        print(f"  {BOLD}{CYAN}{f'🌺  {nombre}  {version}  🌺':^58}{RST}")
         print(f"  {'Sistema Conversacional — FASE 4A':^58}")
-        print(f"  {'1,483 conceptos  ·  Groq Natural  ·  Echo':^58}")
+        print(f"  {f'{PRINCIPIO_CENTRAL[:54]}':^58}")
         print(f"  {'═'*58}")
         print()
         print("  Iniciando sistemas...")
         print()
 
     def _total_conceptos(self) -> int:
-        for metodo in ("total_conceptos", ):
+        for metodo in ("total_conceptos",):
             if hasattr(self.gestor_vocab, metodo):
                 try:
                     return getattr(self.gestor_vocab, metodo)()
@@ -165,10 +225,9 @@ class Belladonna:
         try:
             return len(self.gestor_vocab.obtener_todos())
         except Exception:
-            return 1483
+            return 1472
 
     def _cargar_consejeras(self):
-        """Carga el gestor de consejeras con fallbacks en cascada."""
         self.gestor_consejeras = None
         self.consejeras        = []
 
@@ -184,13 +243,12 @@ class Belladonna:
                 if self.verbose:
                     print(f"  {YELL}⚠ GestorConsejeras: {e}{RST}")
 
-        # Fallback: solo Vega
         Vega = (_importar("consejeras.vega.vega", "Vega")
                 or _importar("consejeras.vega", "Vega"))
         if Vega:
             try:
                 self.consejeras = [Vega()]
-                print(f"  {YELL}⚠  Consejeras:{RST}    solo Vega (guardiana de principios)")
+                print(f"  {YELL}⚠  Consejeras:{RST}    solo Vega")
                 return
             except Exception:
                 pass
@@ -198,7 +256,6 @@ class Belladonna:
         print(f"  {YELL}⚠  Consejeras:{RST}    no disponibles")
 
     def _cargar_opcionales(self):
-        """Carga módulos opcionales de forma tolerante."""
         print()
         print("  Módulos opcionales:")
 
@@ -252,7 +309,18 @@ class Belladonna:
     # ─────────────────────────────────────────────────────────────────────────
 
     def iniciar_sesion(self):
-        """Arranca la sesión e inyecta la memoria compartida al generador."""
+        """
+        Arranca la sesión e inyecta la memoria compartida a motor y generador.
+
+        INYECCIONES CRÍTICAS v5:
+            generador.memoria  = self.gestor_memoria  (FIX v3 — preservado)
+            motor.gestor_memoria = self.gestor_memoria  (NUEVO v5)
+
+        Sin la segunda inyección:
+            - REGISTRO_USUARIO: el motor extrae el nombre pero no lo guarda
+            - CONSULTA_MEMORIA: el motor busca en una instancia vacía
+            - actualizar_estado_sesion(): llama sobre None → silencioso
+        """
         if self._fase2_activa:
             return
 
@@ -264,19 +332,13 @@ class Belladonna:
         except Exception:
             self.id_sesion = datetime.now().isoformat()
 
-        # ══════════════════════════════════════════════════════════════════════
-        # FIX v3 CRÍTICO — INYECCIÓN DE MEMORIA COMPARTIDA
-        # ══════════════════════════════════════════════════════════════════════
-        # PROBLEMA: GeneradorSalida._obtener_memoria() crea su propio
-        # GestorMemoria en la primera llamada → dos instancias en RAM → el
-        # generador nunca ve el nombre ni historial registrado aquí → Groq
-        # recibe contexto vacío → inventa libremente.
-        #
-        # SOLUCIÓN: apuntar generador.memoria a la instancia compartida ANTES
-        # del primer mensaje. Ambos leen y escriben en el mismo objeto.
-        # ══════════════════════════════════════════════════════════════════════
+        # ── FIX v3: memoria compartida → generador ────────────────────────────
         self.generador.memoria = self.gestor_memoria
-        print(f"  {GREEN}✅{RST} Memoria compartida inyectada al generador")
+        print(f"  {GREEN}✅{RST} Memoria inyectada al generador")
+
+        # ── NUEVO v5: memoria compartida → motor ──────────────────────────────
+        self.motor.gestor_memoria = self.gestor_memoria
+        print(f"  {GREEN}✅{RST} Memoria inyectada al motor")
 
         if self.gestor_bucles:
             try:
@@ -297,7 +359,6 @@ class Belladonna:
         print()
 
     def finalizar_sesion(self):
-        """Detiene subsistemas y guarda la sesión."""
         if not self._fase2_activa:
             return
 
@@ -366,8 +427,20 @@ class Belladonna:
         """
         Procesa un mensaje y retorna la respuesta de Bell.
 
-        Flujo completo:
-            Emoción → Traducción → Razonamiento → Consejeras → Generación → Memoria
+        FLUJO v5:
+            0. Emoción detectada en main
+            1. Traducción: español → ConceptosAnclados
+            2. Razonamiento:
+               - clasificar_intencion()
+               - _actualizar_estado_memoria() → GestorMemoria._sesion sincronizado
+               - construir_hechos()
+               - para REGISTRO_USUARIO: _guardar_dato_en_memoria() antes de retornar
+            3. Consejeras (Vega puede vetar)
+            4. Generación:
+               - CALCULO: Python directo, sin Groq
+               - otros: fallback conversacional o Groq + Echo
+            5. Registro operacional (conceptos, decisión, episodio)
+            6. Aprendizaje en tiempo real
         """
         try:
             v = self.verbose
@@ -392,13 +465,19 @@ class Belladonna:
                     print(f"     • {c.id}  g={c.confianza_grounding:.2f}")
 
             # 2 · Razonamiento
+            # v5: el motor ya actualiza memoria de estado y guarda datos verificados
             decision = self.motor.razonar(traduccion)
             if v:
                 print(f"\n  🧠 Decisión: {decision.tipo.name}  "
                       f"certeza={decision.certeza:.0%}  "
                       f"ejecutar={decision.puede_ejecutar}")
+                if decision.hechos_reales:
+                    tipo_r = decision.hechos_reales.get("tipo_respuesta", "")
+                    if tipo_r in ("REGISTRO_USUARIO", "CONSULTA_MEMORIA"):
+                        print(f"     dato_tipo={decision.hechos_reales.get('dato_tipo', '')}")
+                        print(f"     dato_valor={decision.hechos_reales.get('dato_valor', '')}")
 
-            # 3 · Consejeras (todas deliberan; Vega puede vetar)
+            # 3 · Consejeras
             contexto = {
                 "traduccion":       traduccion,
                 "emocion_usuario":  emocion,
@@ -420,7 +499,7 @@ class Belladonna:
                 except Exception:
                     pass
 
-            # 4 · Generación (Groq + Echo si activo, simbólico si no)
+            # 4 · Generación
             if v:
                 modo = "GROQ+ECHO" if self.usar_groq else "SIMBÓLICO"
                 print(f"\n  🎨 Generando [{modo}]...")
@@ -432,7 +511,6 @@ class Belladonna:
                 print(f"  → \"{preview}\"")
 
             # 5 · Registro operacional en memoria
-            # (el generador ya registra usuario + bell en _generar_conversacional)
             if self._fase2_activa:
                 try:
                     for c in traduccion.get("conceptos", [])[:3]:
@@ -445,6 +523,24 @@ class Belladonna:
                         "certeza":        decision.certeza,
                         "emocion":        emocion,
                     })
+
+                    # v5: registrar episodio narrativo para tipos importantes
+                    _TIPOS_EPISODIO = {
+                        "REGISTRO_USUARIO", "CONSULTA_MEMORIA",
+                        "IDENTIDAD_BELL", "ESTADO_USUARIO",
+                    }
+                    tipo_nombre = decision.tipo.name
+                    if tipo_nombre in _TIPOS_EPISODIO and hasattr(self.gestor_memoria, "registrar_episodio"):
+                        try:
+                            # ✅ DESPUÉS (kwargs correctos):
+                            self.gestor_memoria.registrar_episodio(
+                                resumen                  = mensaje[:120],
+                                tema_principal           = tipo_nombre,
+                                estado_emocional_usuario = emocion or "neutral",
+                            )
+                        except Exception:
+                            pass
+
                 except Exception:
                     pass
 
@@ -459,6 +555,7 @@ class Belladonna:
                 except Exception:
                     pass
 
+            self.turnos += 1
             return respuesta
 
         except Exception as e:
@@ -472,10 +569,9 @@ class Belladonna:
     # ─────────────────────────────────────────────────────────────────────────
 
     def loop(self):
-        """Loop conversacional principal."""
         self.iniciar_sesion()
 
-        # Saludo inicial personalizado
+        # ── Saludo inicial personalizado ──────────────────────────────────────
         nombre = ""
         try:
             nombre = self.gestor_memoria.el_usuario_se_llama() or ""
@@ -483,14 +579,24 @@ class Belladonna:
             pass
 
         hora = datetime.now().hour
+
+        # v5: usar identidad_bell para nombre de Bell si está disponible
+        if _IDENTIDAD_OK and nombre:
+            try:
+                nombre_bell = obtener_nombre("estandar", nombre)
+            except Exception:
+                nombre_bell = "Bell"
+        else:
+            nombre_bell = "Bell"
+
         if nombre:
             saludo = f"¡Hola de nuevo, {nombre}! Aquí estoy. ¿En qué te ayudo?"
         elif 5 <= hora < 12:
-            saludo = "¡Buenos días! Soy Bell. ¿Cómo te llamas y en qué te ayudo?"
+            saludo = f"¡Buenos días! Soy {nombre_bell}. ¿Cómo te llamas y en qué te ayudo?"
         elif 12 <= hora < 19:
-            saludo = "¡Buenas tardes! Soy Bell. ¿En qué puedo ayudarte?"
+            saludo = f"¡Buenas tardes! Soy {nombre_bell}. ¿En qué puedo ayudarte?"
         else:
-            saludo = "¡Buenas noches! Soy Bell. ¿En qué puedo ayudarte?"
+            saludo = f"¡Buenas noches! Soy {nombre_bell}. ¿En qué puedo ayudarte?"
 
         print(f"🌺 Bell: {saludo}")
         print(f"   {DIM}(Escribe 'help' para comandos, 'salir' para terminar){RST}")
@@ -512,17 +618,21 @@ class Belladonna:
                     break
 
                 if el == "help":
-                    self._cmd_help();   continue
+                    self._cmd_help();      continue
                 if el == "stats":
-                    self._cmd_stats();  continue
+                    self._cmd_stats();     continue
                 if el == "groq":
-                    self._cmd_groq();   continue
+                    self._cmd_groq();      continue
                 if el == "memoria":
-                    self._cmd_memoria(); continue
+                    self._cmd_memoria();   continue
                 if el == "emociones":
                     self._cmd_emociones(); continue
                 if el == "toggle_groq":
                     self._cmd_toggle_groq(); continue
+                if el == "identidad":
+                    self._cmd_identidad(); continue
+                if el == "personas":
+                    self._cmd_personas();  continue
                 if el == "verbose":
                     self.verbose = not self.verbose
                     print(f"   {YELL}Verbose: {'ON 🔍' if self.verbose else 'OFF'}{RST}\n")
@@ -530,7 +640,6 @@ class Belladonna:
 
                 # ── Mensaje normal ────────────────────────────────────────────
                 respuesta = self.procesar(entrada)
-                self.turnos += 1
                 print(f"🌺 Bell: {respuesta}")
                 print()
 
@@ -549,16 +658,18 @@ class Belladonna:
     def _cmd_help(self):
         print(f"""
   {BOLD}Comandos:{RST}
-  {'─'*38}
+  {'─'*42}
   stats        Estadísticas del sistema
   groq         Estado de Groq y Echo
   memoria      Lo que Bell recuerda de ti
   emociones    Emociones detectadas en la sesión
-  toggle_groq  Activar/desactivar Groq en caliente
-  verbose      Activar/desactivar debug detallado
+  identidad    Identidad y principios de Bell   {DIM}[nuevo v5]{RST}
+  personas     Personas que Bell conoce         {DIM}[nuevo v5]{RST}
+  toggle_groq  Activar/desactivar Groq
+  verbose      Activar/desactivar debug
   help         Esta ayuda
   salir        Terminar
-  {'─'*38}
+  {'─'*42}
   {DIM}Tip: python main.py --use-groq{RST}
 """)
 
@@ -571,17 +682,23 @@ class Belladonna:
             pass
         print(f"""
   {BOLD}Estadísticas:{RST}
-  {'─'*38}
+  {'─'*42}
   Vocabulario   {total} conceptos
   Consejeras    {len(self.consejeras)} activas
   Turnos        {self.turnos}
   Groq          {'ON ✅' if self.usar_groq else 'OFF'}
-  {'─'*38}
+  Identidad     {'cargada ✅' if _IDENTIDAD_OK else 'no disponible'}
+  {'─'*42}
   Respuestas    {sg.get('total_generadas', 0)}
   Con Groq      {sg.get('groq_usadas', 0)}
   Bloqueadas    {sg.get('groq_bloqueadas', 0)}
   Fallback      {sg.get('fallback_a_simbolico', 0)}
-""")
+  {'─'*42}
+  Tipos de decisión:""")
+        tipos = sg.get('tipos_decision', {})
+        for tipo, cnt in sorted(tipos.items(), key=lambda x: -x[1])[:8]:
+            print(f"    {tipo:<25} {cnt}")
+        print()
 
     def _cmd_groq(self):
         if self.usar_groq:
@@ -592,14 +709,15 @@ class Belladonna:
                 pass
             print(f"""
   {GREEN}Groq: ACTIVO{RST}
-  {'─'*38}
+  {'─'*42}
   Llamadas Groq     {sg.get('groq_usadas', 0)}
   Bloqueadas Echo   {sg.get('groq_bloqueadas', 0)}
   Tasa éxito        {sg.get('tasa_groq', 0):.1%}
-  {'─'*38}
+  {'─'*42}
   Anti-invención    {GREEN}ACTIVA{RST}
   Echo verificando  {GREEN}ACTIVO{RST}
-  Memoria inyectada {GREEN}SÍ{RST}
+  Memoria→generador {GREEN}INYECTADA{RST}
+  Memoria→motor     {GREEN}INYECTADA{RST}
 """)
         else:
             print(f"""
@@ -621,23 +739,113 @@ class Belladonna:
         print()
 
     def _cmd_memoria(self):
+        """v5: muestra datos del usuario + temas abiertos + predicciones."""
         try:
-            datos    = self.gestor_memoria.obtener_datos_usuario()
+            datos     = self.gestor_memoria.obtener_datos_usuario()
             historial = self.gestor_memoria.obtener_contexto(n_mensajes=6)
+
             print(f"\n  {BOLD}Lo que Bell recuerda:{RST}")
-            print(f"  {'─'*38}")
+            print(f"  {'─'*42}")
+
+            # Datos verificados del usuario
             if datos:
+                print(f"  {BOLD}Datos del usuario:{RST}")
                 for k, v in datos.items():
-                    print(f"  {k}: {v}")
+                    print(f"    {k}: {v}")
             else:
                 print("  (sin datos del usuario todavía)")
+
+            # Temas abiertos — nuevo v5
+            if hasattr(self.gestor_memoria, "hay_temas_abiertos"):
+                try:
+                    if self.gestor_memoria.hay_temas_abiertos():
+                        temas = self.gestor_memoria.obtener_temas_pendientes()
+                        print(f"\n  {BOLD}Temas pendientes ({len(temas)}):{RST}")
+                        for t in temas[:3]:
+                            print(f"    • {t.get('tema', '?')} — {t.get('resumen', '')[:60]}")
+                except Exception:
+                    pass
+
+            # Últimos mensajes
             if historial:
                 lines = historial.strip().split("\n")[-6:]
-                print(f"\n  Últimos mensajes:")
+                print(f"\n  {BOLD}Últimos mensajes:{RST}")
                 for l in lines:
                     print(f"  {DIM}{l}{RST}")
+
         except Exception as e:
             print(f"  Error: {e}")
+        print()
+
+    def _cmd_identidad(self):
+        """NUEVO v5: muestra identidad y principios de Bell."""
+        print(f"\n  {BOLD}🌺 Identidad de Bell{RST}")
+        print(f"  {'─'*42}")
+
+        if not _IDENTIDAD_OK:
+            print(f"  {YELL}identidad_bell.py no disponible.{RST}")
+            print(f"  Principio: {PRINCIPIO_CENTRAL}")
+        else:
+            print(f"  {BOLD}Principio central:{RST}")
+            print(f"    {PRINCIPIO_CENTRAL}")
+
+            if NARRATIVA_PROPIA:
+                print(f"\n  {BOLD}Narrativa propia:{RST}")
+                lineas = NARRATIVA_PROPIA.split("\n")[:4]
+                for l in lineas:
+                    if l.strip():
+                        print(f"    {l.strip()}")
+
+            if VOZ_BELL:
+                nunca = VOZ_BELL.get("nunca", [])
+                siempre = VOZ_BELL.get("siempre", [])
+                if nunca:
+                    print(f"\n  {BOLD}Nunca dice:{RST}")
+                    for item in nunca[:3]:
+                        print(f"    ✗ {item}")
+                if siempre:
+                    print(f"\n  {BOLD}Siempre hace:{RST}")
+                    for item in siempre[:3]:
+                        print(f"    ✅ {item}")
+
+            if NOMBRES_SEBASTIAN:
+                print(f"\n  {BOLD}Cómo llama a Sebastián:{RST}")
+                for momento, nombre in list(NOMBRES_SEBASTIAN.items())[:3]:
+                    print(f"    {momento}: {nombre}")
+
+        print()
+
+    def _cmd_personas(self):
+        """NUEVO v5: muestra personas que Bell conoce."""
+        print(f"\n  {BOLD}👥 Personas que Bell conoce{RST}")
+        print(f"  {'─'*42}")
+
+        if not hasattr(self.gestor_memoria, "obtener_persona"):
+            print(f"  {YELL}GestorMemoria v5 no disponible.{RST}")
+            print()
+            return
+
+        # Intentar leer desde el cache interno
+        personas = {}
+        try:
+            personas = getattr(self.gestor_memoria, "_cache_personas", {})
+        except Exception:
+            pass
+
+        if not personas:
+            print("  (Bell no ha construido modelos de personas todavía)")
+            print("  Menciona a alguien en la conversación para que lo registre.")
+        else:
+            for nombre_p, datos_p in list(personas.items())[:5]:
+                print(f"\n  {BOLD}{nombre_p}{RST}")
+                if isinstance(datos_p, dict):
+                    genero    = datos_p.get("genero", "")
+                    menciones = datos_p.get("menciones", 0)
+                    emociones = datos_p.get("emociones_asociadas", [])
+                    print(f"    Género: {genero or 'desconocido'}  "
+                          f"Menciones: {menciones}")
+                    if emociones:
+                        print(f"    Emociones: {', '.join(emociones[:3])}")
         print()
 
     def _cmd_toggle_groq(self):
@@ -656,7 +864,7 @@ class Belladonna:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description="Belladonna v4.0 — FASE 4A")
+    parser = argparse.ArgumentParser(description="Belladonna v5.0 — FASE 4A")
     parser.add_argument("--verbose", "-v", action="store_true",
                         help="Mostrar metadata de cada paso")
     parser.add_argument("--use-groq", action="store_true",

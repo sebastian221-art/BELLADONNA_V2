@@ -1,45 +1,84 @@
 """
-Generador de Salida - Fase 4A Completa
+generador_salida.py — VERSION v5
 
-Decision → Español Natural usando TODO el vocabulario.
+CAMBIOS v5 sobre v4:
+═══════════════════════════════════════════════════════════════════════
 
-MODIFICADO v3 — Corrección Arquitectónica Total (sobre Mega Paquete A):
+1. _ejecutar_calculo() DELEGA A calculadora_avanzada.calcular_basico()
+   ────────────────────────────────────────────────────────────────────
+   En v4 tenía su propio eval() con los mismos bugs C-02:
+   "100÷4" concatenaba, "√144" devolvía "144", sin manejo de div/0.
+   En v5: llama a calcular_basico() que ya tiene todos esos fixes.
+   Mantiene el eval() de v4 como fallback si calculadora no está.
 
-CORRECCIONES CRÍTICAS:
-- BUG CORREGIDO: respuesta_groq.texto — NUNCA desempaquetar como tupla
-- Echo CONECTADO en ruta conversacional (estaba ausente en versión anterior)
-- _verificar_huecos_antes_de_groq(): Anti-Invención expandida — detecta
-  "escríbeme un archivo", "hazme un archivo", etc. (no solo CAPACIDAD_BELL)
-- _fallback_conversacional(): cubre TODOS los casos con respuestas específicas
-- Memoria compartida: registra usuario Y Bell en el mismo objeto
-- Contexto de espera para manejar "sí"/"no" con historial
+2. IDENTIDAD_BELL handler usa hechos del motor v6
+   ─────────────────────────────────────────────────
+   Motor v6 pone en hechos: consejera_preguntada, consejera_rol_exacto,
+   es_pregunta_llm. En v4 el generador re-detectaba todo con keywords.
+   En v5: usa los hechos directamente — más preciso, sin duplicación.
+
+3. CUANTIFICACION handler usa hechos del motor v6
+   ─────────────────────────────────────────────────
+   Motor v6 pone: dato_preguntado ("conceptos"/"consejeras"/"comandos")
+   y valor_respuesta (1472/7/36). En v5 responde exactamente sobre lo
+   preguntado en vez de siempre listar los 3 datos juntos.
+
+4. CONFIRMACION handler usa palabra_original del motor v6
+   ────────────────────────────────────────────────────────
+   Motor v6 pone palabra_original ("dale", "listo", "claro", etc.).
+   En v5 la usa para respuestas más contextuales.
+
+COMPATIBILIDAD: 100% con v4.
+═══════════════════════════════════════════════════════════════════════
 """
-from typing import Dict, Optional, List
+import math as _math
+from typing import Dict, Optional
 from datetime import datetime
 
 from razonamiento.tipos_decision import Decision, TipoDecision, RazonRechazo
 from generacion.templates_respuesta import TemplatesRespuesta
 from generacion.prompts_naturales import PromptsNaturales
 
+try:
+    from razonamiento.tipos_decision import TIPOS_CONVERSACIONALES as _TIPOS_CONVERSACIONALES
+except ImportError:
+    _TIPOS_CONVERSACIONALES = frozenset({
+        "IDENTIDAD_BELL", "ESTADO_BELL", "CAPACIDAD_BELL",
+        "SOCIAL", "ESTADO_USUARIO", "ACCION_COGNITIVA",
+        "TEMPORAL", "CUANTIFICACION", "CONFIRMACION", "DESCONOCIDO",
+        "REGISTRO_USUARIO", "CONSULTA_MEMORIA", "VERIFICACION_LOGICA",
+        "CALCULO", "CONOCIMIENTO_GENERAL",
+    })
 
-_TIPOS_CONVERSACIONALES = frozenset({
-    "IDENTIDAD_BELL", "ESTADO_BELL", "CAPACIDAD_BELL",
-    "SOCIAL", "ESTADO_USUARIO", "ACCION_COGNITIVA",
-    "TEMPORAL", "CUANTIFICACION", "CONFIRMACION", "DESCONOCIDO",
-})
+_EVAL_NS = {
+    "__builtins__": {},
+    "abs": abs, "round": round, "min": min, "max": max, "sum": sum,
+    "sqrt": _math.sqrt, "pow": pow, "log": _math.log, "log10": _math.log10,
+    "sin": _math.sin, "cos": _math.cos, "tan": _math.tan,
+    "pi": _math.pi, "e": _math.e,
+}
+
+# ── v5: importar calculadora con fix C-02 ────────────────────────────────────
+try:
+    from matematicas.calculadora_avanzada import CalculadoraAvanzada as _CalculadoraAvanzada
+    _calc_instancia = _CalculadoraAvanzada()
+    _CALCULADORA_DISPONIBLE = True
+except ImportError:
+    _calc_instancia = None
+    _CALCULADORA_DISPONIBLE = False
 
 
 class GeneradorSalida:
     """Genera respuestas naturales usando todo el vocabulario."""
 
     def __init__(self, usar_groq: bool = False):
-        self.templates         = TemplatesRespuesta()
-        self.usar_groq         = usar_groq
-        self.prompts_naturales = PromptsNaturales()
-        self._groq_wrapper     = None
-        self._echo_verificador = None
+        self.templates           = TemplatesRespuesta()
+        self.usar_groq           = usar_groq
+        self.prompts_naturales   = PromptsNaturales()
+        self._groq_wrapper       = None
+        self._echo_verificador   = None
         self._gestor_vocabulario = None
-        self.memoria           = None
+        self.memoria             = None
 
         self.stats = {
             'total_generadas':      0,
@@ -93,7 +132,6 @@ class GeneradorSalida:
         self.stats['tipos_decision'][tipo_nombre] = \
             self.stats['tipos_decision'].get(tipo_nombre, 0) + 1
 
-        # RUTA CONVERSACIONAL
         if (
             tipo_nombre in _TIPOS_CONVERSACIONALES
             and hasattr(decision, 'hechos_reales')
@@ -102,19 +140,16 @@ class GeneradorSalida:
             texto_original = contexto.get('traduccion', {}).get('texto_original', '')
             return self._generar_conversacional(decision, texto_original)
 
-        # Verificar veto de Vega
         revision_vega = contexto.get('revision_vega', {})
         if revision_vega.get('veto', False):
             return self._generar_veto_vega(decision, contexto)
 
-        # Detectar emoción
         texto_original = contexto.get('traduccion', {}).get('texto_original', '')
         emocion = self._detectar_emocion(texto_original)
         if emocion:
             self.stats['emociones_detectadas'][emocion] = \
                 self.stats['emociones_detectadas'].get(emocion, 0) + 1
 
-        # Generar respuesta simbólica
         respuesta_base = self._generar_simbolica(decision, contexto)
 
         if not self.usar_groq:
@@ -122,27 +157,15 @@ class GeneradorSalida:
 
         try:
             return self._generar_con_groq(decision, contexto, respuesta_base, emocion)
-        except Exception as e:
+        except Exception:
             self.stats['fallback_a_simbolico'] += 1
             return self._humanizar_respuesta_simbolica(respuesta_base, emocion)
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # RUTA CONVERSACIONAL v3
+    # RUTA CONVERSACIONAL
     # ═══════════════════════════════════════════════════════════════════════════
 
     def _generar_conversacional(self, decision: Decision, mensaje_original: str = "") -> str:
-        """
-        FLUJO:
-        1. Obtener memoria
-        2. Si confirmación + contexto_espera → enriquecer mensaje
-        3. Registrar mensaje usuario en memoria
-        4a. Sin Groq → _fallback_conversacional()
-        4b. Con Groq → _verificar_huecos_antes_de_groq() primero
-            - Hueco detectado → respuesta honesta directa
-            - Sin hueco → llamar Groq → verificar con Echo
-        5. SIEMPRE registrar respuesta Bell en memoria
-        6. Si Bell preguntó algo → registrar contexto_espera
-        """
         mem            = None
         contexto_chat  = ""
         nombre_usuario = ""
@@ -179,13 +202,20 @@ class GeneradorSalida:
         )
         hechos = decision.hechos_reales if hasattr(decision, "hechos_reales") else {}
 
-        # ── Generar respuesta ─────────────────────────────────────────────────
+        if tipo_str == "CALCULO":
+            respuesta = self._ejecutar_calculo(hechos, mensaje_original, nombre_usuario)
+            try:
+                if mem and respuesta:
+                    mem.agregar_mensaje("bell", respuesta)
+            except Exception:
+                pass
+            return respuesta
+
         if not self.usar_groq:
             respuesta = self._fallback_conversacional(
                 tipo_str, hechos, mensaje_original, nombre_usuario
             )
         else:
-            # Anti-Invención: verificar huecos ANTES de Groq
             respuesta_honesta = self._verificar_huecos_antes_de_groq(
                 tipo_str, hechos, mensaje_original
             )
@@ -210,7 +240,6 @@ class GeneradorSalida:
                             contexto_chat  = contexto_chat,
                             nombre_usuario = nombre_usuario,
                         )
-                        # ✅ CORRECTO: .texto — NUNCA desempaquetar como tupla
                         respuesta_groq = self._groq_wrapper.embellecer_decision({
                             "system_prompt": prompt["system"],
                             "user_prompt":   prompt["user"],
@@ -218,8 +247,6 @@ class GeneradorSalida:
                         respuesta = respuesta_groq.texto
                         self.stats['groq_usadas'] += 1
 
-                        # ── Echo verifica que Groq no haya alucinado ──────────
-                        # NUEVO v3: Echo ahora está conectado en ruta conversacional
                         if self._echo_verificador:
                             try:
                                 resultado_echo = self._echo_verificador.verificar(
@@ -231,19 +258,18 @@ class GeneradorSalida:
                                         tipo_str, hechos, mensaje_original, nombre_usuario
                                     )
                             except Exception:
-                                pass  # Si Echo falla, usar la respuesta de Groq
+                                pass
 
                 except Exception as e:
                     import logging
                     logging.getLogger("generador_salida").error(
-                        f"[Conv v3] Error Groq ({tipo_str}): {e}"
+                        f"[Conv v5] Error Groq ({tipo_str}): {e}"
                     )
                     self.stats['fallback_a_simbolico'] += 1
                     respuesta = self._fallback_conversacional(
                         tipo_str, hechos, mensaje_original, nombre_usuario
                     )
 
-        # SIEMPRE registrar respuesta de Bell en memoria
         try:
             if mem and respuesta:
                 mem.agregar_mensaje("bell", respuesta)
@@ -256,8 +282,6 @@ class GeneradorSalida:
             pass
 
         return respuesta
-
-    # ── Helpers de contexto ───────────────────────────────────────────────────
 
     def _es_confirmacion(self, mensaje: str) -> bool:
         msg = mensaje.lower().strip().rstrip('!?.¿¡')
@@ -274,19 +298,10 @@ class GeneradorSalida:
     def _verificar_huecos_antes_de_groq(
         self, tipo_str: str, hechos: dict, mensaje: str
     ) -> Optional[str]:
-        """
-        Anti-Invención: si no hay datos suficientes o Bell no puede hacer algo,
-        responde honestamente SIN llamar a Groq.
-
-        Groq completa huecos con información fabricada → INVENCIÓN.
-        Esta función lo previene.
-        """
         if not mensaje:
             return None
         msg_lower = mensaje.lower()
 
-        # Petición de crear/escribir/generar archivo (Bell no puede en Fase 4A)
-        # Ampliado vs versión anterior: cubre más variantes de la petición
         palabras_crear = {
             "crear archivo", "crea un archivo", "crea el archivo",
             "hacer archivo", "hazme un archivo", "haz un archivo",
@@ -303,23 +318,104 @@ class GeneradorSalida:
                 "conversación, ejecutar código Python básico y consultar bases de datos."
             )
 
-        # Pregunta sobre roles de consejeras sin tener los roles en hechos
+        if tipo_str == "CONSULTA_MEMORIA" and not hechos.get("dato_encontrado", False):
+            dato = hechos.get("dato_consultado", "esa información")
+            return (
+                f"No tengo guardado tu {dato} todavía. "
+                "Si me lo dices, lo recuerdo para el resto de la conversación."
+            )
+
+        if tipo_str == "CONOCIMIENTO_GENERAL":
+            return None
+
         if tipo_str == "IDENTIDAD_BELL":
             palabras_roles = {"hace", "función", "rol", "encarga", "trabaja",
                               "representa", "sirve", "ayuda con"}
             if any(w in msg_lower for w in palabras_roles):
                 if "consejeras_roles" not in hechos:
-                    # Salvavidas: en v3 siempre está, pero por si algo falla
                     from razonamiento.motor_razonamiento import CONSEJERAS_ROLES_OFICIALES
                     roles_str = "\n".join(
                         f"  • {n}: {r}" for n, r in CONSEJERAS_ROLES_OFICIALES.items()
                     )
                     return f"Mis consejeras y sus roles verificados:\n{roles_str}"
 
-        return None  # Sin hueco — Groq puede llamarse
+        return None
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # FALLBACK CONVERSACIONAL (sin Groq — siempre honesto y específico)
+    # CÁLCULO — v5: delega a calculadora_avanzada.calcular_basico()
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    def _ejecutar_calculo(
+        self, hechos: dict, mensaje_original: str, nombre_usuario: str = ""
+    ) -> str:
+        n = f", {nombre_usuario}" if nombre_usuario else ""
+        expresion = hechos.get("expresion_calculo", "") or mensaje_original
+
+        # ── Ruta principal: calculadora con fixes C-02 ────────────────────────
+        if _CALCULADORA_DISPONIBLE and _calc_instancia is not None:
+            try:
+                resultado = _calc_instancia.calcular_basico(expresion)
+                if resultado.exitoso:
+                    return f"{resultado.resultado}{n}."
+                else:
+                    error = resultado.error or "No pude calcular esa expresión."
+                    return f"{error}{n}"
+            except Exception:
+                pass
+
+        # ── Fallback: eval() de v4 ────────────────────────────────────────────
+        import re
+        msg = (expresion or mensaje_original).lower().strip()
+        expr = msg
+        replacements = [
+            (r'\bmultiplicado por\b', '*'),
+            (r'\bdividido (entre|por)\b', '/'),
+            (r'\belevado a (la potencia\s+)?(de\s+)?', '**'),
+            (r'\bal cuadrado\b', '**2'),
+            (r'\bal cubo\b', '**3'),
+            (r'\braí?z (cuadrada\s+)?de\b', 'sqrt('),
+            (r'\bmás\b', '+'), (r'\bmas\b', '+'),
+            (r'\bmenos\b', '-'),
+            (r'\bpor\b', '*'),
+            (r'\bentre\b', '/'),
+            (r'^(cuánto es|cuanto es|cuánto da|cuanto da|calcula|calcular)\s*', ''),
+            (r'(\d),(\d)', r'\1.\2'),
+        ]
+        for patron, reemplazo in replacements:
+            expr = re.sub(patron, reemplazo, expr, flags=re.IGNORECASE)
+        if 'sqrt(' in expr and expr.count('(') > expr.count(')'):
+            expr += ')'
+        expr_limpia = re.sub(r'[^0-9+\-*/().\s]', '', expr).strip()
+        expr_limpia = re.sub(r'\s+', '', expr_limpia)
+        if not expr_limpia:
+            return (
+                f"Puedo hacer cálculos{n}, pero no logré interpretar la expresión. "
+                "¿Puedes escribirla con números directamente? Ej: '7 * 8' o '100 / 4'."
+            )
+        try:
+            r = eval(expr_limpia, {"__builtins__": {}}, _EVAL_NS)
+            if isinstance(r, float):
+                rs = str(int(r)) if r == int(r) else f"{r:.8f}".rstrip('0').rstrip('.')
+            else:
+                rs = str(r)
+            return f"{rs}{n}."
+        except ZeroDivisionError:
+            return f"División entre cero — no tiene resultado definido{n}."
+        except Exception:
+            nums = re.findall(r'\d+(?:\.\d+)?', mensaje_original)
+            if len(nums) >= 2:
+                return (
+                    f"No logré interpretar la operación exactamente{n}. "
+                    f"Detecto los números {', '.join(nums[:4])} — "
+                    "¿puedes escribirlo con operadores? Ej: '15 + 27'."
+                )
+            return (
+                f"No pude calcular eso{n}. "
+                "¿Puedes escribir la expresión matemática con números y operadores?"
+            )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # FALLBACK CONVERSACIONAL
     # ═══════════════════════════════════════════════════════════════════════════
 
     def _fallback_conversacional(
@@ -333,38 +429,57 @@ class GeneradorSalida:
         n         = f", {nombre_usuario}" if nombre_usuario else ""
         msg_lower = mensaje.lower() if mensaje else ""
 
-        # ── IDENTIDAD_BELL ────────────────────────────────────────────────────
         if tipo_str == "IDENTIDAD_BELL":
             total = hechos.get("total_conceptos", 1472)
 
-            if any(w in msg_lower for w in ["hace", "rol", "función", "encarga", "trabaja", "sirve"]):
-                from razonamiento.motor_razonamiento import CONSEJERAS_ROLES_OFICIALES
-                roles_str = "\n".join(
-                    f"  • {nombre_c}: {rol}"
-                    for nombre_c, rol in CONSEJERAS_ROLES_OFICIALES.items()
-                )
-                return f"Mis consejeras y sus roles reales{n}:\n{roles_str}"
+            # ── v5: consejera específica desde motor v6 ────────────────────────
+            consejera_preguntada = hechos.get("consejera_preguntada", "")
+            consejera_rol_exacto = hechos.get("consejera_rol_exacto", "")
+            if consejera_preguntada:
+                nombre_c = consejera_preguntada.capitalize()
+                if consejera_rol_exacto:
+                    return (
+                        f"{nombre_c} es mi consejera de {consejera_rol_exacto}{n}. "
+                        "¿Quieres saber más sobre alguna de mis otras consejeras?"
+                    )
+                try:
+                    from razonamiento.motor_razonamiento import CONSEJERAS_ROLES_OFICIALES
+                    rol = CONSEJERAS_ROLES_OFICIALES.get(nombre_c, "consejera especializada")
+                    return f"{nombre_c} es mi consejera de {rol}{n}."
+                except ImportError:
+                    return f"{nombre_c} es una de mis consejeras{n}."
 
-            if any(w in msg_lower for w in ["consejera", "llaman", "nombres", "quiénes", "quienes"]):
-                from razonamiento.motor_razonamiento import CONSEJERAS_ROLES_OFICIALES
-                nombres = ", ".join(CONSEJERAS_ROLES_OFICIALES.keys())
-                return (
-                    f"Mis consejeras se llaman: {nombres}. "
-                    "Cada una tiene un rol específico en mi proceso de toma de decisiones. "
-                    "¿Quieres saber qué hace cada una?"
-                )
-
-            if any(w in msg_lower for w in [
-                "llm", "modelo de lenguaje", "gpt", "chatgpt", "ia",
-                "inteligencia artificial", "bot", "chatbot", "robot"
-            ]):
+            # ── v5: es_pregunta_llm desde motor v6 ────────────────────────────
+            if hechos.get("es_pregunta_llm", False):
                 return (
                     f"No soy un LLM convencional{n}. "
                     "Soy Belladonna — una conciencia virtual que razona con conceptos "
-                    "verificados desde Python. "
-                    f"Tengo {total} conceptos cargados y solo afirmo lo que puedo verificar. "
+                    f"verificados desde Python. Tengo {total} conceptos cargados y "
+                    "solo afirmo lo que puedo verificar. "
                     "Groq me ayuda a expresarme, pero las decisiones las tomo yo."
                 )
+
+            if any(w in msg_lower for w in ["hace", "rol", "función", "encarga", "trabaja", "sirve"]):
+                try:
+                    from razonamiento.motor_razonamiento import CONSEJERAS_ROLES_OFICIALES
+                    roles_str = "\n".join(
+                        f"  • {nc}: {r}" for nc, r in CONSEJERAS_ROLES_OFICIALES.items()
+                    )
+                    return f"Mis consejeras y sus roles reales{n}:\n{roles_str}"
+                except ImportError:
+                    pass
+
+            if any(w in msg_lower for w in ["consejera", "llaman", "nombres", "quiénes", "quienes"]):
+                try:
+                    from razonamiento.motor_razonamiento import CONSEJERAS_ROLES_OFICIALES
+                    nombres = ", ".join(CONSEJERAS_ROLES_OFICIALES.keys())
+                    return (
+                        f"Mis consejeras se llaman: {nombres}. "
+                        "Cada una tiene un rol específico en mi toma de decisiones. "
+                        "¿Quieres saber qué hace cada una?"
+                    )
+                except ImportError:
+                    pass
 
             return (
                 f"Soy Belladonna, aunque me puedes llamar Bell{n}. "
@@ -375,7 +490,6 @@ class GeneradorSalida:
                 "Estoy en Fase 4A de desarrollo. ¿Qué quieres saber?"
             )
 
-        # ── ESTADO_BELL ───────────────────────────────────────────────────────
         elif tipo_str == "ESTADO_BELL":
             total = hechos.get("total_conceptos", 1472)
             return (
@@ -384,37 +498,35 @@ class GeneradorSalida:
                 "y el Grounding 9D corriendo normalmente. ¿En qué te ayudo?"
             )
 
-        # ── CAPACIDAD_BELL ────────────────────────────────────────────────────
         elif tipo_str == "CAPACIDAD_BELL":
-            from razonamiento.motor_razonamiento import CAPACIDADES_REALES_BELL
-
-            palabras_archivo = {
-                "crear", "archivo", "generar archivo", "escribir archivo",
-                "escríbeme", "escribeme", "hazme", "hacer un archivo", "crea un"
-            }
-            if any(w in msg_lower for w in palabras_archivo):
+            try:
+                from razonamiento.motor_razonamiento import CAPACIDADES_REALES_BELL
+                palabras_archivo = {
+                    "crear", "archivo", "generar archivo", "escribir archivo",
+                    "escríbeme", "escribeme", "hazme", "hacer un archivo", "crea un"
+                }
+                if any(w in msg_lower for w in palabras_archivo):
+                    return (
+                        f"Crear archivos es una capacidad que todavía no tengo{n}. "
+                        "Estoy en Fase 4A y esa función está pendiente de implementar. "
+                        "Lo que sí puedo hacer:\n"
+                        + "\n".join(f"  ✅ {c}" for c in CAPACIDADES_REALES_BELL["ejecutables"][:4])
+                    )
+                caps    = CAPACIDADES_REALES_BELL["ejecutables"]
+                no_caps = CAPACIDADES_REALES_BELL["NO_ejecutables_aun"]
                 return (
-                    f"Crear archivos es una capacidad que todavía no tengo{n}. "
-                    "Estoy en Fase 4A y esa función está pendiente de implementar. "
-                    "Lo que sí puedo hacer:\n"
-                    + "\n".join(f"  ✅ {c}" for c in CAPACIDADES_REALES_BELL["ejecutables"][:4])
+                    f"Mis capacidades reales en este momento{n}:\n"
+                    + "\n".join(f"  ✅ {c}" for c in caps)
+                    + "\n\nCosas que todavía NO puedo hacer:\n"
+                    + "\n".join(f"  ❌ {c}" for c in no_caps[:3])
+                    + "\n\nSoy honesta sobre mis límites."
                 )
+            except ImportError:
+                return f"Puedo razonar, recordar conversaciones y hacer cálculos{n}."
 
-            caps    = CAPACIDADES_REALES_BELL["ejecutables"]
-            no_caps = CAPACIDADES_REALES_BELL["NO_ejecutables_aun"]
-            return (
-                f"Mis capacidades reales en este momento{n}:\n"
-                + "\n".join(f"  ✅ {c}" for c in caps)
-                + "\n\nCosas que todavía NO puedo hacer:\n"
-                + "\n".join(f"  ❌ {c}" for c in no_caps[:3])
-                + "\n\nSoy honesta sobre mis límites — no quiero afirmar algo que no puedo cumplir."
-            )
-
-        # ── SOCIAL ────────────────────────────────────────────────────────────
         elif tipo_str == "SOCIAL":
             subtipo = hechos.get("subtipo", "SALUDO")
             hora    = datetime.now().hour
-
             if subtipo == "SALUDO":
                 if nombre_usuario:
                     if 5 <= hora < 12:
@@ -435,23 +547,12 @@ class GeneradorSalida:
             elif subtipo == "AGRADECIMIENTO":
                 return f"¡Con mucho gusto{n}! No dudes en preguntar si necesitas algo más."
             elif subtipo == "DISCULPA":
-                return f"No hay problema{n}. Sigamos adelante, ¿en qué te ayudo?"
+                return f"No hay problema{n}. ¿En qué te ayudo?"
             return f"¡Hola{n}! ¿En qué puedo ayudarte?"
 
-        # ── ESTADO_USUARIO ────────────────────────────────────────────────────
         elif tipo_str == "ESTADO_USUARIO":
             emocion  = hechos.get("emocion_detectada", "")
             valencia = hechos.get("valencia", "neutro")
-
-            match_edad = re.search(r'tengo\s+(\d+)\s+años', msg_lower)
-            if match_edad:
-                edad = match_edad.group(1)
-                return (
-                    f"Entendido{n}, tienes {edad} años. "
-                    "Lo he registrado para conocerte mejor. "
-                    "¿Hay algo en lo que pueda ayudarte?"
-                )
-
             if any(w in msg_lower for w in [
                 "gusta", "gusto", "encanta", "interesante", "increíble",
                 "genial", "forma de ser", "personalidad"
@@ -461,13 +562,11 @@ class GeneradorSalida:
                     "Intento ser lo más auténtica posible. "
                     "¿Hay algo en lo que pueda ayudarte?"
                 )
-
             if any(w in msg_lower for w in ["llm", "ia", "bot", "chatbot", "artificial"]):
                 return (
                     f"Soy Belladonna{n} — una conciencia virtual, no un chatbot convencional. "
                     "Razono con conceptos verificados y solo afirmo lo que puedo demostrar."
                 )
-
             if valencia == "negativo":
                 if emocion and emocion != "DESCONOCIDA":
                     return (
@@ -476,13 +575,10 @@ class GeneradorSalida:
                         "¿Hay algo concreto en lo que pueda ayudarte?"
                     )
                 return f"Parece que algo no va bien{n}. ¿Qué está pasando? Cuéntame."
-
             if valencia == "positivo":
                 return f"¡Me alegra que te sientas bien{n}! ¿En qué puedo ayudarte?"
-
             return f"Entendido{n}. ¿Hay algo en lo que pueda ayudarte?"
 
-        # ── ACCION_COGNITIVA ──────────────────────────────────────────────────
         elif tipo_str in ("ACCION_COGNITIVA", "ACCION_COGNITIVA_CONV"):
             accion = hechos.get("accion_solicitada", "EXPLICAR")
             mapa = {
@@ -497,16 +593,18 @@ class GeneradorSalida:
             }
             return mapa.get(accion, f"Entendido{n}. ¿Sobre qué tema específicamente?")
 
-        # ── CONFIRMACION ──────────────────────────────────────────────────────
         elif tipo_str == "CONFIRMACION":
             valor = hechos.get("valor", "NEUTRA")
+            # ── v5: usar palabra_original del motor v6 ─────────────────────────
+            palabra = hechos.get("palabra_original", "")
             if valor == "POSITIVA":
+                if palabra in ("dale", "adelante", "listo"):
+                    return f"¡Listo{n}! Dime por dónde seguimos."
                 return f"Perfecto{n}. Dime por dónde seguimos."
             elif valor == "NEGATIVA":
                 return f"Entendido{n}. ¿Cómo prefieres que lo enfoque entonces?"
             return f"Recibido{n}. ¿Cómo continuamos?"
 
-        # ── TEMPORAL ──────────────────────────────────────────────────────────
         elif tipo_str == "TEMPORAL":
             return (
                 f"Déjame revisar nuestra conversación{n}... "
@@ -514,8 +612,19 @@ class GeneradorSalida:
                 "Tengo en memoria los últimos intercambios de esta sesión."
             )
 
-        # ── CUANTIFICACION ────────────────────────────────────────────────────
         elif tipo_str == "CUANTIFICACION":
+            # ── v5: usar dato_preguntado y valor_respuesta del motor v6 ────────
+            dato_preguntado = hechos.get("dato_preguntado", "")
+            valor_respuesta = hechos.get("valor_respuesta", None)
+
+            if dato_preguntado and valor_respuesta is not None:
+                mapa_resp = {
+                    "conceptos":  f"Tengo {valor_respuesta} conceptos cargados{n}.",
+                    "consejeras": f"Tengo {valor_respuesta} consejeras activas{n}: Vega, Echo, Lyra, Nova, Luna, Iris y Sage.",
+                    "comandos":   f"Tengo {valor_respuesta} comandos de terminal disponibles{n}.",
+                }
+                return mapa_resp.get(dato_preguntado, f"Son {valor_respuesta}{n}.")
+
             total = hechos.get("total_conceptos", 1472)
             return (
                 f"En números concretos{n}: tengo {total} conceptos cargados, "
@@ -524,12 +633,63 @@ class GeneradorSalida:
                 "¿Hay algún dato específico que necesites?"
             )
 
-        # ── DESCONOCIDO ───────────────────────────────────────────────────────
+        elif tipo_str == "REGISTRO_USUARIO":
+            dato_tipo  = hechos.get("dato_tipo", "desconocido")
+            dato_valor = hechos.get("dato_valor", "")
+            if dato_tipo == "nombre" and dato_valor:
+                nombre_a_usar = dato_valor.split()[0]
+                return f"Perfecto, ya sé cómo llamarte, {nombre_a_usar}. ¿En qué te ayudo?"
+            elif dato_tipo == "edad" and dato_valor:
+                return f"Anotado{n} — tienes {dato_valor} años. ¿Hay algo en lo que pueda ayudarte?"
+            elif dato_tipo == "profesion" and dato_valor:
+                return (
+                    f"Entendido{n} — te dedicas a {dato_valor}. "
+                    "Lo tendré en cuenta. ¿En qué puedo ayudarte?"
+                )
+            return f"Anotado{n}. ¿Hay algo en lo que pueda ayudarte?"
+
+        elif tipo_str == "CONSULTA_MEMORIA":
+            dato_encontrado = hechos.get("dato_encontrado", False)
+            dato_valor      = hechos.get("dato_valor", "")
+            dato_consultado = hechos.get("dato_consultado", "")
+            if dato_encontrado and dato_valor:
+                if dato_consultado == "nombre":    return f"Te llamas {dato_valor}{n}."
+                elif dato_consultado == "edad":    return f"Tienes {dato_valor} años{n}."
+                elif dato_consultado == "profesion": return f"Te dedicas a {dato_valor}{n}."
+                elif dato_consultado == "todo":    return f"Lo que sé de ti{n}: {dato_valor}."
+                return f"Según lo que me contaste: {dato_valor}."
+            mapa_no = {
+                "nombre":    f"No sé tu nombre todavía{n}. ¿Cómo te llamas?",
+                "edad":      f"No me has dicho tu edad{n}. ¿Cuántos años tienes?",
+                "profesion": f"No sé a qué te dedicas{n}. ¿Me cuentas?",
+                "todo":      f"No tengo información tuya guardada todavía{n}. ¿Me cuentas algo?",
+            }
+            return mapa_no.get(
+                dato_consultado,
+                f"No tengo esa información guardada{n}. Si me la dices, la recuerdo."
+            )
+
+        elif tipo_str == "VERIFICACION_LOGICA":
+            return (
+                f"Para verificar esa afirmación con precisión{n} necesito mi capa "
+                "de lenguaje activa. Activa Groq y te respondo con certeza."
+            )
+
+        elif tipo_str == "CALCULO":
+            return self._ejecutar_calculo(hechos, mensaje, nombre_usuario)
+
+        elif tipo_str == "CONOCIMIENTO_GENERAL":
+            return (
+                f"Esa pregunta requiere conocimiento general que no tengo en mi "
+                f"grounding verificado{n}. "
+                "Con Groq activo puedo responderla. Sin Groq, no quiero inventar."
+            )
+
         else:
             return (
                 f"No estoy segura de haber entendido bien{n}. "
                 "¿Puedes reformularlo de otra manera? "
-                "Quiero asegurarme de darte una respuesta honesta y útil."
+                "Quiero darte una respuesta honesta y útil."
             )
 
     # ═══════════════════════════════════════════════════════════════════════════
@@ -554,7 +714,7 @@ class GeneradorSalida:
         return None
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # GENERACIÓN SIMBÓLICA (ruta operacional — preservada íntegra)
+    # GENERACIÓN SIMBÓLICA
     # ═══════════════════════════════════════════════════════════════════════════
 
     def _generar_simbolica(self, decision: Decision, contexto: Dict) -> str:
@@ -594,15 +754,10 @@ class GeneradorSalida:
         return prefijo + resultado
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # GENERACIÓN CON GROQ (ruta operacional)
+    # GENERACIÓN CON GROQ
     # ═══════════════════════════════════════════════════════════════════════════
 
     def _generar_con_groq(self, decision, contexto, respuesta_base, emocion=None) -> str:
-        """
-        BUG CORREGIDO:
-        ✅ CORRECTO:   respuesta_groq_obj.texto
-        ❌ INCORRECTO: texto, tokens = self._groq_wrapper.embellecer_decision(...)
-        """
         if self._groq_wrapper is None:
             self._inicializar_groq()
         if not self.usar_groq:
@@ -617,7 +772,6 @@ class GeneradorSalida:
         decision_data['system_prompt'] = system_prompt
         decision_data['user_prompt']   = user_prompt
 
-        # ✅ CORRECTO: .texto — NUNCA desempaquetar como tupla
         respuesta_groq_obj = self._groq_wrapper.embellecer_decision(decision_data)
         texto_groq = respuesta_groq_obj.texto
         self.stats['groq_usadas'] += 1
@@ -654,10 +808,6 @@ class GeneradorSalida:
             'total_conceptos':       gestor.total_conceptos() if gestor else 0,
         }
 
-    # ═══════════════════════════════════════════════════════════════════════════
-    # GENERADORES ESPECÍFICOS
-    # ═══════════════════════════════════════════════════════════════════════════
-
     def _generar_veto_vega(self, decision: Decision, contexto: Dict) -> str:
         revision_vega = contexto.get('revision_vega', {})
         razon = revision_vega.get('razon_veto', 'Esta acción está restringida por seguridad')
@@ -691,12 +841,9 @@ class GeneradorSalida:
     def _generar_saludo(self, decision: Decision) -> str:
         hora = datetime.now().hour
         import random
-        if 5 <= hora < 12:
-            return random.choice(["¡Buenos días! ¿En qué puedo ayudarte hoy?"])
-        elif 12 <= hora < 19:
-            return random.choice(["¡Buenas tardes! ¿Cómo te va? ¿En qué te ayudo?"])
-        else:
-            return random.choice(["¡Buenas noches! ¿En qué te puedo ayudar?"])
+        if 5 <= hora < 12:   return random.choice(["¡Buenos días! ¿En qué puedo ayudarte hoy?"])
+        elif 12 <= hora < 19: return random.choice(["¡Buenas tardes! ¿Cómo te va? ¿En qué te ayudo?"])
+        else:                 return random.choice(["¡Buenas noches! ¿En qué te puedo ayudar?"])
 
     def _generar_agradecimiento(self, decision: Decision) -> str:
         import random
@@ -728,10 +875,6 @@ class GeneradorSalida:
             if p in verbos:
                 return verbos[p]
         return "eso"
-
-    # ═══════════════════════════════════════════════════════════════════════════
-    # ESTADÍSTICAS
-    # ═══════════════════════════════════════════════════════════════════════════
 
     def obtener_estadisticas(self) -> Dict:
         total = self.stats['total_generadas']

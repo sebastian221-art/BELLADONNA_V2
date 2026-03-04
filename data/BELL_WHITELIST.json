@@ -198,5 +198,28 @@
     "total_conceptos_base": 453,
     "total_conceptos_expansion": 1030,
     "total_conceptos": 1483
+  },
+
+  "capacidades_fase4a": {
+    "descripcion": "Conceptos con operaciones definidas pero NO implementadas para el usuario en Fase 4A",
+    "no_implementadas": [
+      "CONCEPTO_TOUCH",
+      "CONCEPTO_MKDIR",
+      "CONCEPTO_CAT",
+      "CONCEPTO_HEAD",
+      "CONCEPTO_TAIL",
+      "CONCEPTO_LESS",
+      "CONCEPTO_GREP",
+      "CONCEPTO_FIND",
+      "CONCEPTO_WC",
+      "CONCEPTO_CP",
+      "CONCEPTO_MV",
+      "CONCEPTO_CHMOD",
+      "CONCEPTO_ELIMINAR_DIRECTORIO",
+      "CONCEPTO_CAMBIAR_DIRECTORIO",
+      "CONCEPTO_STAT",
+      "CONCEPTO_FILE",
+      "CONCEPTO_KILL"
+    ]
   }
 }

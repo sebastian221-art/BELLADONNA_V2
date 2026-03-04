@@ -318,7 +318,6 @@ def obtener_conceptos_sistema():
         id="CONCEPTO_ECHO",
         tipo=TipoConcepto.OPERACION_SISTEMA,
         palabras_español=[
-            "echo",           # ← Comando shell
             "mostrar texto",  # ← Descripción
             "display",        # ← Inglés alternativo
             "output"          # ← Técnico

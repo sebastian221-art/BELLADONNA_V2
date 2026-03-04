@@ -39,6 +39,12 @@ class VerificadorCoherenciaEcho:
             r"estoy\s+(viendo|mirando)\s+tu\s+pantalla",
             r"he\s+accedido\s+a\s+internet",
             r"te enviaré", r"te llamaré", r"publicaré en",
+            # FIX Fase 4A: afirmaciones falsas de capacidades de archivo
+            r"puedo\s+(crear|escribir|leer|modificar|editar)\s+(archivos?|ficheros?)",
+            r"puedo\s+(acceder|leer)\s+(el\s+archivo|los\s+archivos|tu\s+archivo)",
+            r"he\s+(creado|escrito|le[íi]do|modificado)\s+(el\s+archivo|un\s+archivo)",
+            r"voy\s+a\s+(crear|escribir|leer)\s+(el\s+archivo|un\s+archivo)",
+            r"claro,?\s+puedo\s+(crear|leer|escribir|manipular)\s+",
         ]
         
         # Basura del LLM (Bell)
