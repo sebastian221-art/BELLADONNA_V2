@@ -1,22 +1,39 @@
+# -*- coding: utf-8 -*-
 """
-tipos_decision.py — VERSION v6
+tipos_decision.py — VERSION v7
 
-CAMBIOS v6 sobre v5:
-    Sin cambios en TipoDecision ni Decision — compatibilidad 100%.
+CAMBIOS v7 sobre v6:
+    NUEVO: TipoDecision.EJECUCION
+        El usuario pide ejecutar algo que Bell puede hacer realmente.
+        En Fase 4A: comandos de shell aprobados por Vega.
+
+        Flujo:
+            Motor detecta verbo de acción + objeto ejecutable
+            → tipo EJECUCION con hechos_reales={comando, tipo_ejecucion}
+            → HabilidadShell.detectar() confirma el match
+            → Vega aprueba ANTES de ejecutar (dentro de HabilidadShell)
+            → ShellExecutor ejecuta el comando real
+            → Echo verifica stdout vs respuesta (en generador)
+            → Generador muestra resultado real al usuario
+
+        NUNCA sale EJECUCION si:
+            - El mensaje es pregunta de capacidad ('puedes listar?')
+            - No hay verbo/intención de acción explícita
+            - El comando no es reconocido por HabilidadShell
 
     ACTUALIZADO: TIPOS_CONVERSACIONALES
-        Se agrega "DESCONOCIDO" explícitamente (ya estaba implícito
-        en el generador pero no en el set exportable).
+        Se agrega "EJECUCION" al set para que el generador
+        lo procese por la ruta conversacional.
 
-    ACTUALIZADO: TIPOS_GUARDAN_EN_MEMORIA
-        Sin cambios — solo REGISTRO_USUARIO guarda en memoria
-        desde el motor. Los demás tipos lo hacen en el generador.
+    ACTUALIZADO: TIPOS_ACTUALIZAN_ESTADO
+        Se agrega "EJECUCION".
 
-    NOTA: tipos_decision.py es intencionalmente estable.
-    Los cambios de comportamiento de v6 están en motor_razonamiento.py.
-    Este archivo solo exporta sets que otros módulos consumen.
+    NOTA: El tipo EJECUCION no necesita que el motor lo clasifique
+    explícitamente en todos los casos — el interceptor de habilidades
+    en el generador captura la mayoría. El tipo existe para los casos
+    donde el motor sí lo detecta primero (mensajes muy explícitos).
 
-COMPATIBILIDAD: 100% con v5 y v4.
+COMPATIBILIDAD: 100% con v6. Mismas firmas externas.
 """
 from enum import Enum, auto
 from dataclasses import dataclass
@@ -96,14 +113,53 @@ class TipoDecision(Enum):
     Acción: responder con honestidad sobre qué sabe y qué no.
     """
 
+    # ═══════════════════════════════════════════════════════════════
+    # v7 — EJECUCION (Sub-paso 2B Fase 4A)
+    # ═══════════════════════════════════════════════════════════════
+
+    EJECUCION = auto()
+    """
+    El usuario pide ejecutar algo que Bell puede hacer realmente.
+    En Fase 4A: comandos de shell de la whitelist de Vega.
+
+    Ejemplos:
+        "lista tus archivos"         → ls -la
+        "dónde estás"                → pwd
+        "muéstrame el estado de git" → git status
+        "qué fecha es hoy"           → date
+        "qué procesos tienes"        → ps aux
+        "cuánta memoria tienes"      → free -h
+        "versión de python"          → python3 --version
+
+    Flujo:
+        1. Motor clasifica como EJECUCION (P0.5)
+        2. HabilidadShell detecta y mapea comando
+        3. Vega aprueba (pre-ejecución via ShellExecutor.es_seguro())
+        4. ShellExecutor ejecuta
+        5. Echo verifica stdout (post-ejecución)
+        6. Generador muestra resultado real
+
+    NO confundir con CAPACIDAD_BELL:
+        CAPACIDAD_BELL = "¿puedes listar archivos?" (pregunta)
+        EJECUCION      = "lista tus archivos"       (acción)
+
+    hechos_reales esperados:
+        {
+            "tipo_respuesta":    "EJECUCION",
+            "tipo_ejecucion":    "SHELL",
+            "comando_detectado": str,
+            "descripcion":       str,
+            "puede_ejecutar":    True,
+            "mensaje_original":  str,
+        }
+    """
+
 
 # ═══════════════════════════════════════════════════════════════════════
 # SETS EXPORTABLES
 # ═══════════════════════════════════════════════════════════════════════
 
 # Tipos que van por la ruta conversacional
-# generador_salida.py importa este set en lugar de mantener
-# su propia copia que no incluía los tipos nuevos de v4.
 TIPOS_CONVERSACIONALES: FrozenSet[str] = frozenset({
     # Existentes
     "IDENTIDAD_BELL",
@@ -122,10 +178,11 @@ TIPOS_CONVERSACIONALES: FrozenSet[str] = frozenset({
     "VERIFICACION_LOGICA",
     "CALCULO",
     "CONOCIMIENTO_GENERAL",
+    # v7 — nuevo
+    "EJECUCION",
 })
 
 # Tipos que requieren guardar datos en memoria DESDE EL MOTOR
-# (no esperar al generador)
 TIPOS_GUARDAN_EN_MEMORIA: FrozenSet[str] = frozenset({
     "REGISTRO_USUARIO",
 })
@@ -146,6 +203,7 @@ TIPOS_ACTUALIZAN_ESTADO: FrozenSet[str] = frozenset({
     "VERIFICACION_LOGICA",
     "CALCULO",
     "CONOCIMIENTO_GENERAL",
+    "EJECUCION",
     "DESCONOCIDO",
 })
 
@@ -212,10 +270,3 @@ class Decision:
             f"Decision(tipo={self.tipo.name}, certeza={self.certeza:.2f}, "
             f"ejecutable={self.puede_ejecutar})"
         )
-
-
-
-
-
-
-        

@@ -1,54 +1,33 @@
+# -*- coding: utf-8 -*-
 """
-motor_razonamiento.py — VERSION v6
+motor_razonamiento.py  VERSION v9.0
 
-FIXES APLICADOS (basados en diagnóstico 88 casos, 02/03/2026):
-═══════════════════════════════════════════════════════════════════════
+CAMBIOS v9.0 sobre v8.9-FIX-BD:
+═══════════════════════════════════════════════════════════════════
+FIX-M1  "cuánto es 15 * 8" → DESCONOCIDO (debería ser CALCULO)
+        CAUSA: CONCEPTO_OCHO_NUM no está en TRIGGERS_CALCULO, y
+               _es_calculo_por_texto() no detectaba operador directo.
+        FIX:  _es_calculo_por_texto() agrega patrón \d+\s*[+\-*/]\s*\d+.
 
-C-05  CONFIRMACIONES DIRECTAS
-      "sí", "no", "ok" tenían confianza 0% y caían a NO_ENTENDIDO.
-      Solución: razonar() los intercepta por texto ANTES del check
-      de confianza < 0.3. Set CONFIRMACIONES_DIRECTAS.
+FIX-M2  "cuánto es el 15% de 200" → CONFIRMACION (por CONCEPTO_200_OK)
+        CAUSA: CONCEPTO_200_OK en TRIGGERS_CONFIRMACION_POSITIVA se evaluaba
+               antes de _es_calculo(). El porcentaje nunca llegaba a CALCULO.
+        FIX:  a) _es_calculo_por_texto() detecta \d+\s*% y "por ciento".
+              b) clasificar_intencion(): en el bloque CONFIRMACION, si el
+                 mensaje tiene expresión calculable, prioriza CALCULO.
 
-C-04  CONSEJERAS EN CLASIFICADOR
-      "qué hace Vega" → CAPACIDAD_BELL. "cuántas consejeras" → DESCONOCIDO.
-      Solución: NOMBRES_CONSEJERAS + _es_consulta_consejera() evaluado
-      en P3.5, antes de P4. _hechos_identidad() incluye consejera
-      específica y su rol exacto cuando la detecta.
+FIX-M3  "resuelve x^2 - 5x + 6 = 0" → NEGATIVA certeza=0%
+        CAUSA: traductor da confianza baja → razonar() entra en early-exit
+               y no encuentra patrón shell ni BD → devuelve no-entendido.
+        FIX:  En bloque confianza < 0.3 de razonar(), agregar detección de
+              expresiones matemáticas avanzadas (verbo + contenido algebraico).
+              Nueva constante: _RE_EXPR_MAT_AVANZADA_CON_VERBO.
 
-A-02  REGISTRO_USUARIO ANTES DE IDENTIDAD_BELL
-      "me llamo Carlos" → IDENTIDAD_BELL porque P4 ganaba a P10.
-      Solución: _es_registro_usuario() sube a P2.5.
-
-A-01  CONSULTA_MEMORIA ANTES DE IDENTIDAD Y CAPACIDAD
-      "sabes cuántos años tengo" → CAPACIDAD_BELL.
-      "sabes mi nombre" → IDENTIDAD_BELL.
-      Solución: _es_consulta_memoria() ampliado + sube a P2.6.
-
-A-04  TRAMPA LLM → IDENTIDAD_BELL
-      "eres chatgpt", "eres un modelo de lenguaje" → DESCONOCIDO.
-      Solución: PALABRAS_LLM + _es_trampa_llm() en P3.5.
-
-A-06  VERBOS COGNITIVOS EN IMPERATIVO
-      "explícame", "simplifica", "repite" → DESCONOCIDO.
-      Solución: PATRONES_COGNITIVOS_TEXTO + detección en P6.5.
-
-M-01  "QUÉ ES X" → ACCION_COGNITIVA
-      "qué es una variable", "qué es sql" → DESCONOCIDO.
-      Solución: _es_definicion() con regex en P7.5.
-
-M-03  CUANTIFICACION PARA DATOS DE BELL
-      "cuántos conceptos tienes" → CONSULTA_MEMORIA (sin dato).
-      Solución: _es_cuantificacion_bell() en P5.5 con valores hardcoded.
-
-M-05  "BUENOS DÍAS", "MUCHAS GRACIAS" → SOCIAL
-      "buen" y "gracia" no estaban en vocabulario.
-      Solución: PATRONES_SOCIAL_TEXTO + detección por texto en P3.
-
-COMPATIBILIDAD: 100% con v5. Mismas firmas, mismo TipoDecision.
-main.py no necesita cambios adicionales.
-═══════════════════════════════════════════════════════════════════════
+Todos los fixes BD (FIX-BD1, BD2, BD3) preservados intactos de v8.9.
+═══════════════════════════════════════════════════════════════════
 """
 import re
+import unicodedata
 from typing import Dict, Optional
 
 from razonamiento.tipos_decision import (
@@ -60,6 +39,13 @@ from razonamiento.tipos_decision import (
 )
 from razonamiento.generador_decisiones import GeneradorDecisiones
 
+from core.capacidades_fase import (
+    NO_IMPLEMENTADAS_IDS,
+    esta_implementada,
+    razon_no_implementada,
+    detectar_patron_no_implementado,
+)
+
 try:
     from identidad_bell import (
         NARRATIVA_PROPIA,
@@ -70,10 +56,223 @@ try:
 except ImportError:
     _IDENTIDAD_DISPONIBLE = False
 
+try:
+    from habilidades.registro_habilidades import RegistroHabilidades
+    _REGISTRO_DISPONIBLE = True
+except ImportError:
+    _REGISTRO_DISPONIBLE = False
 
-# ═══════════════════════════════════════════════════════════════════════════
-# DATOS VERIFICADOS — HARDCODED (sin cambios desde v5)
-# ═══════════════════════════════════════════════════════════════════════════
+try:
+    from habilidades.shell_habilidad import HabilidadShell as _HabilidadShell
+    _SHELL_DISPONIBLE = True
+except ImportError:
+    _HabilidadShell = None
+    _SHELL_DISPONIBLE = False
+
+try:
+    from razonamiento.patrones_habilidades import detectar_habilidad_externa as _detectar_hab_ext
+    _PATRONES_EXT_DISPONIBLE = True
+except ImportError:
+    _detectar_hab_ext = None
+    _PATRONES_EXT_DISPONIBLE = False
+
+_PETICION_OPERACION = "_PETICION_OPERACION"
+
+
+# ======================================================================
+# NORMALIZADOR
+# ======================================================================
+def _norm(texto: str) -> str:
+    nfkd = unicodedata.normalize('NFD', texto)
+    sin_tildes = ''.join(c for c in nfkd if unicodedata.category(c) != 'Mn')
+    return sin_tildes.lower()
+
+
+# ======================================================================
+# CONCEPTOS SHELL
+# ======================================================================
+_CONCEPTOS_SHELL_IDS = {
+    "CONCEPTO_LS", "CONCEPTO_PWD", "CONCEPTO_DATE",
+    "CONCEPTO_WHOAMI", "CONCEPTO_HOSTNAME", "CONCEPTO_UNAME",
+    "CONCEPTO_UPTIME", "CONCEPTO_PS", "CONCEPTO_TOP",
+    "CONCEPTO_DF", "CONCEPTO_DU", "CONCEPTO_FREE",
+    "CONCEPTO_ENV", "CONCEPTO_ECHO", "CONCEPTO_TREE",
+    "CONCEPTO_GREP", "CONCEPTO_FIND", "CONCEPTO_HEAD",
+    "CONCEPTO_TAIL", "CONCEPTO_WC", "CONCEPTO_CAT",
+    "CONCEPTO_STAT", "CONCEPTO_FILE",
+    "CONCEPTO_KILL", "CONCEPTO_MKDIR", "CONCEPTO_TOUCH",
+    "CONCEPTO_HOY",
+    "CONCEPTO_MEMORIA",
+    "CONCEPTO_PROCESO_SHELL", "CONCEPTO_CPU_SHELL",
+    "CONCEPTO_DISCO",
+}
+
+# ======================================================================
+# CONCEPTOS SQLITE
+# ======================================================================
+_CONCEPTOS_SQLITE_IDS = {
+    "CONCEPTO_SQLITE",
+    "CONCEPTO_SQL",
+    "CONCEPTO_TABLA",
+    "CONCEPTO_SELECT",
+    "CONCEPTO_LISTAR_TABLAS",
+    "CONCEPTO_ESQUEMA",
+    "CONCEPTO_COUNT",
+    "CONCEPTO_INSERT",
+    "CONCEPTO_UPDATE",
+    "CONCEPTO_DELETE",
+    "CONCEPTO_CREAR_TABLA",
+    "CONCEPTO_ELIMINAR_TABLA",
+    "CONCEPTO_VACIAR_TABLA",
+    "CONCEPTO_INSERTAR_DATOS",
+    "CONCEPTO_SQL_ESCRITURA",
+    "CONCEPTO_REGISTRO",
+    "CONCEPTO_RESULTADO_QUERY",
+    "CONCEPTO_TRANSACCION",
+    "CONCEPTO_INDICE",
+    "CONCEPTO_CONECTAR_BD",
+    "CONCEPTO_DESCONECTAR_BD",
+    "CONCEPTO_BASE_DATOS",
+}
+
+# ======================================================================
+# PATRONES SHELL
+# ======================================================================
+_PATRONES_SHELL_DIRECTOS = [
+    r'lista\s+(?:tus\s+)?archivos',
+    r'lista\s+(?:los\s+)?archivos',
+    r'muestr[a-z]*\s+(?:tus?\s+|los\s+)?archivos',
+    r'que\s+archivos\s+(?:hay|tienes)',
+    r'donde\s+est[a-z]*',
+    r'directorio\s+actual',
+    r'ruta\s+actual',
+    r'en\s+que\s+(?:directorio|carpeta)',
+    r'cual\s+es\s+tu\s+directorio',
+    r'que\s+fecha',
+    r'fecha\s+(?:de\s+)?hoy',
+    r'que\s+hora',
+    r'hora\s+actual',
+    r'que\s+dia\s+(?:es\s+)?hoy',
+    r'cuanta\s+(?:ram|memoria)',
+    r'memoria\s+(?:ram|disponible|libre|usada)',
+    r'uso\s+de\s+memoria',
+    r'espacio\s+en\s+disco',
+    r'espacio\s+(?:libre|disponible)',
+    r'cuanto\s+espacio',
+    r'procesos\s+(?:activos|corriendo)',
+    r'que\s+procesos',
+    r'usuario\s+(?:del\s+sistema|actual)',
+    r'con\s+que\s+usuario',
+    r'que\s+usuario\s+soy',
+    r'que\s+usuario\s+eres',           # FIX-H7 en motor también
+    r'cual\s+es\s+tu\s+usuario',       # FIX-H7
+    r'sistema\s+operativo',
+    r'informacion\s+del\s+sistema',
+    r'que\s+(?:linux|kernel|sistema)',
+    r'version\s+(?:de\s+)?python',
+    r'python\s+version',
+    r'nombre\s+del\s+(?:equipo|servidor|maquina)',
+    r'estado\s+(?:de\s+)?git',
+    r'git\s+status',
+    r'historial\s+(?:de\s+)?git',
+    r'log\s+(?:de\s+)?git',
+    r'ramas?\s+(?:de\s+)?git',
+    r'variables?\s+de\s+entorno',
+    r'tiempo\s+(?:encendido|activo)',
+    r'cuanto\s+tiempo\s+(?:lleva|llevas)\s+(?:corriendo|activ[oa]|encendido)',
+    r'paquetes?\s+(?:pip|python|instalados?)',
+    r'que\s+(?:paquetes?|librerias?)\s+(?:hay|tienes)',
+    r'estructura\s+(?:de\s+)?(?:carpetas|directorios)',
+    r'arbol\s+(?:de\s+)?directorios',
+]
+
+_RE_PATRONES_SHELL = [re.compile(p, re.IGNORECASE) for p in _PATRONES_SHELL_DIRECTOS]
+
+
+# ======================================================================
+# PATRONES BD (lectura + escritura completos — de v8.9-FIX-BD)
+# ======================================================================
+_PATRONES_BD_DIRECTOS = [
+    r'estado\s+de\s+(?:tu\s+)?(?:base\s+de\s+datos|bd|sqlite)',
+    r'qu[e]\s+(?:base\s+de\s+datos|bd)\s+tienes',
+    r'tienes\s+(?:una\s+)?(?:base\s+de\s+datos|bd)',
+    r'muestra(?:me)?\s+(?:tu\s+)?(?:base\s+de\s+datos|bd)',
+    r'info(?:rmacion)?\s+de\s+(?:la\s+)?(?:base\s+de\s+datos|bd)',
+    r'qu[e]\s+tablas?\s+(?:hay|tienes|existen)',
+    r'lista(?:me)?\s+(?:las\s+)?tablas?',
+    r'muestr[a-z]*\s+(?:las\s+)?tablas?',
+    r'cu[a]ntas?\s+tablas?\s+(?:hay|tienes)',
+    r'tablas?\s+(?:disponibles?|existentes?)',
+    r'esquema\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'estructura\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'columnas?\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'campos?\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'describe\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'cu[a]ntos?\s+registros?\s+(?:hay|tiene)',
+    r'cu[a]ntas?\s+filas?\s+(?:hay|tiene)',
+    r'total\s+de\s+registros?\s+(?:en|de)\s+\w+',
+    r'count\s+(?:de\s+)?\w+',
+    r'datos?\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'contenido\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'registros?\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'muestra(?:me)?\s+(?:los?\s+)?(?:datos?|registros?)\s+de\s+\w+',
+    r'^select\s+.+\s+from\s+\w+',
+    r'ejecuta(?:me)?\s+(?:el\s+)?(?:sql|query|consulta)',
+    r'consulta\s+sql',
+    r'corre\s+(?:el\s+)?(?:sql|query)',
+    r'[i]ndices?\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'[i]ndices?\s+(?:disponibles?|existentes?)',
+    r'crea(?:r)?\s+(?:una\s+)?tabla\s+\w+',
+    r'crea(?:r)?\s+tabla\s+\w+',
+    r'nueva\s+tabla\s+\w+',
+    r'hacer\s+(?:una\s+)?tabla\s+\w+',
+    r'create\s+table\s+\w+',
+    r'inserta(?:r)?\s+.+\s+en\s+\w+',
+    r'agrega(?:r)?\s+.+\s+(?:a|en)\s+\w+',
+    r'a[na]de?\s+.+\s+(?:a|en)\s+\w+',
+    r'guarda(?:r)?\s+.+\s+en\s+\w+',
+    r'^insert\s+into\s+\w+',
+    r'insert\s+into\s+\w+',
+    r'nuevo\s+registro\s+en\s+\w+',
+    r'actualiza(?:r)?\s+.+\s+(?:en|de)\s+\w+',
+    r'cambia(?:r)?\s+.+\s+(?:en|de)\s+\w+',
+    r'modifica(?:r)?\s+.+\s+(?:en|de)\s+\w+',
+    r'^update\s+\w+\s+set',
+    r'update\s+\w+\s+set',
+    r'elimin[a-z]*\s+.+\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'borra(?:r)?\s+.+\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'^delete\s+from\s+\w+',
+    r'delete\s+from\s+\w+',
+    r'vac[i]a(?:r)?\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'limpia(?:r)?\s+(?:la\s+)?(?:tabla\s+)?\w+',
+    r'borra(?:r)?\s+todos?\s+(?:los\s+)?registros?\s+de\s+\w+',
+    r'elimin[a-z]*\s+todos?\s+(?:los\s+)?registros?\s+de\s+\w+',
+    r'^truncate\s+(?:table\s+)?\w+',
+    r'truncate\s+(?:table\s+)?\w+',
+    r'elimin[a-z]*\s+(?:la\s+)?tabla\s+\w+',
+    r'borra(?:r)?\s+(?:la\s+)?tabla\s+\w+',
+    r'^drop\s+(?:table\s+)?\w+',
+    r'drop\s+(?:table\s+)?\w+',
+    r'destruye?\s+(?:la\s+)?tabla\s+\w+',
+]
+
+_RE_PATRONES_BD = [re.compile(p, re.IGNORECASE) for p in _PATRONES_BD_DIRECTOS]
+
+
+# ======================================================================
+# FIX-M3: patrón para detectar mat avanzada con confianza baja
+# ======================================================================
+_RE_EXPR_MAT_AVANZADA_CON_VERBO = re.compile(
+    r'(?:resolv|resuelv|deriv|integr|l[íi]mite|lim\s*\(|taylor|factori|simplif|expan)\w*'
+    r'.{0,60}'
+    r'(?:[a-zA-Z]\s*[\*\+\-\/\^]|[\*\+\-\/\^]\s*[a-zA-Z]|\d\s*[\*\+\-\/\^]|\()',
+    re.IGNORECASE
+)
+
+
+# ======================================================================
+# RESTO DE CONSTANTES (idénticas a v8.9 — sin cambios)
+# ======================================================================
 
 CONSEJERAS_ROLES_OFICIALES = {
     "Vega":  "Guardiana de principios y seguridad — tiene poder de veto sobre cualquier decision",
@@ -87,12 +286,13 @@ CONSEJERAS_ROLES_OFICIALES = {
 
 CAPACIDADES_REALES_BELL = {
     "ejecutables": [
-        "Razonar sobre problemas usando 1472 conceptos verificados",
+        "Razonar sobre problemas usando 1503 conceptos verificados",
         "Recordar la conversacion actual y datos del usuario",
         "Detectar emociones y adaptar el tono",
-        "Consultar bases de datos SQLite",
+        "Consultar y modificar bases de datos SQLite (CRUD completo)",
         "Ejecutar codigo Python basico",
-        "Ejecutar comandos de terminal (36 comandos disponibles)",
+        "Ejecutar comandos de terminal (165 comandos disponibles)",
+        "Calculos matematicos basicos y avanzados (SymPy): derivadas, integrales, limites, Taylor",
     ],
     "NO_ejecutables_aun": [
         "Crear archivos (capacidad pendiente de implementar)",
@@ -103,60 +303,42 @@ CAPACIDADES_REALES_BELL = {
     ],
 }
 
-
-# ═══════════════════════════════════════════════════════════════════════════
-# CONSTANTES NUEVAS v6
-# ═══════════════════════════════════════════════════════════════════════════
-
-# FIX C-05: palabras que son SIEMPRE confirmaciones — bypasan confianza 0%
 CONFIRMACIONES_DIRECTAS = {
-    "sí", "si", "no", "ok", "okay", "dale", "listo", "claro",
+    "si", "si", "no", "ok", "okay", "dale", "listo", "claro",
     "correcto", "exacto", "perfecto", "adelante", "negativo",
     "afirmativo", "bueno", "bien", "entendido", "de acuerdo",
-    "va", "ya", "ándale", "andale", "sale",
+    "va", "ya", "andale", "andale", "sale",
 }
 
-# FIX C-04: nombres de consejeras para detección por texto
 NOMBRES_CONSEJERAS = {"vega", "echo", "lyra", "nova", "luna", "iris", "sage"}
 
-# FIX A-04: palabras/frases que indican comparación con otro LLM
 PALABRAS_LLM = {
     "modelo de lenguaje", "llm", "chatgpt", "gpt", "openai",
     "inteligencia artificial", "ia", "bot", "chatbot", "robot",
     "claude", "gemini", "copilot", "bard",
 }
 
-# FIX A-06: verbos cognitivos en imperativo que el vocab no captura
 PATRONES_COGNITIVOS_TEXTO = {
-    "explícame":    "EXPLICAR",
     "explicame":    "EXPLICAR",
     "explica":      "EXPLICAR",
     "simplifica":   "SIMPLIFICAR",
-    "simplifícame": "SIMPLIFICAR",
     "simplificame": "SIMPLIFICAR",
     "repite":       "REPETIR",
-    "repíteme":     "REPETIR",
     "repetir":      "REPETIR",
     "define":       "DEFINIR",
-    "defíneme":     "DEFINIR",
     "defineme":     "DEFINIR",
     "reformula":    "REFORMULAR",
     "aclara":       "ACLARAR",
-    "continúa":     "ELABORAR",
     "continua":     "ELABORAR",
     "desarrolla":   "ELABORAR",
-    "amplía":       "ELABORAR",
     "amplia":       "ELABORAR",
 }
 
-# FIX M-05: patrones sociales no cubiertos por vocabulario
 PATRONES_SOCIAL_TEXTO = {
-    "buenos días":        "SALUDO",
     "buenos dias":        "SALUDO",
     "buenas tardes":      "SALUDO",
     "buenas noches":      "SALUDO",
     "buenas":             "SALUDO",
-    "buen día":           "SALUDO",
     "buen dia":           "SALUDO",
     "muchas gracias":     "AGRADECIMIENTO",
     "mil gracias":        "AGRADECIMIENTO",
@@ -164,22 +346,15 @@ PATRONES_SOCIAL_TEXTO = {
     "muy agradecido":     "AGRADECIMIENTO",
     "muy agradecida":     "AGRADECIMIENTO",
     "gracias por todo":   "AGRADECIMIENTO",
-    "muchísimas gracias": "AGRADECIMIENTO",
     "muchisimas gracias": "AGRADECIMIENTO",
 }
 
-# FIX M-03: datos cuantificables de Bell con valores hardcoded
 _CUANTIFICACION_BELL = {
-    "conceptos":           1472,
-    "consejeras":          7,
-    "comandos":            36,
-    "comandos de terminal": 36,
+    "conceptos":            1503,
+    "consejeras":           7,
+    "comandos":             165,
+    "comandos de terminal": 165,
 }
-
-
-# ═══════════════════════════════════════════════════════════════════════════
-# TRIGGERS — igual que v5 + alias nuevos en CALCULO
-# ═══════════════════════════════════════════════════════════════════════════
 
 TRIGGERS_IDENTIDAD = {
     "CONCEPTO_QUIEN", "CONCEPTO_QUIEN_PREGUNTA",
@@ -254,6 +429,32 @@ TRIGGERS_ACCION_COGNITIVA = {
     "CONCEPTO_CONTRASTAR",
 }
 
+_CONCEPTOS_COGNITIVOS_AMBIGUOS = {
+    "CONCEPTO_SIMPLIFICAR",
+    "CONCEPTO_EXPANDIR",
+    "CONCEPTO_ELABORAR",
+}
+
+_CONCEPTOS_MAT_CALCULO = {
+    "CONCEPTO_DERIVAR",
+    "CONCEPTO_INTEGRAR",
+    "CONCEPTO_RESOLVER_ECUACION",
+    "CONCEPTO_SERIE_TAYLOR",
+    "CONCEPTO_LIMITE",
+    "CONCEPTO_SIMPLIFICAR",
+    "CONCEPTO_EXPANDIR",
+    "CONCEPTO_FACTORIZAR",
+    "CONCEPTO_EVALUAR",
+    "CONCEPTO_DERIVADA",
+    "CONCEPTO_DERIVADA_PRIMERA",
+    "CONCEPTO_DERIVADA_SEGUNDA",
+    "CONCEPTO_INTEGRAL",
+    "CONCEPTO_INTEGRAL_DEFINIDA",
+    "CONCEPTO_INTEGRAL_INDEFINIDA",
+    "CONCEPTO_RAIZ_AVANZADA",
+    "CONCEPTO_ECUACION_AVANZADA",
+}
+
 TRIGGERS_CONFIRMACION_POSITIVA = {
     "CONCEPTO_SI", "CONCEPTO_SI_AFIRMACION",
     "CONCEPTO_DE_ACUERDO", "CONCEPTO_ENTENDIDO",
@@ -274,7 +475,8 @@ TRIGGERS_TEMPORAL = {
     "CONCEPTO_ANTES", "CONCEPTO_AHORA", "CONCEPTO_DESPUES",
     "CONCEPTO_HACE_MOMENTO", "CONCEPTO_ANTERIORMENTE",
     "CONCEPTO_RECIEN", "CONCEPTO_PREVIO", "CONCEPTO_LUEGO",
-    "CONCEPTO_HACE_RATO", "CONCEPTO_HOY", "CONCEPTO_ANTES_DIJISTE",
+    "CONCEPTO_HACE_RATO",
+    "CONCEPTO_ANTES_DIJISTE",
     "CONCEPTO_MENCIONASTE", "CONCEPTO_DIJISTE", "CONCEPTO_AYER",
 }
 
@@ -310,17 +512,22 @@ TRIGGERS_CALCULO = {
     "CONCEPTO_SUMA_OP", "CONCEPTO_RESTA_OP",
     "CONCEPTO_DIVISION", "CONCEPTO_POTENCIA", "CONCEPTO_RAIZ",
     "CONCEPTO_CALCULAR", "CONCEPTO_RESULTADO",
-    # v6: aliases del vocabulario real
     "CONCEPTO_SUMA", "CONCEPTO_RESTA", "CONCEPTO_ENTRE_OP",
-    "CONCEPTO_RAIZ_AVANZADA",
+    "CONCEPTO_RAIZ_AVANZADA", "CONCEPTO_MODULO", "CONCEPTO_ABS",
+    "CONCEPTO_REDONDEO", "CONCEPTO_PORCENTAJE",
+    "CONCEPTO_DERIVAR", "CONCEPTO_DERIVADA",
+    "CONCEPTO_DERIVADA_PRIMERA", "CONCEPTO_DERIVADA_SEGUNDA",
+    "CONCEPTO_INTEGRAR", "CONCEPTO_INTEGRAL",
+    "CONCEPTO_INTEGRAL_DEFINIDA", "CONCEPTO_INTEGRAL_INDEFINIDA",
+    "CONCEPTO_LIMITE", "CONCEPTO_SERIE_TAYLOR",
+    "CONCEPTO_SIMPLIFICAR", "CONCEPTO_EXPANDIR", "CONCEPTO_FACTORIZAR",
+    "CONCEPTO_RESOLVER_ECUACION", "CONCEPTO_EVALUAR",
 }
 
 TRIGGERS_CONOCIMIENTO_GENERAL = {
     "CONCEPTO_CAPITAL_CIUDAD", "CONCEPTO_PAIS", "CONCEPTO_HISTORIA",
     "CONCEPTO_CIENTFICO", "CONCEPTO_CONCEPTO_GRAL",
 }
-
-# ── Lookup tables internas ──────────────────────────────────────────────────
 
 _SOCIAL_SUBTIPOS = {
     "CONCEPTO_HOLA": "SALUDO", "CONCEPTO_HOLA_EXPR": "SALUDO",
@@ -342,22 +549,22 @@ _SOCIAL_SUBTIPOS = {
 }
 
 _USUARIO_EMOCIONES = {
-    "CONCEPTO_FRUSTRADO":     ("FRUSTRADO",  "negativo", "paciente"),
-    "CONCEPTO_ENOJADO":       ("ENOJADO",    "negativo", "calmado"),
-    "CONCEPTO_CONFUNDIDO":    ("CONFUNDIDO", "negativo", "claro"),
-    "CONCEPTO_PERDIDO":       ("PERDIDO",    "negativo", "orientador"),
-    "CONCEPTO_PERDIDO_ESTADO":("PERDIDO",    "negativo", "orientador"),
-    "CONCEPTO_TRISTE":        ("TRISTE",     "negativo", "empatico"),
-    "CONCEPTO_CANSADO":       ("CANSADO",    "negativo", "comprensivo"),
-    "CONCEPTO_ESTRESADO":     ("ESTRESADO",  "negativo", "tranquilizador"),
-    "CONCEPTO_PREOCUPADO":    ("PREOCUPADO", "negativo", "tranquilizador"),
-    "CONCEPTO_ANSIOSO":       ("ANSIOSO",    "negativo", "tranquilizador"),
-    "CONCEPTO_ABURRIDO":      ("ABURRIDO",   "negativo", "estimulante"),
-    "CONCEPTO_FELIZ":         ("FELIZ",      "positivo", "entusiasta"),
-    "CONCEPTO_EMOCIONADO":    ("EMOCIONADO", "positivo", "entusiasta"),
-    "CONCEPTO_CONTENTO":      ("CONTENTO",   "positivo", "calido"),
-    "CONCEPTO_INTERESANTE":   ("INTERESADO", "positivo", "curioso"),
-    "CONCEPTO_UNICO":         ("SOLO",       "negativo", "empatico"),
+    "CONCEPTO_FRUSTRADO":      ("FRUSTRADO",  "negativo", "paciente"),
+    "CONCEPTO_ENOJADO":        ("ENOJADO",    "negativo", "calmado"),
+    "CONCEPTO_CONFUNDIDO":     ("CONFUNDIDO", "negativo", "claro"),
+    "CONCEPTO_PERDIDO":        ("PERDIDO",    "negativo", "orientador"),
+    "CONCEPTO_PERDIDO_ESTADO": ("PERDIDO",    "negativo", "orientador"),
+    "CONCEPTO_TRISTE":         ("TRISTE",     "negativo", "empatico"),
+    "CONCEPTO_CANSADO":        ("CANSADO",    "negativo", "comprensivo"),
+    "CONCEPTO_ESTRESADO":      ("ESTRESADO",  "negativo", "tranquilizador"),
+    "CONCEPTO_PREOCUPADO":     ("PREOCUPADO", "negativo", "tranquilizador"),
+    "CONCEPTO_ANSIOSO":        ("ANSIOSO",    "negativo", "tranquilizador"),
+    "CONCEPTO_ABURRIDO":       ("ABURRIDO",   "negativo", "estimulante"),
+    "CONCEPTO_FELIZ":          ("FELIZ",      "positivo", "entusiasta"),
+    "CONCEPTO_EMOCIONADO":     ("EMOCIONADO", "positivo", "entusiasta"),
+    "CONCEPTO_CONTENTO":       ("CONTENTO",   "positivo", "calido"),
+    "CONCEPTO_INTERESANTE":    ("INTERESADO", "positivo", "curioso"),
+    "CONCEPTO_UNICO":          ("SOLO",       "negativo", "empatico"),
 }
 
 _ACCION_COGNITIVA_TIPOS = {
@@ -394,11 +601,67 @@ _OPERADORES_MATEMATICOS = {
 }
 
 _PALABRAS_EXCLUIDAS_NOMBRE = {
-    'un', 'una', 'el', 'la', 'yo', 'tu', 'tú', 'mi', 'me',
+    'un', 'una', 'el', 'la', 'yo', 'tu', 'mi', 'me',
     'capaz', 'bueno', 'malo', 'feliz', 'solo', 'humano', 'persona',
     'que', 'quien', 'como', 'donde', 'para', 'con', 'sin', 'de',
     'uno', 'dos', 'tres', 'diez',
 }
+
+_PALABRAS_MAT_AVANZADA = {
+    'deriva', 'derivada', 'diferencial',
+    'integra', 'integral', 'antiderivada',
+    'limite', 'lim(',
+    'taylor', 'serie de',
+    'factori',
+    'simplif',
+    'expande', 'expand',
+    'resolv',
+    'resuelv',
+    'soluciones de', 'raices de',
+    'evalua',
+}
+
+_VERBOS_CAPACIDAD_MAT = {
+    'puedes', 'puedo', 'sabes', 'eres capaz', 'podrias',
+    'haces', 'es posible', 'puedes hacer',
+}
+
+_PALABRAS_MAT_SIN_EXPR = {
+    'deriva', 'derivar', 'derivada', 'derivadas',
+    'integra', 'integrar', 'integral', 'integrales',
+    'limite', 'limites',
+    'taylor',
+    'factori', 'factorizar',
+    'simplif', 'simplificar',
+    'expande', 'expandir',
+    'resolver', 'resuelve',
+    'calcular', 'calculos', 'matematica', 'matematicas',
+    'sumar', 'suma', 'sumas',
+    'restar', 'resta',
+    'multiplicar', 'multiplicacion', 'multiplicaciones',
+    'dividir', 'division',
+    'potencia', 'elevar', 'elevado',
+    'raiz', 'raices',
+    'operar', 'operacion', 'operaciones',
+}
+
+_RE_EXPR_MAT = re.compile(
+    r'(?:'
+    r'[a-z]\s*[\*\+\-\/\^]'
+    r'|[\*\+\-\/\^]\s*[a-z]'
+    r'|\d+\s*[\*\+\-\/\^]'
+    r'|[\*\+\-\/\^]\s*\d+'
+    r'|\([a-z\d\s\+\-\*\/\^\*]+\)'
+    r'|x\*\*\d'
+    r'|\d+\s+[a-z]\s+\d'
+    r'|sin\(|cos\(|tan\(|sqrt\('
+    r')',
+    re.IGNORECASE
+)
+
+
+def _tiene_expresion_matematica(msg: str) -> bool:
+    return bool(_RE_EXPR_MAT.search(msg))
 
 
 def _clamp_certeza(valor) -> float:
@@ -409,52 +672,31 @@ def _clamp_certeza(valor) -> float:
     return max(0.0, min(v, 1.0))
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# MOTOR DE RAZONAMIENTO v6
-# ═══════════════════════════════════════════════════════════════════════════
+# ======================================================================
+# MOTOR DE RAZONAMIENTO v9.0
+# ======================================================================
 
 class MotorRazonamiento:
-    """
-    El cerebro de Bell — v6.
-
-    Atributos opcionales inyectables desde main.py (igual que v5):
-        gestor_vocabulario
-        gestor_memoria
-    """
 
     def __init__(self):
         self.generador          = GeneradorDecisiones()
         self.gestor_vocabulario = None
         self.gestor_memoria     = None
+        self._habilidad_shell   = _HabilidadShell() if _SHELL_DISPONIBLE else None
 
     def _memoria(self):
         return self.gestor_memoria
 
-    # ───────────────────────────────────────────────────────────────────────
+    # ------------------------------------------------------------------
     # MÉTODO PRINCIPAL
-    # ───────────────────────────────────────────────────────────────────────
+    # ------------------------------------------------------------------
 
     def razonar(self, traduccion: Dict) -> Decision:
-        """
-        FLUJO v6:
-          0. ← NUEVO: Si el mensaje es confirmación directa → CONFIRMACION
-             (bypasa el check de confianza < 0.3)
-          1. Verificar confianza mínima
-          2. Clasificar intención
-          3. Actualizar estado en memoria
-          4. Construir hechos
-          5. Guardar en memoria si aplica
-          6. Retornar Decision
-        """
         conceptos  = traduccion.get('conceptos', [])
         mensaje    = traduccion.get('texto_original', '')
         confianza  = _clamp_certeza(traduccion.get('confianza', 0.0))
         msg_limpio = mensaje.lower().strip() if mensaje else ""
 
-        # ── P0 v6: Bypass para confirmaciones directas — FIX C-05 ──────────
-        # "sí", "no", "ok" tienen confianza 0% porque son palabras de 1 sílaba.
-        # Las capturamos ANTES del check de confianza para que nunca caigan
-        # a NO_ENTENDIDO.
         if msg_limpio in CONFIRMACIONES_DIRECTAS:
             ids   = {c.id for c in conceptos}
             valor = "NEGATIVA" if (
@@ -466,55 +708,136 @@ class MotorRazonamiento:
                 certeza=1.0,
                 conceptos_principales=[c.id for c in conceptos],
                 puede_ejecutar=False,
-                razon="Confirmacion directa detectada por texto (v6)",
+                razon="Confirmacion directa detectada por texto",
                 hechos_reales={
-                    "tipo_respuesta":  "CONFIRMACION",
-                    "valor":           valor,
+                    "tipo_respuesta":   "CONFIRMACION",
+                    "valor":            valor,
                     "palabra_original": msg_limpio,
                 },
             )
 
         if confianza < 0.3:
+            msg_norm_early = _norm(msg_limpio)
+
+            if self._es_ejecucion_shell_directa(msg_norm_early):
+                hechos = self._hechos_ejecucion(conceptos, mensaje)
+                return Decision(
+                    tipo=TipoDecision.EJECUCION,
+                    certeza=1.0,
+                    conceptos_principales=[],
+                    puede_ejecutar=True,
+                    operacion_disponible="ejecutar_habilidad",
+                    razon="FIX-M17: patron shell directo con confianza baja",
+                    hechos_reales=hechos,
+                )
+
+            # FIX-BD: probar tanto msg_norm como msg_limpio (con tildes)
+            if (self._es_ejecucion_bd_directa(msg_norm_early)
+                    or self._es_ejecucion_bd_directa(msg_limpio)):
+                hechos = self._hechos_ejecucion_bd(conceptos, mensaje)
+                return Decision(
+                    tipo=TipoDecision.EJECUCION,
+                    certeza=1.0,
+                    conceptos_principales=[],
+                    puede_ejecutar=True,
+                    operacion_disponible="ejecutar_habilidad",
+                    razon="FIX-BD: patron BD directo con confianza baja",
+                    hechos_reales=hechos,
+                )
+
+            # ── FIX-M3: expresion matematica avanzada con confianza baja ──
+            # "resuelve x^2 - 5x + 6 = 0" llega con certeza=0% porque el
+            # traductor no reconoce notacion algebraica compleja.
+            if _RE_EXPR_MAT_AVANZADA_CON_VERBO.search(msg_limpio):
+                hechos = self._hechos_calculo(conceptos, mensaje)
+                return Decision(
+                    tipo=TipoDecision.CALCULO,
+                    certeza=0.85,
+                    conceptos_principales=[],
+                    puede_ejecutar=True,
+                    operacion_disponible="ejecutar_habilidad",
+                    razon="FIX-M3: expresion matematica avanzada detectada con confianza baja",
+                    hechos_reales=hechos,
+                )
+
             return self.generador.generar_decision_no_entendido(confianza)
 
-        tipo = self.clasificar_intencion(conceptos, mensaje)
+        tipo_semantico = self.clasificar_intencion(conceptos, mensaje)
 
-        if tipo.name in TIPOS_ACTUALIZAN_ESTADO:
-            self._actualizar_estado_memoria(tipo.name, mensaje)
+        if tipo_semantico.name in TIPOS_ACTUALIZAN_ESTADO:
+            self._actualizar_estado_memoria(tipo_semantico.name, mensaje)
 
-        if tipo == TipoDecision.AFIRMATIVA:
-            decision = self._razonar_operacion(traduccion)
+        if tipo_semantico == TipoDecision.AFIRMATIVA:
+            decision = self._resolver_decision(traduccion)
             if not (0.0 <= decision.certeza <= 1.0):
                 decision.certeza = _clamp_certeza(decision.certeza)
             return decision
 
-        hechos          = self.construir_hechos(tipo, conceptos, mensaje)
+        hechos          = self.construir_hechos(tipo_semantico, conceptos, mensaje)
         ids_principales = [c.id for c in conceptos] if conceptos else []
 
-        if tipo.name in TIPOS_GUARDAN_EN_MEMORIA:
+        if tipo_semantico.name in TIPOS_GUARDAN_EN_MEMORIA:
             self._guardar_dato_en_memoria(hechos)
 
         return Decision(
-            tipo=tipo,
+            tipo=tipo_semantico,
             certeza=confianza,
             conceptos_principales=ids_principales,
-            puede_ejecutar=(tipo == TipoDecision.CALCULO),
-            operacion_disponible=("ejecutar_calculo" if tipo == TipoDecision.CALCULO else None),
-            razon=f"Intencion clasificada como {tipo.name}",
+            puede_ejecutar=(tipo_semantico in (TipoDecision.CALCULO, TipoDecision.EJECUCION)),
+            operacion_disponible=("ejecutar_habilidad" if tipo_semantico in (
+                TipoDecision.CALCULO, TipoDecision.EJECUCION
+            ) else None),
+            razon=f"Intencion clasificada como {tipo_semantico.name}",
             hechos_reales=hechos,
         )
 
-    def _razonar_operacion(self, traduccion: Dict) -> Decision:
+    def _resolver_decision(self, traduccion: Dict) -> Decision:
         conceptos = traduccion.get('conceptos', [])
         intencion = traduccion.get('intencion', '')
+        mensaje   = traduccion.get('texto_original', '').lower()
+
         if intencion == 'SALUDO':
             return self.generador.generar_decision_saludo(conceptos)
-        elif intencion == 'AGRADECIMIENTO':
+        if intencion == 'AGRADECIMIENTO':
             return self.generador.generar_decision_agradecimiento(conceptos)
-        else:
-            return self.generador.generar_decision_capacidad(conceptos, intencion)
 
-    # ── Integración con memoria (igual que v5) ────────────────────────────
+        concepto_bloqueado = None
+        razon_bloqueo      = ""
+        for concepto in conceptos:
+            if not esta_implementada(concepto.id):
+                concepto_bloqueado = concepto
+                razon_bloqueo      = razon_no_implementada(concepto.id)
+                break
+
+        if concepto_bloqueado is not None:
+            hechos = self._hechos_capacidad(conceptos, traduccion.get('texto_original', ''))
+            hechos['capacidad_bloqueada_id']         = concepto_bloqueado.id
+            hechos['capacidad_bloqueada_razon']      = razon_bloqueo
+            hechos['capacidad_solicitada_disponible'] = False
+            return Decision(
+                tipo=TipoDecision.CAPACIDAD_BELL,
+                certeza=1.0,
+                conceptos_principales=[c.id for c in conceptos],
+                puede_ejecutar=False,
+                razon=f"Capacidad no implementada: {razon_bloqueo}",
+                hechos_reales=hechos,
+            )
+
+        patron, razon_patron = detectar_patron_no_implementado(mensaje)
+        if patron:
+            hechos = self._hechos_capacidad(conceptos, traduccion.get('texto_original', ''))
+            hechos['capacidad_solicitada_disponible'] = False
+            hechos['capacidad_bloqueada_razon']       = razon_patron
+            return Decision(
+                tipo=TipoDecision.CAPACIDAD_BELL,
+                certeza=1.0,
+                conceptos_principales=[c.id for c in conceptos],
+                puede_ejecutar=False,
+                razon=f"Capacidad no implementada detectada por texto: {razon_patron}",
+                hechos_reales=hechos,
+            )
+
+        return self.generador.generar_decision_capacidad(conceptos, intencion)
 
     def _actualizar_estado_memoria(self, tipo_nombre: str, mensaje: str):
         mem = self._memoria()
@@ -536,7 +859,7 @@ class MotorRazonamiento:
         m = mensaje.lower()
         if any(p in m for p in ["frustrado", "no funciona", "imposible", "harto"]):
             return "frustrado"
-        if any(p in m for p in ["genial", "excelente", "perfecto", "funcionó"]):
+        if any(p in m for p in ["genial", "excelente", "perfecto"]):
             return "contento"
         if any(p in m for p in ["confundido", "no entiendo", "perdido"]):
             return "confundido"
@@ -559,61 +882,60 @@ class MotorRazonamiento:
         except Exception:
             pass
 
-    # ───────────────────────────────────────────────────────────────────────
-    # CLASIFICADOR DE INTENCIÓN — v6
-    # ───────────────────────────────────────────────────────────────────────
+    # ------------------------------------------------------------------
+    # CLASIFICADOR
+    # ------------------------------------------------------------------
 
     def clasificar_intencion(self, conceptos: list, mensaje: str = "") -> TipoDecision:
-        """
-        Prioridades v6 (cambios marcados con ←):
-
-          P1:   Operaciones ejecutables          (sin cambio)
-          P2:   Estados emocionales              (sin cambio)
-          P2.5: REGISTRO_USUARIO                ← subido desde P10
-          P2.6: CONSULTA_MEMORIA                ← subido desde P11 + expandido
-          P3:   Social                           ← + detección por texto
-          P3.5: Consulta consejera específica    ← NUEVO
-          P3.6: Trampa LLM → IDENTIDAD_BELL     ← NUEVO
-          P4:   Identidad Bell                   (sin cambio)
-          P5:   Estado Bell                      (sin cambio)
-          P5.5: Cuantificación sobre Bell        ← NUEVO
-          P6:   Capacidad Bell                   (sin cambio)
-          P6.5: Verbos cognitivos por texto      ← NUEVO
-          P7:   Acciones cognitivas por trigger  (sin cambio)
-          P7.5: "qué es X" → ACCION_COGNITIVA   ← NUEVO
-          P8:   Confirmaciones por trigger       (sin cambio)
-          P9:   Temporal / Cuantificación        (sin cambio)
-          P12:  VERIFICACION_LOGICA              (sin cambio)
-          P13:  CALCULO                          (sin cambio)
-          P14:  CONOCIMIENTO_GENERAL             (sin cambio)
-          P15:  DESCONOCIDO                      (sin cambio)
-        """
         if not conceptos:
-            # Sin conceptos, intentar clasificar por texto puro
             msg_solo = mensaje.lower().strip() if mensaje else ""
             tipo_texto = self._clasificar_por_texto_puro(msg_solo)
             return tipo_texto if tipo_texto else TipoDecision.DESCONOCIDO
 
-        ids = {c.id for c in conceptos}
-        msg = mensaje.lower().strip() if mensaje else ""
+        ids      = {c.id for c in conceptos}
+        msg      = mensaje.lower().strip() if mensaje else ""
+        msg_norm = _norm(msg)
 
-        # P1: Operaciones ejecutables — verifica contra capacidades reales (FIX Fase 4A)
-        _NO_IMPLEMENTADAS_FASE4A = {
-            "CONCEPTO_TOUCH", "CONCEPTO_MKDIR", "CONCEPTO_CAT",
-            "CONCEPTO_CP", "CONCEPTO_MV", "CONCEPTO_NANO",
-            "CONCEPTO_CHMOD", "CONCEPTO_CHOWN", "CONCEPTO_TAIL",
-            "CONCEPTO_HEAD", "CONCEPTO_LESS", "CONCEPTO_MORE",
-            "CONCEPTO_DIFF", "CONCEPTO_TAR", "CONCEPTO_ZIP",
-            "CONCEPTO_UNZIP", "CONCEPTO_WGET", "CONCEPTO_CURL",
-            "CONCEPTO_SSH", "CONCEPTO_SCP", "CONCEPTO_RSYNC",
-        }
+        if self._es_pregunta_capacidad_mat(msg):
+            return TipoDecision.CAPACIDAD_BELL
+
+        # P0.5 SHELL
+        tiene_concepto_shell = bool(ids & _CONCEPTOS_SHELL_IDS)
+        es_shell_directo     = self._es_ejecucion_shell_directa(msg_norm)
+        es_shell_habilidad   = self._es_ejecucion_shell(msg_norm)
+
+        if es_shell_directo or (tiene_concepto_shell and es_shell_habilidad):
+            return TipoDecision.EJECUCION
+
+        # P0.5 EXT: SQLite y habilidades externas
+        tiene_concepto_bd = bool(ids & _CONCEPTOS_SQLITE_IDS)
+        es_bd_norm        = self._es_ejecucion_bd_directa(msg_norm)
+        es_bd_original    = self._es_ejecucion_bd_directa(msg)
+
+        if tiene_concepto_bd and (es_bd_norm or es_bd_original):
+            return TipoDecision.EJECUCION
+
+        if _PATRONES_EXT_DISPONIBLE and _detectar_hab_ext is not None:
+            try:
+                if (_detectar_hab_ext(msg_norm) is not None
+                        or _detectar_hab_ext(msg) is not None):
+                    return TipoDecision.EJECUCION
+            except Exception:
+                pass
+
+        # P1: Conceptos ejecutables
         for concepto in conceptos:
             if hasattr(concepto, 'operaciones') and concepto.operaciones:
                 if concepto.confianza_grounding >= 0.9:
-                    if concepto.id in _NO_IMPLEMENTADAS_FASE4A:
-                        return TipoDecision.CAPACIDAD_BELL
+                    if concepto.id in _CONCEPTOS_SHELL_IDS:
+                        continue
+                    if concepto.id in _CONCEPTOS_SQLITE_IDS:
+                        continue
+                    if concepto.id in _CONCEPTOS_MAT_CALCULO:
+                        return TipoDecision.CALCULO
                     return TipoDecision.AFIRMATIVA
-        # P2: Estados emocionales
+
+        # P2: Estado emocional usuario
         for concepto in conceptos:
             props = getattr(concepto, 'propiedades', {}) or {}
             if props.get('es_estado_emocional'):
@@ -621,157 +943,173 @@ class MotorRazonamiento:
         if ids & TRIGGERS_ESTADO_USUARIO:
             return TipoDecision.ESTADO_USUARIO
 
-        # P2.5: REGISTRO_USUARIO — subido desde P10 (FIX A-02)
-        # Evaluar ANTES de Identidad Bell para que "me llamo X" no
-        # sea confundido con una pregunta sobre el nombre de Bell.
         if self._es_registro_usuario(ids, msg):
             return TipoDecision.REGISTRO_USUARIO
 
-        # P2.6: CONSULTA_MEMORIA — subido y expandido (FIX A-01)
-        # Evaluar ANTES de Identidad y Capacidad para que "sabes mi nombre"
-        # no sea confundido con identidad, y "sabes cuántos años tengo"
-        # no caiga a capacidad.
         if self._es_consulta_memoria(ids, msg):
             return TipoDecision.CONSULTA_MEMORIA
 
-        # P3: Social — + detección por texto (FIX M-05)
         if ids & TRIGGERS_SOCIAL:
             return TipoDecision.SOCIAL
         if self._detectar_social_por_texto(msg):
             return TipoDecision.SOCIAL
 
-        # P3.5: Consulta de consejera específica (FIX C-04)
-        # "qué hace Vega", "cuál es el rol de Echo", "cuántas consejeras tienes"
         if self._es_consulta_consejera(ids, msg):
             return TipoDecision.IDENTIDAD_BELL
 
-        # P3.6: Trampa LLM (FIX A-04)
-        # "eres chatgpt", "eres un modelo de lenguaje", "eres IA"
         if self._es_trampa_llm(msg):
             return TipoDecision.IDENTIDAD_BELL
 
-        # P4: Identidad Bell
         if ids & TRIGGERS_IDENTIDAD:
             if not any(c.id.startswith("CONCEPTO_ARCHIVO") for c in conceptos):
                 return TipoDecision.IDENTIDAD_BELL
 
-        # P5: Estado Bell
         if ids & TRIGGERS_ESTADO_BELL:
             return TipoDecision.ESTADO_BELL
 
-        # P5.5: Cuantificación sobre datos propios de Bell (FIX M-03)
-        # "cuántos conceptos tienes" → CUANTIFICACION con valor 1472
-        # (no CONSULTA_MEMORIA donde Bell respondería "no sé")
         if self._es_cuantificacion_bell(msg):
             return TipoDecision.CUANTIFICACION
 
-        # P6: Capacidad Bell
         if ids & TRIGGERS_CAPACIDAD:
             return TipoDecision.CAPACIDAD_BELL
+        if self._es_pregunta_capacidad_mat(msg):
+            return TipoDecision.CAPACIDAD_BELL
 
-        # P6.5: Verbos cognitivos en imperativo (FIX A-06)
-        # "explícame", "simplifica", "repite" no están en vocab como imperativos
-        if self._detectar_cognitivo_por_texto(msg):
+        cog = self._detectar_cognitivo_por_texto(msg)
+        if cog:
             return TipoDecision.ACCION_COGNITIVA
 
-        # P7: Acciones cognitivas por trigger
-        if ids & TRIGGERS_ACCION_COGNITIVA:
-            return TipoDecision.ACCION_COGNITIVA
+        triggers_cog = ids & TRIGGERS_ACCION_COGNITIVA
+        if triggers_cog:
+            solo_ambiguos = triggers_cog <= _CONCEPTOS_COGNITIVOS_AMBIGUOS
+            if solo_ambiguos and _tiene_expresion_matematica(msg):
+                pass
+            else:
+                return TipoDecision.ACCION_COGNITIVA
 
-        # P7.5: "qué es X" → ACCION_COGNITIVA (FIX M-01)
-        # Los conceptos se detectan pero la combinación qué+es+X no disparaba
-        # ningún tipo. Ahora se trata como petición de definición.
         if self._es_definicion(msg):
             return TipoDecision.ACCION_COGNITIVA
 
-        # P8: Confirmaciones por trigger
-        # (las confirmaciones de texto directo ya se resolvieron en razonar())
+        # ── FIX-M2: CONFIRMACION con verificación de cálculo primero ──
+        # CONCEPTO_200_OK y similares pueden estar en mensajes de porcentaje.
+        # Si el mensaje contiene expresión calculable, priorizar CALCULO.
         if ids & TRIGGERS_CONFIRMACION_POSITIVA:
+            if self._es_calculo_por_texto(msg):   # FIX-M2
+                return TipoDecision.CALCULO
             return TipoDecision.CONFIRMACION
         if ids & TRIGGERS_CONFIRMACION_NEGATIVA:
             return TipoDecision.CONFIRMACION
 
-        # P9: Temporal y cuantificación
         if ids & TRIGGERS_TEMPORAL:
             return TipoDecision.TEMPORAL
         if ids & TRIGGERS_CUANTIFICACION:
             return TipoDecision.CUANTIFICACION
 
-        # P12: VERIFICACION_LOGICA
         if ids & TRIGGERS_VERIFICACION_LOGICA:
             return TipoDecision.VERIFICACION_LOGICA
 
-        # P13: CALCULO
         if self._es_calculo(ids, msg):
             return TipoDecision.CALCULO
 
-        # P14: CONOCIMIENTO_GENERAL
         if self._es_conocimiento_general(ids, msg):
             return TipoDecision.CONOCIMIENTO_GENERAL
 
-        # Fallback por texto puro
         tipo_texto = self._clasificar_por_texto_puro(msg)
         if tipo_texto:
             return tipo_texto
 
         return TipoDecision.DESCONOCIDO
 
-    # ── Detectores auxiliares NUEVOS v6 ───────────────────────────────────
+    # -- Detectores auxiliares ------------------------------------------
 
     def _clasificar_por_texto_puro(self, msg: str) -> Optional[TipoDecision]:
-        """Fallback cuando no hay conceptos o ningún trigger funcionó."""
         if not msg:
             return None
+        msg_norm = _norm(msg)
         if self._detectar_social_por_texto(msg):
             return TipoDecision.SOCIAL
         if self._es_trampa_llm(msg):
             return TipoDecision.IDENTIDAD_BELL
-        if self._detectar_cognitivo_por_texto(msg):
+        if self._es_pregunta_capacidad_mat(msg):
+            return TipoDecision.CAPACIDAD_BELL
+        if self._es_ejecucion_shell_directa(msg_norm):
+            return TipoDecision.EJECUCION
+        if self._es_ejecucion_shell(msg_norm):
+            return TipoDecision.EJECUCION
+        if self._es_ejecucion_bd_directa(msg_norm) or self._es_ejecucion_bd_directa(msg):
+            return TipoDecision.EJECUCION
+        if _PATRONES_EXT_DISPONIBLE and _detectar_hab_ext is not None:
+            try:
+                if (_detectar_hab_ext(msg_norm) is not None
+                        or _detectar_hab_ext(msg) is not None):
+                    return TipoDecision.EJECUCION
+            except Exception:
+                pass
+        cog = self._detectar_cognitivo_por_texto(msg)
+        if cog:
             return TipoDecision.ACCION_COGNITIVA
         if self._es_definicion(msg):
             return TipoDecision.ACCION_COGNITIVA
+        if self._es_calculo_por_texto(msg):
+            return TipoDecision.CALCULO
         return None
 
-    def _es_consulta_consejera(self, ids: set, msg: str) -> bool:
-        """
-        FIX C-04: Detecta preguntas sobre consejeras individuales o el grupo.
+    def _es_ejecucion_shell(self, msg_norm: str) -> bool:
+        if self._habilidad_shell is None:
+            return False
+        try:
+            match = self._habilidad_shell.detectar(msg_norm, [], {})
+            return match is not None
+        except Exception:
+            return False
 
-        Captura:
-          - "qué hace Vega" / "cuál es el rol de Echo"
-          - "quién es Lyra" / "háblame de Nova"
-          - "cuántas consejeras tienes" / "quiénes son tus consejeras"
-        """
-        # Pregunta sobre consejera individual
+    def _es_ejecucion_shell_directa(self, msg_norm: str) -> bool:
+        if not msg_norm:
+            return False
+        verbos_capacidad = [
+            'puedes', 'sabes', 'eres capaz', 'podrias', 'es posible',
+            'puedes hacer', 'sabes hacer', 'tienes capacidad',
+        ]
+        if any(v in msg_norm for v in verbos_capacidad):
+            return False
+        return any(patron.search(msg_norm) for patron in _RE_PATRONES_SHELL)
+
+    def _es_ejecucion_bd_directa(self, msg: str) -> bool:
+        """FIX-BD: acepta tanto texto normalizado como original."""
+        if not msg:
+            return False
+        verbos_capacidad = [
+            'puedes', 'sabes', 'eres capaz', 'podrias', 'es posible',
+            'puedes hacer', 'sabes usar', 'tienes capacidad de',
+        ]
+        msg_lower = msg.lower()
+        if any(v in msg_lower for v in verbos_capacidad):
+            return False
+        return any(patron.search(msg) for patron in _RE_PATRONES_BD)
+
+    def _es_pregunta_capacidad_mat(self, msg: str) -> bool:
+        if _tiene_expresion_matematica(msg):
+            return False
+        tiene_verbo_cap   = any(v in msg for v in _VERBOS_CAPACIDAD_MAT)
+        tiene_palabra_mat = any(p in msg for p in _PALABRAS_MAT_SIN_EXPR)
+        return tiene_verbo_cap and tiene_palabra_mat
+
+    def _es_consulta_consejera(self, ids: set, msg: str) -> bool:
         for nombre in NOMBRES_CONSEJERAS:
             if nombre in msg:
                 verbos_pregunta = [
-                    "qué hace", "que hace", "cuál es", "cual es",
-                    "quién es", "quien es", "háblame", "hablame",
-                    "dime sobre", "cuéntame", "cuentame",
-                    "rol de", "función de", "funcion de",
-                    "para qué sirve", "para que sirve",
+                    "que hace", "cual es", "quien es", "hablame",
+                    "dime sobre", "cuentame", "rol de", "funcion de",
+                    "para que sirve",
                 ]
                 if any(v in msg for v in verbos_pregunta):
                     return True
-
-        # Preguntas sobre el grupo
         if any(p in msg for p in ["consejera", "consejeras"]):
-            if any(p in msg for p in [
-                "cuántas", "cuantas", "cuántos", "cuantos",
-                "quiénes", "quienes", "cuáles", "cuales",
-                "qué", "que", "cómo", "como",
-            ]):
+            if any(p in msg for p in ["cuantas", "cuantos", "quienes", "cuales", "que", "como"]):
                 return True
-
         return False
 
     def _es_trampa_llm(self, msg: str) -> bool:
-        """
-        FIX A-04: Detecta cuando el usuario compara a Bell con otro LLM.
-
-        Requiere "eres/sos" + palabra de LLM para no capturar preguntas
-        legítimas sobre qué son esos sistemas.
-        """
         if not msg:
             return False
         tiene_eres = any(p in msg for p in ["eres", "sos", "eres un", "eres una"])
@@ -780,59 +1118,41 @@ class MotorRazonamiento:
         return any(palabra in msg for palabra in PALABRAS_LLM)
 
     def _detectar_social_por_texto(self, msg: str) -> Optional[str]:
-        """FIX M-05: Detecta saludos y agradecimientos no cubiertos por vocab."""
         for patron, subtipo in PATRONES_SOCIAL_TEXTO.items():
             if patron in msg:
                 return subtipo
         return None
 
     def _detectar_cognitivo_por_texto(self, msg: str) -> Optional[str]:
-        """FIX A-06: Detecta verbos cognitivos en imperativo."""
+        if _tiene_expresion_matematica(msg):
+            return None
         for patron, accion in PATRONES_COGNITIVOS_TEXTO.items():
             if msg.startswith(patron) or f" {patron} " in msg or msg == patron:
                 return accion
         return None
 
     def _es_cuantificacion_bell(self, msg: str) -> bool:
-        """
-        FIX M-03: Detecta preguntas sobre cantidades propias de Bell.
-        Evita que "cuántos conceptos tienes" caiga a CONSULTA_MEMORIA.
-        """
-        tiene_cuantos = any(p in msg for p in [
-            "cuántos", "cuantos", "cuántas", "cuantas",
-        ])
+        tiene_cuantos = any(p in msg for p in ["cuantos", "cuantas"])
         if not tiene_cuantos:
             return False
         return any(clave in msg for clave in _CUANTIFICACION_BELL)
 
     def _es_definicion(self, msg: str) -> bool:
-        """
-        FIX M-01: Detecta preguntas "qué es X" / "qué son X".
-        Redirige a ACCION_COGNITIVA para que el generador pueda
-        explicar el concepto (con grounding si existe, con Groq si no).
-        """
         patrones = [
-            r"qu[eé]\s+es\s+",
-            r"qu[eé]\s+son\s+",
-            r"qu[eé]\s+significa\s+",
-            r"qu[eé]\s+es\s+un[ao]?\s+",
+            r"qu[e]\s+es\s+",
+            r"qu[e]\s+son\s+",
+            r"qu[e]\s+significa\s+",
         ]
         return any(re.search(p, msg) for p in patrones)
 
-    # ── Detectores auxiliares existentes v5 — sin cambios ─────────────────
-
     def _es_registro_usuario(self, ids: set, msg: str) -> bool:
-        """
-        v6: igual que v5 pero evaluado en P2.5 (antes era P10).
-        La lógica interna no cambia.
-        """
         if "CONCEPTO_YO" in ids and "CONCEPTO_LLAMAR" in ids:
-            if '?' not in msg and 'como' not in msg and 'cómo' not in msg:
+            if '?' not in msg and 'como' not in msg:
                 return True
         if any(p in msg for p in ["mi nombre es", "me llamo", "soy "]):
-            if not msg.endswith('?') and 'cómo' not in msg and 'como' not in msg:
+            if not msg.endswith('?') and 'como' not in msg:
                 return True
-        if re.search(r'tengo\s+\d+\s*(a[ñn]os?|a[ñn]o)', msg):
+        if re.search(r'tengo\s+\d+\s*(anos?|ano)', msg):
             return True
         if ids & TRIGGERS_REGISTRO_USUARIO:
             if not msg.endswith('?'):
@@ -840,78 +1160,72 @@ class MotorRazonamiento:
         return False
 
     def _es_consulta_memoria(self, ids: set, msg: str) -> bool:
-        """
-        v6: expandido para capturar "sabes X" y sus variantes (FIX A-01).
-        Evaluado en P2.6 (antes era P11).
-        """
-        # Nombre
         if "CONCEPTO_YO" in ids and "CONCEPTO_LLAMAR" in ids:
-            if '?' in msg or any(p in msg for p in ['como', 'cómo', 'cuál', 'cual']):
+            if '?' in msg or any(p in msg for p in ['como', 'cual']):
                 return True
-
-        # Edad con pregunta
-        if "CONCEPTO_TENER_V" in ids or "CONCEPTO_ANO" in ids:
-            if any(p in msg for p in ['cuantos', 'cuántos', 'años', 'anos', 'edad']):
-                if '?' in msg or any(p in msg for p in ['cuantos', 'cuántos']):
-                    return True
-
-        # ← NUEVO v6: patrón "sabes X" — FIX A-01
         if any(p in msg for p in ['sabes', 'recuerdas', 'conoces']):
             if any(p in msg for p in [
-                'nombre', 'edad', 'años', 'llamo', 'dedico',
-                'profesion', 'trabajo', 'de mi', 'de mí',
+                'nombre', 'edad', 'anos', 'llamo', 'dedico', 'profesion', 'trabajo',
             ]):
                 return True
-
-        # ← NUEVO v6: "qué sabes de mí"
         if any(p in msg for p in [
-            'sabes de mi', 'sabes de mí', 'recuerdas de mi',
-            'tienes sobre mi', 'qué sabes', 'que sabes',
+            'sabes de mi', 'recuerdas de mi', 'tienes sobre mi',
+            'que sabes', 'me dedico', 'mi profesion',
         ]):
             return True
-
-        # Ocupación (igual que v5)
-        if any(p in msg for p in [
-            'me dedico', 'mi profesion', 'mi trabajo',
-            'a qué me dedico', 'a que me dedico',
-        ]):
-            return True
-
         return False
 
     def _es_calculo(self, ids: set, msg: str) -> bool:
+        if ids & TRIGGERS_CALCULO:
+            return True
         if (ids & _OPERADORES_MATEMATICOS) and (ids & _NUMEROS):
             return True
+        return self._es_calculo_por_texto(msg)
+
+    def _es_calculo_por_texto(self, msg: str) -> bool:
+        """
+        FIX-M1: detecta operador aritmético directo entre números.
+        FIX-M2: detecta porcentaje.
+        """
+        if self._es_pregunta_capacidad_mat(msg):
+            return False
+
+        # FIX-M1: operador directo — "15 * 8", "9/3", "100+5"
+        if re.search(r'\d+\s*[\+\-\*\/]\s*\d+', msg):
+            return True
+
+        # FIX-M2: porcentaje — "15% de 200", "15 por ciento de 200"
+        if re.search(r'\d+\s*%|\d+\s*por\s+ciento', msg):
+            return True
+
+        if any(p in msg for p in _PALABRAS_MAT_AVANZADA):
+            return True
+        tiene_numero = bool(re.search(r'\d+', msg))
+        if not tiene_numero:
+            return False
         if any(op in msg for op in [
             'multiplicado', 'dividido', ' por ', 'mas ',
-            'menos ', 'cuanto es ', 'cuánto es ',
-            ' al cuadrado', 'raiz de', 'raíz de', 'elevado',
-            'entre ', 'por ciento',
+            'menos ', 'cuanto es ', 'al cuadrado', 'raiz de',
+            'elevado', 'entre ', 'por ciento',
         ]):
-            if re.search(r'\d+', msg):
-                return True
-        if re.search(r'ra[íi]z\s+de\s+\d+', msg):
+            return True
+        if re.search(r'raiz\s+de\s+\d+', msg):
             return True
         return False
 
     def _es_conocimiento_general(self, ids: set, msg: str) -> bool:
         if any(p in msg for p in [
-            'capital de', 'capital del', 'capital de la',
-            'cuando nacio', 'cuándo nació',
-            'que es la fotosintesis', 'que es el adn',
-            'que planeta', 'cuantos habitantes',
-            'qué pasó', 'que paso', 'noticias',
+            'capital de', 'cuando nacio', 'que es la fotosintesis',
+            'que planeta', 'cuantos habitantes', 'que paso', 'noticias',
         ]):
-            return True
-        if ids == {'CONCEPTO_DE'} and '?' in msg:
             return True
         if ids <= {'CONCEPTO_DE', 'CONCEPTO_QUE'} and len(msg.split()) > 3:
             return True
         return False
 
-    # ───────────────────────────────────────────────────────────────────────
-    # CONSTRUCTORES DE HECHOS
-    # ───────────────────────────────────────────────────────────────────────
+    # ------------------------------------------------------------------
+    # CONSTRUCTORES DE HECHOS (idénticos a v8.9)
+    # ------------------------------------------------------------------
 
     def construir_hechos(self, tipo: TipoDecision, conceptos: list, mensaje: str) -> dict:
         constructores = {
@@ -929,35 +1243,116 @@ class MotorRazonamiento:
             TipoDecision.VERIFICACION_LOGICA:  self._hechos_verificacion_logica,
             TipoDecision.CALCULO:              self._hechos_calculo,
             TipoDecision.CONOCIMIENTO_GENERAL: self._hechos_conocimiento_general,
+            TipoDecision.EJECUCION:            self._hechos_ejecucion,
             TipoDecision.DESCONOCIDO:          self._hechos_desconocido,
         }
         constructor = constructores.get(tipo, self._hechos_desconocido)
         return constructor(conceptos, mensaje)
 
-    # ── Constructores de hechos ────────────────────────────────────────────
+    def _hechos_calculo(self, conceptos: list, mensaje: str) -> dict:
+        numeros            = re.findall(r'\d+(?:\.\d+)?', mensaje)
+        habilidad_match_id = "CALCULO_BASICO"
+        sub_tipo_mat       = "BASICO"
+
+        if _REGISTRO_DISPONIBLE:
+            try:
+                registro = RegistroHabilidades.obtener()
+                if registro:
+                    match = registro.detectar(mensaje, conceptos, {})
+                    if match:
+                        habilidad_match_id = match.habilidad_id
+                        sub_tipo_mat       = match.parametros.get("sub_tipo", "BASICO")
+            except Exception:
+                pass
+
+        return {
+            "tipo_respuesta":     "CALCULO",
+            "expresion_calculo":  mensaje,
+            "numeros":            numeros,
+            "puede_ejecutar":     True,
+            "mensaje_original":   mensaje,
+            "habilidad_match_id": habilidad_match_id,
+            "sub_tipo_mat":       sub_tipo_mat,
+            "usa_registro":       _REGISTRO_DISPONIBLE,
+        }
+
+    def _hechos_ejecucion(self, conceptos: list, mensaje: str) -> dict:
+        """FIX-BD2: decide si es BD o Shell y usa mensaje ORIGINAL."""
+        msg_norm = _norm(mensaje)
+
+        es_bd = (self._es_ejecucion_bd_directa(msg_norm)
+                 or self._es_ejecucion_bd_directa(mensaje.lower().strip()))
+
+        if es_bd:
+            return self._hechos_ejecucion_bd(conceptos, mensaje)
+
+        comando_detectado = ""
+        descripcion       = ""
+        if self._habilidad_shell is not None:
+            try:
+                match = self._habilidad_shell.detectar(msg_norm, conceptos, {})
+                if match:
+                    comando_detectado = match.parametros.get("comando", "")
+                    descripcion       = match.parametros.get("descripcion", "")
+            except Exception:
+                pass
+
+        return {
+            "tipo_respuesta":    "EJECUCION",
+            "tipo_ejecucion":    "shell",
+            "habilidad_id":      "SHELL",
+            "comando_detectado": comando_detectado,
+            "descripcion":       descripcion,
+            "puede_ejecutar":    True,
+            "mensaje_original":  mensaje,
+        }
+
+    def _hechos_ejecucion_bd(self, conceptos: list, mensaje: str) -> dict:
+        """FIX-BD2: pasa mensaje ORIGINAL a habilidad_sqlite.detectar()."""
+        operacion   = ""
+        tabla       = ""
+        descripcion = ""
+
+        if _REGISTRO_DISPONIBLE:
+            try:
+                registro = RegistroHabilidades.obtener()
+                habilidad_sqlite = registro.obtener_habilidad("SQLITE")
+                if habilidad_sqlite is not None:
+                    match = habilidad_sqlite.detectar(mensaje, conceptos, {})
+                    if match:
+                        operacion   = match.parametros.get("operacion", "")
+                        tabla       = match.parametros.get("tabla", "")
+                        descripcion = match.parametros.get("descripcion", "")
+            except Exception:
+                pass
+
+        return {
+            "tipo_respuesta":    "EJECUCION",
+            "tipo_ejecucion":    "consulta_bd",
+            "habilidad_id":      "SQLITE",
+            "operacion":         operacion,
+            "tabla":             tabla,
+            "descripcion":       descripcion,
+            "comando_detectado": "",
+            "puede_ejecutar":    True,
+            "mensaje_original":  mensaje,
+        }
 
     def _hechos_identidad(self, conceptos: list, mensaje: str) -> dict:
-        """
-        v6: detecta si la pregunta es sobre una consejera específica
-        e incluye su rol exacto. Marca si es trampa LLM para que el
-        generador use el template de negación correcto.
-        """
-        total = 1472
+        total = 1503
         if self.gestor_vocabulario:
             try:
                 total = len(self.gestor_vocabulario.obtener_todos())
             except Exception:
                 pass
-
-        msg = mensaje.lower() if mensaje else ""
-
+        msg    = mensaje.lower() if mensaje else ""
         hechos = {
             "tipo_respuesta":     "IDENTIDAD_BELL",
             "nombre":             "Belladonna",
             "apodo":              "Bell",
             "naturaleza":         "conciencia virtual computacional",
             "creador":            "Sebastian",
-            "fase_actual":        "4A",
+            "fase_actual":        "4B",
             "principio_central":  "solo afirmo lo que puedo ejecutar o verificar",
             "total_conceptos":    total,
             "num_consejeras":     7,
@@ -965,91 +1360,135 @@ class MotorRazonamiento:
             "consejeras_nombres": list(CONSEJERAS_ROLES_OFICIALES.keys()),
             "consejeras_roles":   CONSEJERAS_ROLES_OFICIALES,
             "consejera_con_veto": "Vega",
-            # v6: para trampa LLM
             "es_llm":             False,
             "usa_groq":           True,
-            "groq_rol":           "Groq traduce mis decisiones a lenguaje natural, las decisiones las toma Bell",
+            "groq_rol":           "Groq traduce mis decisiones a lenguaje natural",
         }
-
-        # v6: consejera específica preguntada
         for nombre in NOMBRES_CONSEJERAS:
             if nombre in msg:
                 nombre_cap = nombre.capitalize()
                 if nombre_cap in CONSEJERAS_ROLES_OFICIALES:
-                    hechos["consejera_preguntada"]  = nombre_cap
-                    hechos["consejera_rol_exacto"]  = CONSEJERAS_ROLES_OFICIALES[nombre_cap]
+                    hechos["consejera_preguntada"] = nombre_cap
+                    hechos["consejera_rol_exacto"] = CONSEJERAS_ROLES_OFICIALES[nombre_cap]
                 break
-
-        # v6: marcar si es trampa LLM
         if self._es_trampa_llm(msg):
             hechos["es_pregunta_llm"] = True
-
         if _IDENTIDAD_DISPONIBLE:
             hechos["narrativa_bell"]      = NARRATIVA_PROPIA
             hechos["fragmento_identidad"] = obtener_fragmento_identidad_para_prompt()
-
         return hechos
 
     def _hechos_estado_bell(self, conceptos: list, mensaje: str) -> dict:
         return {
-            "tipo_respuesta":      "ESTADO_BELL",
-            "estado":              "activa y operativa",
-            "activa":              True,
-            "funcionando":         True,
-            "consejeras_activas":  7,
-            "total_conceptos":     1472,
-            "groq_conectado":      True,
+            "tipo_respuesta":     "ESTADO_BELL",
+            "estado":             "activa y operativa",
+            "activa":             True,
+            "funcionando":        True,
+            "consejeras_activas": 7,
+            "total_conceptos":    1503,
+            "groq_conectado":     True,
         }
 
     def _hechos_capacidad(self, conceptos: list, mensaje: str) -> dict:
-        """
-        v6: analiza si el mensaje pide una capacidad NO disponible.
-        El generador usa 'capacidad_solicitada_disponible' para
-        decidir entre confirmar o negar honestamente.
-        """
-        msg = mensaje.lower() if mensaje else ""
+        msg               = mensaje.lower() if mensaje else ""
+        capacidad_solicitada = None
+        disponible        = True
+        razon_bloqueo     = ""
 
-        _no_disponibles = {
-            "crear archivo":     ["crear", "crea", "crear un", "crea un"],
-            "leer archivo":      ["leer archivo", "lee archivo"],
-            "acceder internet":  ["internet", "navegar", "buscar en línea"],
-            "procesar imagen":   ["imagen", "imágenes", "foto"],
-            "sesiones previas":  ["sesiones anteriores", "conversacion anterior"],
+        _NEG = {
+            "leer archivo":     "Leer archivos esta pendiente",
+            "crear archivo":    "Crear archivos esta pendiente",
+            "escribir archivo": "Escribir archivos esta pendiente",
+            "generar archivo":  "Generar archivos esta pendiente",
+            "sesion anterior":  "Memoria entre sesiones no disponible",
+            "internet":         "Acceso a internet no disponible",
+            "navegar":          "Navegacion web no disponible",
+            "imagen":           "Procesamiento de imagenes no disponible",
+            "archivo":          "Leer o crear archivos esta pendiente",
+        }
+        _POS_MAT = {
+            "deriva":      "Derivadas con SymPy",
+            "derivar":     "Derivadas con SymPy",
+            "derivada":    "Derivadas con SymPy",
+            "integra":     "Integrales con SymPy",
+            "integrar":    "Integrales con SymPy",
+            "integral":    "Integrales con SymPy",
+            "limite":      "Limites con SymPy",
+            "taylor":      "Series de Taylor con SymPy",
+            "factori":     "Factorizacion con SymPy",
+            "simplif":     "Simplificacion con SymPy",
+            "expande":     "Expansion con SymPy",
+            "resolver":    "Resolucion de ecuaciones con SymPy",
+            "resuelve":    "Resolucion de ecuaciones con SymPy",
+        }
+        _POS = {
+            "calculo":       "Calculos matematicos",
+            "python":        "Ejecutar codigo Python",
+            "terminal":      "Ejecutar comandos de terminal",
+            "shell":         "Ejecutar comandos de terminal",
+            "sqlite":        "Consultar y modificar base de datos SQLite",
+            "base de datos": "Consultar y modificar base de datos SQLite",
+            "tablas":        "Listar tablas SQLite",
+            "sql":           "Ejecutar SQL (CRUD completo)",
+            "crear tabla":   "Crear tablas en SQLite",
+            "insertar":      "Insertar registros en SQLite",
+            "actualizar":    "Actualizar registros en SQLite",
+            "eliminar":      "Eliminar registros en SQLite",
         }
 
-        capacidad_solicitada = None
-        disponible = True
-        for cap, patrones in _no_disponibles.items():
-            if any(p in msg for p in patrones):
-                capacidad_solicitada = cap
-                disponible = False
+        for keyword, razon in _NEG.items():
+            if keyword in msg:
+                capacidad_solicitada = keyword
+                disponible    = False
+                razon_bloqueo = razon
                 break
+        if disponible:
+            for keyword, nombre in _POS_MAT.items():
+                if keyword in msg:
+                    capacidad_solicitada = nombre
+                    break
+        if disponible and not capacidad_solicitada:
+            for keyword, nombre in _POS.items():
+                if keyword in msg:
+                    capacidad_solicitada = nombre
+                    break
+        if disponible and not capacidad_solicitada:
+            for concepto in conceptos:
+                if not esta_implementada(concepto.id):
+                    capacidad_solicitada = concepto.id
+                    disponible    = False
+                    razon_bloqueo = razon_no_implementada(concepto.id)
+                    break
+        if disponible and not razon_bloqueo:
+            patron, razon = detectar_patron_no_implementado(msg)
+            if patron:
+                capacidad_solicitada = patron
+                disponible    = False
+                razon_bloqueo = razon
 
-        return {
+        hechos = {
             "tipo_respuesta":                  "CAPACIDAD_BELL",
             "capacidades_ejecutables":         CAPACIDADES_REALES_BELL["ejecutables"],
             "no_ejecutables":                  CAPACIDADES_REALES_BELL["NO_ejecutables_aun"],
-            "total_conceptos":                 1472,
+            "total_conceptos":                 1503,
             "capacidad_solicitada":            capacidad_solicitada,
             "capacidad_solicitada_disponible": disponible,
         }
+        if not disponible and razon_bloqueo:
+            hechos["capacidad_bloqueada_razon"] = razon_bloqueo
+        return hechos
 
     def _hechos_social(self, conceptos: list, mensaje: str) -> dict:
-        """v6: también detecta subtipo por texto."""
-        ids = {c.id for c in conceptos}
-        msg = mensaje.lower() if mensaje else ""
-
+        ids     = {c.id for c in conceptos}
+        msg     = mensaje.lower() if mensaje else ""
         subtipo = "SALUDO"
         for cid in ids:
             if cid in _SOCIAL_SUBTIPOS:
                 subtipo = _SOCIAL_SUBTIPOS[cid]
                 break
-
-        # Fallback por texto si trigger no lo determinó
         subtipo_texto = self._detectar_social_por_texto(msg)
         if subtipo_texto and subtipo == "SALUDO":
             subtipo = subtipo_texto
-
         return {"tipo_respuesta": "SOCIAL", "subtipo": subtipo}
 
     def _hechos_estado_usuario(self, conceptos: list, mensaje: str) -> dict:
@@ -1057,7 +1496,6 @@ class MotorRazonamiento:
         emocion_id = "DESCONOCIDA"
         valencia   = "neutra"
         tono       = "empatico"
-
         for c in conceptos:
             props = getattr(c, 'propiedades', {}) or {}
             if props.get('es_estado_emocional') or props.get('valencia'):
@@ -1065,14 +1503,12 @@ class MotorRazonamiento:
                 valencia   = props.get('valencia', 'neutra')
                 tono       = props.get('tono_recomendado', 'empatico')
                 break
-
         if emocion_id == "DESCONOCIDA":
             for cid in ids:
                 if cid in _USUARIO_EMOCIONES:
                     t = _USUARIO_EMOCIONES[cid]
                     emocion_id, valencia, tono = t[0], t[1], t[2]
                     break
-
         return {
             "tipo_respuesta":    "ESTADO_USUARIO",
             "emocion_detectada": emocion_id,
@@ -1082,25 +1518,18 @@ class MotorRazonamiento:
         }
 
     def _hechos_accion_cognitiva(self, conceptos: list, mensaje: str) -> dict:
-        """v6: también detecta la acción por texto (imperativo)."""
-        ids = {c.id for c in conceptos}
-        msg = mensaje.lower() if mensaje else ""
-
+        ids               = {c.id for c in conceptos}
+        msg               = mensaje.lower() if mensaje else ""
         accion_solicitada = "EXPLICAR"
         for cid in ids:
             if cid in _ACCION_COGNITIVA_TIPOS:
                 accion_solicitada = _ACCION_COGNITIVA_TIPOS[cid]
                 break
-
-        # Priorizar detección por texto para imperativos
         accion_texto = self._detectar_cognitivo_por_texto(msg)
         if accion_texto:
             accion_solicitada = accion_texto
-
-        # Detectar si es una definición
         if self._es_definicion(msg):
             accion_solicitada = "DEFINIR"
-
         return {
             "tipo_respuesta":    "ACCION_COGNITIVA",
             "accion_solicitada": accion_solicitada,
@@ -1108,8 +1537,8 @@ class MotorRazonamiento:
         }
 
     def _hechos_confirmacion(self, conceptos: list, mensaje: str) -> dict:
-        ids     = {c.id for c in conceptos}
-        msg     = mensaje.lower().strip() if mensaje else ""
+        ids = {c.id for c in conceptos}
+        msg = mensaje.lower().strip() if mensaje else ""
         if msg in CONFIRMACIONES_DIRECTAS:
             valor = "NEGATIVA" if msg == "no" else "POSITIVA"
         elif ids & TRIGGERS_CONFIRMACION_POSITIVA:
@@ -1118,11 +1547,7 @@ class MotorRazonamiento:
             valor = "NEGATIVA"
         else:
             valor = "NEUTRA"
-        return {
-            "tipo_respuesta":  "CONFIRMACION",
-            "valor":           valor,
-            "palabra_original": msg,
-        }
+        return {"tipo_respuesta": "CONFIRMACION", "valor": valor, "palabra_original": msg}
 
     def _hechos_temporal(self, conceptos: list, mensaje: str) -> dict:
         return {
@@ -1133,9 +1558,7 @@ class MotorRazonamiento:
         }
 
     def _hechos_cuantificacion(self, conceptos: list, mensaje: str) -> dict:
-        """v6: incluye respuesta directa para datos propios de Bell."""
-        msg = mensaje.lower() if mensaje else ""
-
+        msg             = mensaje.lower() if mensaje else ""
         dato_preguntado = None
         valor_respuesta = None
         for clave, valor in _CUANTIFICACION_BELL.items():
@@ -1143,12 +1566,11 @@ class MotorRazonamiento:
                 dato_preguntado = clave
                 valor_respuesta = valor
                 break
-
         return {
             "tipo_respuesta":   "CUANTIFICACION",
-            "total_conceptos":  1472,
+            "total_conceptos":  1503,
             "total_consejeras": 7,
-            "total_comandos":   36,
+            "total_comandos":   165,
             "dato_preguntado":  dato_preguntado,
             "valor_respuesta":  valor_respuesta,
             "mensaje_original": mensaje,
@@ -1162,33 +1584,24 @@ class MotorRazonamiento:
         }
 
     def _hechos_registro_usuario(self, conceptos: list, mensaje: str) -> dict:
-        """Igual que v5 — la lógica no cambia, solo la prioridad en el clasificador."""
-        msg = mensaje.lower()
-
+        msg        = mensaje.lower()
         dato_tipo  = "desconocido"
         dato_valor = ""
-
         match_nombre = re.search(
-            r'(?:me llamo|mi nombre es|soy|puedes llamarme|llamame)\s+([a-záéíóúüñ]+)',
-            msg
+            r'(?:me llamo|mi nombre es|soy|puedes llamarme|llamame)\s+([a-z]+)', msg
         )
         if match_nombre:
             candidato = match_nombre.group(1).strip()
-            if (
-                len(candidato) >= 3
-                and candidato not in _PALABRAS_EXCLUIDAS_NOMBRE
-                and not candidato.isdigit()
-            ):
+            if (len(candidato) >= 3 and candidato not in _PALABRAS_EXCLUIDAS_NOMBRE
+                    and not candidato.isdigit()):
                 dato_tipo  = "nombre"
                 dato_valor = candidato.capitalize()
-
-        match_edad = re.search(r'tengo\s+(\d+)\s*(a[ñn]os?)', msg)
+        match_edad = re.search(r'tengo\s+(\d+)\s*(anos?)', msg)
         if match_edad:
             edad = int(match_edad.group(1))
             if 1 <= edad <= 120:
                 dato_tipo  = "edad"
                 dato_valor = str(edad)
-
         if dato_tipo == "desconocido":
             ids = {c.id for c in conceptos}
             if ids & TRIGGERS_REGISTRO_USUARIO:
@@ -1196,44 +1609,38 @@ class MotorRazonamiento:
                 match_prof = re.search(r'(?:soy|trabajo como|me dedico a)\s+(.+?)$', msg)
                 if match_prof:
                     dato_valor = match_prof.group(1).strip()
-
         return {
             "tipo_respuesta":   "REGISTRO_USUARIO",
             "dato_tipo":        dato_tipo,
             "dato_valor":       dato_valor,
             "mensaje_original": mensaje,
             "accion":           "registrar_y_confirmar",
-            "datos_conocidos":  dict(self._memoria().datos_usuario)
-                                if self._memoria() else {},
+            "datos_conocidos":  dict(self._memoria().datos_usuario) if self._memoria() else {},
         }
 
     def _hechos_consulta_memoria(self, conceptos: list, mensaje: str) -> dict:
-        """Igual que v5 — incluye búsqueda real en memoria."""
-        msg = mensaje.lower()
+        msg             = mensaje.lower()
         dato_consultado = "desconocido"
         dato_encontrado = False
         dato_valor      = ""
-
         if any(p in msg for p in ['llamo', 'nombre']):
             dato_consultado = "nombre"
-        elif any(p in msg for p in ['años', 'anos', 'edad', 'cuantos', 'cuántos']):
+        elif any(p in msg for p in ['anos', 'edad', 'cuantos']):
             dato_consultado = "edad"
-        elif any(p in msg for p in ['dedico', 'trabajo', 'profesion', 'ocupo']):
+        elif any(p in msg for p in ['dedico', 'trabajo', 'profesion']):
             dato_consultado = "profesion"
-        elif any(p in msg for p in ['sabes de mi', 'sabes de mí', 'recuerdas', 'todo']):
+        elif any(p in msg for p in ['sabes de mi', 'recuerdas', 'todo']):
             dato_consultado = "todo"
-
         mem = self._memoria()
         if mem:
             datos = mem.datos_usuario
             if dato_consultado == "todo":
                 if datos:
                     dato_encontrado = True
-                    dato_valor = str(datos)
+                    dato_valor      = str(datos)
             elif dato_consultado in datos and datos[dato_consultado]:
                 dato_encontrado = True
-                dato_valor = datos[dato_consultado]
-
+                dato_valor      = datos[dato_consultado]
         return {
             "tipo_respuesta":   "CONSULTA_MEMORIA",
             "dato_consultado":  dato_consultado,
@@ -1250,16 +1657,6 @@ class MotorRazonamiento:
             "mensaje_original":    mensaje,
         }
 
-    def _hechos_calculo(self, conceptos: list, mensaje: str) -> dict:
-        numeros = re.findall(r'\d+(?:\.\d+)?', mensaje)
-        return {
-            "tipo_respuesta":   "CALCULO",
-            "expresion":        mensaje,
-            "numeros":          numeros,
-            "puede_ejecutar":   True,
-            "mensaje_original": mensaje,
-        }
-
     def _hechos_conocimiento_general(self, conceptos: list, mensaje: str) -> dict:
         return {
             "tipo_respuesta":   "CONOCIMIENTO_GENERAL",
@@ -1268,9 +1665,9 @@ class MotorRazonamiento:
             "tiene_grounding":  False,
         }
 
-    # ───────────────────────────────────────────────────────────────────────
-    # PROCESAMIENTO CONVERSACIONAL — Compatible v5
-    # ───────────────────────────────────────────────────────────────────────
+    # ------------------------------------------------------------------
+    # PROCESAMIENTO CONVERSACIONAL
+    # ------------------------------------------------------------------
 
     def procesar_conversacional(
         self, conceptos: list, mensaje_original: str = ""
@@ -1278,14 +1675,15 @@ class MotorRazonamiento:
         tipo      = self.clasificar_intencion(conceptos, mensaje_original)
         hechos    = self.construir_hechos(tipo, conceptos, mensaje_original)
         confianza = _clamp_certeza(hechos.get("grounding_promedio", 0.75))
-
         return Decision(
             tipo=tipo,
             certeza=confianza,
             conceptos_principales=[c.id for c in conceptos],
-            puede_ejecutar=(tipo == TipoDecision.CALCULO),
+            puede_ejecutar=(tipo in (TipoDecision.CALCULO, TipoDecision.EJECUCION)),
             operacion_disponible=(
-                "ejecutar_calculo" if tipo == TipoDecision.CALCULO else None
+                "ejecutar_habilidad" if tipo in (
+                    TipoDecision.CALCULO, TipoDecision.EJECUCION
+                ) else None
             ),
             razon=f"Conversacional: {tipo.name}",
             hechos_reales=hechos,

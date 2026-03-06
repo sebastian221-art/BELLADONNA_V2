@@ -1,58 +1,30 @@
 """
-Belladonna v5.0 — FASE 4A COMPLETA
+Belladonna v6.2 — FASE 4A — SUB-PASO 2C: SQLite Ejecutable
 
-ARQUITECTURA MENTE PURA:
-    Bell (Python)  = Razona con conceptos verificados
-    Groq  (API)    = SOLO embellece texto
-    Echo  (Python) = Verifica que Groq no invente nada
-
-CAMBIOS v5 sobre v4:
+CAMBIOS v6.2 sobre v6.1:
 ═══════════════════════════════════════════════════════════════════════
 
-1. MOTOR CONECTADO A MEMORIA (FIX ARQUITECTURAL CRÍTICO)
-   ──────────────────────────────────────────────────────
-   self.motor.gestor_memoria = self.gestor_memoria
+FIX-MAIN-3  INYECCIÓN DE SQLITE EN GENERADOR
+            En iniciar_sesion(), después de inyectar shell, también
+            se inyecta bd_cliente en HabilidadSQLite:
+                self._inyectar_sqlite()
+            Permite que _ejecutar_habilidad_generica() en el generador
+            use el ClienteSQLite ya inicializado y conectado.
 
-   Por qué importa: el motor v5 guarda datos de REGISTRO_USUARIO
-   DIRECTAMENTE en memoria antes de que llegue al generador.
-   Sin esta línea, el dato se extrae pero nunca se persiste.
+FIX-MAIN-4  COMANDO 'bd' EN LOOP
+            Nuevo comando de diagnóstico: 'bd'
+            Muestra estado de la base de datos, tablas disponibles
+            y estado de HabilidadSQLite en el registro.
 
-2. IDENTIDAD_BELL CARGADA Y MOSTRADA EN BANNER
-   ─────────────────────────────────────────────
-   Importa identidad_bell.py para mostrar el nombre correcto
-   en el saludo inicial y en el banner.
+FIX-MAIN-5  Banner y motor actualizados a v8.9 / v6.2.
 
-3. NOMBRES PERSONALIZADOS (integración con identidad_bell.py)
-   ─────────────────────────────────────────────────────────
-   El saludo inicial usa obtener_nombre_a_usar() del gestor de memoria
-   para saber si decir "Sebas" o "Sebastián" según el tipo de momento.
-
-4. NUEVO COMANDO 'identidad'
-   ──────────────────────────
-   Muestra PRINCIPIO_CENTRAL, VOZ y NARRATIVA_PROPIA de Bell.
-
-5. NUEVO COMANDO 'personas'
-   ─────────────────────────
-   Muestra los modelos mentales de personas que Bell ha construido
-   (Sara, etc.) usando los nuevos métodos de GestorMemoria v5.
-
-6. _cmd_memoria() ENRIQUECIDO
-   ────────────────────────────
-   Muestra además temas abiertos y predicciones de Bell
-   (nuevos campos de GestorMemoria v5).
-
-7. VERSION STRING actualizado a v5.0
-
-CAMBIOS v4 PRESERVADOS:
-- FIX v3: memoria compartida inyectada al generador en iniciar_sesion()
-- Todos los módulos obligatorios y opcionales sin cambios
-- Todos los comandos existentes sin cambios en comportamiento
-
-USO:
-    python main.py              → Sin Groq (honesta, simbólica)
-    python main.py --use-groq   → Con Groq (honesta, natural)
-    python main.py -v           → Verbose
-    python main.py --use-groq -v
+TODOS LOS CAMBIOS v6.1 PRESERVADOS:
+- FIX-MAIN-1: inyección de shell en generador
+- FIX-MAIN-2: comando 'shell' en loop
+- FIX-M1: cargar_capa1=True
+- FIX-M2: verificación Echo en main.procesar()
+- FIX-M3: importación de capacidades_fase.py
+- Inyecciones: generador.memoria, motor.gestor_memoria
 ═══════════════════════════════════════════════════════════════════════
 """
 
@@ -64,12 +36,10 @@ from datetime import datetime
 
 sys.path.insert(0, str(Path(__file__).parent))
 
-# ─── Logging ─────────────────────────────────────────────────────────────────
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s [%(name)s] %(message)s")
 for _lib in ("httpx", "groq", "openai", "urllib3"):
     logging.getLogger(_lib).setLevel(logging.ERROR)
 
-# ─── Colores terminal ─────────────────────────────────────────────────────────
 BOLD  = "\033[1m"
 CYAN  = "\033[96m"
 GREEN = "\033[92m"
@@ -78,25 +48,28 @@ RED   = "\033[91m"
 DIM   = "\033[2m"
 RST   = "\033[0m"
 
-# ─── Carga identidad_bell.py (opcional — no aborta si no existe) ──────────────
 try:
     from identidad_bell import (
-        PRINCIPIO_CENTRAL,
-        NARRATIVA_PROPIA,
-        VOZ_BELL,
-        NOMBRES_SEBASTIAN,
-        obtener_nombre,
+        PRINCIPIO_CENTRAL, NARRATIVA_PROPIA, VOZ_BELL,
+        NOMBRES_SEBASTIAN, obtener_nombre,
     )
     _IDENTIDAD_OK = True
 except ImportError:
-    _IDENTIDAD_OK = False
-    PRINCIPIO_CENTRAL = "solo afirmo lo que puedo ejecutar o verificar"
-    NARRATIVA_PROPIA  = ""
-    VOZ_BELL          = {}
-    NOMBRES_SEBASTIAN = {}
+    _IDENTIDAD_OK         = False
+    PRINCIPIO_CENTRAL     = "solo afirmo lo que puedo ejecutar o verificar"
+    NARRATIVA_PROPIA      = ""
+    VOZ_BELL              = {}
+    NOMBRES_SEBASTIAN     = {}
 
+try:
+    from core.capacidades_fase import NO_IMPLEMENTADAS_IDS, esta_implementada
+    _HONESTIDAD_OK          = True
+    _TOTAL_NO_IMPLEMENTADAS = len(NO_IMPLEMENTADAS_IDS)
+except ImportError:
+    _HONESTIDAD_OK          = False
+    _TOTAL_NO_IMPLEMENTADAS = 0
+    def esta_implementada(cid): return True
 
-# ─── Helpers de importación ───────────────────────────────────────────────────
 
 def _importar(ruta: str, clase: str):
     try:
@@ -110,86 +83,84 @@ def _importar_obligatorio(ruta: str, clase: str):
     cls = _importar(ruta, clase)
     if cls is None:
         print(f"\n{RED}✗ No se pudo cargar {ruta}.{clase}{RST}")
-        print("  Verifica que el proyecto esté completo.\n")
         sys.exit(1)
     return cls
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# CLASE PRINCIPAL
-# ─────────────────────────────────────────────────────────────────────────────
-
 class Belladonna:
     """
-    Belladonna v5.0 — Sistema Conversacional Completo.
+    Belladonna v6.2 — Shell + SQLite ejecutables.
 
     Flujo por mensaje:
         1. TraductorEntrada   → español → ConceptosAnclados
         2. MotorRazonamiento  → clasificar intención → Decision + hechos
-           · v5: el motor actualiza memoria de estado en tiempo real
-           · v5: para REGISTRO_USUARIO guarda el dato en memoria ANTES del generador
-        3. Consejeras deliberan (Vega puede vetar)
-        4. GeneradorSalida    → Decision → español natural (Groq + Echo si activo)
-           · v5: _TIPOS_CONVERSACIONALES incluye los 5 tipos nuevos
-           · v5: CALCULO se resuelve en Python sin Groq
-        5. GestorMemoria      → persiste historial, episodios, personas, predicciones
+           · v8.9: P0.5 detecta SHELL y BD antes que P1
+           · P0.5 EXT: patrones_habilidades.py para habilidades futuras
+        3. FIX-M2: Verificación Echo en main
+        4. Consejeras deliberan (Vega puede vetar)
+        5. GeneradorSalida    → Decision → español natural
+           · EJECUCION SHELL  → _ejecutar_shell_conversacional()
+           · EJECUCION BD     → _ejecutar_habilidad_generica("SQLITE")
+        6. GestorMemoria      → persiste historial
     """
 
     def __init__(self, usar_groq: bool = False, verbose: bool = False):
-        self.usar_groq     = usar_groq
-        self.verbose       = verbose
-        self.turnos        = 0
-        self._fase2_activa = False
+        self.usar_groq      = usar_groq
+        self.verbose        = verbose
+        self.turnos         = 0
+        self._fase2_activa  = False
         self._emociones: dict = {}
-        self.id_sesion     = None
+        self.id_sesion      = None
+        self._echo_main     = None
 
         self._banner()
 
-        # ── Módulos obligatorios ──────────────────────────────────────────────
         GestorVocabulario = _importar_obligatorio("vocabulario.gestor_vocabulario", "GestorVocabulario")
         TraductorEntrada  = _importar_obligatorio("traduccion.traductor_entrada",   "TraductorEntrada")
         MotorRazonamiento = _importar_obligatorio("razonamiento.motor_razonamiento", "MotorRazonamiento")
         GeneradorSalida   = _importar_obligatorio("generacion.generador_salida",    "GeneradorSalida")
         GestorMemoria     = _importar_obligatorio("memoria.gestor_memoria",         "GestorMemoria")
 
-        # ── Vocabulario ───────────────────────────────────────────────────────
+        # FIX-M1: cargar_capa1=True
         try:
-            self.gestor_vocab = GestorVocabulario(cargar_expansion=True)
+            self.gestor_vocab = GestorVocabulario(cargar_expansion=True, cargar_capa1=True)
         except TypeError:
-            self.gestor_vocab = GestorVocabulario()
+            try:
+                self.gestor_vocab = GestorVocabulario(cargar_expansion=True)
+            except TypeError:
+                self.gestor_vocab = GestorVocabulario()
 
         total = self._total_conceptos()
         print(f"  {GREEN}✅ Vocabulario:{RST}   {total} conceptos")
 
-        # ── Traducción ────────────────────────────────────────────────────────
         self.traductor = TraductorEntrada(self.gestor_vocab)
         print(f"  {GREEN}✅ Traductor:{RST}     activo")
 
-        # ── Razonamiento ──────────────────────────────────────────────────────
         self.motor = MotorRazonamiento()
         self.motor.gestor_vocabulario = self.gestor_vocab
-        # ── v5: gestor_memoria se inyecta en iniciar_sesion() (después de crearlo)
-        print(f"  {GREEN}✅ Motor:{RST}         razonamiento v5")
+        print(f"  {GREEN}✅ Motor:{RST}         razonamiento v8.9")
 
-        # ── Consejeras ────────────────────────────────────────────────────────
         self._cargar_consejeras()
 
-        # ── Generador de salida ───────────────────────────────────────────────
         self.generador = GeneradorSalida(usar_groq=usar_groq)
-        modo = f"{GREEN}Groq + Echo ACTIVOS{RST}" if usar_groq else f"{YELL}modo simbólico{RST}"
+        modo = f"{GREEN}Groq + Echo ACTIVOS{RST}" if usar_groq else f"{YELL}modo simbólico + Echo{RST}"
         print(f"  {GREEN}✅ Generador:{RST}     {modo}")
 
-        # ── Memoria ───────────────────────────────────────────────────────────
         self.gestor_memoria = GestorMemoria()
         print(f"  {GREEN}✅ Memoria:{RST}       persistente lista")
 
-        # ── identidad_bell.py ─────────────────────────────────────────────────
+        self._cargar_echo_main()
+
         if _IDENTIDAD_OK:
             print(f"  {GREEN}✅ Identidad:{RST}     Bell cargada")
         else:
             print(f"  {YELL}⚠  Identidad:{RST}     identidad_bell.py no encontrado")
 
-        # ── Módulos opcionales ────────────────────────────────────────────────
+        if _HONESTIDAD_OK:
+            print(f"  {GREEN}✅ Honestidad:{RST}    {_TOTAL_NO_IMPLEMENTADAS} capacidades bloqueadas")
+        else:
+            print(f"  {RED}✗  Honestidad:{RST}    core/capacidades_fase.py no encontrado — RIESGO")
+
         self._cargar_opcionales()
 
         print()
@@ -200,15 +171,13 @@ class Belladonna:
             print(f"  {BOLD}Bell está lista.{RST}  {DIM}(usa --use-groq para Groq){RST}")
         print()
 
-    # ──────────────────────────────────────────────────────────────────────────
-
     def _banner(self):
-        version = "v5.0"
-        nombre  = "Belladonna" if not _IDENTIDAD_OK else "Belladonna (Bell)"
+        version = "v6.2"
+        nombre  = "Belladonna (Bell)" if _IDENTIDAD_OK else "Belladonna"
         print()
         print(f"  {'═'*58}")
         print(f"  {BOLD}{CYAN}{f'🌺  {nombre}  {version}  🌺':^58}{RST}")
-        print(f"  {'Sistema Conversacional — FASE 4A':^58}")
+        print(f"  {'Sistema Conversacional — FASE 4A — Shell + SQLite':^58}")
         print(f"  {f'{PRINCIPIO_CENTRAL[:54]}':^58}")
         print(f"  {'═'*58}")
         print()
@@ -216,16 +185,24 @@ class Belladonna:
         print()
 
     def _total_conceptos(self) -> int:
-        for metodo in ("total_conceptos",):
-            if hasattr(self.gestor_vocab, metodo):
-                try:
-                    return getattr(self.gestor_vocab, metodo)()
-                except Exception:
-                    pass
+        if hasattr(self.gestor_vocab, "total_conceptos"):
+            try:
+                return self.gestor_vocab.total_conceptos()
+            except Exception:
+                pass
         try:
             return len(self.gestor_vocab.obtener_todos())
         except Exception:
             return 1472
+
+    def _cargar_echo_main(self):
+        try:
+            from consejeras.echo.logica import Echo
+            self._echo_main = Echo()
+            print(f"  {GREEN}✅ Echo main:{RST}     verificador activo")
+        except ImportError:
+            self._echo_main = None
+            print(f"  {YELL}⚠  Echo main:{RST}     no disponible")
 
     def _cargar_consejeras(self):
         self.gestor_consejeras = None
@@ -282,17 +259,23 @@ class Belladonna:
         print(f"  {ico}{RST} Motor aprendizaje: "
               + ("listo" if self.motor_aprendizaje else "no disponible"))
 
+        # FIX-MAIN-1: ShellExecutor
         ShellExecutor = _importar("operaciones.shell_executor", "ShellExecutor")
         self.shell = None
         if ShellExecutor:
             try:
                 self.shell = ShellExecutor()
-            except Exception:
-                pass
-        ico = GREEN + "✅" if self.shell else YELL + "⚠ "
-        print(f"  {ico}{RST} Shell executor:    "
-              + ("activo" if self.shell else "no disponible"))
+                cmds   = getattr(self.shell, '_whitelist', None)
+                n_cmds = len(cmds) if cmds else "?"
+                print(f"  {GREEN}✅{RST} Shell executor:    activo ({n_cmds} comandos en whitelist)")
+            except Exception as e:
+                if self.verbose:
+                    print(f"  {YELL}⚠ ShellExecutor: {e}{RST}")
+                print(f"  {YELL}⚠ {RST} Shell executor:    no disponible")
+        else:
+            print(f"  {YELL}⚠ {RST} Shell executor:    no disponible")
 
+        # SQLite
         ClienteSQLite = _importar("base_datos", "ClienteSQLite")
         self.bd_cliente = None
         if ClienteSQLite:
@@ -304,23 +287,42 @@ class Belladonna:
         print(f"  {ico}{RST} Base de datos:     "
               + ("SQLite activo" if self.bd_cliente else "no disponible"))
 
-    # ─────────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
+    # FIX-MAIN-3: INYECCIÓN DE SQLITE
+    # ─────────────────────────────────────────────────────────────────
+
+    def _inyectar_sqlite(self):
+        """
+        FIX-MAIN-3: inyecta bd_cliente y gestor_bd en HabilidadSQLite.
+        Patrón idéntico al de inyección de ShellExecutor.
+        Se llama desde iniciar_sesion() una vez que bd_cliente está conectado.
+        """
+        if not self.bd_cliente:
+            return
+        try:
+            from habilidades.registro_habilidades import RegistroHabilidades
+            registro         = RegistroHabilidades.obtener()
+            habilidad_sqlite = registro.obtener_habilidad("SQLITE")
+            if habilidad_sqlite is not None:
+                habilidad_sqlite.configurar_cliente(
+                    self.bd_cliente,
+                    getattr(self, 'gestor_bd', None),
+                )
+                logging.getLogger("main").info("HabilidadSQLite: bd_cliente inyectado")
+                print(f"  {GREEN}✅{RST} SQLite inyectado en HabilidadSQLite")
+            else:
+                logging.getLogger("main").warning("HabilidadSQLite no encontrada en registro")
+                print(f"  {YELL}⚠ {RST} HabilidadSQLite no registrada — BD sin habilidad")
+        except Exception as e:
+            logging.getLogger("main").error(f"Error inyectando SQLite: {e}")
+            if self.verbose:
+                print(f"  {YELL}⚠ SQLite inyección: {e}{RST}")
+
+    # ─────────────────────────────────────────────────────────────────
     # CICLO DE VIDA
-    # ─────────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
 
     def iniciar_sesion(self):
-        """
-        Arranca la sesión e inyecta la memoria compartida a motor y generador.
-
-        INYECCIONES CRÍTICAS v5:
-            generador.memoria  = self.gestor_memoria  (FIX v3 — preservado)
-            motor.gestor_memoria = self.gestor_memoria  (NUEVO v5)
-
-        Sin la segunda inyección:
-            - REGISTRO_USUARIO: el motor extrae el nombre pero no lo guarda
-            - CONSULTA_MEMORIA: el motor busca en una instancia vacía
-            - actualizar_estado_sesion(): llama sobre None → silencioso
-        """
         if self._fase2_activa:
             return
 
@@ -332,13 +334,28 @@ class Belladonna:
         except Exception:
             self.id_sesion = datetime.now().isoformat()
 
-        # ── FIX v3: memoria compartida → generador ────────────────────────────
-        self.generador.memoria = self.gestor_memoria
-        print(f"  {GREEN}✅{RST} Memoria inyectada al generador")
-
-        # ── NUEVO v5: memoria compartida → motor ──────────────────────────────
+        # Inyecciones críticas
+        self.generador.memoria    = self.gestor_memoria
         self.motor.gestor_memoria = self.gestor_memoria
-        print(f"  {GREEN}✅{RST} Memoria inyectada al motor")
+        print(f"  {GREEN}✅{RST} Memoria inyectada al generador y motor")
+
+        # FIX-MAIN-1: Inyectar shell en generador
+        if self.shell:
+            self.generador.shell = self.shell
+            print(f"  {GREEN}✅{RST} Shell inyectado en generador")
+        else:
+            print(f"  {YELL}⚠ {RST} Shell no disponible — comandos de terminal desactivados")
+
+        # Conectar BD y luego inyectar en HabilidadSQLite
+        if self.bd_cliente:
+            try:
+                self.bd_cliente.conectar()
+                print(f"  {GREEN}✅{RST} Base de datos conectada")
+            except Exception:
+                pass
+            self._inyectar_sqlite()   # FIX-MAIN-3
+        else:
+            print(f"  {YELL}⚠ {RST} Base de datos no disponible — consultas BD desactivadas")
 
         if self.gestor_bucles:
             try:
@@ -347,13 +364,6 @@ class Belladonna:
             except Exception as e:
                 if self.verbose:
                     print(f"  {YELL}⚠ Bucles: {e}{RST}")
-
-        if self.bd_cliente:
-            try:
-                self.bd_cliente.conectar()
-                print(f"  {GREEN}✅{RST} Base de datos conectada")
-            except Exception:
-                pass
 
         self._fase2_activa = True
         print()
@@ -386,9 +396,9 @@ class Belladonna:
 
         self._fase2_activa = False
 
-    # ─────────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
     # DETECCIÓN DE EMOCIÓN
-    # ─────────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
 
     _PATRONES_EMOCION = {
         "frustrado":  (["no funciona", "error", "falla", "frustrado", "harto",
@@ -419,29 +429,40 @@ class Belladonna:
                 return emocion, tono
         return None, "amigable_natural"
 
-    # ─────────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
+    # FIX-M2: VERIFICACIÓN ECHO EN MAIN
+    # ─────────────────────────────────────────────────────────────────
+
+    def _verificar_decision_echo(self, decision):
+        if not self._echo_main:
+            return decision
+        try:
+            resultado = self._echo_main.verificar_decision(decision)
+            if not resultado['coherente']:
+                if self.verbose:
+                    print(f"  {YELL}⚠ Echo-main: {resultado['problemas']}{RST}")
+                from razonamiento.tipos_decision import TipoDecision, Decision as DecisionCls
+                if decision.tipo == TipoDecision.AFIRMATIVA and not decision.puede_ejecutar:
+                    hechos = decision.hechos_reales or {}
+                    hechos['capacidad_solicitada_disponible'] = False
+                    return DecisionCls(
+                        tipo=TipoDecision.CAPACIDAD_BELL,
+                        certeza=decision.certeza,
+                        conceptos_principales=decision.conceptos_principales,
+                        puede_ejecutar=False,
+                        razon="Echo-main corrigió AFIRMATIVA incoherente",
+                        hechos_reales=hechos,
+                    )
+        except Exception as e:
+            if self.verbose:
+                print(f"  {DIM}Echo-main error: {e}{RST}")
+        return decision
+
+    # ─────────────────────────────────────────────────────────────────
     # PROCESAMIENTO PRINCIPAL
-    # ─────────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
 
     def procesar(self, mensaje: str) -> str:
-        """
-        Procesa un mensaje y retorna la respuesta de Bell.
-
-        FLUJO v5:
-            0. Emoción detectada en main
-            1. Traducción: español → ConceptosAnclados
-            2. Razonamiento:
-               - clasificar_intencion()
-               - _actualizar_estado_memoria() → GestorMemoria._sesion sincronizado
-               - construir_hechos()
-               - para REGISTRO_USUARIO: _guardar_dato_en_memoria() antes de retornar
-            3. Consejeras (Vega puede vetar)
-            4. Generación:
-               - CALCULO: Python directo, sin Groq
-               - otros: fallback conversacional o Groq + Echo
-            5. Registro operacional (conceptos, decisión, episodio)
-            6. Aprendizaje en tiempo real
-        """
         try:
             v = self.verbose
 
@@ -450,12 +471,10 @@ class Belladonna:
                 print(f"  📥 MENSAJE: \"{mensaje}\"")
                 print(f"{'═'*64}")
 
-            # 0 · Emoción
             emocion, tono = self._detectar_emocion(mensaje)
             if v and emocion:
                 print(f"\n  💭 Emoción: {emocion} → tono: {tono}")
 
-            # 1 · Traducción
             traduccion = self.traductor.traducir(mensaje)
             if v:
                 cs = traduccion.get("conceptos", [])
@@ -464,20 +483,19 @@ class Belladonna:
                 for c in cs[:4]:
                     print(f"     • {c.id}  g={c.confianza_grounding:.2f}")
 
-            # 2 · Razonamiento
-            # v5: el motor ya actualiza memoria de estado y guarda datos verificados
             decision = self.motor.razonar(traduccion)
             if v:
                 print(f"\n  🧠 Decisión: {decision.tipo.name}  "
                       f"certeza={decision.certeza:.0%}  "
                       f"ejecutar={decision.puede_ejecutar}")
-                if decision.hechos_reales:
-                    tipo_r = decision.hechos_reales.get("tipo_respuesta", "")
-                    if tipo_r in ("REGISTRO_USUARIO", "CONSULTA_MEMORIA"):
-                        print(f"     dato_tipo={decision.hechos_reales.get('dato_tipo', '')}")
-                        print(f"     dato_valor={decision.hechos_reales.get('dato_valor', '')}")
+                if decision.tipo.name == "EJECUCION" and decision.hechos_reales:
+                    hid = decision.hechos_reales.get("habilidad_id", "?")
+                    cmd = decision.hechos_reales.get("comando_detectado", "")
+                    op  = decision.hechos_reales.get("operacion", "")
+                    print(f"     → habilidad: {hid}  cmd/op: {cmd or op}")
 
-            # 3 · Consejeras
+            decision = self._verificar_decision_echo(decision)
+
             contexto = {
                 "traduccion":       traduccion,
                 "emocion_usuario":  emocion,
@@ -499,9 +517,8 @@ class Belladonna:
                 except Exception:
                     pass
 
-            # 4 · Generación
             if v:
-                modo = "GROQ+ECHO" if self.usar_groq else "SIMBÓLICO"
+                modo = "GROQ+ECHO" if self.usar_groq else "SIMBÓLICO+ECHO"
                 print(f"\n  🎨 Generando [{modo}]...")
 
             respuesta = self.generador.generar(decision, contexto)
@@ -510,7 +527,6 @@ class Belladonna:
                 preview = (respuesta[:100] + "...") if len(respuesta) > 100 else respuesta
                 print(f"  → \"{preview}\"")
 
-            # 5 · Registro operacional en memoria
             if self._fase2_activa:
                 try:
                     for c in traduccion.get("conceptos", [])[:3]:
@@ -524,7 +540,6 @@ class Belladonna:
                         "emocion":        emocion,
                     })
 
-                    # v5: registrar episodio narrativo para tipos importantes
                     _TIPOS_EPISODIO = {
                         "REGISTRO_USUARIO", "CONSULTA_MEMORIA",
                         "IDENTIDAD_BELL", "ESTADO_USUARIO",
@@ -532,7 +547,6 @@ class Belladonna:
                     tipo_nombre = decision.tipo.name
                     if tipo_nombre in _TIPOS_EPISODIO and hasattr(self.gestor_memoria, "registrar_episodio"):
                         try:
-                            # ✅ DESPUÉS (kwargs correctos):
                             self.gestor_memoria.registrar_episodio(
                                 resumen                  = mensaje[:120],
                                 tema_principal           = tipo_nombre,
@@ -540,11 +554,9 @@ class Belladonna:
                             )
                         except Exception:
                             pass
-
                 except Exception:
                     pass
 
-            # 6 · Aprendizaje en tiempo real
             if self.motor_aprendizaje:
                 try:
                     self.motor_aprendizaje.procesar_turno({
@@ -564,14 +576,13 @@ class Belladonna:
                 traceback.print_exc()
             return f"Perdona, tuve un error interno: {e}"
 
-    # ─────────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
     # LOOP CONVERSACIONAL
-    # ─────────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
 
     def loop(self):
         self.iniciar_sesion()
 
-        # ── Saludo inicial personalizado ──────────────────────────────────────
         nombre = ""
         try:
             nombre = self.gestor_memoria.el_usuario_se_llama() or ""
@@ -580,7 +591,6 @@ class Belladonna:
 
         hora = datetime.now().hour
 
-        # v5: usar identidad_bell para nombre de Bell si está disponible
         if _IDENTIDAD_OK and nombre:
             try:
                 nombre_bell = obtener_nombre("estandar", nombre)
@@ -605,40 +615,32 @@ class Belladonna:
         while True:
             try:
                 entrada = input("🧑 Tú: ").strip()
-
                 if not entrada:
                     continue
 
                 el = entrada.lower()
 
-                # ── Comandos especiales ───────────────────────────────────────
                 if el in ("salir", "exit", "quit", "chao", "bye", "adios", "adiós"):
                     print("\n🌺 Bell: ¡Hasta pronto! Fue un gusto conversar.")
                     self.finalizar_sesion()
                     break
 
-                if el == "help":
-                    self._cmd_help();      continue
-                if el == "stats":
-                    self._cmd_stats();     continue
-                if el == "groq":
-                    self._cmd_groq();      continue
-                if el == "memoria":
-                    self._cmd_memoria();   continue
-                if el == "emociones":
-                    self._cmd_emociones(); continue
-                if el == "toggle_groq":
-                    self._cmd_toggle_groq(); continue
-                if el == "identidad":
-                    self._cmd_identidad(); continue
-                if el == "personas":
-                    self._cmd_personas();  continue
+                if el == "help":        self._cmd_help();       continue
+                if el == "stats":       self._cmd_stats();      continue
+                if el == "groq":        self._cmd_groq();       continue
+                if el == "memoria":     self._cmd_memoria();    continue
+                if el == "emociones":   self._cmd_emociones();  continue
+                if el == "toggle_groq": self._cmd_toggle_groq(); continue
+                if el == "identidad":   self._cmd_identidad();  continue
+                if el == "personas":    self._cmd_personas();   continue
+                if el == "honestidad":  self._cmd_honestidad(); continue
+                if el == "shell":       self._cmd_shell();      continue
+                if el == "bd":          self._cmd_bd();         continue  # FIX-MAIN-4
                 if el == "verbose":
                     self.verbose = not self.verbose
                     print(f"   {YELL}Verbose: {'ON 🔍' if self.verbose else 'OFF'}{RST}\n")
                     continue
 
-                # ── Mensaje normal ────────────────────────────────────────────
                 respuesta = self.procesar(entrada)
                 print(f"🌺 Bell: {respuesta}")
                 print()
@@ -651,52 +653,177 @@ class Belladonna:
                 self.finalizar_sesion()
                 break
 
-    # ─────────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
     # COMANDOS
-    # ─────────────────────────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────
 
     def _cmd_help(self):
+        shell_estado = f"{GREEN}ACTIVO{RST}" if self.shell      else f"{YELL}inactivo{RST}"
+        bd_estado    = f"{GREEN}ACTIVO{RST}" if self.bd_cliente else f"{YELL}inactivo{RST}"
         print(f"""
   {BOLD}Comandos:{RST}
-  {'─'*42}
+  {'─'*44}
   stats        Estadísticas del sistema
   groq         Estado de Groq y Echo
   memoria      Lo que Bell recuerda de ti
   emociones    Emociones detectadas en la sesión
-  identidad    Identidad y principios de Bell   {DIM}[nuevo v5]{RST}
-  personas     Personas que Bell conoce         {DIM}[nuevo v5]{RST}
+  identidad    Identidad y principios de Bell
+  personas     Personas que Bell conoce
+  honestidad   Estado del sistema de honestidad
+  shell        Estado del Shell Executor  ({shell_estado})
+  bd           Estado de la base de datos  ({bd_estado})  {DIM}[nuevo v6.2]{RST}
   toggle_groq  Activar/desactivar Groq
   verbose      Activar/desactivar debug
   help         Esta ayuda
   salir        Terminar
-  {'─'*42}
-  {DIM}Tip: python main.py --use-groq{RST}
+  {'─'*44}
+  {DIM}Shell: "lista tus archivos", "dónde estás", "estado de git"
+  BD:    "qué tablas tienes", "esquema de X", "datos de X"
+         "cuántos registros en X", "SELECT ... FROM X"{RST}
 """)
+
+    def _cmd_bd(self):
+        """FIX-MAIN-4: Estado de la base de datos SQLite."""
+        print(f"\n  {BOLD}🗄  Base de Datos — Sub-paso 2C{RST}")
+        print(f"  {'─'*44}")
+
+        if not self.bd_cliente:
+            print(f"  {RED}✗ ClienteSQLite no disponible{RST}")
+            print(f"    Verifica base_datos.py y su importación en _cargar_opcionales()")
+            print()
+            return
+
+        print(f"  {GREEN}✅ ClienteSQLite ACTIVO{RST}")
+
+        # Estado de HabilidadSQLite en el registro
+        try:
+            from habilidades.registro_habilidades import RegistroHabilidades
+            reg    = RegistroHabilidades.obtener()
+            hab_sq = reg.obtener_habilidad("SQLITE")
+            if hab_sq:
+                print(f"  {GREEN}✅ HabilidadSQLite registrada{RST}")
+                cliente_ok = getattr(hab_sq, '_cliente', None) is not None
+                print(f"     bd_cliente inyectado: {'sí ✅' if cliente_ok else 'no ⚠️'}")
+                if hasattr(hab_sq, 'descripcion_para_bell'):
+                    print(f"     {DIM}{hab_sq.descripcion_para_bell[:70]}...{RST}")
+            else:
+                print(f"  {YELL}⚠  HabilidadSQLite no registrada{RST}")
+        except Exception as e:
+            print(f"  {YELL}⚠  No se pudo consultar el registro: {e}{RST}")
+
+        # Tablas disponibles
+        try:
+            tablas = self.bd_cliente.listar_tablas()
+            if tablas:
+                print(f"\n  {BOLD}Tablas ({len(tablas)}):{RST}")
+                for t in tablas[:10]:
+                    print(f"    • {t}")
+                if len(tablas) > 10:
+                    print(f"    ... y {len(tablas) - 10} más")
+            else:
+                print(f"\n  {DIM}Base de datos vacía (sin tablas aún){RST}")
+        except Exception as e:
+            print(f"\n  {YELL}No se pudieron listar tablas: {e}{RST}")
+
+        # Patrones registrados
+        try:
+            from razonamiento.patrones_habilidades import (
+                listar_habilidades_registradas,
+                obtener_patrones_por_habilidad,
+            )
+            habs = listar_habilidades_registradas()
+            print(f"\n  {BOLD}Habilidades con patrones externos ({len(habs)}):{RST}")
+            for hid in habs:
+                n = len(obtener_patrones_por_habilidad(hid))
+                print(f"    • {hid:<20} {n} patrones")
+        except Exception:
+            pass
+
+        print(f"\n  {DIM}Prueba: 'qué tablas tienes', 'esquema de usuarios',")
+        print(f"         'cuántos registros en pedidos', 'SELECT * FROM ...'{RST}")
+        print()
+
+    def _cmd_shell(self):
+        """Estado del ShellExecutor."""
+        print(f"\n  {BOLD}🖥  Shell Executor — Sub-paso 2B{RST}")
+        print(f"  {'─'*44}")
+
+        if not self.shell:
+            print(f"  {RED}✗ ShellExecutor no disponible{RST}")
+            print(f"    Verifica operaciones/shell_executor.py")
+            print()
+            return
+
+        print(f"  {GREEN}✅ ShellExecutor ACTIVO{RST}")
+
+        whitelist = getattr(self.shell, '_whitelist', None) or getattr(self.shell, 'whitelist', None)
+        if whitelist:
+            print(f"\n  {BOLD}Comandos permitidos ({len(whitelist)}):{RST}")
+            cmds = sorted(list(whitelist))[:15]
+            for i in range(0, len(cmds), 3):
+                fila = cmds[i:i+3]
+                print("    " + "  ".join(f"{c:<18}" for c in fila))
+            if len(whitelist) > 15:
+                print(f"    ... y {len(whitelist) - 15} más")
+
+        timeout = getattr(self.shell, 'timeout', None)
+        if timeout:
+            print(f"\n  Timeout:    {timeout}s")
+
+        directorio = getattr(self.shell, 'working_dir', None) or getattr(self.shell, 'cwd', None)
+        if directorio:
+            print(f"  Directorio: {directorio}")
+
+        try:
+            from habilidades.registro_habilidades import RegistroHabilidades
+            reg       = RegistroHabilidades.obtener()
+            shell_hab = reg.obtener_habilidad("SHELL")
+            if shell_hab:
+                print(f"\n  {GREEN}✅ HabilidadShell registrada (prioridad 80){RST}")
+                print(f"     {DIM}{shell_hab.descripcion_para_bell[:70]}...{RST}")
+            else:
+                print(f"\n  {YELL}⚠  HabilidadShell no registrada{RST}")
+        except Exception:
+            pass
+
+        print(f"\n  {DIM}Prueba: 'lista tus archivos', 'dónde estás',")
+        print(f"         'estado de git', 'cuánta memoria tienes'{RST}")
+        print()
 
     def _cmd_stats(self):
         total = self._total_conceptos()
-        sg = {}
+        sg    = {}
         try:
             sg = self.generador.obtener_estadisticas()
         except Exception:
             pass
+        shell_ico = "✅" if self.shell      else "⚠️"
+        bd_ico    = "✅" if self.bd_cliente else "⚠️"
         print(f"""
   {BOLD}Estadísticas:{RST}
-  {'─'*42}
+  {'─'*44}
   Vocabulario   {total} conceptos
   Consejeras    {len(self.consejeras)} activas
   Turnos        {self.turnos}
   Groq          {'ON ✅' if self.usar_groq else 'OFF'}
-  Identidad     {'cargada ✅' if _IDENTIDAD_OK else 'no disponible'}
-  {'─'*42}
+  Shell         {shell_ico}
+  BD SQLite     {bd_ico}
+  Honestidad    {'activa ✅' if _HONESTIDAD_OK else 'NO ACTIVA ⚠️'}
+  {'─'*44}
   Respuestas    {sg.get('total_generadas', 0)}
   Con Groq      {sg.get('groq_usadas', 0)}
   Bloqueadas    {sg.get('groq_bloqueadas', 0)}
+  Echo correc.  {sg.get('echo_correcciones', 0)}
   Fallback      {sg.get('fallback_a_simbolico', 0)}
-  {'─'*42}
+  Shell exec.   {sg.get('shell_ejecutados', 0)}
+  Shell fall.   {sg.get('shell_fallidos', 0)}
+  {'─'*44}
+  Habilidades ejecutadas:""")
+        for hid, cnt in sg.get('habilidades_ejecutadas', {}).items():
+            print(f"    {hid:<25} {cnt}x")
+        print(f"""  {'─'*44}
   Tipos de decisión:""")
-        tipos = sg.get('tipos_decision', {})
-        for tipo, cnt in sorted(tipos.items(), key=lambda x: -x[1])[:8]:
+        for tipo, cnt in sorted(sg.get('tipos_decision', {}).items(), key=lambda x: -x[1])[:8]:
             print(f"    {tipo:<25} {cnt}")
         print()
 
@@ -709,22 +836,24 @@ class Belladonna:
                 pass
             print(f"""
   {GREEN}Groq: ACTIVO{RST}
-  {'─'*42}
+  {'─'*44}
   Llamadas Groq     {sg.get('groq_usadas', 0)}
   Bloqueadas Echo   {sg.get('groq_bloqueadas', 0)}
+  Echo correcciones {sg.get('echo_correcciones', 0)}
   Tasa éxito        {sg.get('tasa_groq', 0):.1%}
-  {'─'*42}
+  {'─'*44}
   Anti-invención    {GREEN}ACTIVA{RST}
   Echo verificando  {GREEN}ACTIVO{RST}
-  Memoria→generador {GREEN}INYECTADA{RST}
-  Memoria→motor     {GREEN}INYECTADA{RST}
+  Honestidad        {GREEN + 'ACTIVA' if _HONESTIDAD_OK else RED + 'INACTIVA'}{RST}
+  Shell ejecutable  {GREEN + 'ACTIVO' if self.shell else YELL + 'inactivo'}{RST}
+  BD SQLite         {GREEN + 'ACTIVO' if self.bd_cliente else YELL + 'inactivo'}{RST}
 """)
         else:
             print(f"""
   {YELL}Groq: DESACTIVADO{RST}
-  Bell usa generación simbólica honesta.
+  Bell usa generación simbólica honesta con Echo activo.
+  Shell y BD siguen activos — funcionan sin Groq.
   Activa con: python main.py --use-groq
-  O en caliente: toggle_groq
 """)
 
     def _cmd_emociones(self):
@@ -739,15 +868,13 @@ class Belladonna:
         print()
 
     def _cmd_memoria(self):
-        """v5: muestra datos del usuario + temas abiertos + predicciones."""
         try:
             datos     = self.gestor_memoria.obtener_datos_usuario()
             historial = self.gestor_memoria.obtener_contexto(n_mensajes=6)
 
             print(f"\n  {BOLD}Lo que Bell recuerda:{RST}")
-            print(f"  {'─'*42}")
+            print(f"  {'─'*44}")
 
-            # Datos verificados del usuario
             if datos:
                 print(f"  {BOLD}Datos del usuario:{RST}")
                 for k, v in datos.items():
@@ -755,7 +882,6 @@ class Belladonna:
             else:
                 print("  (sin datos del usuario todavía)")
 
-            # Temas abiertos — nuevo v5
             if hasattr(self.gestor_memoria, "hay_temas_abiertos"):
                 try:
                     if self.gestor_memoria.hay_temas_abiertos():
@@ -766,7 +892,6 @@ class Belladonna:
                 except Exception:
                     pass
 
-            # Últimos mensajes
             if historial:
                 lines = historial.strip().split("\n")[-6:]
                 print(f"\n  {BOLD}Últimos mensajes:{RST}")
@@ -778,80 +903,92 @@ class Belladonna:
         print()
 
     def _cmd_identidad(self):
-        """NUEVO v5: muestra identidad y principios de Bell."""
         print(f"\n  {BOLD}🌺 Identidad de Bell{RST}")
-        print(f"  {'─'*42}")
-
+        print(f"  {'─'*44}")
         if not _IDENTIDAD_OK:
             print(f"  {YELL}identidad_bell.py no disponible.{RST}")
             print(f"  Principio: {PRINCIPIO_CENTRAL}")
         else:
             print(f"  {BOLD}Principio central:{RST}")
             print(f"    {PRINCIPIO_CENTRAL}")
-
             if NARRATIVA_PROPIA:
                 print(f"\n  {BOLD}Narrativa propia:{RST}")
-                lineas = NARRATIVA_PROPIA.split("\n")[:4]
-                for l in lineas:
+                for l in NARRATIVA_PROPIA.split("\n")[:4]:
                     if l.strip():
                         print(f"    {l.strip()}")
-
             if VOZ_BELL:
-                nunca = VOZ_BELL.get("nunca", [])
+                nunca   = VOZ_BELL.get("nunca", [])
                 siempre = VOZ_BELL.get("siempre", [])
                 if nunca:
                     print(f"\n  {BOLD}Nunca dice:{RST}")
-                    for item in nunca[:3]:
+                    for item in nunca[:4]:
                         print(f"    ✗ {item}")
                 if siempre:
                     print(f"\n  {BOLD}Siempre hace:{RST}")
                     for item in siempre[:3]:
                         print(f"    ✅ {item}")
-
-            if NOMBRES_SEBASTIAN:
-                print(f"\n  {BOLD}Cómo llama a Sebastián:{RST}")
-                for momento, nombre in list(NOMBRES_SEBASTIAN.items())[:3]:
-                    print(f"    {momento}: {nombre}")
-
         print()
 
     def _cmd_personas(self):
-        """NUEVO v5: muestra personas que Bell conoce."""
         print(f"\n  {BOLD}👥 Personas que Bell conoce{RST}")
-        print(f"  {'─'*42}")
-
+        print(f"  {'─'*44}")
         if not hasattr(self.gestor_memoria, "obtener_persona"):
-            print(f"  {YELL}GestorMemoria v5 no disponible.{RST}")
+            print(f"  {YELL}GestorMemoria v5+ no disponible.{RST}")
             print()
             return
-
-        # Intentar leer desde el cache interno
         personas = {}
         try:
             personas = getattr(self.gestor_memoria, "_cache_personas", {})
         except Exception:
             pass
-
         if not personas:
             print("  (Bell no ha construido modelos de personas todavía)")
-            print("  Menciona a alguien en la conversación para que lo registre.")
         else:
             for nombre_p, datos_p in list(personas.items())[:5]:
                 print(f"\n  {BOLD}{nombre_p}{RST}")
                 if isinstance(datos_p, dict):
-                    genero    = datos_p.get("genero", "")
-                    menciones = datos_p.get("menciones", 0)
-                    emociones = datos_p.get("emociones_asociadas", [])
-                    print(f"    Género: {genero or 'desconocido'}  "
-                          f"Menciones: {menciones}")
-                    if emociones:
-                        print(f"    Emociones: {', '.join(emociones[:3])}")
+                    print(f"    Género: {datos_p.get('genero','desconocido')}  "
+                          f"Menciones: {datos_p.get('menciones',0)}")
+        print()
+
+    def _cmd_honestidad(self):
+        print(f"\n  {BOLD}🛡 Sistema de Honestidad — Fase 4A{RST}")
+        print(f"  {'─'*44}")
+        if _HONESTIDAD_OK:
+            print(f"  {GREEN}✅ core/capacidades_fase.py ACTIVO{RST}")
+            print(f"     {_TOTAL_NO_IMPLEMENTADAS} capacidades bloqueadas")
+            try:
+                from core.capacidades_fase import NO_IMPLEMENTADAS
+                print(f"\n  {BOLD}Capacidades no implementadas:{RST}")
+                for cid, razon in list(NO_IMPLEMENTADAS.items())[:6]:
+                    nombre = cid.replace("CONCEPTO_", "").lower()
+                    print(f"    ✗ {nombre:<15} — {razon[:50]}")
+                if len(NO_IMPLEMENTADAS) > 6:
+                    print(f"    ... y {len(NO_IMPLEMENTADAS) - 6} más")
+            except Exception:
+                pass
+        else:
+            print(f"  {RED}✗ core/capacidades_fase.py NO ENCONTRADO{RST}")
+
+        echo_ok  = self._echo_main is not None
+        gen_echo = getattr(self.generador, '_echo_verificador', None) is not None
+        print(f"\n  {BOLD}Echo verificadores:{RST}")
+        print(f"    Echo main:      {GREEN + 'ACTIVO' if echo_ok  else RED + 'INACTIVO'}{RST}")
+        print(f"    Echo generador: {GREEN + 'ACTIVO' if gen_echo else RED + 'INACTIVO'}{RST}")
+        sg = {}
+        try:
+            sg = self.generador.obtener_estadisticas()
+        except Exception:
+            pass
+        print(f"\n  {BOLD}Correcciones esta sesión:{RST}")
+        print(f"    Echo correcciones: {sg.get('echo_correcciones', 0)}")
+        print(f"    Bloqueadas:        {sg.get('groq_bloqueadas', 0)}")
         print()
 
     def _cmd_toggle_groq(self):
         try:
             from llm.groq_wrapper import GroqWrapper  # noqa
-            self.usar_groq = not self.usar_groq
+            self.usar_groq           = not self.usar_groq
             self.generador.usar_groq = self.usar_groq
             estado = f"{GREEN}ACTIVADO{RST}" if self.usar_groq else f"{YELL}DESACTIVADO{RST}"
             print(f"  Groq: {estado}\n")
@@ -859,12 +996,10 @@ class Belladonna:
             print(f"  {YELL}Groq no disponible en este entorno.{RST}\n")
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# PUNTO DE ENTRADA
-# ─────────────────────────────────────────────────────────────────────────────
-
 def main():
-    parser = argparse.ArgumentParser(description="Belladonna v5.0 — FASE 4A")
+    parser = argparse.ArgumentParser(
+        description="Belladonna v6.2 — FASE 4A — Shell + SQLite Ejecutable"
+    )
     parser.add_argument("--verbose", "-v", action="store_true",
                         help="Mostrar metadata de cada paso")
     parser.add_argument("--use-groq", action="store_true",
