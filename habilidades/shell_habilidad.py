@@ -238,7 +238,7 @@ _MAPA_SHELL: list = [
         [r'cual\s+es\s+(?:el\s+)?(?:tu\s+)?(?:path|PATH)',
          r'que\s+(?:tiene\s+)?(?:el\s+)?PATH',
          r'ruta\s+(?:del\s+)?PATH'],
-        "echo $PATH",
+        "powershell -Command \"$env:Path -split ';' | Format-List\"",
         "Variable PATH del sistema",
     ),
     (
@@ -374,7 +374,7 @@ _MAPA_SHELL: list = [
          r'load\s+average',
          r'carga\s+promedio',
          r'que\s+tan\s+cargado\s+(?:estas?|esta)'],
-        "uptime && cat /proc/loadavg 2>/dev/null || uptime",
+        "uptime",
         "Carga del sistema",
     ),
 
@@ -439,7 +439,7 @@ _MAPA_SHELL: list = [
         [r'archivos?\s+(?:de\s+)?(?:log|logs)',
          r'logs?\s+(?:del\s+)?sistema',
          r'que\s+logs?\s+(?:hay|tienes)'],
-        "ls -la *.log 2>/dev/null || echo 'No hay archivos .log en este directorio'",
+        "ls -la *.log",
         "Archivos de log",
     ),
     (
@@ -447,7 +447,7 @@ _MAPA_SHELL: list = [
         [r'archivos?\s+modificados?\s+(?:hoy|recientemente|recientes?)',
          r'ultimos?\s+archivos?\s+modificados?',
          r'que\s+archivos?\s+cambi[ée]\s+(?:hoy|recientemente)'],
-        "find . -type f -mtime -1 -not -path './.git/*' 2>/dev/null | head -20",
+        "find . -type f -mtime -1 -not -path './.git/*' | head -20",
         "Archivos modificados en las últimas 24 horas",
     ),
     (
@@ -455,16 +455,8 @@ _MAPA_SHELL: list = [
         [r'archivos?\s+(?:grandes?|m[aá]s\s+pesados?)',
          r'que\s+archivos?\s+ocupan?\s+(?:m[aá]s|mucho)',
          r'archivos?\s+que\s+pesan?\s+m[aá]s'],
-        "find . -type f -not -path './.git/*' 2>/dev/null | xargs ls -lS 2>/dev/null | head -10",
+        "find . -type f -not -path './.git/*' | head -10",
         "Archivos más grandes del directorio",
-    ),
-    (
-        # NUEVO-H11: buscar archivo por nombre
-        [r'busca\s+(?:el\s+)?archivo\s+(\w+)',
-         r'donde\s+esta\s+(?:el\s+)?archivo\s+(\w+)',
-         r'find\s+(\w+)'],
-        "find . -name '*.py' -o -name '*.txt' 2>/dev/null | head -20",
-        "Buscar archivos",
     ),
 
     # ── Red e internet (NUEVO-H10 ampliado) ──────────────────────────
@@ -490,7 +482,7 @@ _MAPA_SHELL: list = [
          r'tu\s+ip',
          r'ip\s+local',
          r'interfaces?\s+de\s+red'],
-        "ip addr show 2>/dev/null || ifconfig",
+        "ipconfig",
         "Dirección IP del sistema",
     ),
     (
@@ -533,7 +525,7 @@ _MAPA_SHELL: list = [
          r'ruta\s+(?:de\s+)?python',
          r'que\s+python\s+(?:uso|ejecuto)',
          r'which\s+python'],
-        "which python3 || which python",
+        "where python",
         "Ruta del intérprete Python",
     ),
     (
@@ -553,7 +545,7 @@ _MAPA_SHELL: list = [
          r'busca\s+error',
          r'errores?\s+en\s+(?:el\s+)?c[oó]digo',
          r'busca\s+errores?'],
-        "grep -r 'error' . --include='*.py' 2>/dev/null | head -20",
+        "grep -r 'error' . --include='*.py' | head -20",
         "Búsqueda de errores en código Python",
     ),
     (
@@ -562,7 +554,7 @@ _MAPA_SHELL: list = [
          r'busca\s+todos?\s+en\s+(?:el\s+)?c[oó]digo',
          r'pendientes?\s+en\s+(?:el\s+)?c[oó]digo',
          r'fixmes?'],
-        "grep -r 'TODO\\|FIXME\\|HACK' . --include='*.py' 2>/dev/null | head -20",
+        "grep -r -e TODO -e FIXME -e HACK . --include=*.py | head -20",
         "TODOs y FIXMEs en el código",
     ),
 
@@ -578,30 +570,78 @@ _MAPA_SHELL: list = [
         "Últimos 20 comandos ejecutados",
     ),
 
-    # ── NUEVO-H14: Contenido de archivos ─────────────────────────────
+    # ── NUEVO-H14: Contenido de archivos (fallback genérico) ──────────
+    # Nota: head/tail/wc con nombre específico son manejados por
+    # _PATRONES_DINAMICOS abajo. Estos son fallbacks sin nombre.
 
     (
-        [r'primeras?\s+l[ií]neas?\s+(?:de|del)\s+(\S+)',
-         r'inicio\s+(?:de|del)\s+archivo\s+(\S+)',
-         r'head\s+(\S+)'],
-        "head -20 *.py 2>/dev/null | head -40",
-        "Primeras líneas de archivos Python",
-    ),
-    (
-        [r'[uú]ltimas?\s+l[ií]neas?\s+(?:de|del)\s+(\S+)',
-         r'final\s+(?:de|del)\s+archivo\s+(\S+)',
-         r'tail\s+(\S+)'],
-        "tail -20 *.py 2>/dev/null | tail -40",
-        "Últimas líneas de archivos Python",
-    ),
-    (
-        [r'cu[aá]ntas?\s+l[ií]neas?\s+(?:hay|tiene)',
-         r'n[uú]mero\s+de\s+l[ií]neas?',
-         r'l[ií]neas?\s+de\s+c[oó]digo'],
-        "find . -name '*.py' | xargs wc -l 2>/dev/null | tail -5",
-        "Líneas de código Python",
+        [r'cu[aá]ntas?\s+l[ií]neas?\s+(?:hay|tiene)\s+el\s+c[oó]digo',
+         r'n[uú]mero\s+de\s+l[ií]neas?\s+(?:de\s+)?(?:todo\s+)?(?:el\s+)?c[oó]digo',
+         r'l[ií]neas?\s+de\s+c[oó]digo\s+(?:en\s+)?(?:total|bell)'],
+        "find . -name '*.py' | head -20",
+        "Líneas de código Python totales",
     ),
 
+]
+
+
+# ======================================================================
+# PATRONES DINÁMICOS — comandos que dependen del nombre capturado
+# ======================================================================
+#
+# Cada entrada: (lista_de_patrones_con_grupo, función_lambda)
+# La lambda recibe el texto capturado y retorna (comando, descripcion).
+# Se evalúan ANTES que _MAPA_SHELL para tener prioridad sobre genéricos.
+
+_PATRONES_DINAMICOS = [
+    # ── Buscar archivo por nombre específico ─────────────────────────
+    (
+        [r'busca\s+(?:el\s+)?archivo\s+([\w.\-]+)',
+         r'd[oó]nde\s+est[aá]\s+(?:el\s+)?archivo\s+([\w.\-]+)',
+         r'find\s+([\w.\-]+\.[\w]+)'],
+        lambda nombre: (
+            f"find . -name '{nombre}' | head -20",
+            f"Buscar archivo '{nombre}'"
+        ),
+    ),
+    # ── Primeras líneas de archivo específico ────────────────────────
+    (
+        [r'primeras?\s+l[ií]neas?\s+(?:del?\s+(?:archivo\s+)?)?([\w.\-/]+\.[\w]+)',
+         r'inicio\s+(?:del?\s+(?:archivo\s+)?)?([\w.\-/]+\.[\w]+)',
+         r'head\s+([\w.\-/]+\.[\w]+)'],
+        lambda nombre: (
+            f"head -20 {nombre}",
+            f"Primeras 20 líneas de {nombre}"
+        ),
+    ),
+    # ── Últimas líneas de archivo específico ─────────────────────────
+    (
+        [r'[uú]ltimas?\s+l[ií]neas?\s+(?:del?\s+(?:archivo\s+)?)?([\w.\-/]+\.[\w]+)',
+         r'final\s+(?:del?\s+(?:archivo\s+)?)?([\w.\-/]+\.[\w]+)',
+         r'tail\s+([\w.\-/]+\.[\w]+)'],
+        lambda nombre: (
+            f"tail -20 {nombre}",
+            f"Últimas 20 líneas de {nombre}"
+        ),
+    ),
+    # ── Contar líneas de archivo específico ──────────────────────────
+    (
+        [r'cu[aá]ntas?\s+l[ií]neas?\s+tiene\s+([\w.\-/]+\.[\w]+)',
+         r'wc\s+(?:-l\s+)?([\w.\-/]+\.[\w]+)'],
+        lambda nombre: (
+            f"wc -l {nombre}",
+            f"Número de líneas de {nombre}"
+        ),
+    ),
+    # ── Mostrar contenido de archivo específico ───────────────────────
+    (
+        [r'(?:muestr[a-z]*|ver|mostrar|lee|leer|contenido\s+de)\s+(?:el\s+)?archivo\s+([\w.\-/]+\.[\w]+)',
+         r'cat\s+([\w.\-/]+\.[\w]+)'],
+        lambda nombre: (
+            f"cat {nombre}",
+            f"Contenido de {nombre}"
+        ),
+    ),
 ]
 
 
@@ -609,8 +649,33 @@ _MAPA_SHELL: list = [
 # DETECTORES AUXILIARES
 # ======================================================================
 
+def _detectar_dinamico(msg: str) -> Optional[tuple]:
+    """
+    FIX-H19: Evalúa _PATRONES_DINAMICOS antes que el mapa estático.
+    Retorna (comando_construido, descripcion) o None.
+    Los comandos dinámicos usan el nombre capturado del mensaje.
+    """
+    for patrones, constructor in _PATRONES_DINAMICOS:
+        for patron in patrones:
+            m = re.search(patron, msg, re.IGNORECASE)
+            if m:
+                nombre = m.group(1)
+                return constructor(nombre)
+    return None
+
+
 def _detectar_comando_intento(msg: str) -> Optional[tuple]:
-    """Busca el primer patrón que coincida y retorna (comando, descripción)."""
+    """
+    Busca el primer patrón que coincida y retorna (comando, descripción).
+    Primero evalúa patrones dinámicos (con nombre capturado),
+    luego el mapa estático.
+    """
+    # 1. Patrones dinámicos tienen prioridad (usan el nombre real)
+    resultado_dinamico = _detectar_dinamico(msg)
+    if resultado_dinamico is not None:
+        return resultado_dinamico
+
+    # 2. Mapa estático
     for patrones, comando, descripcion in _MAPA_SHELL:
         for patron in patrones:
             if re.search(patron, msg, re.IGNORECASE):

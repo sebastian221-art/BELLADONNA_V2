@@ -157,8 +157,7 @@ class ShellExecutor:
         'ls -lh':              'dir /a',
         'ls -ltr':             'dir /a /o-d',
         'ls -la *.py':         'dir /a *.py',
-        'ls -la *.log 2>/dev/null || echo \'No hay archivos .log en este directorio\'':
-                               'dir /a *.log 2>nul || echo No hay archivos .log en este directorio',
+        'ls -la *.log':         'dir /a *.log',
 
         # Directorio actual
         'pwd':                 'cd',
@@ -198,11 +197,12 @@ class ShellExecutor:
 
         # Variables de entorno
         'env':                 'set',
+        'echo $PATH':           'powershell -Command "$env:Path -split \';\' | Format-List"',
         'printenv':            'set',
 
         # Red
         'ifconfig':            'ipconfig /all',
-        'ip addr show 2>/dev/null || ifconfig': 'ipconfig /all',
+        'ipconfig':             'ipconfig /all',
         'ss -tuln':            'netstat -an',
         'netstat':             'netstat -an',
         'ping -c 3 google.com':'ping -n 3 google.com',
@@ -218,19 +218,21 @@ class ShellExecutor:
 
         # Python (puede ser python o py en Windows)
         'python3 --version':   'python --version',
+        'where python':         'where python',
         'pip3 list':           'pip list',
 
         # Historial
         'history | tail -20':  'powershell -Command "Get-History -Count 20 | Format-Table Id, CommandLine -AutoSize"',
 
         # Búsqueda
-        'grep -r \'error\' . --include=\'*.py\' 2>/dev/null | head -20':
-                               'powershell -Command "Select-String -Path \'*.py\' -Pattern \'error\' -Recurse | Select-Object -First 20 | Format-Table Filename, LineNumber, Line -AutoSize"',
-        'grep -r \'TODO\\|FIXME\\|HACK\' . --include=\'*.py\' 2>/dev/null | head -20':
-                               'powershell -Command "Select-String -Path \'*.py\' -Pattern \'TODO|FIXME|HACK\' -Recurse | Select-Object -First 20 | Format-Table Filename, LineNumber, Line -AutoSize"',
+        'grep -r \'error\' . --include=\'*.py\' | head -20':
+                               'powershell -Command "Select-String -Path *.py -Pattern error -Recurse | Select-Object -First 20 | Format-Table Filename, LineNumber, Line -AutoSize"',
+        'grep -r -e TODO -e FIXME -e HACK . --include=*.py | head -20':
+                               'powershell -Command "Select-String -Path *.py -Pattern \"TODO|FIXME|HACK\" -Recurse | Select-Object -First 20 | Format-Table Filename, LineNumber, Line -AutoSize"',
 
         # Estructura de directorios
         'tree -L 2':           'tree /f /a | more',
+        'find . -name *.py | head -20': 'dir /s /b *.py | head -20',
 
         # Información del sistema completa
         'systeminfo':          'systeminfo',
@@ -319,6 +321,7 @@ class ShellExecutor:
         '`',    # command substitution (bash y PowerShell)
         '$(',   # command substitution bash
         '&&',   # AND lógico
+        '||',   # FIX-BUG02: OR lógico — permite inyección de comandos
     ]
 
     _PIPES_SEGUROS = [

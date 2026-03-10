@@ -526,5 +526,89 @@
     "decision_tomada": null,
     "prediccion_bell": null,
     "temas_abiertos": []
+  },
+  {
+    "id": "ep_1090685a",
+    "fecha": "2026-03-06T10:24:22.390900",
+    "sesion_id": "d4e62ba1-3cec-463e-b5da-0a3c542a081e",
+    "resumen": "pasos = decision.pasos_razonamiento or []",
+    "tema_principal": "IDENTIDAD_BELL",
+    "personas_mencionadas": [],
+    "estado_emocional_usuario": "neutral",
+    "decision_tomada": null,
+    "prediccion_bell": null,
+    "temas_abiertos": []
+  },
+  {
+    "id": "ep_aac11cfe",
+    "fecha": "2026-03-06T10:26:41.251625",
+    "sesion_id": "d4e62ba1-3cec-463e-b5da-0a3c542a081e",
+    "resumen": "```\ndef explicar_decision(self, decision: Decision) -> str:\n        pasos = decision.pasos_razonamiento or []\n        re",
+    "tema_principal": "IDENTIDAD_BELL",
+    "personas_mencionadas": [],
+    "estado_emocional_usuario": "neutral",
+    "decision_tomada": null,
+    "prediccion_bell": null,
+    "temas_abiertos": []
+  },
+  {
+    "id": "ep_7592e0d3",
+    "fecha": "2026-03-07T12:09:10.489174",
+    "sesion_id": "7abdae89-5f57-4e09-828e-cfa25ed56912",
+    "resumen": "FASE 4A — VERSION v3.0 — SOPORTE WINDOWS + LINUX",
+    "tema_principal": "IDENTIDAD_BELL",
+    "personas_mencionadas": [],
+    "estado_emocional_usuario": "neutral",
+    "decision_tomada": null,
+    "prediccion_bell": null,
+    "temas_abiertos": []
+  },
+  {
+    "id": "ep_aa09028b",
+    "fecha": "2026-03-07T12:09:11.989398",
+    "sesion_id": "7abdae89-5f57-4e09-828e-cfa25ed56912",
+    "resumen": "Antes: solo reemplazaba el primer token (ls→dir).",
+    "tema_principal": "ESTADO_USUARIO",
+    "personas_mencionadas": [],
+    "estado_emocional_usuario": "neutral",
+    "decision_tomada": null,
+    "prediccion_bell": null,
+    "temas_abiertos": []
+  },
+  {
+    "id": "ep_9860cac8",
+    "fecha": "2026-03-07T12:11:01.842550",
+    "sesion_id": "093431a6-953a-46b7-b68e-4c06635ab3c4",
+    "resumen": "cómo se llama esta máquina",
+    "tema_principal": "IDENTIDAD_BELL",
+    "personas_mencionadas": [],
+    "estado_emocional_usuario": "neutral",
+    "decision_tomada": null,
+    "prediccion_bell": null,
+    "temas_abiertos": []
+  },
+  {
+    "id": "ep_3afb3966",
+    "fecha": "2026-03-07T12:11:20.726434",
+    "sesion_id": "093431a6-953a-46b7-b68e-4c06635ab3c4",
+    "resumen": "cómo se llama esta máquina",
+    "tema_principal": "IDENTIDAD_BELL",
+    "personas_mencionadas": [],
+    "estado_emocional_usuario": "neutral",
+    "decision_tomada": null,
+    "prediccion_bell": null,
+    "temas_abiertos": []
+  },
+  {
+    "id": "ep_03580d3c",
+    "fecha": "2026-03-09T16:50:24.765142",
+    "sesion_id": "cdabe721-c6b2-4f74-bcc0-936cf531560e",
+    "resumen": "hola como me llamo",
+    "tema_principal": "CONSULTA_MEMORIA",
+    "personas_mencionadas": [],
+    "estado_emocional_usuario": "neutral",
+    "decision_tomada": null,
+    "prediccion_bell": null,
+    "temas_abiertos": []
   }
 ]

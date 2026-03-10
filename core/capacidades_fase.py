@@ -1,20 +1,23 @@
 """
-capacidades_fase.py — FUENTE ÚNICA DE VERDAD
+capacidades_fase.py — FUENTE ÚNICA DE VERDAD — VERSION v1.1
+
+CAMBIOS v1.1 sobre v1.0:
+═══════════════════════════════════════════════════════════════════
+FIX-BUG7  CONCEPTO_DESCARGAR no estaba bloqueado
+          CAUSA: Bell respondía "eso está dentro de mis capacidades"
+          cuando el usuario pedía "descarga el archivo X" porque
+          CONCEPTO_DESCARGAR no existía en NO_IMPLEMENTADAS ni en
+          PATRONES_NO_IMPLEMENTADOS.
+          FIX:   Agregar CONCEPTO_DESCARGAR, CONCEPTO_WGET y
+          CONCEPTO_CURL a NO_IMPLEMENTADAS.
+          Agregar patrones "descarga", "descargar", "bajar archivo",
+          "download" a PATRONES_NO_IMPLEMENTADOS.
+═══════════════════════════════════════════════════════════════════
 
 QUÉ ES ESTE ARCHIVO:
     El único lugar donde vive la respuesta a "¿qué puede hacer Bell ahora?".
     Todos los módulos que necesiten saber si una capacidad está implementada
     importan desde aquí. Nadie más tiene su propia lista.
-
-POR QUÉ EXISTE:
-    Antes había TRES listas desincronizadas:
-      A) _NO_IMPLEMENTADAS_FASE4A inline en motor_razonamiento.py (21 conceptos)
-      B) capacidades_fase4a.no_implementadas en BELL_WHITELIST.json (17 conceptos)
-      C) _no_disponibles en _hechos_capacidad() del motor (patrones de texto)
-
-    Las tres tenían contenidos distintos. CONCEPTO_LEER y CONCEPTO_ESCRIBIR
-    no estaban en A ni en B, aunque sí en C. Eso causaba que Bell mintiera
-    sobre capacidades de archivos en el 90% de los casos.
 
 CÓMO SE USA:
     from core.capacidades_fase import NO_IMPLEMENTADAS, esta_implementada, razon_no_implementada
@@ -30,21 +33,17 @@ FASE_ACTUAL = "4A"
 
 # ═══════════════════════════════════════════════════════════════════════
 # CONCEPTOS NO IMPLEMENTADOS EN FASE 4A
-#
-# Formato: { "CONCEPTO_ID": "razón para el usuario" }
-#
-# Un concepto aquí significa:
-#   - El código Python puede existir (grounding real)
-#   - Pero Bell NO puede ejecutarlo para el usuario en esta fase
-#   - Cualquier módulo que consulte esto debe responder NEGATIVA honesta
 # ═══════════════════════════════════════════════════════════════════════
 
 NO_IMPLEMENTADAS: dict = {
-    # ── Operaciones de archivo — LOS DOS QUE CAUSABAN TODAS LAS MENTIRAS ──
+    # ── Operaciones de archivo ────────────────────────────────────────
     "CONCEPTO_LEER":    "Leer archivos del sistema de archivos está pendiente de implementar en Fase 4A",
     "CONCEPTO_ESCRIBIR": "Escribir/crear archivos está pendiente de implementar en Fase 4A",
 
-    # ── Comandos shell no disponibles ─────────────────────────────────────
+    # ── FIX-BUG7 v1.1: Descargar archivos de internet ─────────────────
+    "CONCEPTO_DESCARGAR": "Descargar archivos de internet no está implementado en Fase 4A",
+
+    # ── Comandos shell no disponibles ─────────────────────────────────
     "CONCEPTO_TOUCH":              "Crear archivos vacíos (touch) no implementado en Fase 4A",
     "CONCEPTO_MKDIR":              "Crear directorios (mkdir) no implementado en Fase 4A",
     "CONCEPTO_CAT":                "Mostrar contenido de archivos (cat) no implementado en Fase 4A",
@@ -81,10 +80,7 @@ NO_IMPLEMENTADAS_IDS: frozenset = frozenset(NO_IMPLEMENTADAS.keys())
 
 
 # ═══════════════════════════════════════════════════════════════════════
-# PATRONES DE TEXTO — para detección en mensajes del usuario
-#
-# Complementan la lista de IDs cuando el motor necesita detectar
-# si el usuario está pidiendo algo no implementado por texto libre.
+# PATRONES DE TEXTO
 # ═══════════════════════════════════════════════════════════════════════
 
 PATRONES_NO_IMPLEMENTADOS: dict = {
@@ -99,6 +95,13 @@ PATRONES_NO_IMPLEMENTADOS: dict = {
     "escribir archivo":   "Crear/escribir archivos está pendiente de implementar en Fase 4A",
     "generar archivo":    "Generar archivos está pendiente de implementar en Fase 4A",
     "genera un archivo":  "Generar archivos está pendiente de implementar en Fase 4A",
+    # FIX-BUG7 v1.1: patrones de descarga
+    "descarga":           "Descargar archivos de internet no está implementado en Fase 4A",
+    "descargar":          "Descargar archivos de internet no está implementado en Fase 4A",
+    "bajar el archivo":   "Descargar archivos de internet no está implementado en Fase 4A",
+    "bajar archivo":      "Descargar archivos de internet no está implementado en Fase 4A",
+    "download":           "Descargar archivos de internet no está implementado en Fase 4A",
+    # Patrones existentes preservados
     "acceder internet":   "Acceso a internet no está disponible en Fase 4A",
     "internet":           "Acceso a internet no está disponible en Fase 4A",
     "navegar":            "Navegación web no está disponible en Fase 4A",
@@ -110,50 +113,18 @@ PATRONES_NO_IMPLEMENTADOS: dict = {
 
 
 # ═══════════════════════════════════════════════════════════════════════
-# API PÚBLICA
+# API PÚBLICA (idéntica a v1.0)
 # ═══════════════════════════════════════════════════════════════════════
 
 def esta_implementada(concepto_id: str) -> bool:
-    """
-    ¿Está este concepto implementado para el usuario en la fase actual?
-
-    Args:
-        concepto_id: ID del concepto, ej: "CONCEPTO_LEER"
-
-    Returns:
-        True si está implementado y disponible para el usuario.
-        False si existe en el código pero no está habilitado en esta fase.
-
-    Uso:
-        if not esta_implementada("CONCEPTO_LEER"):
-            return decision_negativa_honesta()
-    """
     return concepto_id not in NO_IMPLEMENTADAS_IDS
 
 
 def razon_no_implementada(concepto_id: str) -> str:
-    """
-    Razón por la que un concepto no está implementado.
-
-    Args:
-        concepto_id: ID del concepto
-
-    Returns:
-        String con la razón, o "" si está implementado.
-    """
     return NO_IMPLEMENTADAS.get(concepto_id, "")
 
 
 def detectar_patron_no_implementado(mensaje: str) -> tuple:
-    """
-    Detecta si el mensaje del usuario pide algo no implementado por texto libre.
-
-    Args:
-        mensaje: Texto del usuario en minúsculas
-
-    Returns:
-        (patron_encontrado: str, razon: str) o ("", "") si no hay match.
-    """
     msg = mensaje.lower()
     for patron, razon in PATRONES_NO_IMPLEMENTADOS.items():
         if patron in msg:
@@ -162,8 +133,4 @@ def detectar_patron_no_implementado(mensaje: str) -> tuple:
 
 
 def obtener_lista_no_implementadas() -> list:
-    """
-    Retorna lista de IDs de conceptos no implementados.
-    Para compatibilidad con código que espera una lista.
-    """
     return list(NO_IMPLEMENTADAS_IDS)

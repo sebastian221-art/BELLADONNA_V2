@@ -1,30 +1,36 @@
 # -*- coding: utf-8 -*-
 """
-razonamiento/patrones_habilidades.py  VERSION v2.0
+razonamiento/patrones_habilidades.py  VERSION v3.1
 
-CAMBIOS v2.0 sobre v1.0:
+CAMBIOS v3.1 sobre v3.0:
 ════════════════════════════════════════════════════════════════════
-FASE 4B — BD AL 100%: patrones para operaciones de escritura.
+FIX-P1  "métricas de Bell", "estadísticas de Bell", "score de Bell"
+        → motor detectaba ANALISIS_PYTHON pero _MAPA_ANALISIS en
+          analizador_habilidad.py no cubría esas frases → operación vacía.
+        FIX: Agregar los patrones que faltan al bloque
+             metricas_generales de _PATRONES_ANALISIS_PYTHON para
+             que la detección en el motor y en la habilidad sean
+             consistentes.
 
-NUEVOS PATRONES SQLITE:
-  ✅ crear_tabla       — "crea una tabla X", "CREATE TABLE X"
-  ✅ insertar          — "inserta a X en Y", "INSERT INTO X"
-  ✅ actualizar        — "actualiza X=Y en Z", "UPDATE X SET"
-  ✅ eliminar_registro — "elimina a X de Y", "DELETE FROM X WHERE"
-  ✅ vaciar_tabla      — "vacía la tabla X", "DELETE FROM X"
-  ✅ eliminar_tabla    — "elimina la tabla X", "DROP TABLE X"
-  ✅ sql_escritura     — INSERT/UPDATE/DELETE directo
+FIX-P2  Consejeras individuales: "analiza nova", "analiza vega",
+        "analiza lyra", "analiza luna", "analiza iris", "analiza sage"
+        → v3.0 solo tenía nova, vega, echo. Faltaban lyra, luna, iris, sage.
+        FIX: Unificar las 7 consejeras en un solo patrón.
 
-Todo lo demás de v1.0 preservado intacto.
+FIX-P3  Ruta absoluta Windows/Linux para analizar_archivo:
+        "analiza C:\ruta\archivo.py" o "analiza /home/user/archivo.py"
+        → v3.0 no tenía estos patrones en _PATRONES_ANALISIS_PYTHON.
+        FIX: Agregar patrones de ruta absoluta.
 
-COMPATIBILIDAD: motor_razonamiento v8.9+, generador_salida v8.5+
+Todo lo demás de v3.0 preservado intacto (SQLITE completo).
+════════════════════════════════════════════════════════════════════
 """
 import re
 from typing import Optional, Tuple, List
 
 
 # ======================================================================
-# HABILIDAD: SQLITE — patrones completos v2.0
+# HABILIDAD: SQLITE — patrones completos v2.0 (sin cambios)
 # ======================================================================
 
 _PATRONES_SQLITE: List[str] = [
@@ -71,13 +77,13 @@ _PATRONES_SQLITE: List[str] = [
     r'[íi]ndices?\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
     r'[íi]ndices?\s+(?:disponibles?|existentes?)',
 
-    # ── NUEVO v2.0: Crear tabla ────────────────────────────────────────
+    # ── Crear tabla ────────────────────────────────────────────────────
     r'crea(?:r)?\s+(?:una\s+)?tabla\s+\w+',
     r'nueva\s+tabla\s+\w+',
     r'hacer\s+(?:una\s+)?tabla\s+\w+',
     r'create\s+table\s+\w+',
 
-    # ── NUEVO v2.0: Insertar ───────────────────────────────────────────
+    # ── Insertar ───────────────────────────────────────────────────────
     r'inserta(?:r)?\s+.+\s+en\s+\w+',
     r'agrega(?:r)?\s+.+\s+(?:a|en)\s+\w+',
     r'a[nñ]ade?\s+.+\s+(?:a|en)\s+\w+',
@@ -85,27 +91,27 @@ _PATRONES_SQLITE: List[str] = [
     r'^insert\s+into\s+\w+',
     r'nuevo\s+registro\s+en\s+\w+',
 
-    # ── NUEVO v2.0: Actualizar ─────────────────────────────────────────
+    # ── Actualizar ─────────────────────────────────────────────────────
     r'actualiza(?:r)?\s+.+\s+(?:en|de)\s+\w+',
     r'cambia(?:r)?\s+.+\s+(?:en|de)\s+\w+',
     r'modifica(?:r)?\s+.+\s+(?:en|de)\s+\w+',
     r'^update\s+\w+\s+set',
 
-    # ── NUEVO v2.0: Eliminar registro ──────────────────────────────────
+    # ── Eliminar registro ──────────────────────────────────────────────
     r'elimin[a-z]*\s+.+\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
     r'borra(?:r)?\s+.+\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
     r'quita(?:r)?\s+.+\s+de\s+(?:la\s+)?(?:tabla\s+)?\w+',
     r'^delete\s+from\s+\w+\s+where',
     r'^delete\s+from\s+\w+',
 
-    # ── NUEVO v2.0: Vaciar tabla ───────────────────────────────────────
+    # ── Vaciar tabla ───────────────────────────────────────────────────
     r'vac[ií]a(?:r)?\s+(?:la\s+)?(?:tabla\s+)?\w+',
     r'limpia(?:r)?\s+(?:la\s+)?(?:tabla\s+)?\w+',
     r'borra(?:r)?\s+todos?\s+(?:los\s+)?registros?\s+de\s+\w+',
     r'elimin[a-z]*\s+todos?\s+(?:los\s+)?registros?\s+de\s+\w+',
     r'^truncate\s+(?:table\s+)?\w+',
 
-    # ── NUEVO v2.0: Eliminar tabla ─────────────────────────────────────
+    # ── Eliminar tabla ─────────────────────────────────────────────────
     r'elimin[a-z]*\s+(?:la\s+)?tabla\s+\w+',
     r'borra(?:r)?\s+(?:la\s+)?tabla\s+\w+',
     r'^drop\s+(?:table\s+)?\w+',
@@ -135,9 +141,113 @@ _CONCEPTOS_SQLITE: List[str] = [
 
 
 # ======================================================================
+# HABILIDAD: ANALISIS_PYTHON — patrones v3.1
+# ======================================================================
+
+_PATRONES_ANALISIS_PYTHON: List[str] = [
+
+    # ── Análisis completo de Bell ──────────────────────────────────────
+    r'anali[sz]a(?:r)?\s+(?:tu\s+)?(?:propio\s+)?c[oó]digo',
+    r'anali[sz]a(?:r)?\s+(?:a\s+)?bell\b',
+    r'anali[sz]a(?:r)?\s+(?:todo\s+)?(?:el\s+)?sistema',
+    r'revisa(?:r)?\s+(?:tu\s+)?c[oó]digo',
+    r'inspecci[oó]n\s+(?:de\s+)?bell',
+    r'c[oó]mo\s+est[aá]\s+(?:tu\s+)?c[oó]digo',
+    r'qu[eé]\s+tal\s+(?:tu\s+)?c[oó]digo',
+    r'qu[eé]\s+tal\s+est[aá]\s+(?:tu\s+)?c[oó]digo',
+
+    # ── Las 7 consejeras — FIX-P2 ─────────────────────────────────────
+    # v3.0 tenía solo nova, vega, echo como patrones separados.
+    # v3.1: un solo patrón unificado con todos los nombres.
+    r'anali[sz]a(?:r)?\s+(?:la\s+)?(?:consejera\s+)?(nova|vega|echo|lyra|luna|iris|sage)\b',
+    r'revisa(?:r)?\s+(?:la\s+)?(?:consejera\s+)?(nova|vega|echo|lyra|luna|iris|sage)\b',
+    r'c[oó]mo\s+est[aá]\s+(?:la\s+)?(nova|vega|echo|lyra|luna|iris|sage)\b',
+    r'qu[eé]\s+hace\s+(?:la\s+)?(nova|vega|echo|lyra|luna|iris|sage)\b',
+
+    # ── Módulo Bell específico (no-consejera) ──────────────────────────
+    r'anali[sz]a(?:r)?\s+(?:el\s+)?motor(?:_razonamiento)?',
+    r'anali[sz]a(?:r)?\s+(?:el\s+)?generador(?:_salida|_ejecutores)?',
+    r'anali[sz]a(?:r)?\s+(?:el\s+)?registro(?:_habilidades)?',
+    r'anali[sz]a(?:r)?\s+(?:el\s+)?m[oó]dulo\s+\w+',
+    r'anali[sz]a(?:r)?\s+(?:la\s+)?habilidad\s+\w+',
+    r'qu[eé]\s+hace\s+(?:el\s+)?motor',
+    r'estructura\s+del?\s+motor',
+    r'c[oó]mo\s+est[aá]\s+(?:el\s+)?m[oó]dulo\s+\w+',
+    r'qu[eé]\s+contiene\s+(?:el\s+)?m[oó]dulo\s+\w+',
+    r'anali[sz]a(?:r)?\s+(?:el\s+)?main',
+
+    # ── Archivo .py por nombre simple ─────────────────────────────────
+    r'anali[sz]a(?:r)?\s+\w+\.py',
+    r'revisa(?:r)?\s+\w+\.py',
+    r'qu[eé]\s+problemas?\s+(?:tiene|hay\s+en)\s+\w+\.py',
+    r'complejidad\s+de\s+\w+\.py',
+    r'calidad\s+de\s+\w+\.py',
+    r'metricas?\s+de\s+\w+\.py',
+    r'c[oó]mo\s+est[aá]\s+\w+\.py',
+    r'errores?\s+en\s+\w+\.py',
+    r'score\s+de\s+\w+\.py',
+
+    # ── Archivo por ruta absoluta — FIX-P3 ────────────────────────────
+    # Windows: "analiza C:\ruta\archivo.py"
+    r'anali[sz]a(?:r)?\s+[A-Za-z]:\\[^\s]+\.py',
+    r'revisa(?:r)?\s+[A-Za-z]:\\[^\s]+\.py',
+    # Linux/Mac: "analiza /home/user/archivo.py"
+    r'anali[sz]a(?:r)?\s+/[^\s]+\.py',
+    r'revisa(?:r)?\s+/[^\s]+\.py',
+
+    # ── Código inline ──────────────────────────────────────────────────
+    r'anali[sz]a(?:r)?\s+(?:este\s+)?c[oó]digo',
+    r'revisa(?:r)?\s+(?:este\s+)?c[oó]digo',
+    r'qu[eé]\s+(?:problemas?|errores?)\s+tiene\s+(?:este\s+)?c[oó]digo',
+    r'qu[eé]\s+est[aá]\s+mal\s+(?:en\s+)?(?:este\s+)?c[oó]digo',
+    r'qu[eé]\s+piensas?\s+(?:de\s+)?(?:este\s+)?c[oó]digo',
+    r'mejora(?:r)?\s+(?:este\s+)?c[oó]digo',
+    r'c[oó]mo\s+mejorar[ií]as?\s+(?:este\s+)?c[oó]digo',
+    r'analiza\s+(?:el\s+)?siguiente\s+c[oó]digo',
+    r'revisa\s+(?:el\s+)?siguiente\s+c[oó]digo',
+    r'```python',
+
+    # ── Métricas generales Bell — FIX-P1 ──────────────────────────────
+    # v3.0 no cubría "métricas de Bell", "estadísticas de Bell",
+    # "score de Bell", "tamaño de Bell". Solo cubría frases con "código".
+    r'metricas?\s+(?:del?\s+|de\s+tu\s+)?c[oó]digo',
+    r'metricas?\s+de\s+bell',                           # FIX-P1
+    r'calidad\s+del?\s+c[oó]digo',
+    r'complejidad\s+(?:del?\s+c[oó]digo|de\s+bell)',
+    r'qu[eé]\s+tan\s+(?:bueno|complejo|grande)\s+es\s+(?:tu\s+)?c[oó]digo',
+    r'qu[eé]\s+tan\s+grande\s+es\s+bell',              # FIX-P1
+    r'cu[aá]ntas?\s+l[ií]neas?\s+(?:tiene|tienes)',
+    r'cu[aá]ntas?\s+funciones?\s+(?:tiene|tienes)',
+    r'cu[aá]ntas?\s+clases?\s+(?:tiene|tienes)',
+    r'tama[nñ]o\s+(?:de\s+)?bell',
+    r'estad[ií]sticas?\s+(?:de\s+)?bell',              # FIX-P1
+    r'estad[ií]sticas?\s+del?\s+c[oó]digo',
+    r'resumen\s+del?\s+c[oó]digo',
+    r'score\s+(?:de\s+)?bell',                         # FIX-P1
+    r'score\s+(?:del?\s+)?c[oó]digo',
+    r'cu[aá]nto\s+c[oó]digo\s+(?:tiene|tienes)',       # FIX-P1
+    r'cu[aá]ntas?\s+l[ií]neas?\s+(?:tiene|tienes)\s+bell',  # FIX-P1
+]
+
+_CONCEPTOS_ANALISIS_PYTHON: List[str] = [
+    "CONCEPTO_ANALISIS_CODIGO",
+    "CONCEPTO_ANALISIS_PYTHON",
+    "CONCEPTO_COMPLEJIDAD_CODIGO",
+    "CONCEPTO_CALIDAD_CODIGO",
+    "CONCEPTO_METRICAS_CODIGO",
+    "CONCEPTO_FUNCION_CODIGO",
+    "CONCEPTO_CLASE_CODIGO",
+    "CONCEPTO_DOCSTRING",
+    "CONCEPTO_IMPORT_CODIGO",
+    "CONCEPTO_REFACTORIZAR",
+    "CONCEPTO_INTROSPECCION_BELL",
+    "CONCEPTO_SCORE_CALIDAD",
+    "CONCEPTO_COMPLEJIDAD_MCCABE",
+]
+
+
+# ======================================================================
 # REGISTRO CENTRAL DE PATRONES EXTERNOS
-# Agregar una nueva habilidad = agregar una entrada aquí.
-# Motor y generador NO necesitan modificarse.
 # ======================================================================
 
 PATRONES_EXTERNOS: List[dict] = [
@@ -147,18 +257,18 @@ PATRONES_EXTERNOS: List[dict] = [
         "patrones":       _PATRONES_SQLITE,
         "conceptos_ids":  _CONCEPTOS_SQLITE,
     },
+    {
+        "habilidad_id":   "ANALISIS_PYTHON",
+        "tipo_ejecucion": "analisis_codigo",
+        "patrones":       _PATRONES_ANALISIS_PYTHON,
+        "conceptos_ids":  _CONCEPTOS_ANALISIS_PYTHON,
+    },
     # ── Futuras habilidades van aquí ──────────────────────────────────
-    # {
-    #     "habilidad_id":   "PYTHON_RUNNER",
-    #     "tipo_ejecucion": "ejecucion_python",
-    #     "patrones":       _PATRONES_PYTHON,
-    #     "conceptos_ids":  _CONCEPTOS_PYTHON,
-    # },
 ]
 
 
 # ======================================================================
-# CACHÉ COMPILADA — se construye UNA VEZ al importar
+# CACHÉ COMPILADA
 # ======================================================================
 
 _CACHE_COMPILADA: List[Tuple[re.Pattern, str, str]] = []
@@ -182,7 +292,7 @@ _compilar_cache()
 
 
 # ======================================================================
-# API PÚBLICA — idéntica a v1.0 (motor no necesita cambios)
+# API PÚBLICA — idéntica a v3.0
 # ======================================================================
 
 def detectar_habilidad_externa(
@@ -191,6 +301,9 @@ def detectar_habilidad_externa(
     """
     Detecta si msg_norm coincide con algún patrón de habilidad externa.
     Retorna (habilidad_id, tipo_ejecucion) o None.
+
+    ORDEN DE PRIORIDAD: el primer match gana.
+    SQLITE tiene prioridad sobre ANALISIS_PYTHON.
     """
     if not msg_norm:
         return None
