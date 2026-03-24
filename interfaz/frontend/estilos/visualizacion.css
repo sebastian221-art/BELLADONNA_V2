@@ -1,0 +1,145 @@
+/* ================================================
+   VISUALIZACION.CSS — Estilos del canvas 3D
+   ================================================ */
+
+#zona-visualizacion {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--fondo-base);
+}
+
+/* Canvas Three.js */
+#bell-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Info del nodo seleccionado */
+#nodo-info {
+    position: absolute;
+    top: var(--espacio-lg);
+    right: var(--espacio-lg);
+    width: 260px;
+    background-color: rgba(10, 22, 40, 0.92);
+    border: 1px solid var(--borde-activo);
+    border-radius: 12px;
+    padding: var(--espacio-lg);
+    backdrop-filter: blur(12px);
+    z-index: 10;
+    animation: aparecer-panel var(--transicion-normal) ease;
+}
+
+@keyframes aparecer-panel {
+    from {
+        opacity: 0;
+        transform: translateX(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+#nodo-info-cerrar {
+    position: absolute;
+    top: var(--espacio-sm);
+    right: var(--espacio-sm);
+    background: transparent;
+    border: none;
+    color: var(--texto-secundario);
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: var(--espacio-xs);
+    transition: color var(--transicion-rapida);
+}
+
+#nodo-info-cerrar:hover {
+    color: var(--texto-principal);
+}
+
+#nodo-info-nombre {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--texto-principal);
+    margin-bottom: var(--espacio-xs);
+    padding-right: var(--espacio-xl);
+    font-family: var(--fuente-codigo);
+}
+
+#nodo-info-tipo {
+    font-size: 11px;
+    color: var(--neurona-activa);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--espacio-md);
+}
+
+#nodo-info-estado {
+    font-size: 12px;
+    color: var(--texto-secundario);
+    margin-bottom: var(--espacio-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-xs);
+}
+
+#nodo-info-conexiones {
+    font-size: 12px;
+    color: var(--texto-secundario);
+    border-top: 1px solid var(--borde-suave);
+    padding-top: var(--espacio-sm);
+    margin-top: var(--espacio-sm);
+}
+
+.conexion-item {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-xs);
+    padding: var(--espacio-xs) 0;
+    color: var(--texto-apagado);
+    font-size: 11px;
+    font-family: var(--fuente-codigo);
+}
+
+.conexion-item::before {
+    content: '→';
+    color: var(--conexion-viva);
+}
+
+/* Leyenda */
+#leyenda {
+    position: absolute;
+    bottom: var(--espacio-lg);
+    left: var(--espacio-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-xs);
+    background-color: rgba(10, 22, 40, 0.80);
+    border: 1px solid var(--borde-suave);
+    border-radius: 8px;
+    padding: var(--espacio-sm) var(--espacio-md);
+    backdrop-filter: blur(8px);
+}
+
+.leyenda-item {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-sm);
+    font-size: 11px;
+    color: var(--texto-secundario);
+}
+
+.leyenda-color {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.leyenda-color.activo      { background-color: var(--neurona-activa); }
+.leyenda-color.procesando  { background-color: var(--neurona-procesando); }
+.leyenda-color.error       { background-color: var(--neurona-error); }
+.leyenda-color.incompleto  { background-color: var(--neurona-warning); }

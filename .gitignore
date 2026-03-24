@@ -1,38 +1,107 @@
-# Python
+# ================================================
+# BELLADONNA — .gitignore
+# Claude Code puede ver todo el código.
+# Solo se excluye lo que no es código.
+# ================================================
+
+# ---- ENTORNO VIRTUAL ----
+venv/
+.venv/
+env/
+.env/
+
+# ---- PYTHON CACHE ----
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
+*.pyo
+*.pyd
 .Python
-env/
-venv/
-*.egg-info/
-dist/
-build/
-models/
-modelos/
-*.safetensors
-modelos/
-# IDEs
-.vscode/
-.idea/
-# Modelos grandes (se descargan con HuggingFace)
-modelos/
-*.safetensors
+
+# ---- VARIABLES DE ENTORNO Y SECRETOS ----
+.env
+*.env
+.env.local
+config_local.py
+secrets.py
+groq_key.txt
+api_keys.txt
+
+# ---- MODELOS GRANDES (>100MB) ----
 *.bin
+*.safetensors
+*.gguf
+*.ggml
 *.pt
-*.ckpt
+*.pth
+*.onnx
+*.pkl
+*.h5
+
+# ---- BASE DE DATOS LOCAL ----
+*.db
+*.sqlite
+*.sqlite3
+datos_bell.db
+episodios.json
+personas.json
+
+# ---- LOGS DE EJECUCIÓN ----
+*.log
+logs/
+bell.log
+
+# ---- ARCHIVOS TEMPORALES ----
+*.tmp
+*.temp
+*.bak
 *.swp
 *.swo
-.env
-.env.example
-.env .example
-# Tests
+~$*
+
+# ---- IDEs ----
+.vscode/
+.idea/
+*.code-workspace
+.cursor/
+
+# ---- SISTEMA OPERATIVO ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- DISTRIBUCIÓN PYTHON ----
+dist/
+build/
+*.egg-info/
+*.egg
+MANIFEST
+
+# ---- PYTEST Y COBERTURA ----
 .pytest_cache/
 .coverage
 htmlcov/
+coverage.xml
 
-# Belladonna específico
-*.db
-logs/
-backups/
+# ---- JUPYTER ----
+.ipynb_checkpoints/
+*.ipynb
+
+# ---- NODE (si hubiera) ----
+node_modules/
+package-lock.json
+
+# ---- ARCHIVOS GRANDES DE DATOS ----
+*.csv
+*.parquet
+*.jsonl
+
+# ---- TODO LO DEMÁS SE INCLUYE ----
+# biblioteca/ — completo
+# capas/ — completo
+# interfaz/ — completo
+# docs/ — completo
+# main.py — incluido
+# *.py — todo el código incluido
+# *.js — todo el frontend incluido
+# *.html — incluido
+# *.css — incluido

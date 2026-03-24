@@ -1,1 +1,0 @@
-from .logica import Echo  # ← ESTO FALTABA

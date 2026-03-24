@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell — Consciencia Digital</title>
+    <link rel="stylesheet" href="/estilos/base.css">
+    <link rel="stylesheet" href="/estilos/chat.css">
+    <link rel="stylesheet" href="/estilos/visualizacion.css">
+</head>
+<body>
+
+<div id="bell-app">
+
+    <header id="bell-header">
+        <div id="bell-titulo">
+            <span id="bell-nombre">Bell</span>
+            <span id="bell-estado-global">● Iniciando...</span>
+        </div>
+        <div id="selector-vistas">
+            <button class="btn-vista activa" data-vista="logica">
+                Cerebro Lógico
+            </button>
+            <button class="btn-vista" data-vista="neuronal">
+                Red Neuronal
+            </button>
+            <button class="btn-vista" data-vista="flujo">
+                Flujo
+            </button>
+            <button class="btn-vista" data-vista="vida">
+                Vida
+            </button>
+            <button class="btn-vista deshabilitada" data-vista="consejeras">
+                Consejeras
+            </button>
+        </div>
+    </header>
+
+    <main id="bell-main">
+
+        <section id="zona-chat">
+            <div id="chat-historial">
+                <div class="mensaje-bienvenida">
+                    <p>Bell está iniciando...</p>
+                </div>
+            </div>
+            <div id="chat-indicador"></div>
+            <div id="chat-input-zona">
+                <textarea
+                    id="chat-input"
+                    placeholder="Habla con Bell..."
+                    rows="1"
+                ></textarea>
+                <button id="chat-enviar">Enviar</button>
+            </div>
+        </section>
+
+        <section id="zona-visualizacion">
+            <canvas id="bell-canvas"></canvas>
+            <div id="nodo-info" class="oculto">
+                <button id="nodo-info-cerrar">×</button>
+                <div id="nodo-info-nombre"></div>
+                <div id="nodo-info-tipo"></div>
+                <div id="nodo-info-estado"></div>
+                <div id="nodo-info-conexiones"></div>
+            </div>
+            <div id="leyenda">
+                <div class="leyenda-item">
+                    <span class="leyenda-color activo"></span>
+                    <span>Activo</span>
+                </div>
+                <div class="leyenda-item">
+                    <span class="leyenda-color procesando"></span>
+                    <span>Procesando</span>
+                </div>
+                <div class="leyenda-item">
+                    <span class="leyenda-color error"></span>
+                    <span>Error</span>
+                </div>
+                <div class="leyenda-item">
+                    <span class="leyenda-color incompleto"></span>
+                    <span>Incompleto</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</div>
+
+<!-- Librerías externas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+
+<!-- Motor visual -->
+<script src="/scripts/visualizacion/motor3d.js"></script>
+<script src="/scripts/visualizacion/nodos.js"></script>
+<script src="/scripts/visualizacion/conexiones.js"></script>
+<script src="/scripts/visualizacion/impulsos.js"></script>
+<script src="/scripts/visualizacion/camara.js"></script>
+
+<!-- Vistas — vista_vida.js incluida -->
+<script src="/scripts/visualizacion/vistas/base_vista.js"></script>
+<script src="/scripts/visualizacion/vistas/vista_logica.js"></script>
+<script src="/scripts/visualizacion/vistas/vista_neuronal.js"></script>
+<script src="/scripts/visualizacion/vistas/vista_flujo.js"></script>
+<script src="/scripts/visualizacion/vistas/vista_consejeras.js"></script>
+<script src="/scripts/visualizacion/vistas/vista_vida.js"></script>
+
+<!-- Chat y estado -->
+<script src="/scripts/chat/indicador.js"></script>
+<script src="/scripts/chat/chat.js"></script>
+<script src="/scripts/estado/estado_bell.js"></script>
+<script src="/scripts/estado/sincronizador.js"></script>
+
+<!-- Entrada principal -->
+<script src="/scripts/main.js"></script>
+
+</body>
+</html>

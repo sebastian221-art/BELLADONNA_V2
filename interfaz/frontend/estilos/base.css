@@ -1,0 +1,188 @@
+/* ================================================
+   BASE.CSS — Variables, tipografía y layout
+   Todo el color y estilo base de Bell
+   Si cambias una variable se propaga a todo
+   ================================================ */
+
+:root {
+    /* Fondos */
+    --fondo-base:           #050810;
+    --fondo-secundario:     #0A1628;
+    --fondo-panel:          #0D1F3C;
+
+    /* Neuronas y nodos */
+    --neurona-base:         #1B3A6B;
+    --neurona-activa:       #4A9EFF;
+    --neurona-procesando:   #FFFFFF;
+    --neurona-error:        #C0392B;
+    --neurona-warning:      #D4AC0D;
+    --neurona-bell:         #FFFFFF;
+
+    /* Conexiones */
+    --conexion-base:        #1A2744;
+    --conexion-viva:        #B8D4FF;
+    --impulso:              #FFFFFF;
+
+    /* Consejeras */
+    --color-vega:           #8B0000;
+    --color-echo:           #00695C;
+    --color-nova:           #1565C0;
+    --color-lyra:           #F57F17;
+    --color-luna:           #37474F;
+    --color-iris:           #00838F;
+    --color-soma:           #2E7D32;
+    --color-sage:           #7B00FF;
+
+    /* Texto */
+    --texto-principal:      #E8F0FE;
+    --texto-secundario:     #8899AA;
+    --texto-apagado:        #3A4A5C;
+
+    /* Bordes */
+    --borde-suave:          #1A2744;
+    --borde-activo:         #2E4A7A;
+
+    /* Tipografía */
+    --fuente-principal:     'Inter', 'Segoe UI', system-ui, sans-serif;
+    --fuente-codigo:        'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Espaciado */
+    --espacio-xs:           4px;
+    --espacio-sm:           8px;
+    --espacio-md:           16px;
+    --espacio-lg:           24px;
+    --espacio-xl:           32px;
+
+    /* Transiciones */
+    --transicion-rapida:    0.15s ease;
+    --transicion-normal:    0.3s ease;
+    --transicion-lenta:     0.6s ease;
+
+    /* Alturas */
+    --alto-header:          56px;
+    --alto-input:           72px;
+}
+
+/* Reset base */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--fondo-base);
+    color: var(--texto-principal);
+    font-family: var(--fuente-principal);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--fondo-base);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--borde-activo);
+    border-radius: 2px;
+}
+
+/* Layout principal */
+#bell-app {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header */
+#bell-header {
+    height: var(--alto-header);
+    min-height: var(--alto-header);
+    background-color: var(--fondo-secundario);
+    border-bottom: 1px solid var(--borde-suave);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--espacio-lg);
+    z-index: 100;
+}
+
+#bell-nombre {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--texto-principal);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+#bell-estado-global {
+    font-size: 12px;
+    color: var(--texto-secundario);
+    margin-left: var(--espacio-md);
+}
+
+#bell-estado-global.activo {
+    color: var(--neurona-activa);
+}
+
+/* Selector de vistas */
+#selector-vistas {
+    display: flex;
+    gap: var(--espacio-sm);
+}
+
+.btn-vista {
+    background: transparent;
+    border: 1px solid var(--borde-suave);
+    color: var(--texto-secundario);
+    padding: var(--espacio-xs) var(--espacio-md);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: var(--fuente-principal);
+    transition: all var(--transicion-rapida);
+}
+
+.btn-vista:hover {
+    border-color: var(--neurona-activa);
+    color: var(--neurona-activa);
+}
+
+.btn-vista.activa {
+    background: var(--neurona-activa);
+    border-color: var(--neurona-activa);
+    color: var(--fondo-base);
+    font-weight: 600;
+}
+
+.btn-vista.deshabilitada {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Zona principal */
+#bell-main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Utilidades */
+.oculto {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
