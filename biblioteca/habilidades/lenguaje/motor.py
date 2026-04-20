@@ -2,18 +2,43 @@
 # ================================================
 # MOTOR DE COMPRENSIÓN PROFUNDA
 #
-# Coordina las 6 dimensiones y produce
-# una comprensión real del mensaje.
-#
-# Trabaja ENCIMA de lo que Bell ya procesó:
-# vocab_match, ids_activos, historial.
-# No rehace ese trabajo — lo usa como base.
+# FIX CRÍTICO — _afinar_con_ids_bell():
+# Solo sobreescribe tipo_mensaje a identidad
+# si hay señal EXPLÍCITA de pregunta (PREG_*).
+# Saludos, emociones y otros tipos con prioridad
+# NUNCA son sobreescritos por IDs de Bell.
 # ================================================
 
 from typing import List, Optional
 from biblioteca.habilidades.lenguaje.dimensiones.base import (
     DimensionLenguaje, ResultadoDimension
 )
+
+# IDs que la red siempre tiene activos por propagación.
+# No representan el mensaje actual — son nodos base de Bell.
+# Se excluyen del contexto que recibe el motor.
+_IDS_RED_SIEMPRE_ACTIVOS = {
+    'BELL_NOMBRE_BELL', 'BELL_NOMBRE_BELLADONNA',
+    'BELL_NOMBRE_COMPLETO', 'BELL_NOMBRE_CORTO',
+    'BELL_CONSCIENCIA', 'BELL_CORE',
+}
+
+# Tipos que tienen prioridad absoluta.
+# Si el mensaje ya fue clasificado como uno de estos,
+# _afinar_con_ids_bell NO lo toca.
+_TIPOS_PRIORIDAD_ALTA = {
+    'saludo',
+    'despedida',
+    'gratitud',
+    'expresion_emocional_negativa',
+    'expresion_emocional_positiva',
+    'solicitud_accion',
+    'solicitud_tecnica',
+    'pregunta_estado_bell',
+    'pregunta_capacidad_bell',
+    'confirmacion',
+    'negacion',
+}
 
 
 class ResultadoMotor:
@@ -109,7 +134,13 @@ class MotorComprension:
         resultado                = ResultadoMotor()
         resultado.texto_original = texto
         resultado.nombre_usuario = contexto.get('nombre_usuario', 'Sebastian')
-        resultado.ids_activos    = list(contexto.get('ids_activos', []))
+
+        # Filtrar IDs siempre activos — no representan el mensaje actual
+        ids_raw = list(contexto.get('ids_activos', []))
+        resultado.ids_activos = [
+            i for i in ids_raw
+            if i not in _IDS_RED_SIEMPRE_ACTIVOS
+        ]
         resultado.conceptos_bell = contexto.get('conceptos_red', [])
 
         ctx = dict(contexto)
@@ -138,6 +169,7 @@ class MotorComprension:
     def _sintetizar(self, r: ResultadoMotor, resultados: list, ctx: dict):
         mapa = {rd.dimension: rd for rd in resultados}
 
+        # LITERAL
         lit = mapa.get('literal')
         if lit and lit.activa:
             h = lit.hallazgos
@@ -149,6 +181,7 @@ class MotorComprension:
             elif tipo_or == 'orden':
                 r.tipo_mensaje = 'solicitud_accion'
 
+        # TÉCNICA
         tec = mapa.get('tecnica')
         if tec and tec.activa:
             h = tec.hallazgos
@@ -159,6 +192,7 @@ class MotorComprension:
             if r.dominio_tecnico:
                 r.tipo_mensaje = 'solicitud_tecnica'
 
+        # INFERENCIAL
         inf = mapa.get('inferencial')
         if inf and inf.activa:
             h = inf.hallazgos
@@ -169,6 +203,7 @@ class MotorComprension:
                 if r.tipo_mensaje == 'pregunta':
                     r.tipo_mensaje = 'solicitud_accion'
 
+        # PSICOLÓGICA — emoción tiene alta prioridad
         psi = mapa.get('psicologica')
         if psi and psi.activa:
             h = psi.hallazgos
@@ -188,6 +223,7 @@ class MotorComprension:
                 if r.tipo_mensaje == 'conversacional':
                     r.tipo_mensaje = 'expresion_emocional_positiva'
 
+        # CONTEXTUAL
         ctxd = mapa.get('contextual')
         if ctxd and ctxd.activa:
             h = ctxd.hallazgos
@@ -199,6 +235,7 @@ class MotorComprension:
             if tipo_ctx and r.tipo_mensaje == 'conversacional':
                 r.tipo_mensaje = tipo_ctx
 
+        # INTRÍNSECA
         intr = mapa.get('intrinseca')
         if intr and intr.activa:
             h = intr.hallazgos
@@ -207,37 +244,87 @@ class MotorComprension:
             r.nivel_energia      = h.get('nivel_energia', 'normal')
             r.modo_mental        = h.get('modo_mental', 'receptivo')
 
+        # Afinar con IDs de Bell — con las reglas correctas
         self._afinar_con_ids_bell(r, ctx)
 
         if not r.intencion:
             r.intencion = self._inferir_intencion(r)
 
     def _afinar_con_ids_bell(self, r: ResultadoMotor, ctx: dict):
+        """
+        Refina tipo_mensaje usando IDs de Bell.
+
+        REGLAS:
+        1. Si el tipo ya tiene prioridad alta → no tocar.
+        2. Solo sobreescribir a pregunta_identidad_bell si hay
+           señal EXPLÍCITA de pregunta (IDs PREG_*) junto con
+           IDs de componentes de Bell.
+        3. Los saludos detectados por IDs de la red solo se
+           aplican si el tipo sigue siendo conversacional.
+        """
         ids = set(r.ids_activos)
 
-        ids_identidad_bell = {
+        # REGLA 1: tipos con prioridad alta no se tocan
+        if r.tipo_mensaje in _TIPOS_PRIORIDAD_ALTA:
+            # Solo agregar id_lyra si falta
+            emociones_red = {i for i in ids if i.startswith('EMOCION_')}
+            if emociones_red and not r.id_lyra:
+                r.id_lyra = next(iter(emociones_red))
+            return
+
+        # Señal de pregunta explícita en el mensaje actual
+        ids_preg_explicita = {i for i in ids if i.startswith('PREG_')}
+
+        # Frases compuestas del vocabulario que son preguntas directas sobre Bell
+        ids_preg_bell_directa = {
             'PREG_CONSEJERAS_BELL', 'PREG_CAPAS_BELL', 'PREG_VALORES_BELL',
             'PREG_NODOS_BELL', 'PREG_CUANTAS_CONSEJERAS',
-            'BELL_CONSCIENCIA', 'BELL_NOMBRE_COMPLETO', 'BELL_NOMBRE_CORTO',
-            'BELL_CONSEJERAS', 'BELL_CONSEJERA', 'BELL_CAPAS', 'BELL_CAPA',
+        }
+
+        # Componentes de Bell — solo activan identidad CON pregunta explícita
+        ids_componentes_bell = {
+            'BELL_CONSEJERAS', 'BELL_CONSEJERA',
+            'BELL_CAPAS', 'BELL_CAPA',
             'BELL_SOMA', 'BELL_VEGA', 'BELL_NOVA', 'BELL_ECHO',
             'BELL_LYRA', 'BELL_LUNA', 'BELL_IRIS', 'BELL_SAGE',
+            'BELL_VALORES', 'BELL_PRINCIPIOS',
+            'BELL_GROUNDING', 'BELL_BIBLIOTECA', 'BELL_VOCABULARIO',
         }
-        if ids & ids_identidad_bell:
+
+        # REGLA 2a: pregunta directa sobre Bell (frase compuesta)
+        if ids & ids_preg_bell_directa:
             r.tipo_mensaje = 'pregunta_identidad_bell'
             if not r.intencion:
                 r.intencion = 'conocer_bell'
+            return
 
-        if 'BELL_RED_NEURONAL' in ids or 'BELL_NODOS' in ids:
+        # REGLA 2b: componente de Bell + pregunta explícita en el texto
+        if ids & ids_componentes_bell and ids_preg_explicita:
+            r.tipo_mensaje = 'pregunta_identidad_bell'
+            if not r.intencion:
+                r.intencion = 'conocer_bell'
+            return
+
+        # Estado de Bell — solo con pregunta explícita
+        if ('BELL_RED_NEURONAL' in ids or 'BELL_NODOS' in ids) and ids_preg_explicita:
             r.tipo_mensaje = 'pregunta_estado_bell'
+            return
 
+        # Presentación de Sebastian — solo si la palabra 'sebastian'
+        # apareció en el texto (vocab_tipos lo confirma)
         if 'NEURONA_SEBASTIAN' in ids and r.tipo_mensaje == 'conversacional':
-            r.tipo_mensaje = 'presentacion_sebastian'
+            vocab_tipos = ctx.get('vocab_tipos', {})
+            tipo_sebastian = vocab_tipos.get('NEURONA_SEBASTIAN', '')
+            if tipo_sebastian:  # la palabra apareció en el texto
+                r.tipo_mensaje = 'presentacion_sebastian'
+            return
 
+        # Saludos por IDs de la red — solo si tipo sigue siendo conversacional
         saludos_red = {i for i in ids if i.startswith('SALUDO_')}
         if saludos_red and r.tipo_mensaje == 'conversacional':
             r.tipo_mensaje = 'saludo'
 
+        # Emociones — solo agregar id_lyra
         emociones_red = {i for i in ids if i.startswith('EMOCION_')}
         if emociones_red and not r.id_lyra:
             r.id_lyra = next(iter(emociones_red))
@@ -253,6 +340,7 @@ class MotorComprension:
             'pregunta':                     'obtener_informacion',
             'pregunta_identidad_bell':      'conocer_bell',
             'pregunta_estado_bell':         'saber_estado_bell',
+            'pregunta_capacidad_bell':      'saber_capacidades_bell',
             'expresion_emocional_negativa': 'expresar_estado',
             'expresion_emocional_positiva': 'compartir_estado',
             'saludo':                       'conectar',

@@ -2,18 +2,24 @@
 # ================================================
 # CONSTRUCTOR DE COMPRENSIÓN — con motor de lenguaje
 #
-# Si la habilidad de lenguaje está disponible:
-#   Motor de lenguaje → comprensión real en 6 dimensiones
+# FIX: ya no llama a GestorVocabulario de nuevo.
+# Usa los vocab_match que Capa 1 ya procesó.
+# Filtra IDs que siempre están activos en la red
+# y que no representan el mensaje actual.
 #
-# Si no está (fallback):
-#   Lógica original con IDs de la red → funciona igual que antes
-#
-# El contrato de salida NO cambia.
-# comprension = { literal, contextual, profunda }
-# Capa 4+ nunca sabe si fue motor o fallback.
+# Si el motor falla → fallback a lógica original.
+# El contrato de salida nunca cambia.
 # ================================================
 
 from typing import Dict, Any
+
+# IDs que la red siempre tiene activos y contaminan
+# la clasificación si no se filtran
+_IDS_SIEMPRE_ACTIVOS = {
+    'BELL_NOMBRE_BELL', 'BELL_NOMBRE_BELLADONNA',
+    'BELL_NOMBRE_COMPLETO', 'BELL_NOMBRE_CORTO',
+    'BELL_CONSCIENCIA', 'BELL_CORE',
+}
 
 
 class ConstructorComprension:
@@ -34,18 +40,17 @@ class ConstructorComprension:
         ids_activos   = {n.get('nodo_id', '') for n in todos}
         ids_primarios = {n.get('nodo_id', '') for n in primarios}
 
-        # ── Intentar motor de lenguaje ──────────────────────
+        # Intentar motor de lenguaje
         resultado_motor = self._usar_motor_lenguaje(
             texto_original, ids_activos, ids_primarios, contexto
         )
 
         if resultado_motor:
-            # Motor disponible — comprensión real
             return self._comprension_desde_motor(
                 resultado_motor, primarios, texto_original
             )
 
-        # ── Fallback — lógica original con IDs ──────────────
+        # Fallback — lógica original con IDs
         return {
             'literal':    self._comprension_literal(primarios, texto_original),
             'contextual': self._comprension_contextual(
@@ -68,49 +73,64 @@ class ConstructorComprension:
         contexto:      dict,
     ) -> object:
         """
-        Llama al motor de comprensión de lenguaje.
+        Llama al motor de comprensión.
         Retorna ResultadoMotor o None si falla.
+
+        FIX: ya no llama a GestorVocabulario de nuevo.
+        Usa los vocab_match del contexto que Capa 1 ya construyó.
+        Filtra IDs siempre activos que no son del mensaje actual.
         """
         try:
             from biblioteca.habilidades.lenguaje.motor import MotorComprension
-            from biblioteca.vocabulario.gestor_vocabulario import GestorVocabulario
             from capas.capa6.buffer_sesion import BufferSesion
 
-            # Vocabulario que Bell ya reconoce
-            vocab   = GestorVocabulario.obtener()
-            matches = vocab.buscar_frase(texto)
+            # FIX: usar vocab_match del contexto si existe
+            # El contexto viene de Capa 1 que ya llamó a GestorVocabulario
+            # No llamamos al gestor de nuevo — evita duplicación y contaminación
+            vocab_context = contexto.get('vocab_match', [])
 
-            # IDs del vocabulario
+            # Si Capa 1 no pasó vocab_match, llamar al gestor como fallback
+            if not vocab_context:
+                try:
+                    from biblioteca.vocabulario.gestor_vocabulario import GestorVocabulario
+                    vocab = GestorVocabulario.obtener()
+                    vocab_context = vocab.buscar_frase(texto)
+                except Exception:
+                    vocab_context = []
+
+            # IDs del vocabulario del mensaje actual
             ids_vocab = [
                 m['concepto'].get('id', '')
-                for m in matches
+                for m in vocab_context
                 if m.get('concepto', {}).get('id')
+                and m['concepto']['id'] not in _IDS_SIEMPRE_ACTIVOS
             ]
+
             vocab_tipos = {
                 m['concepto'].get('id', ''): m['concepto'].get('tipo', '')
-                for m in matches
+                for m in vocab_context
                 if m.get('concepto', {}).get('id')
             }
 
-            # Combinar IDs de la red neuronal + vocabulario
-            todos_ids = list(ids_activos | set(ids_vocab))
+            # Combinar IDs de la red + vocabulario, filtrando los siempre activos
+            ids_activos_limpios = ids_activos - _IDS_SIEMPRE_ACTIVOS
+            todos_ids = list(ids_activos_limpios | set(ids_vocab))
 
-            # Historial del buffer de sesión
+            # Historial del buffer
             historial = []
             try:
-                buffer  = BufferSesion.obtener()
-                turnos  = buffer.obtener_ultimas_respuestas_bell(4)
+                buffer = BufferSesion.obtener()
+                turnos = buffer.obtener_ultimas_respuestas_bell(4)
                 historial = [{'respuesta_bell': r} for r in turnos]
             except Exception:
                 pass
 
-            # Nombre del usuario
             nombre = contexto.get('sebastian', {}).get('nombre', 'Sebastian')
 
             ctx_motor = {
                 'nombre_usuario': nombre,
                 'historial':      historial,
-                'vocab_match':    matches,
+                'vocab_match':    vocab_context,
                 'ids_activos':    todos_ids,
                 'ids_conocidos':  todos_ids,
                 'vocab_tipos':    vocab_tipos,
@@ -126,15 +146,11 @@ class ConstructorComprension:
 
     def _comprension_desde_motor(
         self,
-        motor:         object,
-        primarios:     list,
+        motor:          object,
+        primarios:      list,
         texto_original: str,
     ) -> dict:
-        """
-        Convierte el ResultadoMotor al formato exacto
-        que espera Capa 4 y las consejeras.
-        """
-        # Certeza basada en confianza del motor
+        """Convierte ResultadoMotor al formato que espera Capa 4."""
         certeza_lit = motor.confianza_global if motor.confianza_global > 0 else 0.7
         certeza_ctx = min(0.95, certeza_lit + 0.05)
         certeza_pro = min(0.95, certeza_lit + 0.03)

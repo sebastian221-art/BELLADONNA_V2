@@ -6,7 +6,7 @@
 # ================================================
 
 from capas.capa1.paquete_capa1 import ConceptoTraducido, Desconocido
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 
 class Traductor:
@@ -139,7 +139,6 @@ class Traductor:
         """Intenta inferir el concepto por raíz."""
         if not self._gestor:
             return None
-        # Buscar por los primeros 4 caracteres
         if len(token) > 4:
             for palabra in self._gestor._vocabulario:
                 if (palabra.startswith(token[:4]) and
@@ -150,20 +149,20 @@ class Traductor:
     def _buscar_vocabulario_base(self, token: str) -> Optional[dict]:
         """Vocabulario base hardcodeado como fallback."""
         base = {
-            'bell':       {'id': 'BELL_NOMBRE_BELL',    'grounding': 1.0,  'tipo': 'identidad'},
+            'bell':       {'id': 'BELL_NOMBRE_BELL',     'grounding': 1.0, 'tipo': 'identidad'},
             'belladonna': {'id': 'BELL_NOMBRE_BELLADONNA','grounding': 1.0, 'tipo': 'identidad'},
-            'crear':      {'id': 'ACCION_CREAR',         'grounding': 0.9,  'tipo': 'accion'},
-            'mostrar':    {'id': 'ACCION_MOSTRAR',       'grounding': 0.9,  'tipo': 'accion'},
-            'buscar':     {'id': 'ACCION_BUSCAR',        'grounding': 0.9,  'tipo': 'accion'},
-            'borrar':     {'id': 'ACCION_BORRAR',        'grounding': 0.9,  'tipo': 'accion'},
-            'agregar':    {'id': 'ACCION_AGREGAR',       'grounding': 0.9,  'tipo': 'accion'},
-            'analizar':   {'id': 'ACCION_ANALIZAR',      'grounding': 0.9,  'tipo': 'accion'},
-            'ejecutar':   {'id': 'ACCION_EJECUTAR',      'grounding': 0.9,  'tipo': 'accion'},
-            'ayuda':      {'id': 'VERBO_AYUDA',          'grounding': 0.9,  'tipo': 'verbo_ayuda'},
-            'archivo':    {'id': 'ENTIDAD_ARCHIVO',      'grounding': 1.0,  'tipo': 'entidad'},
-            'carpeta':    {'id': 'ENTIDAD_CARPETA',      'grounding': 1.0,  'tipo': 'entidad'},
-            'código':     {'id': 'ENTIDAD_CODIGO',       'grounding': 1.0,  'tipo': 'entidad'},
-            'codigo':     {'id': 'ENTIDAD_CODIGO',       'grounding': 1.0,  'tipo': 'entidad'},
-            'error':      {'id': 'ENTIDAD_ERROR',        'grounding': 1.0,  'tipo': 'entidad'},
+            'crear':      {'id': 'ACCION_CREAR',          'grounding': 0.9, 'tipo': 'accion'},
+            'mostrar':    {'id': 'ACCION_MOSTRAR',        'grounding': 0.9, 'tipo': 'accion'},
+            'buscar':     {'id': 'ACCION_BUSCAR',         'grounding': 0.9, 'tipo': 'accion'},
+            'borrar':     {'id': 'ACCION_BORRAR',         'grounding': 0.9, 'tipo': 'accion'},
+            'agregar':    {'id': 'ACCION_AGREGAR',        'grounding': 0.9, 'tipo': 'accion'},
+            'analizar':   {'id': 'ACCION_ANALIZAR',       'grounding': 0.9, 'tipo': 'accion'},
+            'ejecutar':   {'id': 'ACCION_EJECUTAR',       'grounding': 0.9, 'tipo': 'accion'},
+            'ayuda':      {'id': 'VERBO_AYUDA',           'grounding': 0.9, 'tipo': 'verbo_ayuda'},
+            'archivo':    {'id': 'ENTIDAD_ARCHIVO',       'grounding': 1.0, 'tipo': 'entidad'},
+            'carpeta':    {'id': 'ENTIDAD_CARPETA',       'grounding': 1.0, 'tipo': 'entidad'},
+            'código':     {'id': 'ENTIDAD_CODIGO',        'grounding': 1.0, 'tipo': 'entidad'},
+            'codigo':     {'id': 'ENTIDAD_CODIGO',        'grounding': 1.0, 'tipo': 'entidad'},
+            'error':      {'id': 'ENTIDAD_ERROR',         'grounding': 1.0, 'tipo': 'entidad'},
         }
         return base.get(token.lower())
