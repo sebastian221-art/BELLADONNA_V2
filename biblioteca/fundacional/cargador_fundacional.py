@@ -1,11 +1,13 @@
 # biblioteca/fundacional/cargador_fundacional.py
 # ================================================
-# CARGADOR FUNDACIONAL — v5
-# SIN llamada a Biblioteca.obtener() — eso era
-# la causa de la recursión infinita.
-# El auto-registro se hace DESDE biblioteca/__init__.py
-# DESPUÉS de que el cargador termina.
+# CARGADOR FUNDACIONAL — v6
+# Arranque limpio: solo muestra resumen final.
+# Sin prints de cada paso intermedio.
 # ================================================
+
+import os
+_DEBUG = os.getenv('BELL_DEBUG', '0') == '1'
+
 
 class CargadorFundacional:
 
@@ -17,7 +19,6 @@ class CargadorFundacional:
         if self.cargado:
             return True
 
-        print('  Cargando núcleo fundacional...')
         try:
             self._cargar_identidad()
             self._cargar_valores()
@@ -28,44 +29,37 @@ class CargadorFundacional:
 
             self.cargado = True
             total = len(self.red.obtener_todos_los_nodos())
-            print(f'  ✓ Fundacional listo: {total} nodos base')
+            print(f'  ✓ Fundacional: {total} nodos base cargados')
             return True
 
         except Exception as e:
             import traceback
             print(f'  ✗ Error en fundacional: {e}')
-            traceback.print_exc()
+            if _DEBUG:
+                traceback.print_exc()
             return False
-
-    # ==========================================
-    # CARGADORES INDIVIDUALES
-    # ==========================================
 
     def _cargar_identidad(self):
         from biblioteca.fundacional.identidad.bell_core import crear_bell_core
         from biblioteca.fundacional.identidad.proposito import crear_proposito
         crear_bell_core(self.red)
         crear_proposito(self.red)
-        print('    ✓ Identidad')
 
     def _cargar_valores(self):
         from biblioteca.fundacional.valores.valores_bell import crear_valores
         crear_valores(self.red)
-        print('    ✓ Valores')
 
     def _cargar_consejeras(self):
         from biblioteca.fundacional.consejeras.neuronas_consejeras import (
             crear_neuronas_consejeras
         )
         crear_neuronas_consejeras(self.red)
-        print('    ✓ Consejeras (neuronas base)')
 
     def _cargar_sebastian(self):
         from biblioteca.fundacional.sebastian.neurona_sebastian import (
             crear_neurona_sebastian
         )
         crear_neurona_sebastian(self.red)
-        print('    ✓ Sebastian')
 
     def _cargar_vocabulario(self):
         from biblioteca.fundacional.vocabulario.neuronas_saludos    import crear_neuronas_saludos
@@ -82,33 +76,13 @@ class CargadorFundacional:
         crear_neuronas_tiempo(self.red)
         crear_neuronas_conectores(self.red)
 
-        total_vocab = sum(
-            1 for n in self.red.obtener_todos_los_nodos()
-            if (nr := self.red.obtener_neurona(n)) and
-               nr.nucleo.tipo == 'concepto'
-        )
-        print(f'    ✓ Vocabulario: {total_vocab} conceptos')
-
     def _cargar_capacidades(self):
-        from biblioteca.fundacional.capacidades.neurona_biblioteca  import crear_neurona_biblioteca
-        from biblioteca.fundacional.capacidades.neuronas_capas      import crear_neuronas_capas
+        from biblioteca.fundacional.capacidades.neurona_biblioteca   import crear_neurona_biblioteca
+        from biblioteca.fundacional.capacidades.neuronas_capas       import crear_neuronas_capas
         from biblioteca.fundacional.capacidades.neuronas_habilidades import crear_neuronas_habilidades
-        from biblioteca.fundacional.capacidades.neuronas_interfaz   import crear_neuronas_interfaz
+        from biblioteca.fundacional.capacidades.neuronas_interfaz    import crear_neuronas_interfaz
 
         crear_neurona_biblioteca(self.red)
         crear_neuronas_capas(self.red)
         crear_neuronas_habilidades(self.red)
         crear_neuronas_interfaz(self.red)
-
-        total_caps = sum(
-            1 for n in self.red.obtener_todos_los_nodos()
-            if (nr := self.red.obtener_neurona(n)) and
-               nr.nucleo.tipo in ('capacidad', 'habilidad', 'interfaz')
-        )
-        print(f'    ✓ Capacidades: {total_caps} nodos')
-
-        # ─── NOTA ────────────────────────────────────────────────────
-        # El auto-registro del proyecto se hace DESDE biblioteca/__init__.py
-        # DESPUÉS de que este método retorna, para evitar la recursión
-        # infinita que ocurría al llamar Biblioteca.obtener() desde aquí.
-        # ─────────────────────────────────────────────────────────────

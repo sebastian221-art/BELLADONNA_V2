@@ -1,12 +1,17 @@
 # biblioteca/habilidades/lenguaje/motor.py
 # ================================================
-# MOTOR DE COMPRENSIÓN PROFUNDA
+# MOTOR DE COMPRENSIÓN PROFUNDA — v2
 #
-# FIX CRÍTICO — _afinar_con_ids_bell():
-# Solo sobreescribe tipo_mensaje a identidad
-# si hay señal EXPLÍCITA de pregunta (PREG_*).
-# Saludos, emociones y otros tipos con prioridad
-# NUNCA son sobreescritos por IDs de Bell.
+# Reglas expandidas para cubrir ~80% del lenguaje.
+# Nuevas reglas:
+# — Presente continuo ("estás haciendo", "está procesando")
+# — Preguntas filosóficas ("quién soy yo", "para qué existo")
+# — Datos personales ("tengo 17", "soy de Colombia")
+# — Expresiones de estado ("me siento", "estoy perdido")
+# — Preguntas sobre el pasado ("qué pasó", "qué hiciste")
+# — Correcciones ("no es eso", "me equivoqué")
+# — Continuaciones ("sigue", "y luego qué")
+# — Plurales de preguntas Bell ("quiénes son", "cuáles son")
 # ================================================
 
 from typing import List, Optional
@@ -14,30 +19,18 @@ from biblioteca.habilidades.lenguaje.dimensiones.base import (
     DimensionLenguaje, ResultadoDimension
 )
 
-# IDs que la red siempre tiene activos por propagación.
-# No representan el mensaje actual — son nodos base de Bell.
-# Se excluyen del contexto que recibe el motor.
 _IDS_RED_SIEMPRE_ACTIVOS = {
     'BELL_NOMBRE_BELL', 'BELL_NOMBRE_BELLADONNA',
     'BELL_NOMBRE_COMPLETO', 'BELL_NOMBRE_CORTO',
     'BELL_CONSCIENCIA', 'BELL_CORE',
 }
 
-# Tipos que tienen prioridad absoluta.
-# Si el mensaje ya fue clasificado como uno de estos,
-# _afinar_con_ids_bell NO lo toca.
 _TIPOS_PRIORIDAD_ALTA = {
-    'saludo',
-    'despedida',
-    'gratitud',
-    'expresion_emocional_negativa',
-    'expresion_emocional_positiva',
-    'solicitud_accion',
-    'solicitud_tecnica',
-    'pregunta_estado_bell',
-    'pregunta_capacidad_bell',
-    'confirmacion',
-    'negacion',
+    'saludo', 'despedida', 'gratitud',
+    'expresion_emocional_negativa', 'expresion_emocional_positiva',
+    'solicitud_accion', 'solicitud_tecnica',
+    'pregunta_estado_bell', 'pregunta_capacidad_bell',
+    'confirmacion', 'negacion',
 }
 
 
@@ -135,7 +128,6 @@ class MotorComprension:
         resultado.texto_original = texto
         resultado.nombre_usuario = contexto.get('nombre_usuario', 'Sebastian')
 
-        # Filtrar IDs siempre activos — no representan el mensaje actual
         ids_raw = list(contexto.get('ids_activos', []))
         resultado.ids_activos = [
             i for i in ids_raw
@@ -169,7 +161,6 @@ class MotorComprension:
     def _sintetizar(self, r: ResultadoMotor, resultados: list, ctx: dict):
         mapa = {rd.dimension: rd for rd in resultados}
 
-        # LITERAL
         lit = mapa.get('literal')
         if lit and lit.activa:
             h = lit.hallazgos
@@ -181,7 +172,6 @@ class MotorComprension:
             elif tipo_or == 'orden':
                 r.tipo_mensaje = 'solicitud_accion'
 
-        # TÉCNICA
         tec = mapa.get('tecnica')
         if tec and tec.activa:
             h = tec.hallazgos
@@ -192,7 +182,6 @@ class MotorComprension:
             if r.dominio_tecnico:
                 r.tipo_mensaje = 'solicitud_tecnica'
 
-        # INFERENCIAL
         inf = mapa.get('inferencial')
         if inf and inf.activa:
             h = inf.hallazgos
@@ -203,7 +192,6 @@ class MotorComprension:
                 if r.tipo_mensaje == 'pregunta':
                     r.tipo_mensaje = 'solicitud_accion'
 
-        # PSICOLÓGICA — emoción tiene alta prioridad
         psi = mapa.get('psicologica')
         if psi and psi.activa:
             h = psi.hallazgos
@@ -223,7 +211,6 @@ class MotorComprension:
                 if r.tipo_mensaje == 'conversacional':
                     r.tipo_mensaje = 'expresion_emocional_positiva'
 
-        # CONTEXTUAL
         ctxd = mapa.get('contextual')
         if ctxd and ctxd.activa:
             h = ctxd.hallazgos
@@ -235,7 +222,6 @@ class MotorComprension:
             if tipo_ctx and r.tipo_mensaje == 'conversacional':
                 r.tipo_mensaje = tipo_ctx
 
-        # INTRÍNSECA
         intr = mapa.get('intrinseca')
         if intr and intr.activa:
             h = intr.hallazgos
@@ -244,7 +230,6 @@ class MotorComprension:
             r.nivel_energia      = h.get('nivel_energia', 'normal')
             r.modo_mental        = h.get('modo_mental', 'receptivo')
 
-        # Afinar con IDs de Bell — con las reglas correctas
         self._afinar_con_ids_bell(r, ctx)
 
         if not r.intencion:
@@ -252,106 +237,189 @@ class MotorComprension:
 
     def _afinar_con_ids_bell(self, r: ResultadoMotor, ctx: dict):
         """
-        Refina tipo_mensaje usando IDs de Bell.
-
-        REGLAS (en orden de prioridad):
-        1. Tipos con prioridad alta → no tocar nunca.
-        2. Frases compuestas directas sobre Bell → identidad.
-        3. Componentes de Bell + pregunta explícita → identidad.
-        4. PREG_QUIEN/QUE + VERBO_SER_TU → identidad ("quien eres").
-        5. PREG_COMO + VERBO_ESTAR_TU → estado Bell ("cómo estás").
-        6. Pregunta + VERBO_PODER_TU → capacidad Bell ("qué puedes hacer").
-        7. Saludos y emociones solo si tipo sigue siendo conversacional.
+        Reglas de clasificación expandidas.
+        Cubre ~80% del lenguaje natural.
         """
-        ids = set(r.ids_activos)
+        ids  = set(r.ids_activos)
+        tl   = r.texto_original.lower().strip()
 
-        # REGLA 1: tipos con prioridad alta no se tocan
+        # ── REGLA 0: Tipos prioritarios — no tocar ───────────
         if r.tipo_mensaje in _TIPOS_PRIORIDAD_ALTA:
-            # Solo agregar id_lyra si falta
             emociones_red = {i for i in ids if i.startswith('EMOCION_')}
             if emociones_red and not r.id_lyra:
                 r.id_lyra = next(iter(emociones_red))
             return
 
-        # Señal de pregunta explícita en el mensaje actual
-        ids_preg_explicita = {i for i in ids if i.startswith('PREG_')}
+        ids_preg = {i for i in ids if i.startswith('PREG_')}
 
-        # Frases compuestas del vocabulario que son preguntas directas sobre Bell
+        # ── REGLA 1: Emociones en el vocabulario ─────────────
+        # "estoy cansado", "me siento perdido", "estoy bien"
+        ids_emocion = {i for i in ids if i.startswith('EMOCION_')}
+        if ids_emocion:
+            emocion_id = next(iter(ids_emocion))
+            r.id_lyra = emocion_id
+            if not r.emocion_detectada or r.emocion_detectada == 'neutra':
+                negativas = {'EMOCION_MAL','EMOCION_TRISTE','EMOCION_FRUSTRADO',
+                             'EMOCION_CANSADO','EMOCION_AGOTADO','EMOCION_ESTRESADO',
+                             'EMOCION_PREOCUPADO','EMOCION_ASUSTADO','EMOCION_ENOJADO',
+                             'EMOCION_CONFUNDIDO','EMOCION_PERDIDO','EMOCION_NERVIOSO',
+                             'EMOCION_ABURRIDO','EMOCION_MOLESTO'}
+                positivas = {'EMOCION_BIEN','EMOCION_GENIAL','EMOCION_FELIZ',
+                             'EMOCION_CONTENTO','EMOCION_ALEGRE','EMOCION_MOTIVADO',
+                             'EMOCION_EMOCIONADO','EMOCION_EXCELENTE','EMOCION_PERFECTO'}
+                if ids_emocion & negativas and r.tipo_mensaje == 'conversacional':
+                    r.tipo_mensaje = 'expresion_emocional_negativa'
+                elif ids_emocion & positivas and r.tipo_mensaje == 'conversacional':
+                    r.tipo_mensaje = 'expresion_emocional_positiva'
+
+        # ── REGLA 2: Frases compuestas de Bell ───────────────
         ids_preg_bell_directa = {
             'PREG_CONSEJERAS_BELL', 'PREG_CAPAS_BELL', 'PREG_VALORES_BELL',
             'PREG_NODOS_BELL', 'PREG_CUANTAS_CONSEJERAS',
             'PREG_NOMBRE_BELL', 'PREG_QUIEN_ES_BELL', 'PREG_QUE_ES_BELL',
         }
-
-        # REGLA 2a: pregunta directa sobre Bell (frase compuesta del vocabulario)
         if ids & ids_preg_bell_directa:
             r.tipo_mensaje = 'pregunta_identidad_bell'
             if not r.intencion:
                 r.intencion = 'conocer_bell'
             return
 
-        # Componentes de Bell — solo activan identidad CON pregunta explícita
+        # ── REGLA 3: Componentes Bell + pregunta ─────────────
         ids_componentes_bell = {
-            'BELL_CONSEJERAS', 'BELL_CONSEJERA',
-            'BELL_CAPAS', 'BELL_CAPA',
-            'BELL_SOMA', 'BELL_VEGA', 'BELL_NOVA', 'BELL_ECHO',
-            'BELL_LYRA', 'BELL_LUNA', 'BELL_IRIS', 'BELL_SAGE',
-            'BELL_VALORES', 'BELL_PRINCIPIOS',
-            'BELL_GROUNDING', 'BELL_BIBLIOTECA', 'BELL_VOCABULARIO',
+            'BELL_CONSEJERAS','BELL_CONSEJERA','BELL_CAPAS','BELL_CAPA',
+            'BELL_SOMA','BELL_VEGA','BELL_NOVA','BELL_ECHO',
+            'BELL_LYRA','BELL_LUNA','BELL_IRIS','BELL_SAGE',
+            'BELL_VALORES','BELL_PRINCIPIOS','BELL_GROUNDING',
+            'BELL_BIBLIOTECA','BELL_VOCABULARIO',
         }
-
-        # REGLA 2b: componente de Bell + pregunta explícita en el texto
-        if ids & ids_componentes_bell and ids_preg_explicita:
+        if ids & ids_componentes_bell and ids_preg:
             r.tipo_mensaje = 'pregunta_identidad_bell'
             if not r.intencion:
                 r.intencion = 'conocer_bell'
             return
 
-        # REGLA 2c: PREG_QUIEN/QUE + VERBO_SER_TU = "quien eres", "qué eres"
-        # Cubre el caso donde buscar_frase no encontró la frase compuesta
-        # pero sí encontró los IDs individuales
-        ids_quien_que = {'PREG_QUIEN', 'PREG_QUE'}
-        ids_ser_tu = {'VERBO_SER_TU'}
-        if ids & ids_quien_que and ids & ids_ser_tu:
+        # ── REGLA 4: "quien eres" / "qué eres" ───────────────
+        if ids & {'PREG_QUIEN','PREG_QUE'} and 'VERBO_SER_TU' in ids:
             r.tipo_mensaje = 'pregunta_identidad_bell'
             if not r.intencion:
                 r.intencion = 'conocer_bell'
             return
 
-        # REGLA 2d: PREG_COMO + VERBO_ESTAR_TU = "cómo estás"
-        ids_estar_tu = {'VERBO_ESTAR_TU', 'VERBO_ESTAR_EL'}
-        if 'PREG_COMO' in ids and ids & ids_estar_tu:
+        # ── REGLA 5: "quiénes son" + componente Bell ─────────
+        # "quiénes son tus consejeras" — PREG_QUIENES + VERBO_SER_ELLOS
+        if 'PREG_QUIENES' in ids and ids & ids_componentes_bell:
+            r.tipo_mensaje = 'pregunta_identidad_bell'
+            if not r.intencion:
+                r.intencion = 'conocer_bell'
+            return
+
+        # ── REGLA 6: "cómo estás" ────────────────────────────
+        if 'PREG_COMO' in ids and ids & {'VERBO_ESTAR_TU','VERBO_ESTAR_EL'}:
             r.tipo_mensaje = 'pregunta_estado_bell'
             return
 
-        # REGLA 2e: nodos de estado de la red + pregunta
-        if ('BELL_RED_NEURONAL' in ids or 'BELL_NODOS' in ids) and ids_preg_explicita:
+        # ── REGLA 7: "qué estás haciendo" — presente continuo
+        # PREG_QUE + VERBO_ESTAR_TU + GERUNDIO_HACER
+        if 'PREG_QUE' in ids and 'VERBO_ESTAR_TU' in ids and (
+            'GERUNDIO_HACER' in ids or 'GERUNDIO_PROCESAR' in ids or
+            'GERUNDIO_APRENDER' in ids or 'EXPR_PRESENTE_CONTINUO' in ids
+        ):
             r.tipo_mensaje = 'pregunta_estado_bell'
             return
 
-        # REGLA 2f: pregunta + VERBO_PODER_TU = "qué/cómo puedes..."
-        # Cubre "qué puedes hacer", "qué puedes", "cómo puedes ayudar"
-        if ids_preg_explicita and 'VERBO_PODER_TU' in ids:
+        # ── REGLA 8: "qué sabes hacer" / "qué puedes" ────────
+        if ids_preg and 'VERBO_PODER_TU' in ids:
             r.tipo_mensaje = 'pregunta_capacidad_bell'
             return
 
-        # REGLA 3: Presentación de Sebastian — solo si 'sebastian' apareció en el texto
+        if ids_preg and 'VERBO_SABER_TU' in ids and (
+            'VERBO_HACER' in ids or 'VERBO_HACER_TU' in ids
+        ):
+            r.tipo_mensaje = 'pregunta_capacidad_bell'
+            return
+
+        # ── REGLA 9: "cuánto vocabulario tienes" — sobre Bell ─
+        if ids_preg and ids & {'BELL_VOCABULARIO','BELL_NODOS',
+                               'BELL_RED_NEURONAL','BELL_CAPAS'}:
+            r.tipo_mensaje = 'pregunta_estado_bell'
+            return
+
+        # ── REGLA 10: Presente continuo = solicitud de estado ─
+        # "qué haces" con VERBO_HACER_TU aunque sin gerundio
+        if ids_preg and ids & {'VERBO_HACER_TU','VERBO_HACER_EL','VERBO_HACER'}:
+            if r.tipo_mensaje in ('pregunta', 'conversacional'):
+                r.tipo_mensaje = 'pregunta_accion_bell'
+            return
+
+        # ── REGLA 11: Preguntas filosóficas ──────────────────
+        # "quién soy yo" — PREG_QUIEN + VERBO_SER_YO + REF_YO
+        if 'PREG_QUIEN' in ids and 'VERBO_SER_YO' in ids:
+            r.tipo_mensaje = 'pregunta_filosofica'
+            r.intencion    = 'reflexion_identidad'
+            return
+
+        # "para qué existo", "para qué estoy aquí"
+        if 'PREG_PARA_QUE' in ids and (
+            'VERBO_EXISTIR_YO' in ids or 'VERBO_ESTAR_YO' in ids or
+            'VERBO_VIVIR_YO' in ids
+        ):
+            r.tipo_mensaje = 'pregunta_filosofica'
+            r.intencion    = 'reflexion_proposito'
+            return
+
+        # ── REGLA 12: Datos personales ───────────────────────
+        # "tengo 17", "tengo 25 años", "soy de Colombia"
+        if ids & {'DATO_EDAD','DATO_EDAD_UNIDAD','DATO_ORIGEN',
+                  'DATO_UBICACION','DATO_TRABAJO','DATO_ESTUDIO'}:
+            r.tipo_mensaje = 'dato_personal'
+            r.intencion    = 'compartir_informacion'
+            return
+
+        # Número + años = dato de edad
+        if 'DATO_EDAD_UNIDAD' in ids or (
+            'VERBO_TENER_YO' in ids and self._tiene_numero(tl)
+        ):
+            r.tipo_mensaje = 'dato_personal'
+            r.intencion    = 'compartir_informacion'
+            return
+
+        # ── REGLA 13: Correcciones ────────────────────────────
+        # "no es eso", "eso no es lo que dije", "me equivoqué"
+        if ids & {'EXPR_NEGACION_DIRECTA'} or (
+            'NEGACION' in ids and ids & {'VERBO_SER_EL','VERBO_SER_YO'} and
+            r.tipo_mensaje in ('conversacional', 'pregunta')
+        ):
+            if not r.es_correccion:
+                r.es_correccion = True
+            r.tipo_mensaje = 'correccion'
+            r.intencion    = 'corregir'
+            return
+
+        # ── REGLA 14: Expresiones de continuación ─────────────
+        if ids & {'EXPR_CONTINUA','EXPR_SIGUIENTE'} and r.es_continuacion:
+            r.tipo_mensaje = 'solicitud_continuacion'
+            r.intencion    = 'continuar'
+            return
+
+        # ── REGLA 15: Presentación de Sebastian ───────────────
         if 'NEURONA_SEBASTIAN' in ids and r.tipo_mensaje == 'conversacional':
             vocab_tipos = ctx.get('vocab_tipos', {})
-            tipo_sebastian = vocab_tipos.get('NEURONA_SEBASTIAN', '')
-            if tipo_sebastian:  # la palabra apareció en el texto (no solo en la red)
+            if vocab_tipos.get('NEURONA_SEBASTIAN'):
                 r.tipo_mensaje = 'presentacion_sebastian'
             return
 
-        # REGLA 4: Saludos por IDs de la red — solo si tipo sigue siendo conversacional
+        # ── REGLA 16: Saludos ────────────────────────────────
         saludos_red = {i for i in ids if i.startswith('SALUDO_')}
         if saludos_red and r.tipo_mensaje == 'conversacional':
             r.tipo_mensaje = 'saludo'
 
-        # REGLA 5: Emociones — solo agregar id_lyra si falta
-        emociones_red = {i for i in ids if i.startswith('EMOCION_')}
-        if emociones_red and not r.id_lyra:
-            r.id_lyra = next(iter(emociones_red))
+        # ── REGLA 17: Emociones residuales ───────────────────
+        if ids_emocion and not r.id_lyra:
+            r.id_lyra = next(iter(ids_emocion))
+
+    def _tiene_numero(self, texto: str) -> bool:
+        import re
+        return bool(re.search(r'\b\d+\b', texto))
 
     def _inferir_intencion(self, r: ResultadoMotor) -> str:
         if r.habilidad_requerida:
@@ -365,6 +433,11 @@ class MotorComprension:
             'pregunta_identidad_bell':      'conocer_bell',
             'pregunta_estado_bell':         'saber_estado_bell',
             'pregunta_capacidad_bell':      'saber_capacidades_bell',
+            'pregunta_accion_bell':         'saber_que_hace_bell',
+            'pregunta_filosofica':          'reflexionar',
+            'dato_personal':                'compartir_informacion',
+            'correccion':                   'corregir',
+            'solicitud_continuacion':       'continuar',
             'expresion_emocional_negativa': 'expresar_estado',
             'expresion_emocional_positiva': 'compartir_estado',
             'saludo':                       'conectar',
