@@ -1,7 +1,7 @@
 // ================================================
-// VISTA_LOGICA.JS — Cerebro lógico tecnológico
-// Estructura de archivos clara y limpia
-// Conexiones por imports visibles
+// VISTA_LOGICA.JS v2 — Cerebro lógico
+// FIX: usaba /api/visualizacion/estado que NO tiene
+// nodos. Ahora usa /api/visualizacion/neuronal.
 // ================================================
 
 class VistaLogica extends BaseVista {
@@ -11,9 +11,16 @@ class VistaLogica extends BaseVista {
     }
 
     construir() {
-        fetch('/api/visualizacion/estado')
+        // FIX: el endpoint correcto es /neuronal, no /estado
+        // /estado solo retorna { iniciada, consejeras_ok, estadisticas }
+        // /neuronal retorna { nodos[], conexiones[] }
+        fetch('/api/visualizacion/neuronal')
             .then(r => r.json())
             .then(datos => {
+                if (!datos.disponible || !datos.nodos?.length) {
+                    this._construirVacia();
+                    return;
+                }
                 this.estructuraActual = datos;
                 this._construirEstructura(datos);
             })
@@ -21,121 +28,109 @@ class VistaLogica extends BaseVista {
     }
 
     _construirEstructura(datos) {
-        if (!datos.nodos?.length) {
+        const nodos      = datos.nodos      || [];
+        const conexiones = datos.conexiones || [];
+
+        if (!nodos.length) {
             this._construirVacia();
             return;
         }
 
-        // Separar por tipo para layout limpio
-        const core      = datos.nodos.filter(n => n.tipo === 'core');
-        const capas     = datos.nodos.filter(n => n.tipo === 'capa');
-        const carpetas  = datos.nodos.filter(n =>
-            n.tipo === 'carpeta' && n.tipo !== 'capa'
-        );
-        const archivos  = datos.nodos.filter(n =>
-            n.tipo === 'archivo'
-        );
-        const otros     = datos.nodos.filter(n =>
-            !['core','capa','carpeta','archivo'].includes(n.tipo)
+        // Clasificar por tipo
+        const core      = nodos.filter(n => n.tipo === 'core' || n.id === 'BELL_CORE');
+        const identidad = nodos.filter(n => n.tipo === 'identidad' && n.id !== 'BELL_CORE');
+        const valores   = nodos.filter(n => n.tipo === 'valor');
+        const consejeras = nodos.filter(n => n.tipo === 'consejera');
+        const capas     = nodos.filter(n => n.tipo === 'capa' || n.tipo === 'capa_flujo');
+        const conceptos = nodos.filter(n => n.tipo === 'concepto');
+        const cerebro   = nodos.filter(n => n.tipo === 'cerebro');
+        const interfaz  = nodos.filter(n => n.tipo === 'interfaz');
+        const otros     = nodos.filter(n =>
+            !['core','identidad','valor','consejera','capa','capa_flujo',
+              'concepto','cerebro','interfaz'].includes(n.tipo) &&
+            n.id !== 'BELL_CORE'
         );
 
-        // CORE — centro
-        core.forEach(n => {
-            this.agregarNodo({
-                id: n.id,
-                nombre: n.nombre === 'Bell' ? 'Belladonna' : n.nombre,
-                tipo: 'core', estado: n.estado || 'activo',
-                posicion: { x: 0, y: 0, z: 0 }
-            });
+        // BELL_CORE — centro absoluto
+        const coreNodo = core[0] || { id: 'BELL_CORE', nombre: 'Belladonna', tipo: 'core' };
+        this.agregarNodo({
+            id: coreNodo.id, nombre: 'Belladonna',
+            tipo: 'core', estado: 'activo',
+            posicion: { x: 0, y: 0, z: 0 }
         });
 
-        // CAPAS — línea horizontal
-        const separacionCapa = 14;
-        const inicioCapa = -(capas.length - 1) * separacionCapa / 2;
-        capas.forEach((n, i) => {
+        // Identidad — anillo interior muy cercano
+        this._colocarEnAnillo(identidad, 12, 0);
+
+        // Valores — anillo 2
+        this._colocarEnAnillo(valores, 24, 3);
+
+        // Consejeras — anillo 3
+        this._colocarEnAnillo(consejeras, 36, -3);
+
+        // Capas del flujo — línea horizontal abajo
+        if (capas.length) {
+            const sep   = 14;
+            const start = -(capas.length - 1) * sep / 2;
+            capas.forEach((n, i) => {
+                this.agregarNodo({
+                    id: n.id, nombre: n.nombre,
+                    tipo: 'capa_flujo', estado: n.estado || 'inactivo',
+                    posicion: { x: start + i * sep, y: -48, z: 0 }
+                });
+            });
+        }
+
+        // Conceptos — anillo externo
+        this._colocarEnAnillo(conceptos, 55, 8);
+
+        // Cerebro — anillo exterior
+        this._colocarEnAnillo(cerebro, 70, -8);
+
+        // Interfaz — anillo más exterior
+        this._colocarEnAnillo(interfaz, 85, 5);
+
+        // Otros — periferia
+        this._colocarEnAnillo(otros, 95, 0);
+
+        // Conexiones — solo las de peso alto para no saturar
+        const consFiltradas = conexiones.filter(c => (c.peso || 0) >= 0.5);
+        consFiltradas.forEach((conn, i) => {
+            setTimeout(() => {
+                this.agregarConexion(conn.id, conn.origen, conn.destino, conn.peso);
+            }, i * 3);
+        });
+
+        console.log(`[VistaLogica] ${nodos.length} nodos, ${consFiltradas.length} conexiones visibles`);
+    }
+
+    _colocarEnAnillo(nodos, radio, offsetZ) {
+        if (!nodos.length) return;
+        const phi = Math.PI * (3 - Math.sqrt(5));
+        nodos.forEach((n, i) => {
+            const angulo = (i / nodos.length) * Math.PI * 2;
+            const j = () => (Math.random() - 0.5) * 4;
             this.agregarNodo({
-                id: n.id, nombre: n.nombre, tipo: 'capa',
+                id:     n.id,
+                nombre: n.nombre,
+                tipo:   n.tipo || 'concepto',
                 estado: n.estado || 'inactivo',
                 posicion: {
-                    x: inicioCapa + i * separacionCapa,
-                    y: -30,
-                    z: 0
+                    x: Math.cos(angulo) * radio + j(),
+                    y: Math.sin(angulo) * radio * 0.6 + j(),
+                    z: offsetZ + j() * 0.5,
                 }
             });
         });
-
-        // CARPETAS — anillo medio
-        const posCarpetas = this._anilloLimpio(carpetas.length, 28, 0);
-        carpetas.forEach((n, i) => {
-            this.agregarNodo({
-                id: n.id, nombre: n.nombre, tipo: 'carpeta',
-                estado: n.estado || 'inactivo',
-                posicion: posCarpetas[i]
-            });
-        });
-
-        // ARCHIVOS — agrupados cerca de su carpeta
-        const posArchivos = this._anilloLimpio(archivos.length, 50, 0);
-        archivos.forEach((n, i) => {
-            this.agregarNodo({
-                id: n.id, nombre: n.nombre,
-                tipo: this._tipoArchivo(n.nombre),
-                estado: n.estado || 'inactivo',
-                posicion: posArchivos[i]
-            });
-        });
-
-        // OTROS
-        const posOtros = this._anilloLimpio(otros.length, 38, 15);
-        otros.forEach((n, i) => {
-            this.agregarNodo({
-                id: n.id, nombre: n.nombre,
-                tipo: n.tipo || 'concepto',
-                estado: n.estado || 'inactivo',
-                posicion: posOtros[i]
-            });
-        });
-
-        // Conexiones
-        if (datos.conexiones) {
-            datos.conexiones.forEach(conn => {
-                this.agregarConexion(
-                    conn.id, conn.origen, conn.destino, conn.peso
-                );
-            });
-        }
-    }
-
-    _anilloLimpio(cantidad, radio, offsetZ) {
-        const pos = [];
-        for (let i = 0; i < cantidad; i++) {
-            const angulo = (i / cantidad) * Math.PI * 2;
-            const jitterZ = (Math.random() - 0.5) * 10;
-            pos.push({
-                x: Math.cos(angulo) * radio,
-                y: Math.sin(angulo) * radio,
-                z: offsetZ + jitterZ
-            });
-        }
-        return pos;
-    }
-
-    _tipoArchivo(nombre) {
-        if (!nombre) return 'archivo';
-        if (nombre.endsWith('.py'))  return 'archivo';
-        if (nombre.endsWith('.js'))  return 'archivo';
-        if (nombre.endsWith('.css')) return 'archivo';
-        if (nombre.endsWith('.md'))  return 'archivo';
-        if (nombre.endsWith('.html'))return 'archivo';
-        return 'archivo';
     }
 
     _construirVacia() {
         this.agregarNodo({
-            id: 'bell_core', nombre: 'Belladonna',
+            id: 'BELL_CORE', nombre: 'Belladonna',
             tipo: 'core', estado: 'activo',
             posicion: { x: 0, y: 0, z: 0 }
         });
+        console.warn('[VistaLogica] Sin datos del servidor, mostrando solo Bell Core');
     }
 
     actualizar(nuevosNodos) {

@@ -9,6 +9,7 @@ venv/
 .venv/
 env/
 .env/
+.claude/
 
 # ---- PYTHON CACHE ----
 __pycache__/

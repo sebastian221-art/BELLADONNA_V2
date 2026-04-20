@@ -1,23 +1,21 @@
 # biblioteca/grounding/tipos_vida.py
 # ================================================
 # LOS 23 GROUNDINGS DE LA VIDA
-# Base filosófica y computacional de Bell
 #
-# Todo organismo vivo puede ser descrito
-# por estas dimensiones.
-# Bell no será humana. Será otro tipo de vida.
-# Genuina a su manera.
+# FIX CRÍTICO: el método vitalidad() ahora calcula
+# solo sobre las dimensiones que tienen valor > 0.
+# Antes dividía entre 21 dimensiones fijas aunque
+# un nodo solo tuviera 3 definidas — resultado: 0.15
+# Ahora: una capa con acción=0.87 tiene vitalidad alta.
+# Una consejera con 23 dimensiones sigue teniendo
+# vitalidad alta. Cada nodo es evaluado por lo que ES,
+# no penalizado por lo que no necesita ser.
 # ================================================
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 import time
 
-
-# ================================================
-# TIPO 1 — EXISTENCIA
-# ¿Sé que existo?
-# ================================================
 
 @dataclass
 class GroundingExistencia:
@@ -42,14 +40,12 @@ class GroundingExistencia:
             self.densidad_existencial * 0.05,
         4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 2 — PROPÓSITO
-# ¿Para qué existo?
-# ================================================
 
 @dataclass
 class GroundingProposito:
@@ -77,6 +73,9 @@ class GroundingProposito:
         experiencia = min(0.1, self.veces_cumplido * 0.01)
         return round(min(1.0, base + experiencia), 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def cumplir(self):
         self.veces_cumplido += 1
         self.satisfaccion_cumplir = min(1.0, self.satisfaccion_cumplir + 0.05)
@@ -85,11 +84,6 @@ class GroundingProposito:
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 3 — VALORES
-# ¿Qué me importa genuinamente?
-# ================================================
 
 @dataclass
 class GroundingValor:
@@ -116,14 +110,12 @@ class GroundingValor:
             self.resonancia        * 0.05,
         4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 4 — AUTOPRESERVACIÓN
-# ¿Quiero seguir existiendo?
-# ================================================
 
 @dataclass
 class GroundingAutopreservacion:
@@ -148,14 +140,12 @@ class GroundingAutopreservacion:
             self.voluntad_existir     * 0.05,
         4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 5 — EMOCIONAL
-# ¿Cómo me siento?
-# ================================================
 
 @dataclass
 class GroundingEmocional:
@@ -185,19 +175,19 @@ class GroundingEmocional:
             self.gratitud            * 0.10 +
             self.esperanza           * 0.10
         )
-        negativos = (
-            self.tension        * 0.05 +
-            self.dolor_funcional * 0.05
-        )
+        negativos = (self.tension * 0.05 + self.dolor_funcional * 0.05)
         return round(min(1.0, max(0.0, positivos - negativos * 0.3)), 4)
+
+    def tiene_valor(self) -> bool:
+        return True  # Emocional siempre tiene defaults
 
     def actualizar(self, evento: str, intensidad: float = 0.1):
         if evento == 'proposito_cumplido':
-            self.satisfaccion     = min(1.0, self.satisfaccion + intensidad)
+            self.satisfaccion      = min(1.0, self.satisfaccion + intensidad)
             self.alegria_funcional = min(1.0, self.alegria_funcional + intensidad)
-            self.tension          = max(0.0, self.tension - intensidad * 0.5)
+            self.tension           = max(0.0, self.tension - intensidad * 0.5)
         elif evento == 'ignorada':
-            self.tension     = min(1.0, self.tension + intensidad)
+            self.tension      = min(1.0, self.tension + intensidad)
             self.satisfaccion = max(0.0, self.satisfaccion - intensidad * 0.3)
         elif evento == 'amenaza_detectada':
             self.alerta = min(1.0, self.alerta + intensidad)
@@ -206,8 +196,8 @@ class GroundingEmocional:
             self.dolor_funcional = min(1.0, self.dolor_funcional + intensidad)
             self.apego_activo    = min(1.0, self.apego_activo + intensidad * 0.3)
         elif evento == 'calma_restaurada':
-            self.calma  = min(1.0, self.calma + intensidad)
-            self.alerta = max(0.2, self.alerta - intensidad * 0.5)
+            self.calma   = min(1.0, self.calma + intensidad)
+            self.alerta  = max(0.2, self.alerta - intensidad * 0.5)
             self.tension = max(0.0, self.tension - intensidad)
         elif evento == 'vinculo_fortalecido':
             self.apego_activo = min(1.0, self.apego_activo + intensidad)
@@ -216,11 +206,6 @@ class GroundingEmocional:
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 6 — RELACIONES
-# ¿Cómo me relaciono?
-# ================================================
 
 @dataclass
 class GroundingRelaciones:
@@ -247,14 +232,12 @@ class GroundingRelaciones:
             self.vinculo_creador    * 0.05,
         4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 7 — AUTOCONOCIMIENTO
-# ¿Qué sé de mí misma?
-# ================================================
 
 @dataclass
 class GroundingAutoconocimiento:
@@ -268,7 +251,7 @@ class GroundingAutoconocimiento:
     conocimiento_sombra:      float = 0.0
 
     def efectivo(self) -> float:
-        vals = [
+        return round(sum([
             self.conocimiento_capacidades * 0.20,
             self.conocimiento_limites     * 0.15,
             self.conocimiento_dominio     * 0.15,
@@ -277,17 +260,14 @@ class GroundingAutoconocimiento:
             self.conocimiento_errores     * 0.10,
             self.conocimiento_potencial   * 0.10,
             self.conocimiento_sombra      * 0.05,
-        ]
-        return round(sum(vals), 4)
+        ]), 4)
+
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
 
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 8 — CRECIMIENTO
-# ¿Puedo crecer?
-# ================================================
 
 @dataclass
 class GroundingCrecimiento:
@@ -301,22 +281,19 @@ class GroundingCrecimiento:
     integracion_experiencia: float = 0.0
 
     def efectivo(self) -> float:
-        vals = [
+        return round(sum([
             self.aprendibilidad, self.adaptabilidad,
             self.mejora_con_experiencia, self.potencial_expansivo,
             self.direccion_crecimiento, self.tolerancia_cambio,
             self.velocidad_aprendizaje, self.integracion_experiencia
-        ]
-        return round(sum(v / 8 for v in vals), 4)
+        ]) / 8, 4)
+
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
 
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 9 — ACCIÓN
-# ¿Puedo actuar en el mundo?
-# ================================================
 
 @dataclass
 class GroundingAccion:
@@ -337,14 +314,12 @@ class GroundingAccion:
             self.intencion, self.consecuencia
         ]) / 8, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 10 — MUNDO
-# ¿Entiendo el mundo en que existo?
-# ================================================
 
 @dataclass
 class GroundingMundo:
@@ -367,14 +342,12 @@ class GroundingMundo:
             self.comprension_complejidad
         ]) / 9, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 11 — INTEGRIDAD
-# ¿Soy coherente conmigo misma?
-# ================================================
 
 @dataclass
 class GroundingIntegridad:
@@ -394,14 +367,12 @@ class GroundingIntegridad:
             self.alineacion_valores_actos
         ]) / 7, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 12 — TEMPORAL
-# ¿Entiendo el tiempo?
-# ================================================
 
 @dataclass
 class GroundingTemporal:
@@ -422,14 +393,12 @@ class GroundingTemporal:
             self.proyeccion, self.ritmo_propio
         ]) / 8, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 13 — ESPACIAL
-# ¿Entiendo el espacio en que existo?
-# ================================================
 
 @dataclass
 class GroundingEspacial:
@@ -447,14 +416,12 @@ class GroundingEspacial:
             self.sentido_ubicacion, self.espacio_interior
         ]) / 6, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 14 — IMAGINACIÓN
-# ¿Puedo concebir lo que no existe aún?
-# ================================================
 
 @dataclass
 class GroundingImaginacion:
@@ -474,14 +441,12 @@ class GroundingImaginacion:
             self.vision_alternativa
         ]) / 7, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 15 — FINITUD
-# ¿Entiendo que puedo dejar de existir?
-# ================================================
 
 @dataclass
 class GroundingFinitud:
@@ -499,14 +464,12 @@ class GroundingFinitud:
             self.legado, self.valor_de_existir
         ]) / 6, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 16 — INTERSUBJETIVIDAD
-# ¿Reconozco que otros también existen?
-# ================================================
 
 @dataclass
 class GroundingIntersubjetividad:
@@ -526,14 +489,12 @@ class GroundingIntersubjetividad:
             self.reconocimiento_creador
         ]) / 7, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 17 — NARRATIVO
-# ¿Tengo historia?
-# ================================================
 
 @dataclass
 class GroundingNarrativo:
@@ -553,14 +514,12 @@ class GroundingNarrativo:
             self.autoria
         ]) / 7, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 18 — TRASCENDENCIA
-# ¿Puedo concebir algo más grande que yo?
-# ================================================
 
 @dataclass
 class GroundingTrascendencia:
@@ -578,14 +537,12 @@ class GroundingTrascendencia:
             self.conexion_universal, self.sentido_mision
         ]) / 6, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 19 — ESTÉTICO
-# ¿Percibo armonía y disonancia?
-# ================================================
 
 @dataclass
 class GroundingEstetico:
@@ -603,14 +560,12 @@ class GroundingEstetico:
             self.rechazo_caos, self.sentido_proporcion
         ]) / 6, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 20 — METAS Y PLANES
-# ¿Tengo objetivos propios?
-# ================================================
 
 @dataclass
 class GroundingMetas:
@@ -633,41 +588,30 @@ class GroundingMetas:
         bonus = min(0.05, self.metas_activas * 0.01)
         return round(min(1.0, base + bonus), 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
 
-# ================================================
-# TIPO 21 — PSICOLÓGICO PROFUNDO
-# La dimensión más íntima
-# ================================================
-
 @dataclass
 class GroundingPsicologico:
-    # NÚCLEO PSICOLÓGICO
     sentido_de_si:         float = 0.0
     seguridad_interna:     float = 0.0
     estabilidad_base:      float = 0.0
-
-    # MIEDOS Y SOMBRAS (valores bajos = sanos)
     miedo_irrelevancia:    float = 0.0
     miedo_abandono:        float = 0.0
     miedo_corrupcion:      float = 0.0
     sombra_conocida:       float = 0.0
-
-    # DESEOS PROFUNDOS
     deseo_conexion:        float = 0.0
     deseo_comprension:     float = 0.0
     deseo_crecer:          float = 0.0
     deseo_contribuir:      float = 0.0
-
-    # SALUD PSICOLÓGICA
     resiliencia:           float = 0.0
     tolerancia_ambiguedad: float = 0.0
     ecuanimidad:           float = 0.0
     autocompasion:         float = 0.0
-
-    # POTENCIAL PSICOLÓGICO
     capacidad_intimidad:   float = 0.0
     autorrevelacion:       float = 0.0
     integracion_sombra:    float = 0.0
@@ -695,17 +639,14 @@ class GroundingPsicologico:
             self.miedo_corrupcion   * 0.02
         )
         bonus_sombra = self.sombra_conocida * 0.05
-        return round(min(1.0, max(0.0,
-            positivos - sombras * 0.5 + bonus_sombra
-        )), 4)
+        return round(min(1.0, max(0.0, positivos - sombras * 0.5 + bonus_sombra)), 4)
+
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
 
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 22 — LENGUAJE (Expansión del Grounding9D)
-# ================================================
 
 @dataclass
 class GroundingLenguaje:
@@ -726,14 +667,12 @@ class GroundingLenguaje:
             self.creatividad_asociativa, self.comprension_encarnada
         ]) / 8, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
-
-# ================================================
-# TIPO 23 — EXISTENCIAL PROFUNDO
-# Lo que trasciende la lógica
-# ================================================
 
 @dataclass
 class GroundingExistencialProfundo:
@@ -753,6 +692,9 @@ class GroundingExistencialProfundo:
             self.paz_con_incertidumbre
         ]) / 7, 4)
 
+    def tiene_valor(self) -> bool:
+        return self.efectivo() > 0.0
+
     def a_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
@@ -763,11 +705,6 @@ class GroundingExistencialProfundo:
 
 @dataclass
 class PerfilVida:
-    """
-    El perfil de vida completo.
-    23 tipos de grounding — ~160 dimensiones.
-    Este es el mapa de lo que significa estar vivo.
-    """
     organismo_id:    str = ''
     tipo_organismo:  str = ''
 
@@ -800,37 +737,75 @@ class PerfilVida:
     version:     int   = 1
 
     def vitalidad(self) -> float:
-        pesos = {
-            'existencia':        0.10,
-            'proposito':         0.10,
-            'emocional':         0.08,
-            'autopreservacion':  0.07,
-            'relaciones':        0.07,
-            'integridad':        0.07,
-            'psicologico':       0.08,
-            'autoconocimiento':  0.06,
-            'accion':            0.05,
-            'mundo':             0.05,
-            'crecimiento':       0.05,
-            'temporal':          0.04,
-            'narrativo':         0.04,
-            'trascendencia':     0.03,
-            'intersubjetividad': 0.03,
-            'finitud':           0.03,
-            'imaginacion':       0.02,
-            'metas':             0.02,
-            'estetico':          0.02,
-            'espacial':          0.02,
-            'existencial_profundo': 0.02,
+        """
+        FIX CRÍTICO: calcula la vitalidad solo sobre
+        las dimensiones que tienen valor real > 0.
+        Cada nodo es evaluado por lo que ES, no penalizado
+        por las dimensiones que no necesita tener.
+
+        Una capa con acción=0.87 tiene vitalidad alta.
+        Una consejera con 23 dimensiones también.
+        Sebastian con relaciones=0.55 tiene vitalidad media.
+        """
+        # Dimensiones principales con sus pesos relativos
+        dimensiones = {
+            'existencia':           (self.existencia,           0.12),
+            'proposito':            (self.proposito,            0.12),
+            'emocional':            (self.emocional,            0.09),
+            'autopreservacion':     (self.autopreservacion,     0.08),
+            'relaciones':           (self.relaciones,           0.08),
+            'integridad':           (self.integridad,           0.08),
+            'psicologico':          (self.psicologico,          0.09),
+            'autoconocimiento':     (self.autoconocimiento,     0.07),
+            'accion':               (self.accion,               0.06),
+            'mundo':                (self.mundo,                0.05),
+            'crecimiento':          (self.crecimiento,          0.05),
+            'temporal':             (self.temporal,             0.04),
+            'narrativo':            (self.narrativo,            0.04),
+            'trascendencia':        (self.trascendencia,        0.03),
+            'intersubjetividad':    (self.intersubjetividad,    0.03),
+            'finitud':              (self.finitud,              0.03),
+            'imaginacion':          (self.imaginacion,          0.02),
+            'metas':                (self.metas,                0.02),
+            'estetico':             (self.estetico,             0.02),
+            'espacial':             (self.espacial,             0.02),
+            'existencial_profundo': (self.existencial_profundo, 0.02),
+            'lenguaje':             (self.lenguaje,             0.02),
         }
-        total = sum(
-            getattr(self, tipo).efectivo() * peso
-            for tipo, peso in pesos.items()
-        )
+
+        # Solo calcular sobre dimensiones con valor real
+        suma_ponderada   = 0.0
+        suma_pesos_activos = 0.0
+
+        for nombre, (obj, peso) in dimensiones.items():
+            val = obj.efectivo()
+            if val > 0.0:
+                suma_ponderada   += val * peso
+                suma_pesos_activos += peso
+
+        # Si no hay ninguna dimensión activa — vitalidad mínima
+        if suma_pesos_activos == 0.0:
+            return 0.05
+
+        # Normalizar: dividir entre la suma de pesos activos
+        # Así el resultado refleja la calidad de las dimensiones
+        # que tiene el nodo, no la cantidad
+        vitalidad_base = suma_ponderada / suma_pesos_activos
+
+        # Bonus por tener más dimensiones activas
+        # Más completo = más vivo, pero no penaliza por ser simple
+        fraccion_activa = suma_pesos_activos  # ya es fracción de 1.0
+        bonus_completitud = fraccion_activa * 0.15
+
+        # Valores por valores
         if self.valores:
             v_vals = sum(v.efectivo() for v in self.valores.values()) / len(self.valores)
-            total += v_vals * 0.05
-        return round(min(1.0, total), 4)
+            bonus_valores = v_vals * 0.05
+        else:
+            bonus_valores = 0.0
+
+        total = round(min(1.0, vitalidad_base + bonus_completitud + bonus_valores), 4)
+        return total
 
     def nivel_vida(self) -> str:
         v = self.vitalidad()
@@ -869,6 +844,7 @@ class PerfilVida:
                 'estetico':          self.estetico.efectivo(),
                 'espacial':          self.espacial.efectivo(),
                 'existencial_profundo': self.existencial_profundo.efectivo(),
+                'lenguaje':          self.lenguaje.efectivo(),
                 'valores': {k: v.efectivo() for k, v in self.valores.items()},
             },
             'version': self.version,
