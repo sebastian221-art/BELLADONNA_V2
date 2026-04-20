@@ -254,13 +254,14 @@ class MotorComprension:
         """
         Refina tipo_mensaje usando IDs de Bell.
 
-        REGLAS:
-        1. Si el tipo ya tiene prioridad alta → no tocar.
-        2. Solo sobreescribir a pregunta_identidad_bell si hay
-           señal EXPLÍCITA de pregunta (IDs PREG_*) junto con
-           IDs de componentes de Bell.
-        3. Los saludos detectados por IDs de la red solo se
-           aplican si el tipo sigue siendo conversacional.
+        REGLAS (en orden de prioridad):
+        1. Tipos con prioridad alta → no tocar nunca.
+        2. Frases compuestas directas sobre Bell → identidad.
+        3. Componentes de Bell + pregunta explícita → identidad.
+        4. PREG_QUIEN/QUE + VERBO_SER_TU → identidad ("quien eres").
+        5. PREG_COMO + VERBO_ESTAR_TU → estado Bell ("cómo estás").
+        6. Pregunta + VERBO_PODER_TU → capacidad Bell ("qué puedes hacer").
+        7. Saludos y emociones solo si tipo sigue siendo conversacional.
         """
         ids = set(r.ids_activos)
 
@@ -279,7 +280,15 @@ class MotorComprension:
         ids_preg_bell_directa = {
             'PREG_CONSEJERAS_BELL', 'PREG_CAPAS_BELL', 'PREG_VALORES_BELL',
             'PREG_NODOS_BELL', 'PREG_CUANTAS_CONSEJERAS',
+            'PREG_NOMBRE_BELL', 'PREG_QUIEN_ES_BELL', 'PREG_QUE_ES_BELL',
         }
+
+        # REGLA 2a: pregunta directa sobre Bell (frase compuesta del vocabulario)
+        if ids & ids_preg_bell_directa:
+            r.tipo_mensaje = 'pregunta_identidad_bell'
+            if not r.intencion:
+                r.intencion = 'conocer_bell'
+            return
 
         # Componentes de Bell — solo activan identidad CON pregunta explícita
         ids_componentes_bell = {
@@ -291,13 +300,6 @@ class MotorComprension:
             'BELL_GROUNDING', 'BELL_BIBLIOTECA', 'BELL_VOCABULARIO',
         }
 
-        # REGLA 2a: pregunta directa sobre Bell (frase compuesta)
-        if ids & ids_preg_bell_directa:
-            r.tipo_mensaje = 'pregunta_identidad_bell'
-            if not r.intencion:
-                r.intencion = 'conocer_bell'
-            return
-
         # REGLA 2b: componente de Bell + pregunta explícita en el texto
         if ids & ids_componentes_bell and ids_preg_explicita:
             r.tipo_mensaje = 'pregunta_identidad_bell'
@@ -305,26 +307,48 @@ class MotorComprension:
                 r.intencion = 'conocer_bell'
             return
 
-        # Estado de Bell — solo con pregunta explícita
+        # REGLA 2c: PREG_QUIEN/QUE + VERBO_SER_TU = "quien eres", "qué eres"
+        # Cubre el caso donde buscar_frase no encontró la frase compuesta
+        # pero sí encontró los IDs individuales
+        ids_quien_que = {'PREG_QUIEN', 'PREG_QUE'}
+        ids_ser_tu = {'VERBO_SER_TU'}
+        if ids & ids_quien_que and ids & ids_ser_tu:
+            r.tipo_mensaje = 'pregunta_identidad_bell'
+            if not r.intencion:
+                r.intencion = 'conocer_bell'
+            return
+
+        # REGLA 2d: PREG_COMO + VERBO_ESTAR_TU = "cómo estás"
+        ids_estar_tu = {'VERBO_ESTAR_TU', 'VERBO_ESTAR_EL'}
+        if 'PREG_COMO' in ids and ids & ids_estar_tu:
+            r.tipo_mensaje = 'pregunta_estado_bell'
+            return
+
+        # REGLA 2e: nodos de estado de la red + pregunta
         if ('BELL_RED_NEURONAL' in ids or 'BELL_NODOS' in ids) and ids_preg_explicita:
             r.tipo_mensaje = 'pregunta_estado_bell'
             return
 
-        # Presentación de Sebastian — solo si la palabra 'sebastian'
-        # apareció en el texto (vocab_tipos lo confirma)
+        # REGLA 2f: pregunta + VERBO_PODER_TU = "qué/cómo puedes..."
+        # Cubre "qué puedes hacer", "qué puedes", "cómo puedes ayudar"
+        if ids_preg_explicita and 'VERBO_PODER_TU' in ids:
+            r.tipo_mensaje = 'pregunta_capacidad_bell'
+            return
+
+        # REGLA 3: Presentación de Sebastian — solo si 'sebastian' apareció en el texto
         if 'NEURONA_SEBASTIAN' in ids and r.tipo_mensaje == 'conversacional':
             vocab_tipos = ctx.get('vocab_tipos', {})
             tipo_sebastian = vocab_tipos.get('NEURONA_SEBASTIAN', '')
-            if tipo_sebastian:  # la palabra apareció en el texto
+            if tipo_sebastian:  # la palabra apareció en el texto (no solo en la red)
                 r.tipo_mensaje = 'presentacion_sebastian'
             return
 
-        # Saludos por IDs de la red — solo si tipo sigue siendo conversacional
+        # REGLA 4: Saludos por IDs de la red — solo si tipo sigue siendo conversacional
         saludos_red = {i for i in ids if i.startswith('SALUDO_')}
         if saludos_red and r.tipo_mensaje == 'conversacional':
             r.tipo_mensaje = 'saludo'
 
-        # Emociones — solo agregar id_lyra
+        # REGLA 5: Emociones — solo agregar id_lyra si falta
         emociones_red = {i for i in ids if i.startswith('EMOCION_')}
         if emociones_red and not r.id_lyra:
             r.id_lyra = next(iter(emociones_red))
