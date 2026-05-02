@@ -1,8 +1,7 @@
 # biblioteca/vocabulario/gestor_vocabulario.py
 # ================================================
-# GESTOR DE VOCABULARIO
-# FIX: carga bell_identidad para que Bell
-# reconozca preguntas sobre sí misma.
+# GESTOR DE VOCABULARIO — v2 COMPLETO
+# Carga todos los módulos de vocabulario.
 # ================================================
 
 from typing import Optional, Dict, List
@@ -25,13 +24,23 @@ class GestorVocabulario:
 
     def cargar_todo(self):
         modulos = [
-            ('saludos',        'SALUDOS'),
-            ('verbos_comunes', 'VERBOS_COMUNES'),
-            ('preguntas',      'PREGUNTAS'),
-            ('emociones',      'EMOCIONES'),
-            ('tiempo',         'TIEMPO'),
-            ('conectores',     'CONECTORES'),
-            ('bell_identidad', 'BELL_IDENTIDAD'),  # ← nuevo
+            # ── Núcleo original ──────────────────────────
+            ('saludos',               'SALUDOS'),
+            ('verbos_comunes',        'VERBOS_COMUNES'),
+            ('preguntas',             'PREGUNTAS'),
+            ('emociones',             'EMOCIONES'),
+            ('tiempo',                'TIEMPO'),
+            ('conectores',            'CONECTORES'),
+            ('bell_identidad',        'BELL_IDENTIDAD'),
+            # ── Nuevos módulos v2 ────────────────────────
+            ('cotidiano',             'CONCEPTOS_COTIDIANO'),
+            ('colombia',              'CONCEPTOS_COLOMBIA'),
+            ('tecnologia',            'CONCEPTOS_TECNOLOGIA'),
+            ('conversacion_profunda', 'CONCEPTOS_PROFUNDO'),
+            ('internet_redes',        'CONCEPTOS_INTERNET'),
+            ('gastronomia',           'CONCEPTOS_GASTRONOMIA'),
+            ('expresiones_expandidas','CONCEPTOS_EXPRESIONES'),
+            ('mundo_vida',            'CONCEPTOS_MUNDO'),
         ]
         total = 0
         for nombre_modulo, nombre_dict in modulos:
@@ -39,7 +48,7 @@ class GestorVocabulario:
             total += cantidad
 
         self._cargado = True
-        print(f'Vocabulario cargado: {total} palabras en {len(modulos)} módulos')
+        print(f'Vocabulario: {total} conceptos en {len(modulos)} módulos')
 
     def _cargar_modulo(self, nombre_modulo: str, nombre_dict: str) -> int:
         try:
@@ -50,6 +59,9 @@ class GestorVocabulario:
             diccionario = getattr(modulo, nombre_dict, {})
             for palabra, concepto in diccionario.items():
                 self._agregar_concepto(palabra, concepto)
+                # Registrar también todas las variantes
+                for variante in concepto.get('variantes', []):
+                    self._agregar_concepto(variante, concepto)
             return len(diccionario)
         except Exception as e:
             print(f'Vocabulario: error cargando {nombre_modulo} — {e}')
@@ -57,9 +69,11 @@ class GestorVocabulario:
 
     def _agregar_concepto(self, palabra: str, concepto: dict):
         palabra_lower = palabra.lower().strip()
+        if not palabra_lower:
+            return
         if palabra_lower in self._vocabulario:
             existente = self._vocabulario[palabra_lower]
-            if concepto.get('grounding', 0) <= existente.get('grounding', 0):
+            if concepto.get('grounding_base', 0) <= existente.get('grounding_base', 0):
                 return
         self._vocabulario[palabra_lower] = concepto
         concepto_id = concepto.get('id', '')
@@ -93,6 +107,7 @@ class GestorVocabulario:
         resultados = []
         usadas = set()
 
+        # Frases de 3 palabras
         for i in range(len(palabras) - 2):
             frase = f'{palabras[i]} {palabras[i+1]} {palabras[i+2]}'
             concepto = self.buscar(frase)
@@ -100,6 +115,7 @@ class GestorVocabulario:
                 resultados.append({'palabra': frase, 'concepto': concepto})
                 usadas.update([i, i+1, i+2])
 
+        # Frases de 2 palabras
         for i in range(len(palabras) - 1):
             if i in usadas or i+1 in usadas:
                 continue
@@ -109,6 +125,7 @@ class GestorVocabulario:
                 resultados.append({'palabra': frase, 'concepto': concepto})
                 usadas.update([i, i+1])
 
+        # Palabras individuales
         for i, palabra in enumerate(palabras):
             if i in usadas:
                 continue
@@ -126,7 +143,7 @@ class GestorVocabulario:
         if not palabra or not concepto_id:
             return False
         self._agregar_concepto(palabra, {
-            'id': concepto_id, 'grounding': grounding, 'tipo': tipo
+            'id': concepto_id, 'grounding_base': grounding, 'tipo': tipo
         })
         return True
 
@@ -134,7 +151,7 @@ class GestorVocabulario:
         return {
             'total_palabras':  len(self._vocabulario),
             'total_conceptos': len(self._indice_id),
-            'cargado':         self._cargado
+            'cargado':         self._cargado,
         }
 
     @staticmethod
@@ -142,7 +159,7 @@ class GestorVocabulario:
         reemplazos = {
             'á':'a','é':'e','í':'i','ó':'o','ú':'u',
             'Á':'a','É':'e','Í':'i','Ó':'o','Ú':'u',
-            'ü':'u','ñ':'n','Ñ':'n'
+            'ü':'u','ñ':'n','Ñ':'n',
         }
         resultado = texto.lower().strip()
         for orig, rep in reemplazos.items():

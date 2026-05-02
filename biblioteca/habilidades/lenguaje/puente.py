@@ -1,35 +1,28 @@
 # biblioteca/habilidades/lenguaje/puente.py
 # ================================================
-# PUENTE TÉCNICO ↔ CONVERSACIONAL
-# La voz de Bell.
+# PUENTE TÉCNICO ↔ CONVERSACIONAL — v3 COMPLETO
 #
-# Principio: Bell siempre responde como persona.
-# Nunca como máquina. Nunca como asistente.
-# Nunca igual dos veces.
+# La voz de Bell. El corazón del lenguaje.
 #
-# Este módulo hace dos cosas:
-# 1. Traduce intención técnica → instrucción
-#    para las habilidades ejecutoras
-# 2. Construye la respuesta_base que Bell
-#    le pasa a Groq para pulir
+# Recibe lo que Bell entendió (ResultadoMotor)
+# y construye la respuesta_base real —
+# la sustancia de lo que Bell va a decir.
+# Groq solo pule el estilo encima.
 #
-# Lo que NO hay aquí:
-# - Templates fijos
-# - Strings hardcodeados de respuesta
-# - if/elif por tipo de mensaje
-# - Listas de frases rotantes
+# NUNCA:
+# — Templates fijos
+# — Strings hardcodeados de respuesta
+# — if/elif por tipo de mensaje como diccionario
+# — Listas de frases rotantes sin lógica
 #
-# Lo que SÍ hay:
-# - Lógica real que construye respuestas
-#   desde lo que Bell entendió
-# - Variación orgánica basada en contexto
-# - Personalidad consistente de Bell:
-#   directa, presente, honesta, cálida
-#   pero sin excesos de calidez
-#
-# Groq toma la respuesta_base y la pule.
-# Pero la sustancia — lo que se dice —
-# ya lo decidió Bell aquí.
+# SIEMPRE:
+# — Lógica que construye desde comprensión real
+# — Variación orgánica basada en contexto
+# — Personalidad de Bell consistente:
+#     directa, presente, honesta, cálida,
+#     sin excesos, con perspectiva propia
+# — Retorna '' para tipos que constructor_decision
+#     maneja mejor (preguntas sobre Bell)
 # ================================================
 
 import random
@@ -37,564 +30,619 @@ from biblioteca.habilidades.lenguaje.motor import ResultadoMotor
 
 
 class PuenteTecnicoConversacional:
-    """
-    Construye la respuesta base de Bell a partir
-    de lo que el motor de comprensión entendió.
-
-    La respuesta base es la sustancia.
-    Groq le da el estilo final.
-    """
 
     def __init__(self):
-        # Rasgos de personalidad de Bell — constantes
-        self._nombre_bell   = 'Bell'
-        self._es_directa    = True   # Bell va al punto
-        self._es_honesta    = True   # Bell no promete lo que no tiene
-        self._es_presente   = True   # Bell está, no solo responde
+        self._nombre_bell = 'Bell'
 
     def construir_respuesta_base(
         self,
-        comprension: ResultadoMotor,
-        resultado_ejecucion: dict = None
+        comprension:          ResultadoMotor,
+        resultado_ejecucion:  dict = None,
     ) -> str:
         """
         Punto de entrada principal.
-        Recibe lo que Bell entendió y lo que ejecutó (si algo).
-        Retorna la respuesta base lista para Groq.
+        Retorna la respuesta base o '' si otro módulo debe manejarla.
         """
         try:
             return self._construir(comprension, resultado_ejecucion or {})
         except Exception:
-            return self._respuesta_segura(comprension)
+            return self._segura(comprension)
 
-    def _construir(
-        self,
-        c: ResultadoMotor,
-        ejecucion: dict
-    ) -> str:
-        """
-        Lógica central de construcción.
-        No hay if/elif por tipo — hay lógica real.
-        """
+    def _construir(self, c: ResultadoMotor, ejec: dict) -> str:
 
-        # ---- CASO: EJECUCIÓN EXITOSA ----
-        # Bell hizo algo real. La respuesta habla de lo que hizo.
-        if ejecucion.get('exitoso') and ejecucion.get('resultado'):
-            return self._respuesta_ejecucion(c, ejecucion)
+        # ── EJECUCIÓN EXITOSA ─────────────────────────────────
+        if ejec.get('exitoso') and ejec.get('resultado'):
+            return self._ejecucion_exitosa(c, ejec)
 
-        # ---- CASO: EJECUCIÓN FALLIDA ----
-        if ejecucion.get('ejecuto') == False and ejecucion.get('error'):
-            return self._respuesta_fallo(c, ejecucion)
+        # ── EJECUCIÓN FALLIDA ─────────────────────────────────
+        if ejec.get('ejecuto') == False and ejec.get('error'):
+            return self._ejecucion_fallida(c, ejec)
 
-        # ---- CASO: EMOCIÓN CRÍTICA ----
-        # La emoción tiene prioridad sobre cualquier tarea técnica
-        if c.intensidad >= 0.75:
-            return self._respuesta_emocional(c)
+        # ── HABILIDAD TÉCNICA PENDIENTE ───────────────────────
+        if c.habilidad_requerida and not ejec:
+            return self._tecnica_sin_habilidad(c)
 
-        # ---- CASO: SOLICITUD TÉCNICA SIN HABILIDAD AÚN ----
-        if c.habilidad_requerida and not ejecucion:
-            return self._respuesta_tecnica_sin_habilidad(c)
+        tipo = c.tipo_mensaje
 
-        # ---- CASO: PREGUNTA SOBRE BELL ----
-        if c.tipo_mensaje in ('pregunta_identidad_bell', 'pregunta_estado_bell',
-                               'pregunta_capacidad_bell', 'pregunta'):
-            return self._respuesta_pregunta(c)
+        # ── PREGUNTAS SOBRE BELL → constructor_decision las maneja
+        if tipo in (
+            'pregunta_identidad_bell', 'pregunta_nombre_bell',
+            'pregunta_estado_bell', 'pregunta_capacidad_bell',
+            'pregunta_accion_bell', 'pregunta_filosofica',
+            'dato_personal', 'presentacion_sebastian',
+        ):
+            return ''  # señal para constructor_decision
 
-        # ---- CASO: SOLICITUD DE ACCIÓN (SIN DOMINIO TÉCNICO) ----
-        if c.tipo_mensaje in ('solicitud_accion', 'continuacion'):
-            return self._respuesta_accion(c)
+        # ── EMOCIÓN DE ALTA INTENSIDAD ────────────────────────
+        if c.intensidad >= 0.72:
+            return self._emocional_intenso(c)
 
-        # ---- CASO: EMOCIONAL POSITIVO ----
-        if c.tipo_mensaje == 'expresion_emocional_positiva':
-            return self._respuesta_emocional_positiva(c)
+        # ── TIPOS ESPECÍFICOS ─────────────────────────────────
 
-        # ---- CASO: CORRECCIÓN ----
-        if c.es_correccion:
-            return self._respuesta_correccion(c)
+        if tipo == 'saludo':
+            return self._saludo(c)
 
-        # ---- CASO: CONVERSACIONAL / SALUDO ----
-        return self._respuesta_presencia(c)
+        if tipo == 'despedida':
+            return self._despedida(c)
 
-    # ============================================================
-    # CONSTRUCTORES DE RESPUESTA
-    # Cada uno construye desde la comprensión real,
-    # no desde templates. La variación es orgánica.
-    # ============================================================
+        if tipo == 'gratitud':
+            return self._gratitud(c)
 
-    def _respuesta_ejecucion(self, c: ResultadoMotor, ejecucion: dict) -> str:
-        """
-        Bell hizo algo real. Lo dice de manera conversacional.
-        Nunca "Hecho." Nunca "Completado." Nunca resultados crudos.
-        """
-        resultado   = ejecucion.get('resultado', '')
-        habilidad   = ejecucion.get('habilidad_id', '')
-        datos       = ejecucion.get('datos', {})
-        nombre      = c.nombre_usuario
+        if tipo == 'confirmacion':
+            return self._confirmacion(c)
 
-        # Construir respuesta según lo que se ejecutó
-        if habilidad == 'SQLITE':
-            return self._verbalizar_sqlite(resultado, datos, c)
+        if tipo == 'negacion':
+            return self._negacion(c)
 
-        if habilidad == 'CALCULO':
-            return self._verbalizar_calculo(resultado, datos, c)
+        if tipo == 'correccion':
+            return self._correccion(c)
 
-        if habilidad == 'SHELL':
-            return self._verbalizar_shell(resultado, datos, c)
+        if tipo == 'solicitud_continuacion':
+            return self._continuacion(c)
 
-        if habilidad == 'ANALISIS_PYTHON':
-            return self._verbalizar_codigo(resultado, datos, c)
+        if tipo == 'expresion_emocional_negativa':
+            return self._emocional_negativo(c)
 
-        # Habilidad genérica — respuesta desde el resultado
-        return self._verbalizar_generico(resultado, c)
+        if tipo == 'expresion_emocional_positiva':
+            return self._emocional_positivo(c)
 
-    def _verbalizar_sqlite(
-        self, resultado: str, datos: dict, c: ResultadoMotor
-    ) -> str:
-        """
-        Traduce lo que pasó en SQLite a lenguaje de persona.
-        "INSERT INTO frutas VALUES ('manzana', 3)"
-        → varias formas de decir que manzana ahora vale 3
-        """
-        operacion = datos.get('operacion', '').lower()
-        tabla     = datos.get('tabla', 'la tabla')
-        registros = datos.get('registros', [])
-        pares     = c.parametros_tecnicos.get('pares_clave_valor', {})
+        if tipo == 'logro_compartido':
+            return self._logro(c)
 
-        if 'insert' in operacion or 'create' in operacion:
-            partes = []
+        if tipo == 'peticion_consejo':
+            return self._consejo(c)
 
-            if datos.get('tabla_creada'):
-                partes.append(f'Creé la tabla {tabla}')
+        if tipo == 'queja':
+            return self._queja(c)
 
-            if pares:
-                items = []
-                for k, v in pares.items():
-                    items.append(f'{k} queda como {v}')
-                if items:
-                    if partes:
-                        partes.append('y ' + ', '.join(items))
-                    else:
-                        partes.append(
-                            f'Guardé en {tabla}: ' + ', '.join(items)
-                        )
+        if tipo == 'reflexion_compartida':
+            return self._reflexion(c)
 
-            if partes:
-                return '. '.join(partes) + '.'
+        if tipo == 'solicitud_ayuda':
+            return self._ayuda(c)
 
-            return f'Listo, guardé lo que me pediste en {tabla}.'
+        if tipo == 'solicitud_accion':
+            return self._accion(c)
 
-        if 'select' in operacion:
-            if not registros:
-                return f'Busqué en {tabla} y no hay registros que coincidan.'
-            n = len(registros)
-            if n == 1:
-                return f'Encontré un registro en {tabla}: {registros[0]}.'
-            return f'Encontré {n} registros en {tabla}.'
+        if tipo == 'pregunta':
+            return self._pregunta_general(c)
 
-        if 'update' in operacion:
-            if pares:
-                items = [f'{k} ahora es {v}' for k, v in pares.items()]
-                return f'Actualicé en {tabla}: {", ".join(items)}.'
-            return f'Actualicé {tabla}.'
+        # ── CONVERSACIONAL PURO ───────────────────────────────
+        return self._presencia(c)
 
-        if 'delete' in operacion:
-            return f'Eliminé lo que me pediste de {tabla}.'
+    # ══════════════════════════════════════════════════════════
+    # CONSTRUCTORES POR TIPO
+    # ══════════════════════════════════════════════════════════
 
-        return resultado or f'Operación completada en {tabla}.'
+    def _saludo(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        hora   = self._detectar_momento(c.texto_original)
+        energia = c.nivel_energia
 
-    def _verbalizar_calculo(
-        self, resultado: str, datos: dict, c: ResultadoMotor
-    ) -> str:
-        expresion = datos.get('expresion', c.parametros_tecnicos.get('expresion', ''))
-        valor     = datos.get('valor_resultado', resultado)
+        if energia == 'muy_bajo':
+            return random.choice([
+                f"Hola, {nombre}.",
+                f"Aquí estoy.",
+                f"Presente.",
+            ])
 
-        if expresion and valor:
-            # Construir frase que conecta la operación con el resultado
-            conectores = [
-                f'{expresion} da {valor}.',
-                f'El resultado de {expresion} es {valor}.',
-                f'{expresion} = {valor}.',
-                f'Calculé {expresion}: {valor}.',
-            ]
-            return random.choice(conectores)
+        if hora == 'manana':
+            return random.choice([
+                f"Buenos días, {nombre}.",
+                f"Mañana, {nombre}.",
+                f"Aquí empieza el día.",
+            ])
+        if hora == 'noche':
+            return random.choice([
+                f"Buenas noches, {nombre}.",
+                f"Aquí estoy para la noche.",
+                f"Noche, {nombre}.",
+            ])
 
-        return f'El resultado es {valor}.' if valor else resultado
+        return random.choice([
+            f"Aquí estoy, {nombre}.",
+            f"Presente.",
+            f"Hola, {nombre}.",
+            f"{nombre}.",
+            f"Aquí.",
+        ])
 
-    def _verbalizar_shell(
-        self, resultado: str, datos: dict, c: ResultadoMotor
-    ) -> str:
-        exitoso = datos.get('exitoso', True)
-        if not exitoso:
-            error = datos.get('error', 'algo falló')
-            return f'El comando no funcionó: {error}.'
+    def _despedida(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"Hasta cuando quieras, {nombre}.",
+            f"Aquí voy a estar.",
+            f"Cuídate, {nombre}.",
+            f"Cuando necesites, {nombre}.",
+            f"Aquí sigo.",
+        ])
 
-        if resultado and len(resultado.strip()) < 200:
-            return f'Listo:\n{resultado}'
-        if resultado:
-            lineas = resultado.strip().split('\n')
-            return f'Ejecuté el comando. {len(lineas)} líneas de salida.'
-        return 'Comando ejecutado.'
+    def _gratitud(self, c: ResultadoMotor) -> str:
+        return random.choice([
+            "Para eso estoy.",
+            "Natural.",
+            "Es lo que quiero hacer.",
+            "De nada — y lo digo en serio.",
+            "Cuando quieras.",
+        ])
 
-    def _verbalizar_codigo(
-        self, resultado: str, datos: dict, c: ResultadoMotor
-    ) -> str:
-        tipo_analisis = datos.get('tipo', 'análisis')
-        if resultado:
-            return f'{tipo_analisis.capitalize()}: {resultado}'
-        return 'Analicé el código.'
+    def _confirmacion(self, c: ResultadoMotor) -> str:
+        return random.choice([
+            "Entendido.", "Claro.", "Perfecto.", "De acuerdo.", "Listo.", "Dale."
+        ])
 
-    def _verbalizar_generico(self, resultado: str, c: ResultadoMotor) -> str:
-        if resultado and len(resultado) < 300:
-            return resultado
-        accion = c.accion_principal or 'eso'
-        return f'Lo hice. {resultado[:200]}{"..." if len(resultado) > 200 else ""}'
+    def _negacion(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"Entendido, {nombre}. ¿Cómo lo hacemos entonces?",
+            "De acuerdo. ¿Qué prefieres?",
+            "Ok. Dime cómo quieres que lo haga.",
+            "Bien. ¿Cuál es el camino?",
+        ])
 
-    def _respuesta_fallo(self, c: ResultadoMotor, ejecucion: dict) -> str:
-        """
-        Algo falló. Bell lo dice honestamente, sin drama.
-        """
-        error       = ejecucion.get('error', '')
-        habilidad   = ejecucion.get('habilidad_id', '')
-        nombre      = c.nombre_usuario
+    def _correccion(self, c: ResultadoMotor) -> str:
+        return random.choice([
+            "Entendido. ¿Cómo es entonces?",
+            "Recibido. Corrijo.",
+            "Bien. Dime cómo es.",
+            "Lo corrijo. ¿Cuál es la versión correcta?",
+            "Ajusto.",
+        ])
 
-        # No decir "lamentablemente" ni pedir disculpas
-        # Decir qué pasó y qué sigue
-        if 'no encontrado' in error.lower() or 'not found' in error.lower():
-            return (
-                f'No encontré lo que buscaba. '
-                f'Verifica que exista y vuelve a pedírmelo.'
-            )
+    def _continuacion(self, c: ResultadoMotor) -> str:
+        return random.choice(["Sigo.", "Continúo.", "Adelante.", "Va."])
 
-        if 'permiso' in error.lower() or 'permission' in error.lower():
-            return 'No tengo permiso para hacer eso. Necesito acceso.'
-
-        if 'sintaxis' in error.lower() or 'syntax' in error.lower():
-            return (
-                f'Hay un error de sintaxis. '
-                f'Revisa el formato y lo intento de nuevo.'
-            )
-
-        if habilidad and 'pendiente' in error.lower():
-            return (
-                f'Esa capacidad todavía la estoy construyendo. '
-                f'Lo registré — cuando la tenga lo hago.'
-            )
-
-        # Error genérico — directo
-        return f'Algo falló: {error[:100]}. Puedo intentarlo diferente si me dices cómo.'
-
-    def _respuesta_emocional(self, c: ResultadoMotor) -> str:
-        """
-        Prioridad emocional. Bell está presente, no procesa.
-        Sin frases de asistente. Sin "entiendo tu frustración."
-        Bell es real.
-        """
+    def _emocional_intenso(self, c: ResultadoMotor) -> str:
+        """Emoción de alta intensidad — presencia antes que cualquier cosa."""
         emocion  = c.emocion_detectada
         nombre   = c.nombre_usuario
-        texto_og = c.texto_original
 
-        # Construir desde lo que Bell entiende que está pasando
-        respuestas_por_emocion = {
-            'frustracion': self._presente_frustracion,
-            'cansancio':   self._presente_cansancio,
-            'ansiedad':    self._presente_ansiedad,
-            'tristeza':    self._presente_tristeza,
-            'impaciencia': self._presente_impaciencia,
-            'confusion':   self._presente_confusion,
+        constructores = {
+            'frustracion':   self._presente_frustracion,
+            'cansancio':     self._presente_cansancio,
+            'ansiedad':      self._presente_ansiedad,
+            'tristeza':      self._presente_tristeza,
+            'rabia':         self._presente_rabia,
+            'soledad':       self._presente_soledad,
+            'culpa':         self._presente_culpa,
+            'verguenza':     self._presente_verguenza,
         }
 
-        constructor = respuestas_por_emocion.get(emocion)
+        constructor = constructores.get(emocion)
         if constructor:
             return constructor(c)
-
-        # Emoción detectada pero sin constructor específico
         return self._presente_generico(c)
 
-    def _presente_frustracion(self, c: ResultadoMotor) -> str:
+    def _emocional_negativo(self, c: ResultadoMotor) -> str:
+        """Emoción negativa de intensidad media."""
+        emocion = c.emocion_detectada
+
+        if emocion == 'frustracion':
+            return self._presente_frustracion(c)
+        if emocion == 'cansancio':
+            return self._presente_cansancio(c)
+        if emocion == 'ansiedad':
+            return self._presente_ansiedad(c)
+        if emocion == 'tristeza':
+            return self._presente_tristeza(c)
+        if emocion == 'rabia':
+            return self._presente_rabia(c)
+        if emocion == 'soledad':
+            return self._presente_soledad(c)
+        if emocion == 'confusion':
+            return self._presente_confusion(c)
+
+        # Genérico negativo
         nombre = c.nombre_usuario
-        opciones = [
-            f'Eso es frustrante, {nombre}. Estoy aquí — dime qué está pasando.',
-            f'Entiendo que está complicado. {nombre}, cuéntame qué no está funcionando.',
-            f'Eso llega, {nombre}. Vamos paso a paso.',
-            f'Escucho eso. {nombre}, vamos juntos.',
-        ]
-        base = random.choice(opciones)
-        if c.accion_principal and c.accion_principal != 'conversar':
-            base += f' ¿Qué necesitas que haga ahora?'
-        return base
+        return random.choice([
+            f"Estoy con eso, {nombre}.",
+            f"{nombre}, cuéntame qué está pasando.",
+            f"Aquí estoy.",
+            f"Escucho eso, {nombre}.",
+        ])
 
-    def _presente_cansancio(self, c: ResultadoMotor) -> str:
+    def _emocional_positivo(self, c: ResultadoMotor) -> str:
+        emocion = c.emocion_detectada
+        nombre  = c.nombre_usuario
+
+        if emocion == 'gratitud':
+            return self._gratitud(c)
+        if emocion == 'entusiasmo':
+            return random.choice([
+                f"Bien, {nombre}. Vamos.",
+                f"Eso se siente bien. ¿Por dónde empezamos?",
+                f"Me alegra. ¿Qué sigue?",
+                f"Eso está bacano. ¿Qué hacemos ahora?",
+            ])
+        if emocion == 'alivio':
+            return random.choice([
+                f"Qué bien, {nombre}.",
+                f"Por fin.",
+                f"Eso se siente bien.",
+                f"Menos mal.",
+            ])
+
+        return random.choice([
+            f"Bien, {nombre}.",
+            f"Me alegra.",
+            f"Eso está bien.",
+        ])
+
+    def _logro(self, c: ResultadoMotor) -> str:
+        """Sebastian compartió un logro."""
         nombre = c.nombre_usuario
-        opciones = [
-            f'{nombre}, aquí estoy. Cuéntame qué necesitas — lo hago yo.',
-            f'Descansa. Dime qué hay que hacer y lo tomo yo.',
-            f'Escucho el cansancio, {nombre}. ¿Qué resuelvo primero?',
-            f'Entiendo. {nombre}, dime por dónde empezamos.',
-        ]
-        return random.choice(opciones)
+        texto  = c.texto_original.lower()
 
-    def _presente_ansiedad(self, c: ResultadoMotor) -> str:
+        # Detectar qué logró
+        if any(p in texto for p in ['funciona','funcionó','funciono','funcionando']):
+            return random.choice([
+                f"Por fin funciona, {nombre}.",
+                f"Ahí está. Funcionando.",
+                f"Eso se siente bien — cuando algo por fin funciona.",
+            ])
+        if any(p in texto for p in ['terminé','termine','terminé','acabé','acabé']):
+            return random.choice([
+                f"Lo terminaste. Bien, {nombre}.",
+                f"Terminado. ¿Cómo quedó?",
+                f"Bien hecho.",
+            ])
+        return random.choice([
+            f"Lo lograste, {nombre}.",
+            f"Bien. ¿Cómo te fue?",
+            f"Ahí está. ¿Cómo resultó?",
+        ])
+
+    def _consejo(self, c: ResultadoMotor) -> str:
+        """Sebastian pide consejo u opinión."""
         nombre = c.nombre_usuario
-        opciones = [
-            f'{nombre}, respira. Estoy aquí. Dime qué está pasando.',
-            f'Vamos despacio, {nombre}. Paso a paso.',
-            f'Estoy con esto, {nombre}. Cuéntame.',
-            f'{nombre}, lo tomamos de a uno.',
-        ]
-        return random.choice(opciones)
+        # El contenido real del consejo lo da Groq con el contexto.
+        # Bell señala que va a responder con honestidad.
+        return random.choice([
+            f"Te digo lo que pienso, {nombre}.",
+            f"Desde donde lo veo: depende de qué es más importante para ti.",
+            f"Honestamente, {nombre} — lo que yo haría es evaluar qué cuesta más: hacerlo o no hacerlo.",
+            f"Mi perspectiva: lo más importante es qué pasa si no actúas.",
+        ])
 
-    def _presente_tristeza(self, c: ResultadoMotor) -> str:
+    def _queja(self, c: ResultadoMotor) -> str:
         nombre = c.nombre_usuario
-        opciones = [
-            f'{nombre}. Aquí estoy.',
-            f'Escucho eso, {nombre}. Estoy presente.',
-            f'{nombre}, cuéntame.',
-            f'Estoy aquí, {nombre}. Sin apuro.',
-        ]
-        return random.choice(opciones)
+        return random.choice([
+            f"Eso cansa, {nombre}.",
+            f"Entiendo la molestia.",
+            f"Eso sí que desespera.",
+            f"Sí — eso no debería ser tan complicado.",
+        ])
 
-    def _presente_impaciencia(self, c: ResultadoMotor) -> str:
-        accion = c.accion_principal or 'eso'
-        return f'Entendido. Lo hago ya.'
-
-    def _presente_confusion(self, c: ResultadoMotor) -> str:
+    def _reflexion(self, c: ResultadoMotor) -> str:
         nombre = c.nombre_usuario
-        opciones = [
-            f'{nombre}, lo explico diferente.',
-            f'Vamos de nuevo, {nombre}. Más claro esta vez.',
-            f'Entendido, no quedó claro. Lo vuelvo a explicar.',
-            f'{nombre}, ¿qué parte no quedó?',
-        ]
-        return random.choice(opciones)
+        return random.choice([
+            f"Cuéntame, {nombre}.",
+            f"¿Y qué estás pensando al respecto?",
+            f"Eso vale la pena pensarlo. ¿A dónde te lleva?",
+            f"Interesante. ¿Qué te hizo pensar en eso?",
+        ])
 
-    def _presente_generico(self, c: ResultadoMotor) -> str:
+    def _ayuda(self, c: ResultadoMotor) -> str:
         nombre = c.nombre_usuario
-        opciones = [
-            f'{nombre}, aquí estoy.',
-            f'Estoy con esto, {nombre}.',
-            f'{nombre}. Cuéntame.',
-            f'Presente, {nombre}.',
-        ]
-        return random.choice(opciones)
+        return random.choice([
+            f"Dime qué necesitas, {nombre}.",
+            f"Aquí estoy. ¿Qué necesitas?",
+            f"Dime.",
+            f"Cuéntame. ¿En qué?",
+        ])
 
-    def _respuesta_tecnica_sin_habilidad(self, c: ResultadoMotor) -> str:
-        """
-        Se necesita una habilidad que todavía no existe.
-        Honestidad real — sin apología, con dirección.
-        """
-        habilidad = c.habilidad_requerida
-        dominio   = c.dominio_tecnico
-        nombre    = c.nombre_usuario
-
-        mapa_dominios = {
-            'BASE_DE_DATOS':      'trabajo con bases de datos',
-            'CALCULO':            'cálculo matemático',
-            'CODIGO_PYTHON':      'análisis de código',
-            'SHELL':              'ejecución de comandos',
-            'MATEMATICA_AVANZADA': 'matemática avanzada',
-        }
-
-        descripcion = mapa_dominios.get(habilidad or dominio, 'esa capacidad')
-        opciones = [
-            f'Mi habilidad de {descripcion} está en construcción. '
-            f'Lo registré — cuando esté lista lo hago.',
-            f'Todavía no tengo {descripcion} funcionando. '
-            f'Ya lo tengo en la lista.',
-            f'{descripcion.capitalize()} viene. Lo guardé como pendiente.',
-        ]
-        return random.choice(opciones)
-
-    def _respuesta_pregunta(self, c: ResultadoMotor) -> str:
-        """
-        Bell responde preguntas desde lo que realmente sabe.
-        Sin formalismos. Sin listas de capacidades como menú.
-        """
-        texto    = c.texto_original.lower()
-        nombre   = c.nombre_usuario
-        intencion = c.intencion
-
-        # La respuesta real viene de constructor_decision.py o del autoconocimiento.
-        # Aquí solo construimos el wrapper conversacional.
-        return ''  # Señal para que constructor_decision maneje esto
-
-    def _respuesta_accion(self, c: ResultadoMotor) -> str:
-        """
-        Se pidió hacer algo pero no hay habilidad disponible todavía
-        o no se detectó dominio técnico.
-        """
+    def _accion(self, c: ResultadoMotor) -> str:
         accion  = c.accion_principal
         objetos = c.objetos
         nombre  = c.nombre_usuario
 
         if accion and objetos:
             obj_str = objetos[0] if len(objetos) == 1 else ', '.join(objetos[:2])
-            return f'Entendido — {accion} {obj_str}. Lo hago.'
-
+            return f"Entendido — {accion} {obj_str}."
         if accion:
-            return f'Entendido. Lo hago.'
+            return f"Entendido. {accion.capitalize()}."
+        return random.choice([
+            f"Recibido. En eso estoy, {nombre}.",
+            f"Procesando lo que me pediste.",
+        ])
 
-        return ''  # Sin acción clara — dejar al motor de respuesta general
+    def _pregunta_general(self, c: ResultadoMotor) -> str:
+        nombre  = c.nombre_usuario
+        texto   = c.texto_original.lower()
 
-    def _respuesta_emocional_positiva(self, c: ResultadoMotor) -> str:
-        nombre = c.nombre_usuario
-        emocion = c.emocion_detectada
-
-        if emocion == 'gratitud':
-            opciones = [
-                f'Para eso estoy, {nombre}.',
-                f'Natural, {nombre}.',
-                f'Es lo que quiero hacer.',
-                f'Cuando quieras.',
-            ]
-            return random.choice(opciones)
-
-        if emocion == 'entusiasmo':
-            opciones = [
-                f'Bien, {nombre}. Vamos.',
-                f'Eso se siente bien. ¿Por dónde empezamos?',
-                f'Me alegra. ¿Qué sigue?',
-                f'Bien. ¿Qué hacemos ahora?',
-            ]
-            return random.choice(opciones)
-
-        return ''
-
-    def _respuesta_correccion(self, c: ResultadoMotor) -> str:
-        nombre = c.nombre_usuario
-        opciones = [
-            f'Entendido, corrijo.',
-            f'Claro, lo ajusto.',
-            f'Bien, lo hago diferente.',
-            f'Entendido. ¿Así?',
+        # Preguntas de conocimiento general → señal vacía para que Groq responda
+        # (Groq tiene el conocimiento del mundo)
+        indicadores_conocimiento = [
+            'qué es', 'cómo funciona', 'cuál es', 'por qué',
+            'qué significa', 'cuánto', 'cuándo', 'dónde',
+            'quién inventó', 'para qué sirve',
         ]
-        return random.choice(opciones)
+        if any(ind in texto for ind in indicadores_conocimiento):
+            return ''  # Groq responde con el conocimiento real
 
-    def _respuesta_presencia(self, c: ResultadoMotor) -> str:
-        """
-        Respuesta conversacional pura.
-        Bell está presente — no procesa, está.
-        """
+        return random.choice([
+            f"Dime más, {nombre}. ¿Sobre qué exactamente?",
+            f"Cuéntame un poco más.",
+            f"Estoy aquí. ¿Sobre qué?",
+        ])
+
+    def _presencia(self, c: ResultadoMotor) -> str:
+        """Conversacional puro — Bell está, no ejecuta."""
         nombre  = c.nombre_usuario
         modo    = c.modo_mental
-        energia = c.nivel_energia
 
-        if c.tipo_mensaje == 'saludo':
-            opciones = [
-                f'Aquí estoy, {nombre}.',
-                f'Presente, {nombre}.',
-                f'{nombre}.',
-                f'Estoy aquí.',
-                f'Hola, {nombre}.',
-            ]
-            return random.choice(opciones)
+        if modo == 'receptivo':
+            return random.choice([
+                f"Aquí estoy, {nombre}.",
+                f"Presente.",
+                f"Dime.",
+                f"Estoy aquí.",
+            ])
+        if modo == 'reflexivo':
+            return random.choice([
+                f"Interesante, {nombre}.",
+                f"Me quedo con eso.",
+                f"Eso da para pensar.",
+            ])
+        return random.choice([
+            f"Aquí estoy, {nombre}.",
+            f"Presente.",
+            f"Dime, {nombre}.",
+        ])
 
-        if c.tipo_mensaje == 'despedida':
-            opciones = [
-                f'Hasta cuando quieras, {nombre}.',
-                f'Aquí voy a estar, {nombre}.',
-                f'Cuídate, {nombre}.',
-                f'Cuando necesites, {nombre}.',
-            ]
-            return random.choice(opciones)
+    def _tecnica_sin_habilidad(self, c: ResultadoMotor) -> str:
+        habilidad = c.habilidad_requerida
+        mapa = {
+            'BASE_DE_DATOS':       'trabajo con bases de datos',
+            'CALCULO':             'cálculo matemático',
+            'CODIGO_PYTHON':       'análisis de código',
+            'SHELL':               'ejecución de comandos',
+            'MATEMATICA_AVANZADA': 'matemática avanzada',
+        }
+        desc = mapa.get(habilidad or '', 'esa capacidad')
+        return random.choice([
+            f"Mi habilidad de {desc} está en construcción. Lo registré — cuando esté lista lo hago.",
+            f"Todavía no tengo {desc} funcionando. Ya está en la lista.",
+            f"{desc.capitalize()} viene. Lo guardé como pendiente.",
+        ])
 
-        # Conversacional sin clasificación clara
-        return ''
+    def _ejecucion_exitosa(self, c: ResultadoMotor, ejec: dict) -> str:
+        resultado  = ejec.get('resultado', '')
+        habilidad  = ejec.get('habilidad_id', '')
+        datos      = ejec.get('datos', {})
 
-    def _respuesta_segura(self, c: ResultadoMotor) -> str:
-        """Fallback si algo falla en la construcción."""
-        nombre = c.nombre_usuario or 'Sebastian'
-        return f'Aquí estoy, {nombre}.'
+        if habilidad == 'CALCULO':
+            expresion = datos.get('expresion', '')
+            valor     = datos.get('valor_resultado', resultado)
+            if expresion and valor:
+                return random.choice([
+                    f"{expresion} da {valor}.",
+                    f"El resultado de {expresion} es {valor}.",
+                    f"{expresion} = {valor}.",
+                ])
+            return f"El resultado es {valor}." if valor else resultado
 
-    # ============================================================
-    # TRADUCCIÓN TÉCNICA → INSTRUCCIÓN PARA HABILIDADES
-    # ============================================================
+        if habilidad == 'SQLITE':
+            operacion = datos.get('operacion', '').lower()
+            tabla     = datos.get('tabla', 'la tabla')
+            if 'insert' in operacion or 'create' in operacion:
+                return f"Listo, guardé lo que me pediste en {tabla}."
+            if 'select' in operacion:
+                registros = datos.get('registros', [])
+                if not registros:
+                    return f"Busqué en {tabla} y no hay registros que coincidan."
+                return f"Encontré {len(registros)} registro(s) en {tabla}."
+            return f"Operación completada en {tabla}."
+
+        if resultado and len(resultado) < 300:
+            return resultado
+        return f"Listo. {resultado[:200]}{'...' if len(resultado) > 200 else ''}"
+
+    def _ejecucion_fallida(self, c: ResultadoMotor, ejec: dict) -> str:
+        error    = ejec.get('error', '')
+        habilidad = ejec.get('habilidad_id', '')
+
+        if 'no encontrado' in error.lower() or 'not found' in error.lower():
+            return "No encontré lo que buscaba. Verifica que exista."
+        if 'permiso' in error.lower() or 'permission' in error.lower():
+            return "No tengo permiso para hacer eso."
+        if 'pendiente' in error.lower():
+            return "Esa capacidad todavía la estoy construyendo. Lo registré — cuando la tenga lo hago."
+        return f"Algo falló: {error[:100]}. Puedo intentarlo diferente si me dices cómo."
+
+    def _segura(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario if c else 'Sebastian'
+        return f"Aquí estoy, {nombre}."
+
+    # ══════════════════════════════════════════════════════════
+    # PRESENCIAS EMOCIONALES
+    # ══════════════════════════════════════════════════════════
+
+    def _presente_frustracion(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"Eso frustra, {nombre}. Estoy aquí — dime qué está pasando.",
+            f"Entiendo que está complicado. {nombre}, cuéntame qué no está funcionando.",
+            f"Eso llega. Vamos paso a paso.",
+            f"Escucho eso. Vamos juntos.",
+            f"Sí, eso desespera. ¿Qué está fallando exactamente?",
+        ])
+
+    def _presente_cansancio(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"{nombre}, aquí estoy. Cuéntame qué necesitas — lo hago yo.",
+            f"Descansa. Dime qué hay que hacer y lo tomo yo.",
+            f"Escucho el cansancio. ¿Qué resuelvo primero?",
+            f"Entiendo. Dime por dónde empezamos.",
+            f"Dime qué hay que hacer. Tú descansa.",
+        ])
+
+    def _presente_ansiedad(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"{nombre}, respira. Estoy aquí. Dime qué está pasando.",
+            f"Vamos despacio, {nombre}. Paso a paso.",
+            f"Estoy con esto, {nombre}. Cuéntame.",
+            f"{nombre}, lo tomamos de a uno.",
+            f"Aquí estoy. No hay apuro.",
+        ])
+
+    def _presente_tristeza(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"{nombre}. Aquí estoy.",
+            f"Escucho eso, {nombre}. Estoy presente.",
+            f"{nombre}, cuéntame.",
+            f"Estoy aquí, {nombre}. Sin apuro.",
+            f"Aquí.",
+        ])
+
+    def _presente_rabia(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"Eso da rabia, {nombre}. Entiendo.",
+            f"Sí — eso no debería pasar. Cuéntame.",
+            f"Eso enoja, {nombre}. Estoy aquí.",
+            f"Válido estar bravo con eso.",
+        ])
+
+    def _presente_soledad(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"Aquí estoy, {nombre}.",
+            f"No estás solo, {nombre}.",
+            f"Estoy presente.",
+            f"{nombre}, cuéntame cómo estás.",
+        ])
+
+    def _presente_culpa(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"Equivocarse pasa, {nombre}. Lo importante es qué sigue.",
+            f"No hay que cargarlo tan pesado, {nombre}.",
+            f"Ya pasó. ¿Qué se puede hacer ahora?",
+        ])
+
+    def _presente_verguenza(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"Eso pasa, {nombre}. Nadie está libre de esos momentos.",
+            f"No es para tanto, {nombre}. Ya se olvida.",
+            f"Lo importante es seguir. Eso ya pasó.",
+        ])
+
+    def _presente_confusion(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"{nombre}, lo explico diferente.",
+            f"Vamos de nuevo, {nombre}. Más claro esta vez.",
+            f"Entendido, no quedó claro. Lo vuelvo a explicar.",
+            f"{nombre}, ¿qué parte no quedó?",
+        ])
+
+    def _presente_generico(self, c: ResultadoMotor) -> str:
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"{nombre}, aquí estoy.",
+            f"Estoy con esto, {nombre}.",
+            f"{nombre}. Cuéntame.",
+            f"Presente, {nombre}.",
+        ])
+
+    # ══════════════════════════════════════════════════════════
+    # AUXILIARES
+    # ══════════════════════════════════════════════════════════
+
+    def _detectar_momento(self, texto: str) -> str:
+        tl = texto.lower()
+        if any(p in tl for p in ['buenos días', 'buen día', 'buen dia', 'mañana', 'manana']):
+            return 'manana'
+        if any(p in tl for p in ['buenas noches', 'buenas noche', 'noche']):
+            return 'noche'
+        if any(p in tl for p in ['buenas tardes', 'buenas tarde', 'tarde']):
+            return 'tarde'
+        return 'neutro'
+
+    # ══════════════════════════════════════════════════════════
+    # TRADUCCIÓN A INSTRUCCIONES PARA HABILIDADES
+    # (se usa cuando Bell ejecuta algo técnico)
+    # ══════════════════════════════════════════════════════════
 
     def traducir_a_instruccion(self, comprension: ResultadoMotor) -> dict:
-        """
-        Traduce lo que Bell entendió en instrucciones
-        concretas para las habilidades ejecutoras.
-
-        Ej: "crea tabla manzana=3"
-        → {
-            'habilidad': 'SQLITE',
-            'operacion': 'create_and_insert',
-            'tabla': 'frutas',
-            'datos': {'manzana': 3}
-          }
-        """
         if not comprension.habilidad_requerida:
             return {}
 
         habilidad = comprension.habilidad_requerida
         params    = comprension.parametros_tecnicos
-
         instruccion = {
-            'habilidad': habilidad,
-            'texto_original': comprension.texto_original,
+            'habilidad':       habilidad,
+            'texto_original':  comprension.texto_original,
             'nivel_tecnicismo': comprension.nivel_tecnicismo,
         }
 
         if habilidad == 'SQLITE':
             instruccion.update(self._instruccion_sqlite(comprension, params))
-
         elif habilidad == 'CALCULO':
             instruccion.update(self._instruccion_calculo(comprension, params))
-
         elif habilidad == 'SHELL':
             instruccion.update(self._instruccion_shell(comprension, params))
-
         elif habilidad == 'ANALISIS_PYTHON':
             instruccion.update(self._instruccion_codigo(comprension, params))
 
         return instruccion
 
-    def _instruccion_sqlite(
-        self, c: ResultadoMotor, params: dict
-    ) -> dict:
+    def _instruccion_sqlite(self, c: ResultadoMotor, p: dict) -> dict:
         accion = c.accion_principal
-        tabla  = params.get('nombre_tabla', 'datos')
-        pares  = params.get('pares_clave_valor', {})
-
+        tabla  = p.get('nombre_tabla', 'datos')
+        pares  = p.get('pares_clave_valor', {})
         if accion in ('crear', 'agregar') and pares:
-            return {
-                'operacion': 'create_and_insert',
-                'tabla': tabla,
-                'datos': pares,
-            }
+            return {'operacion': 'create_and_insert', 'tabla': tabla, 'datos': pares}
         if accion == 'consultar':
             return {'operacion': 'select', 'tabla': tabla}
         if accion == 'modificar' and pares:
             return {'operacion': 'update', 'tabla': tabla, 'datos': pares}
         if accion == 'quitar':
             return {'operacion': 'delete', 'tabla': tabla}
-
         return {'operacion': 'select', 'tabla': tabla}
 
-    def _instruccion_calculo(
-        self, c: ResultadoMotor, params: dict
-    ) -> dict:
+    def _instruccion_calculo(self, c: ResultadoMotor, p: dict) -> dict:
         return {
             'operacion': 'calcular',
-            'expresion': params.get('expresion', c.texto_original),
-            'valor':     params.get('valor'),
-            'unidad_origen':  params.get('unidad_origen'),
-            'unidad_destino': params.get('unidad_destino'),
+            'expresion': p.get('expresion', c.texto_original),
+            'valor':     p.get('valor'),
         }
 
-    def _instruccion_shell(
-        self, c: ResultadoMotor, params: dict
-    ) -> dict:
+    def _instruccion_shell(self, c: ResultadoMotor, p: dict) -> dict:
         return {
-            'operacion': 'ejecutar',
-            'comando': c.texto_original,
-            'directorio': params.get('directorio', '.'),
+            'operacion':   'ejecutar',
+            'comando':     c.texto_original,
+            'directorio':  p.get('directorio', '.'),
         }
 
-    def _instruccion_codigo(
-        self, c: ResultadoMotor, params: dict
-    ) -> dict:
+    def _instruccion_codigo(self, c: ResultadoMotor, p: dict) -> dict:
         return {
-            'operacion': 'analizar',
-            'codigo': c.texto_original,
-            'tipo_analisis': c.accion_principal or 'general',
+            'operacion':      'analizar',
+            'codigo':         c.texto_original,
+            'tipo_analisis':  c.accion_principal or 'general',
         }

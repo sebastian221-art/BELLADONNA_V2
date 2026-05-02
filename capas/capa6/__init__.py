@@ -111,7 +111,8 @@ def _procesar_interno(paquete_capa5: dict) -> dict:
 
     # ── 4. GUARDAR EN BUFFER ────────────────────────────────
     if texto_original and respuesta_final:
-        BufferSesion.obtener().agregar_turno(texto_original, respuesta_final)
+        comprension_actual = paquete_c3.get('comprension', {})
+        BufferSesion.obtener().agregar_turno(texto_original, respuesta_final, comprension_actual)
 
     return PaqueteCapa6(
         decision         = decision,
