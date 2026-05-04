@@ -2,19 +2,15 @@
 # ================================================
 # CONSTRUCTOR DE COMPRENSIÓN — con motor de lenguaje
 #
-# FIX: ya no llama a GestorVocabulario de nuevo.
-# Usa los vocab_match que Capa 1 ya procesó.
-# Filtra IDs que siempre están activos en la red
-# y que no representan el mensaje actual.
-#
-# Si el motor falla → fallback a lógica original.
-# El contrato de salida nunca cambia.
+# FIX v3.1:
+# — Detección de NEURONA_SEBASTIAN antes del bloque
+#   genérico para que preguntas sobre Sebastian
+#   vayan a 'pregunta' y no a 'pregunta_identidad_otro'
+# — IDs siempre activos filtrados correctamente
 # ================================================
 
 from typing import Dict, Any
 
-# IDs que la red siempre tiene activos y contaminan
-# la clasificación si no se filtran
 _IDS_SIEMPRE_ACTIVOS = {
     'BELL_NOMBRE_BELL', 'BELL_NOMBRE_BELLADONNA',
     'BELL_NOMBRE_COMPLETO', 'BELL_NOMBRE_CORTO',
@@ -24,14 +20,7 @@ _IDS_SIEMPRE_ACTIVOS = {
 
 class ConstructorComprension:
 
-    def construir(
-        self,
-        red_activa:     dict,
-        texto_original: str,
-        contexto:       dict,
-        tono:           str
-    ) -> dict:
-
+    def construir(self, red_activa, texto_original, contexto, tono):
         primarios   = red_activa.get('nodos_primarios',   [])
         secundarios = red_activa.get('nodos_secundarios', [])
         terciarios  = red_activa.get('nodos_terciarios',  [])
@@ -40,7 +29,6 @@ class ConstructorComprension:
         ids_activos   = {n.get('nodo_id', '') for n in todos}
         ids_primarios = {n.get('nodo_id', '') for n in primarios}
 
-        # Intentar motor de lenguaje
         resultado_motor = self._usar_motor_lenguaje(
             texto_original, ids_activos, ids_primarios, contexto
         )
@@ -50,7 +38,6 @@ class ConstructorComprension:
                 resultado_motor, primarios, texto_original
             )
 
-        # Fallback — lógica original con IDs
         return {
             'literal':    self._comprension_literal(primarios, texto_original),
             'contextual': self._comprension_contextual(
@@ -61,44 +48,19 @@ class ConstructorComprension:
             ),
         }
 
-    # ════════════════════════════════════════════════
-    # MOTOR DE LENGUAJE
-    # ════════════════════════════════════════════════
-
-    def _usar_motor_lenguaje(
-        self,
-        texto:         str,
-        ids_activos:   set,
-        ids_primarios: set,
-        contexto:      dict,
-    ) -> object:
-        """
-        Llama al motor de comprensión.
-        Retorna ResultadoMotor o None si falla.
-
-        FIX: ya no llama a GestorVocabulario de nuevo.
-        Usa los vocab_match del contexto que Capa 1 ya construyó.
-        Filtra IDs siempre activos que no son del mensaje actual.
-        """
+    def _usar_motor_lenguaje(self, texto, ids_activos, ids_primarios, contexto):
         try:
             from biblioteca.habilidades.lenguaje.motor import MotorComprension
             from capas.capa6.buffer_sesion import BufferSesion
 
-            # FIX: usar vocab_match del contexto si existe
-            # El contexto viene de Capa 1 que ya llamó a GestorVocabulario
-            # No llamamos al gestor de nuevo — evita duplicación y contaminación
             vocab_context = contexto.get('vocab_match', [])
-
-            # Si Capa 1 no pasó vocab_match, llamar al gestor como fallback
             if not vocab_context:
                 try:
                     from biblioteca.vocabulario.gestor_vocabulario import GestorVocabulario
-                    vocab = GestorVocabulario.obtener()
-                    vocab_context = vocab.buscar_frase(texto)
+                    vocab_context = GestorVocabulario.obtener().buscar_frase(texto)
                 except Exception:
                     vocab_context = []
 
-            # IDs del vocabulario del mensaje actual
             ids_vocab = [
                 m['concepto'].get('id', '')
                 for m in vocab_context
@@ -112,16 +74,16 @@ class ConstructorComprension:
                 if m.get('concepto', {}).get('id')
             }
 
-            # Combinar IDs de la red + vocabulario, filtrando los siempre activos
             ids_activos_limpios = ids_activos - _IDS_SIEMPRE_ACTIVOS
             todos_ids = list(ids_activos_limpios | set(ids_vocab))
 
-            # Historial del buffer
             historial = []
             try:
                 buffer = BufferSesion.obtener()
-                turnos = buffer.obtener_ultimas_respuestas_bell(4)
-                historial = [{'respuesta_bell': r} for r in turnos]
+                historial = [
+                    {'respuesta_bell': r}
+                    for r in buffer.obtener_ultimas_respuestas_bell(4)
+                ]
             except Exception:
                 pass
 
@@ -137,20 +99,11 @@ class ConstructorComprension:
                 'conceptos_red':  [],
             }
 
-            motor    = MotorComprension.obtener()
-            resultado = motor.comprender(texto, ctx_motor)
-            return resultado
-
+            return MotorComprension.obtener().comprender(texto, ctx_motor)
         except Exception:
             return None
 
-    def _comprension_desde_motor(
-        self,
-        motor:          object,
-        primarios:      list,
-        texto_original: str,
-    ) -> dict:
-        """Convierte ResultadoMotor al formato que espera Capa 4."""
+    def _comprension_desde_motor(self, motor, primarios, texto_original):
         certeza_lit = motor.confianza_global if motor.confianza_global > 0 else 0.7
         certeza_ctx = min(0.95, certeza_lit + 0.05)
         certeza_pro = min(0.95, certeza_lit + 0.03)
@@ -196,9 +149,7 @@ class ConstructorComprension:
 
         return {'literal': literal, 'contextual': contextual, 'profunda': profunda}
 
-    # ════════════════════════════════════════════════
-    # FALLBACK — lógica original intacta
-    # ════════════════════════════════════════════════
+    # ── Fallback ──────────────────────────────────────────
 
     def _comprension_literal(self, primarios, texto):
         if not primarios:
@@ -274,18 +225,36 @@ class ConstructorComprension:
 
         if 'PREG_QUIEN' in ids_primarios and 'VERBO_SER_TU' in ids_primarios:
             return 'pregunta_identidad_bell'
+
+        # FIX v3.1: preguntas sobre Sebastian van a 'pregunta'
+        # para que Capa 6 las maneje con _PATRONES_SEBASTIAN
+        if ('PREG_QUIEN' in ids_primarios and
+                'VERBO_SER_EL' in ids_primarios and
+                'NEURONA_SEBASTIAN' in ids_primarios):
+            return 'pregunta'
+
         if 'PREG_QUIEN' in ids_primarios and 'VERBO_SER_EL' in ids_primarios:
             return 'pregunta_identidad_otro'
+
         if 'PREG_COMO' in ids_primarios and 'VERBO_ESTAR_TU' in ids_primarios:
             return 'pregunta_estado_bell'
         if 'PREG_COMO' in ids_primarios and 'REF_TE' in ids_primarios:
             return 'pregunta_nombre_bell'
 
         capacidad = {'VERBO_HACER_TU', 'VERBO_PODER_TU', 'VERBO_PODER_EL', 'VERBO_HACER'}
-        if ids_primarios & capacidad and ('PREG_QUE' in ids_primarios or 'PREG_CUAL' in ids_primarios):
+        if ids_primarios & capacidad and (
+            'PREG_QUE' in ids_primarios or 'PREG_CUAL' in ids_primarios
+        ):
             return 'pregunta_capacidad_bell'
+
         if 'PREG_QUE' in ids_primarios and 'VERBO_SER_TU' in ids_primarios:
             return 'pregunta_identidad_bell'
+
+        # FIX v3.1: preguntas con VERBO_CREAR + NEURONA_SEBASTIAN → 'pregunta'
+        if 'VERBO_CREAR_YO' in ids_primarios and 'NEURONA_SEBASTIAN' in ids:
+            return 'pregunta'
+        if 'VERBO_CREAR_YO' in ids_primarios and 'REF_TE' in ids_primarios:
+            return 'pregunta'
 
         ayuda = {'VERBO_AYUDAR_ME', 'VERBO_AYUDA', 'VERBO_AYUDAR'}
         if ids_primarios & ayuda:

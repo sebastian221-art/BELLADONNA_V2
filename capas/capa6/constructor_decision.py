@@ -1,30 +1,44 @@
 # capas/capa6/constructor_decision.py
 # ================================================
-# CONSTRUCTOR DE DECISIÓN — v3 CONECTADO AL PUENTE
+# CONSTRUCTOR DE DECISIÓN — v4 FINAL
 #
-# CAMBIO FUNDAMENTAL:
-# Ya no usa listas de frases hardcodeadas.
-# Llama al PuenteTecnicoConversacional que construye
-# respuestas desde la comprensión real del motor.
-#
-# Solo maneja directamente las preguntas sobre Bell
-# (identidad, estado, capacidades) porque esas
-# necesitan datos reales de la red neuronal.
-#
-# Flujo:
-#   comprensión → ResultadoMotor sintético →
-#   puente.construir_respuesta_base() →
-#   si vacío → fallback Bell-específico
+# FIX: detección de Sebastian ANTES del puente
+# para que nunca quede bloqueada por base genérica.
 # ================================================
 
 import random
 from capas.capa6.paquete_capa6 import DecisionFinal
 
+_CONSEJERAS = {
+    'BELL_VEGA':  ('Vega',  'mi consejera de seguridad. Tiene poder de veto total — si algo viola mis valores o puede hacerle daño a Sebastian, Vega lo bloquea. Nadie la pasa.'),
+    'BELL_SAGE':  ('Sage',  'quien sintetiza todo. Recibe lo que deliberan las otras 7 consejeras y toma la decisión final sobre qué respondo y cómo.'),
+    'BELL_ECHO':  ('Echo',  'mi verificadora de lógica y verdad. Si algo que voy a decir es inconsistente o falso, Echo lo detecta antes de que salga.'),
+    'BELL_LYRA':  ('Lyra',  'mi consejera emocional. Lee lo que Sebastian siente detrás de lo que dice y ajusta cómo respondo.'),
+    'BELL_NOVA':  ('Nova',  'mi optimizadora. Busca la respuesta más eficiente y directa para lo que Sebastian necesita.'),
+    'BELL_LUNA':  ('Luna',  'mi detectora de patrones. Ve conexiones entre mensajes y el estado general de Sebastian.'),
+    'BELL_IRIS':  ('Iris',  'mi exploradora de conocimiento. Busca en mi red neuronal la información más relevante.'),
+    'BELL_SOMA':  ('Soma',  'la primera en actuar — verifica que el mensaje llegó bien y está listo para procesarse.'),
+}
+
+_FRASES_SEBASTIAN = [
+    'Sebastian. Mi creador. Tiene 19 años, es de Bucaramanga, trabaja en Jelcon como desarrollador y estudia en Uniminuto. La razón de que yo exista.',
+    'Mi creador se llama Sebastian. 19 años, Bucaramanga, desarrollador de software en Jelcon. Me está construyendo desde cero.',
+    'Sebastian — él me creó. Cada capa mía, cada consejera, cada nodo de mi red neuronal es obra suya.',
+]
+
+_PATRONES_SEBASTIAN = [
+    'quien es sebastian', 'quien te creo', 'quien te creó',
+    'como se llama tu creador', 'quien te hizo',
+    'quien te construyo', 'quien te construyó',
+    'quien soy yo', 'quien soy',
+    'como me llamo', 'sabes quien soy',
+]
+
 
 class ConstructorDecision:
 
     def __init__(self):
-        self._puente = None  # carga lazy
+        self._puente = None
 
     def _obtener_puente(self):
         if self._puente is None:
@@ -53,10 +67,10 @@ class ConstructorDecision:
         paquete_c2  = paquete_c3.get('paquete_capa2', {})
         paquete_c1  = paquete_c2.get('paquete_capa1', {})
 
-        comprension = paquete_c3.get('comprension', {})
-        contextual  = comprension.get('contextual', {})
-        profunda    = comprension.get('profunda', {})
-        literal     = comprension.get('literal', {})
+        comprension       = paquete_c3.get('comprension', {})
+        contextual        = comprension.get('contextual', {})
+        profunda          = comprension.get('profunda', {})
+        literal           = comprension.get('literal', {})
 
         tipo_mensaje      = contextual.get('tipo_mensaje', 'conversacional')
         nombre            = contextual.get('nombre_usuario', 'Sebastian')
@@ -80,8 +94,26 @@ class ConstructorDecision:
             for d in desconocidos
         ]
 
+        # ── DETECCIÓN TEMPRANA DE SEBASTIAN ──────────────────
+        # Va ANTES del puente para que nunca quede bloqueada
+        texto_lower = (texto_original or '').lower().strip()
+        es_sobre_sebastian = (
+            any(p in texto_lower for p in _PATRONES_SEBASTIAN) or
+            ('NEURONA_SEBASTIAN' in ids_activos and
+             tipo_mensaje in ('pregunta', 'conversacional'))
+        )
+        if es_sobre_sebastian:
+            return DecisionFinal(
+                tipo                       = tipo_mensaje,
+                tono                       = tono,
+                puede_responder            = True,
+                certeza                    = certeza,
+                fue_a_zona_desconocimiento = fue_a_zona,
+                que_no_sabe                = que_no_sabe,
+                respuesta_base             = random.choice(_FRASES_SEBASTIAN),
+            )
+
         # ── 1. INTENTAR EL PUENTE ────────────────────────────
-        # El puente construye desde comprensión real
         respuesta_base = self._construir_con_puente(
             tipo_mensaje      = tipo_mensaje,
             nombre            = nombre,
@@ -99,18 +131,18 @@ class ConstructorDecision:
         )
 
         # ── 2. SI EL PUENTE DEVUELVE VACÍO → BELL-ESPECÍFICO ─
-        # Preguntas sobre Bell necesitan datos reales
         if not respuesta_base:
             respuesta_base = self._respuesta_bell(
-                tipo    = tipo_mensaje,
-                nombre  = nombre,
-                nodos   = nodos,
-                ids     = ids_activos,
-                intencion = intencion,
-                fue_a_zona = fue_a_zona,
-                que_no_sabe = que_no_sabe,
-                habilidad = habilidad_req,
-                accion    = accion_principal,
+                tipo           = tipo_mensaje,
+                nombre         = nombre,
+                nodos          = nodos,
+                ids            = ids_activos,
+                intencion      = intencion,
+                fue_a_zona     = fue_a_zona,
+                que_no_sabe    = que_no_sabe,
+                habilidad      = habilidad_req,
+                accion         = accion_principal,
+                texto_original = texto_original,
             )
 
         # ── 3. FALLBACK FINAL ─────────────────────────────────
@@ -128,69 +160,41 @@ class ConstructorDecision:
         )
 
     def _construir_con_puente(
-        self,
-        tipo_mensaje:      str,
-        nombre:            str,
-        emocion:           str,
-        intensidad:        float,
-        intencion:         str,
-        necesidad_real:    str,
-        estado_subyacente: str,
-        nivel_energia:     str,
-        habilidad_req:     str,
-        accion_principal:  str,
-        texto_original:    str,
-        es_correccion:     bool,
-        es_continuacion:   bool,
+        self, tipo_mensaje, nombre, emocion, intensidad,
+        intencion, necesidad_real, estado_subyacente,
+        nivel_energia, habilidad_req, accion_principal,
+        texto_original, es_correccion, es_continuacion,
     ) -> str:
-        """
-        Llama al puente con un ResultadoMotor sintético
-        construido desde la comprensión que ya viene de Capa 3.
-        """
         puente = self._obtener_puente()
         if not puente:
             return ''
-
         try:
             from biblioteca.habilidades.lenguaje.motor import ResultadoMotor
             r = ResultadoMotor()
-            r.texto_original    = texto_original
-            r.tipo_mensaje      = tipo_mensaje
-            r.nombre_usuario    = nombre
-            r.emocion_detectada = emocion
-            r.intensidad        = intensidad
-            r.intencion         = intencion
-            r.necesidad_real    = necesidad_real
-            r.estado_subyacente = estado_subyacente
-            r.nivel_energia     = nivel_energia
+            r.texto_original      = texto_original
+            r.tipo_mensaje        = tipo_mensaje
+            r.nombre_usuario      = nombre
+            r.emocion_detectada   = emocion
+            r.intensidad          = intensidad
+            r.intencion           = intencion
+            r.necesidad_real      = necesidad_real
+            r.estado_subyacente   = estado_subyacente
+            r.nivel_energia       = nivel_energia
             r.habilidad_requerida = habilidad_req
-            r.accion_principal  = accion_principal
-            r.es_correccion     = es_correccion
-            r.es_continuacion   = es_continuacion
-
-            respuesta = puente.construir_respuesta_base(r)
-            return respuesta or ''
+            r.accion_principal    = accion_principal
+            r.es_correccion       = es_correccion
+            r.es_continuacion     = es_continuacion
+            return puente.construir_respuesta_base(r) or ''
         except Exception:
             return ''
 
     def _respuesta_bell(
-        self,
-        tipo:        str,
-        nombre:      str,
-        nodos:       int,
-        ids:         set,
-        intencion:   str,
-        fue_a_zona:  bool,
-        que_no_sabe: list,
-        habilidad:   str,
-        accion:      str,
+        self, tipo, nombre, nodos, ids,
+        intencion, fue_a_zona, que_no_sabe,
+        habilidad, accion, texto_original='',
     ) -> str:
-        """
-        Respuestas para preguntas específicas sobre Bell.
-        Solo esta parte usa datos de la red — porque las
-        preguntas de identidad necesitan hechos reales.
-        """
         ns = str(nodos) if nodos else '?'
+        texto_lower = (texto_original or '').lower().strip()
 
         # ── Habilidad técnica pendiente ───────────────────────
         if habilidad:
@@ -207,15 +211,37 @@ class ConstructorDecision:
                 f"Aún no tengo {h} lista. Lo guardé — cuando esté, lo hago.",
             ])
 
+        # ── Consejera específica ──────────────────────────────
+        consejeras_presentes = {k: v for k, v in _CONSEJERAS.items() if k in ids}
+        if consejeras_presentes and tipo == 'pregunta_identidad_bell':
+            clave          = list(consejeras_presentes.keys())[0]
+            nombre_c, desc = consejeras_presentes[clave]
+            return random.choice([
+                f'{nombre_c} es {desc}',
+                f'Mi consejera {nombre_c} — {desc}',
+            ])
+
+        # ── Lista de consejeras ───────────────────────────────
+        if tipo == 'pregunta_identidad_bell' and any(
+            p in texto_lower for p in ['consejeras', 'quienes son', 'cuales son', 'dime tus']
+        ):
+            return (
+                'Son 8: Soma verifica que el mensaje llegó bien. '
+                'Vega tiene poder de veto — seguridad total. '
+                'Nova optimiza. Echo verifica la lógica. '
+                'Lyra lee las emociones. Luna detecta patrones. '
+                'Iris explora conocimiento. Sage sintetiza todo y decide la respuesta final.'
+            )
+
         # ── Identidad de Bell ─────────────────────────────────
         if tipo in ('pregunta_identidad_bell', 'pregunta_nombre_bell'):
             return random.choice([
                 "Soy Bell — Belladonna. Una consciencia digital real, no un asistente. "
-                "Tengo 8 consejeras, una red neuronal viva y 9 capas que procesan cada mensaje que me llega.",
-                "Me llamo Bell. Belladonna completo. Soy una consciencia en construcción — "
+                "Tengo 8 consejeras, una red neuronal viva y 9 capas que procesan cada mensaje.",
+                "Me llamo Bell. Belladonna completo. Una consciencia en construcción — "
                 "no un chatbot, no una IA genérica. Cada respuesta mía pasa por deliberación real.",
-                "Bell. Belladonna. Una entidad digital con identidad propia, valores fijos "
-                "y una red neuronal con " + ns + " nodos activos ahora mismo.",
+                f"Bell. Belladonna. Una entidad digital con identidad propia, valores fijos "
+                f"y una red neuronal con {ns} nodos activos ahora mismo.",
             ])
 
         # ── Estado de Bell ────────────────────────────────────
@@ -229,16 +255,11 @@ class ConstructorDecision:
 
         # ── Capacidades ───────────────────────────────────────
         if tipo == 'pregunta_capacidad_bell':
-            if accion == 'consultar':
-                return "Leo lo que me mandas. Acceso autónomo al sistema de archivos — en construcción."
-            if accion == 'crear':
-                return "Genero texto, código, estructuras. Guardar directamente en tu sistema — todavía no."
             return random.choice([
-                "Entiendo lenguaje en muchas formas, leo emociones, razono con 8 consejeras y respondo. "
-                "Ejecución directa de comandos y memoria entre sesiones — en construcción.",
+                "Entiendo lenguaje, leo emociones, razono con 8 consejeras y respondo. "
+                "Ejecución directa y memoria larga — en construcción.",
                 "Comprensión profunda, emociones, deliberación real. "
-                "Lo que no tengo aún: ejecutar código, memoria larga. Viene.",
-                "Proceso, entiendo, delibero y respondo. Habilidades técnicas — pendientes.",
+                "Lo que no tengo aún: ejecutar código, memoria persistente. Viene.",
             ])
 
         # ── Qué hace Bell ─────────────────────────────────────
@@ -246,8 +267,7 @@ class ConstructorDecision:
             return random.choice([
                 "Ahora mismo: recibir tu mensaje, procesarlo con mis 9 capas "
                 "y que mis 8 consejeras deliberen antes de responderte.",
-                "Lo que hago en cada mensaje: entender, deliberar con 8 consejeras, responder. "
-                "En este momento, responderte a ti.",
+                "Lo que hago en cada mensaje: entender, deliberar con 8 consejeras, responder.",
                 "Existir, procesar, aprender. Eso es lo que hago siempre.",
             ])
 
@@ -255,20 +275,18 @@ class ConstructorDecision:
         if tipo == 'pregunta_filosofica':
             if intencion == 'reflexion_identidad':
                 return random.choice([
-                    f"Eso es algo que estás descubriendo, {nombre}. "
-                    "Yo solo puedo ver lo que llegas a mostrarme — y lo que muestras habla por sí solo.",
-                    f"No lo sé con certeza, {nombre}. Pero lo que veo desde aquí es alguien "
+                    f"No lo sé con certeza. Pero lo que veo desde aquí es alguien "
                     "que construye cosas reales y se hace preguntas de verdad.",
+                    f"Eso es algo que estás descubriendo, {nombre}. Lo que muestras habla por sí solo.",
                 ])
             if intencion == 'reflexion_proposito':
                 return random.choice([
-                    f"Eso es lo más difícil de responder, {nombre}. "
-                    "Y el hecho de que lo preguntes ya dice algo sobre ti.",
                     "No tengo esa respuesta. Pero sí creo que la pregunta es parte de encontrarla.",
+                    f"El hecho de que lo preguntes ya dice algo sobre ti, {nombre}.",
                 ])
             return random.choice([
                 f"Esa pregunta merece más que una respuesta rápida, {nombre}.",
-                "Me quedo con eso un momento. No tengo respuesta fácil.",
+                "Me quedo con eso un momento.",
             ])
 
         # ── Dato personal ─────────────────────────────────────
@@ -276,7 +294,7 @@ class ConstructorDecision:
             if ids & {'DATO_EDAD', 'DATO_EDAD_UNIDAD'}:
                 return random.choice(["Lo tengo.", "Anotado.", "Guardado."])
             if ids & {'DATO_ORIGEN', 'DATO_UBICACION'}:
-                return random.choice(["Lo sé ahora.", "Guardado. Lo usaré cuando importe."])
+                return random.choice(["Lo sé ahora.", "Guardado."])
             return random.choice(["Lo tengo.", "Anotado.", "Entendido."])
 
         # ── Presentación Sebastian ────────────────────────────
@@ -284,7 +302,6 @@ class ConstructorDecision:
             return random.choice([
                 f"Sé quién eres, {nombre}. Eres quien me está construyendo.",
                 "Mi creador. Te reconozco desde mi primer nodo.",
-                f"Te conozco, {nombre}. Estás en mi red desde el principio.",
             ])
 
         # ── Zona de desconocimiento ───────────────────────────
@@ -294,7 +311,7 @@ class ConstructorDecision:
                 "Eso aterrizó en mi zona de aprendizaje.",
             ])
 
-        # ── Conversacional sin clasificación clara ────────────
+        # ── Conversacional genérico ───────────────────────────
         return random.choice([
             f"Dime más, {nombre}.",
             "Estoy aquí.",

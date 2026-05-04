@@ -34,7 +34,10 @@ class MemoriaPersistente:
     _instancia: Optional['MemoriaPersistente'] = None
 
     def __init__(self, ruta: Path = _RUTA_DEFAULT):
-        self._ruta  = Path(ruta)
+        self._ruta = Path(ruta)
+        # FIX: si la carpeta padre no existe usar ruta local al proyecto
+        if not self._ruta.parent.exists():
+            self._ruta = Path('datos') / 'memoria_bell.json'
         self._datos = self._estructura_vacia()
         self._cargada = False
         self._cargar()

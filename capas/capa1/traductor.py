@@ -8,9 +8,10 @@
 # como encontradas — así no se reprocesean como tokens
 # individuales y no van a desconocidos.
 #
-# Para tokens individuales no encontrados en la frase,
-# ahora usa _gestor.buscar() directamente antes de
-# intentar la inferencia poco confiable.
+# FIX v3.1:
+# Palabras vacías expandidas — artículos, pronombres,
+# conectores y auxiliares comunes ya no van a la
+# zona de desconocimiento.
 # ================================================
 
 from capas.capa1.paquete_capa1 import ConceptoTraducido, Desconocido
@@ -18,10 +19,6 @@ from typing import List, Tuple, Optional
 
 
 class Traductor:
-    """
-    Traduce contenido a conceptos con grounding.
-    Usa el vocabulario completo de Bell.
-    """
 
     def __init__(self):
         self._gestor = None
@@ -29,21 +26,13 @@ class Traductor:
 
     def _inicializar_gestor(self):
         try:
-            from biblioteca.vocabulario.gestor_vocabulario import (
-                GestorVocabulario
-            )
+            from biblioteca.vocabulario.gestor_vocabulario import GestorVocabulario
             self._gestor = GestorVocabulario.obtener()
         except Exception as e:
             print(f'Traductor: vocabulario no disponible — {e}')
             self._gestor = None
 
-    def traducir(
-        self,
-        contenido_normalizado: dict
-    ) -> Tuple[List[ConceptoTraducido], List[Desconocido], float]:
-        """
-        Traduce el contenido a conceptos con grounding.
-        """
+    def traducir(self, contenido_normalizado: dict) -> Tuple[List[ConceptoTraducido], List[Desconocido], float]:
         texto = contenido_normalizado.get('contenido_limpio', '')
         if not texto:
             return [], [], 0.0
@@ -59,9 +48,6 @@ class Traductor:
                 palabra  = resultado['palabra']
                 concepto = resultado['concepto']
 
-                # FIX CRÍTICO: marcar también las palabras componentes
-                # "quien eres" → marca {"quien eres", "quien", "eres"}
-                # así ninguna se reprocesa individualmente
                 palabras_encontradas.add(palabra)
                 if ' ' in palabra:
                     for componente in palabra.split():
@@ -75,13 +61,11 @@ class Traductor:
                     tipo=concepto.get('tipo', 'concepto')
                 ))
 
-            # Procesar tokens individuales no encontrados en frases
             tokens = self._tokenizar(texto)
             for token in tokens:
                 if token in palabras_encontradas:
                     continue
 
-                # FIX: usar el gestor directamente antes de fallbacks
                 concepto_gestor = self._gestor.buscar(token)
                 if concepto_gestor:
                     conceptos.append(ConceptoTraducido(
@@ -94,7 +78,6 @@ class Traductor:
                     palabras_encontradas.add(token)
                     continue
 
-                # Segundo fallback: vocabulario base hardcodeado
                 concepto_base = self._buscar_vocabulario_base(token)
                 if concepto_base:
                     conceptos.append(ConceptoTraducido(
@@ -106,14 +89,12 @@ class Traductor:
                     ))
                     palabras_encontradas.add(token)
                 else:
-                    # Token realmente desconocido — a zona
                     desconocidos.append(Desconocido(
                         fragmento=token,
                         tipo='concepto',
                         inferencia=None
                     ))
         else:
-            # Fallback sin gestor — vocabulario base
             tokens = self._tokenizar(texto)
             for token in tokens:
                 concepto = self._buscar_vocabulario_base(token)
@@ -132,7 +113,6 @@ class Traductor:
                         inferencia=None
                     ))
 
-        # Certeza global
         certeza = (
             sum(c.grounding for c in conceptos) / len(conceptos)
             if conceptos else 0.0
@@ -141,9 +121,28 @@ class Traductor:
         return conceptos, desconocidos, certeza
 
     def _tokenizar(self, texto: str) -> List[str]:
+        # FIX v3.1: palabras vacías expandidas
+        # Artículos, pronombres, conectores y auxiliares
+        # no tienen valor semántico para Bell
         palabras_vacias = {
+            # Artículos
             'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas',
-            'de', 'del', 'en', 'a', 'al'
+            # Preposiciones comunes
+            'de', 'del', 'en', 'a', 'al', 'con', 'por', 'para',
+            'sin', 'sobre', 'bajo', 'ante', 'tras', 'hasta', 'desde',
+            'entre', 'hacia', 'durante',
+            # Pronombres personales y posesivos
+            'se', 'me', 'te', 'le', 'nos', 'les', 'lo', 'vos',
+            'mi', 'tu', 'su', 'mis', 'tus', 'sus',
+            # Conjunciones
+            'y', 'o', 'u', 'e', 'ni', 'pero', 'sino', 'aunque',
+            'porque', 'que', 'si',
+            # Auxiliares y cópulas comunes
+            'es', 'son', 'ha', 'han', 'hay', 'era', 'eran',
+            'fue', 'fueron', 'ser', 'estar',
+            # Otros
+            'no', 'más', 'mas', 'ya', 'aún', 'aun', 'también',
+            'tambien', 'solo', 'sólo',
         }
         tokens = texto.lower().split()
         return [
@@ -155,7 +154,6 @@ class Traductor:
         ]
 
     def _buscar_vocabulario_base(self, token: str) -> Optional[dict]:
-        """Vocabulario base hardcodeado como último fallback."""
         base = {
             'bell':       {'id': 'BELL_NOMBRE_BELL',      'grounding': 1.0, 'tipo': 'identidad'},
             'belladonna': {'id': 'BELL_NOMBRE_BELLADONNA', 'grounding': 1.0, 'tipo': 'identidad'},

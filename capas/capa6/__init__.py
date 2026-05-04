@@ -2,12 +2,12 @@
 # ================================================
 # CAPA 6 — DECISIÓN Y EXPRESIÓN
 #
-# La comprensión ya viene enriquecida de Capa 3
-# (con el motor de lenguaje si está disponible).
-#
 # Bell construye respuesta_base en Python puro.
 # Groq pule el lenguaje — no inventa ni decide.
-# Si Groq produce algo robótico → base gana.
+#
+# FIX: _es_mejor_que_base rechaza respuestas Groq
+# que son más cortas que la base (no aportaron).
+# FIX: log de groq_raw en modo debug.
 # ================================================
 
 from capas.capa6.paquete_capa6        import PaqueteCapa6, DecisionFinal
@@ -16,6 +16,9 @@ from capas.capa6.constructor_prompt    import ConstructorPrompt
 from capas.capa6.generador_groq        import GeneradorGroq
 from capas.capa6.verificador_respuesta import VerificadorRespuesta
 from capas.capa6.buffer_sesion         import BufferSesion
+
+import os
+_DEBUG = os.getenv('BELL_DEBUG', '0') == '1'
 
 _decision    = ConstructorDecision()
 _prompt      = ConstructorPrompt()
@@ -35,6 +38,13 @@ _SEÑALES_ROBOTICO = [
     'la aprobación de todas las consejeras',
     'espero tu próximo paso', 'como modelo de lenguaje',
     'como sistema de inteligencia',
+    'me encuentro en un estado de deliberación',
+    'considerando todas las variables',
+    'en todo momento', 'procesando todo lo que me rodea',
+    'la expresión falló esta vez',
+    'groq no respondió bien',
+    'el procesamiento funcionó',
+    'recibí tu mensaje, sebastian. la expresión',
 ]
 
 
@@ -45,7 +55,7 @@ def procesar(paquete_capa5: dict) -> dict:
         import traceback; traceback.print_exc()
         return PaqueteCapa6(
             decision         = DecisionFinal(),
-            respuesta_final  = "Algo falló. Bell sigue aquí — intenta de nuevo.",
+            respuesta_final  = "Aquí estoy. Algo falló — intenta de nuevo.",
             fuente_respuesta = 'error',
             paquete_capa5    = paquete_capa5,
             exitoso          = False,
@@ -55,7 +65,6 @@ def procesar(paquete_capa5: dict) -> dict:
 
 def _procesar_interno(paquete_capa5: dict) -> dict:
 
-    # Veto
     if paquete_capa5.get('veto'):
         respuesta_veto = paquete_capa5.get('respuesta_directa', '')
         _guardar_en_buffer(paquete_capa5, respuesta_veto)
@@ -74,12 +83,9 @@ def _procesar_interno(paquete_capa5: dict) -> dict:
     texto_original = paquete_c1.get('contenido_original', '')
     nombre         = comprension.get('contextual', {}).get('nombre_usuario', 'Sebastian')
 
-    # ── 1. BELL DECIDE EL CONTENIDO ────────────────────────
-    # La comprensión ya viene enriquecida del motor en Capa 3
     decision       = _decision.construir(paquete_capa5)
-    respuesta_base = decision.respuesta_base
+    respuesta_base = decision.respuesta_base or 'Aquí estoy.'
 
-    # ── 2. GROQ PULE LA BASE ────────────────────────────────
     prompt = _prompt.construir(
         texto_original = texto_original,
         decision       = decision,
@@ -88,7 +94,9 @@ def _procesar_interno(paquete_capa5: dict) -> dict:
     )
     respuesta_groq, fuente = _groq.generar(prompt, decision.tono)
 
-    # ── 3. VERIFICAR Y ELEGIR ───────────────────────────────
+    if _DEBUG:
+        print(f'  C6 groq_raw:    "{respuesta_groq[:100]}" | fuente: {fuente}')
+
     respuesta_verificada = _verificador.verificar(
         respuesta      = respuesta_groq,
         decision       = decision,
@@ -99,7 +107,10 @@ def _procesar_interno(paquete_capa5: dict) -> dict:
     if fuente in ('fallback', 'error'):
         respuesta_final = respuesta_base
         fuente_final    = 'base_python'
-    elif _groq_tiene_robotico(respuesta_groq):
+    elif _tiene_robotico(respuesta_groq):
+        respuesta_final = respuesta_base
+        fuente_final    = 'base_python'
+    elif _tiene_robotico(respuesta_verificada):
         respuesta_final = respuesta_base
         fuente_final    = 'base_python'
     elif _es_mejor_que_base(respuesta_verificada, respuesta_base):
@@ -109,10 +120,15 @@ def _procesar_interno(paquete_capa5: dict) -> dict:
         respuesta_final = respuesta_base
         fuente_final    = 'base_python'
 
-    # ── 4. GUARDAR EN BUFFER ────────────────────────────────
+    if not respuesta_final or not respuesta_final.strip():
+        respuesta_final = respuesta_base or 'Aquí estoy.'
+        fuente_final    = 'base_python'
+
     if texto_original and respuesta_final:
         comprension_actual = paquete_c3.get('comprension', {})
-        BufferSesion.obtener().agregar_turno(texto_original, respuesta_final, comprension_actual)
+        BufferSesion.obtener().agregar_turno(
+            texto_original, respuesta_final, comprension_actual
+        )
 
     return PaqueteCapa6(
         decision         = decision,
@@ -123,29 +139,44 @@ def _procesar_interno(paquete_capa5: dict) -> dict:
     ).a_dict()
 
 
-def _groq_tiene_robotico(respuesta: str) -> bool:
+def _tiene_robotico(respuesta: str) -> bool:
     if not respuesta:
         return False
     rl = respuesta.lower()
-    return any(señal in rl for señal in _SEÑALES_ROBOTICO)
+    return any(s in rl for s in _SEÑALES_ROBOTICO)
 
 
-def _es_mejor_que_base(respuesta_groq: str, base: str) -> bool:
-    if not respuesta_groq or not respuesta_groq.strip():
+def _es_mejor_que_base(groq: str, base: str) -> bool:
+    if not groq or not groq.strip():
         return False
-    rg = respuesta_groq.strip().lower()
-    rb = base.strip().lower()
-    if rg == rb:
+
+    rg = groq.strip()
+    rb = base.strip()
+    rg_l = rg.lower()
+    rb_l = rb.lower()
+
+    # Misma respuesta → confirma la base
+    if rg_l == rb_l:
         return True
-    if len(respuesta_groq) > len(base) * 2.5 and len(base) > 20:
+
+    # Groq más corta que la base → no aportó nada → base gana
+    if len(rg) < len(rb) * 0.8 and len(rb) > 12:
         return False
-    frases_prompt = [
-        'mente pura', 'respuesta base', 'texto pulido',
-        'instrucción', 'reglas absolutas', 'sin comillas',
-    ]
-    for frase in frases_prompt:
-        if frase in rg:
+
+    # Groq demasiado larga vs base corta → rechazar
+    if len(rg) > len(rb) * 3 and len(rb) > 10:
+        return False
+
+    # Groq demasiado larga vs base larga → rechazar
+    if len(rg) > len(rb) * 2 and len(rb) > 40:
+        return False
+
+    # Frases del prompt coladas en la respuesta
+    for frase in ['mente pura', 'respuesta base', 'contenido base:',
+                  'sage:', 'tono:', 'escribe solo', 'sin comillas']:
+        if frase in rg_l:
             return False
+
     return True
 
 
@@ -157,6 +188,7 @@ def _guardar_en_buffer(paquete_capa5: dict, respuesta: str):
         pc1   = pc2.get('paquete_capa1', {})
         texto = pc1.get('contenido_original', '')
         if texto and respuesta:
-            BufferSesion.obtener().agregar_turno(texto, respuesta)
+            comprension = pc3.get('comprension', {})
+            BufferSesion.obtener().agregar_turno(texto, respuesta, comprension)
     except Exception:
         pass

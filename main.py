@@ -21,7 +21,8 @@ try:
     from interfaz.sistema_nodos.registro_nodos import RegistroNodos
     registro = RegistroNodos()
     registro.escanear_proyecto()
-    stats = registro.obtener_estadisticas()
+    # FIX: el método correcto es obtener_estado_completo()
+    stats = registro.obtener_estado_completo()
     print(
         f'Escaneo completo: '
         f'{stats.get("total_nodos", 0)} nodos, '
@@ -35,9 +36,6 @@ from biblioteca import Biblioteca
 biblioteca = Biblioteca.obtener()
 
 # ── AUTO-REGISTRO (DESPUÉS de que la biblioteca esté lista) ──────────
-# Esto evita la recursión: antes el cargador llamaba Biblioteca.obtener()
-# desde adentro de _inicializar(). Ahora el auto-registro ocurre aquí,
-# cuando la biblioteca ya está completamente inicializada.
 if biblioteca and biblioteca.iniciada:
     try:
         from biblioteca.registrador_automatico import RegistradorAutomatico
@@ -45,7 +43,6 @@ if biblioteca and biblioteca.iniciada:
         total_nuevos = registrador.registrar_todo_el_proyecto(str(RAIZ_BELL))
         if total_nuevos > 0:
             print(f'  Auto-registro: {total_nuevos} nuevas neuronas integradas')
-            # Aplicar grounding de vida a los nodos AUTO recién creados
             biblioteca.aplicar_vida_a_nuevos_nodos()
             print(f'  ✓ Grounding de vida aplicado a nodos AUTO')
         else:
@@ -57,8 +54,12 @@ if biblioteca and biblioteca.iniciada:
 from interfaz import iniciar
 
 if __name__ == '__main__':
+    # FIX: host='0.0.0.0' para que el Nest Mini (192.168.1.3)
+    # pueda acceder a los archivos de audio en Flask (192.168.1.7:5000).
+    # Con '127.0.0.1' Flask solo escucha en localhost y el Nest
+    # recibe connection refused al intentar cargar el MP3.
     iniciar(
-        host='127.0.0.1',
+        host='0.0.0.0',
         port=5000,
         debug=False
     )

@@ -1,10 +1,23 @@
 # capas/capa2/__init__.py
 # ================================================
 # CAPA 2 — Activación neuronal + grounding 9D
-# CORREGIDO: red_activa siempre es dict
+#
+# FIX: red_activa siempre retorna estructura completa
+# incluso cuando la biblioteca no está iniciada.
 # ================================================
+
 from biblioteca import Biblioteca
 from biblioteca.zona_desconocimiento.zona import ZonaDesconocimiento
+
+_RED_VACIA = {
+    'nodos_primarios':    [],
+    'nodos_secundarios':  [],
+    'nodos_terciarios':   [],
+    'energia_total':      0.0,
+    'nivel_conocimiento': 0.0,
+    'tiene_conocimiento': False,
+    'total_activados':    0,
+}
 
 
 def procesar(paquete_capa1: dict) -> dict:
@@ -15,15 +28,7 @@ def procesar(paquete_capa1: dict) -> dict:
         return {
             'exitoso':       False,
             'error':         f'Error en Capa 2: {str(e)}',
-            'red_activa':    {
-                'nodos_primarios':    [],
-                'nodos_secundarios':  [],
-                'nodos_terciarios':   [],
-                'energia_total':      0.0,
-                'nivel_conocimiento': 0.0,
-                'tiene_conocimiento': False,
-                'total_activados':    0,
-            },
+            'red_activa':    dict(_RED_VACIA),
             'paquete_capa1': paquete_capa1
         }
 
@@ -34,10 +39,19 @@ def _procesar_interno(paquete_capa1: dict) -> dict:
 
     if not biblioteca.iniciada:
         return {
-            'exitoso':    False,
-            'error':      'Biblioteca neuronal no iniciada',
-            'red_activa': {},
-            'paquete_capa1': paquete_capa1
+            'exitoso':            False,
+            'error':              'Biblioteca neuronal no iniciada',
+            'red_activa':         dict(_RED_VACIA),  # FIX: estructura completa
+            'nivel_conocimiento': {
+                'bell_conoce_esto':  False,
+                'profundidad':        0.0,
+                'tiene_habilidades':  False,
+                'gaps_detectados':    [],
+                'grounding_promedio': 0.0,
+            },
+            'conceptos_enriquecidos': [],
+            'desconocidos_enviados':  0,
+            'paquete_capa1':          paquete_capa1
         }
 
     conceptos    = paquete_capa1.get('conceptos', [])
@@ -52,7 +66,7 @@ def _procesar_interno(paquete_capa1: dict) -> dict:
             conceptos_norm.append(c)
         else:
             conceptos_norm.append({
-                'id':       getattr(c, 'id', ''),
+                'id':        getattr(c, 'id', ''),
                 'grounding': getattr(c, 'grounding', 0.5),
                 'certeza':   getattr(c, 'certeza', 'directo'),
                 'tipo':      getattr(c, 'tipo', 'concepto')
@@ -63,23 +77,20 @@ def _procesar_interno(paquete_capa1: dict) -> dict:
         conceptos_norm, contexto_raw
     )
 
-    # Activar la red — activador.py ahora SIEMPRE retorna dict
+    # Activar la red
     red_activa = biblioteca.activar(conceptos_enriquecidos, texto)
 
-    # Defensa extra: si por cualquier razón no es dict, convertir
+    # Defensa: garantizar que sea dict con estructura completa
     if not isinstance(red_activa, dict):
         if hasattr(red_activa, 'a_dict'):
             red_activa = red_activa.a_dict()
         else:
-            red_activa = {
-                'nodos_primarios':    [],
-                'nodos_secundarios':  [],
-                'nodos_terciarios':   [],
-                'energia_total':      0.0,
-                'nivel_conocimiento': 0.0,
-                'tiene_conocimiento': False,
-                'total_activados':    0,
-            }
+            red_activa = dict(_RED_VACIA)
+
+    # Garantizar que tenga todos los campos esperados
+    for campo, valor in _RED_VACIA.items():
+        if campo not in red_activa:
+            red_activa[campo] = valor
 
     # Registrar uso en grounding
     _registrar_uso_grounding(conceptos_norm, red_activa)
@@ -180,11 +191,16 @@ def _detectar_gaps(red_activa: dict, desconocidos: list) -> list:
     for desc in desconocidos:
         frag = (desc.get('fragmento', '') if isinstance(desc, dict)
                 else getattr(desc, 'fragmento', ''))
-        gaps.append({'tipo': 'concepto', 'descripcion': frag, 'origen': 'capa1'})
+        if frag:
+            gaps.append({
+                'tipo':        'concepto',
+                'descripcion': frag,
+                'origen':      'capa1'
+            })
     if not red_activa.get('nodos_primarios'):
         gaps.append({
-            'tipo': 'conocimiento',
+            'tipo':        'conocimiento',
             'descripcion': 'Sin activación primaria',
-            'origen': 'capa2'
+            'origen':      'capa2'
         })
     return gaps

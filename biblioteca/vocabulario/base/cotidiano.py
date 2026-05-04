@@ -14,7 +14,7 @@ CONCEPTOS_COTIDIANO = {
     },
     'comer': {
         'id': 'COTI_COMER', 'tipo': 'accion_cotidiana',
-        'variantes': ['comer','como','comí','almorzar','almorcé','desayunar','desayuné',
+        'variantes': ['comer','comí','almorzar','almorcé','desayunar','desayuné',
                       'cenar','cené','no he comido','tengo hambre','hambre'],
         'grounding_base': 0.75,
     },

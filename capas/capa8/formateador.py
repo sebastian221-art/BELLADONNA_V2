@@ -2,83 +2,57 @@
 # ================================================
 # FORMATEADOR — Capa 8
 #
-# Limpia la respuesta para que llegue perfecta
-# al usuario. Sin artefactos, sin markdown
-# innecesario, longitud adecuada.
+# FIX: _limpiar_markdown más segura — solo elimina
+# símbolos de markdown, no borra contenido válido.
+# Bell no genera markdown pero si llegara algo
+# con formato, se limpia sin perder el texto.
 # ================================================
 
 import re
 
-
-# Longitudes máximas por tipo de respuesta
 _LONGITUD_MAX = {
-    'conversacional':      300,
-    'emocional':           250,
-    'informativa':         500,
-    'ejecutiva':           400,
+    'conversacional':        300,
+    'emocional':             250,
+    'informativa':           500,
+    'ejecutiva':             400,
     'honestidad_limitacion': 200,
-    'veto_respuesta':      200,
-    'default':             350,
+    'veto_respuesta':        200,
+    'default':               350,
 }
-
-# Artefactos que no deben aparecer en la respuesta final
-_ARTEFACTOS = [
-    r'\*\*.*?\*\*',     # **negrita**
-    r'\*.*?\*',          # *itálica*
-    r'`.*?`',            # `código`
-    r'#{1,6}\s',         # # headers
-    r'^\s*[-•]\s',       # bullets al inicio de línea
-    r'^\s*\d+\.\s',      # listas numeradas
-]
 
 
 class Formateador:
 
-    def formatear(
-        self,
-        respuesta:     str,
-        tipo_respuesta: str,
-    ) -> str:
-        """
-        Aplica formato final a la respuesta.
-        """
+    def formatear(self, respuesta: str, tipo_respuesta: str) -> str:
         if not respuesta:
             return respuesta
 
-        # 1. Limpiar artefactos de markdown
         resultado = self._limpiar_markdown(respuesta)
-
-        # 2. Normalizar espacios y saltos de línea
         resultado = self._normalizar_espacios(resultado)
-
-        # 3. Verificar longitud
         resultado = self._ajustar_longitud(resultado, tipo_respuesta)
-
-        # 4. Capitalizar primera letra si hace falta
         resultado = self._capitalizar(resultado)
 
         return resultado.strip()
 
     def _limpiar_markdown(self, texto: str) -> str:
-        resultado = texto
-        for patron in _ARTEFACTOS:
-            # Extraer el contenido sin los símbolos de markdown
-            resultado = re.sub(patron, lambda m: self._extraer_contenido(m.group()), resultado, flags=re.MULTILINE)
-        return resultado
-
-    def _extraer_contenido(self, match: str) -> str:
-        """Extrae el texto limpio de un artefacto markdown."""
-        # Remover símbolos de markdown al inicio y final
-        limpio = re.sub(r'^[\*#`\-•\d\.>\s]+', '', match)
-        limpio = re.sub(r'[\*#`]+$', '', limpio)
-        return limpio.strip()
+        # FIX: extraer SOLO el contenido, nunca borrar
+        # **negrita** → negrita
+        texto = re.sub(r'\*\*(.+?)\*\*', r'\1', texto)
+        # *itálica* → itálica (solo si hay contenido dentro)
+        texto = re.sub(r'\*(.+?)\*', r'\1', texto)
+        # `código` → código
+        texto = re.sub(r'`(.+?)`', r'\1', texto)
+        # ### Headers → texto limpio
+        texto = re.sub(r'^#{1,6}\s+', '', texto, flags=re.MULTILINE)
+        # - bullets al inicio de línea → quitar solo el símbolo
+        texto = re.sub(r'^\s*[-•]\s+', '', texto, flags=re.MULTILINE)
+        # 1. listas numeradas → quitar solo el número
+        texto = re.sub(r'^\s*\d+\.\s+', '', texto, flags=re.MULTILINE)
+        return texto
 
     def _normalizar_espacios(self, texto: str) -> str:
-        # Múltiples espacios → uno
         resultado = re.sub(r' {2,}', ' ', texto)
-        # Múltiples saltos de línea → máximo uno
         resultado = re.sub(r'\n{3,}', '\n\n', resultado)
-        # Espacios antes de puntuación
         resultado = re.sub(r' ([.,;:!?])', r'\1', resultado)
         return resultado.strip()
 
@@ -87,7 +61,6 @@ class Formateador:
         if len(texto) <= max_chars:
             return texto
 
-        # Cortar en el último punto antes del límite
         truncado = texto[:max_chars]
         ultimo_punto = max(
             truncado.rfind('.'),

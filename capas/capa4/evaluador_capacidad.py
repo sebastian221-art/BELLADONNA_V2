@@ -1,27 +1,40 @@
 # capas/capa4/evaluador_capacidad.py
 # ================================================
 # EVALUADOR DE CAPACIDAD — Capa 4
-# Responde: ¿puede Bell hacer lo que se pide?
-# Si no puede: ¿qué puede hacer en su lugar?
-# Bell nunca miente sobre sus capacidades.
+#
+# FIX: intenciones alineadas con las que genera
+# el motor de lenguaje real. Antes usaba nombres
+# como 'preguntar_identidad' cuando el motor
+# genera 'conocer_bell'.
 # ================================================
 
 from capas.capa4.paquete_capa4 import EvaluacionCapacidad, RecursosDisponibles
 
-
-# Intenciones que Bell puede manejar en sus capas actuales
+# Intenciones conversacionales — Bell siempre puede responder
 INTENCIONES_CONVERSACIONALES = {
     'saludar', 'despedirse', 'agradecer', 'conversar',
-    'preguntar_identidad', 'presentarse', 'confirmar', 'negar',
-    'expresar_emocion_positiva', 'expresar_emocion_negativa',
-    'expresar_emocion_negativa', 'solicitar_ayuda',
+    # Sobre Bell
+    'conocer_bell',          # "quien eres"
+    'saber_estado_bell',     # "como estas"
+    'saber_nombre_bell',     # "como te llamas"
+    'saber_capacidades_bell',# "que puedes hacer"
+    # Sobre Sebastian
+    'preguntar',             # "quien es sebastian", preguntas generales
+    # Interacción
+    'presentarse', 'confirmar', 'negar',
+    'expresar_emocion_positiva',
+    'expresar_emocion_negativa',
+    'pedir_ayuda',
+    'desconocida',           # siempre responde algo honesto
 }
 
+# Intenciones informativas — Bell responde con lo que sabe
 INTENCIONES_INFORMATIVAS = {
     'preguntar_capacidad', 'preguntar_estado', 'preguntar_como',
     'pedir_explicacion', 'pedir_definicion',
 }
 
+# Intenciones ejecutivas — requieren habilidades de Capa 7
 INTENCIONES_EJECUTIVAS = {
     'ejecutar_comando', 'crear_archivo', 'calcular', 'buscar',
     'analizar_codigo', 'consultar_bd',
@@ -54,11 +67,11 @@ class EvaluadorCapacidad:
         comprension = paquete_capa3.get('comprension', {})
         profunda    = comprension.get('profunda', {})
 
-        intencion   = profunda.get('intencion_detectada', 'conversar')
-        necesidad   = profunda.get('necesidad_real', 'conexion_social')
-        certeza     = paquete_capa3.get('nivel_certeza', 0.5)
+        intencion = profunda.get('intencion_detectada', 'conversar')
+        necesidad = profunda.get('necesidad_real', 'conexion_social')
+        certeza   = paquete_capa3.get('nivel_certeza', 0.5)
 
-        # ¿Puede Bell responder en modo conversacional?
+        # ¿Conversacional? — Bell siempre puede
         if intencion in INTENCIONES_CONVERSACIONALES:
             return EvaluacionCapacidad(
                 puede_responder=True,
@@ -67,7 +80,7 @@ class EvaluadorCapacidad:
                 tipo_respuesta='conversacional',
             )
 
-        # ¿Puede Bell responder en modo informativo?
+        # ¿Informativa? — Bell responde con lo que tiene
         if intencion in INTENCIONES_INFORMATIVAS:
             confianza = certeza * 0.9 if recursos.nodos_activos > 0 else 0.4
             return EvaluacionCapacidad(
@@ -77,7 +90,7 @@ class EvaluadorCapacidad:
                 tipo_respuesta='informativa',
             )
 
-        # ¿Requiere ejecución? (Capa 7 aún no existe)
+        # ¿Ejecutiva? — depende de habilidades disponibles
         if intencion in INTENCIONES_EJECUTIVAS:
             if recursos.tiene_habilidades:
                 return EvaluacionCapacidad(
@@ -93,11 +106,12 @@ class EvaluadorCapacidad:
                 nivel_confianza=0.6,
                 tipo_respuesta='honestidad_limitacion',
                 alternativa='Entiendo lo que necesitas pero mis capacidades de ejecución aún están en desarrollo.',
-                razon_limitacion='Capas 6-7 no implementadas',
+                razon_limitacion='Habilidades de ejecución pendientes',
             )
 
-        # ¿Necesidad emocional?
-        if necesidad in ('apoyo_emocional', 'ser_escuchado', 'compania'):
+        # ¿Necesidad emocional? — Bell siempre puede estar presente
+        if necesidad in ('apoyo_emocional', 'ser_escuchado', 'compania',
+                         'conexion_social', 'compartir_alegria'):
             return EvaluacionCapacidad(
                 puede_responder=True,
                 puede_ejecutar=False,
@@ -105,7 +119,7 @@ class EvaluadorCapacidad:
                 tipo_respuesta='emocional',
             )
 
-        # Caso general — Bell siempre puede responder algo honesto
+        # Caso general — Bell siempre responde algo honesto
         confianza = certeza * 0.8 if recursos.nodos_activos > 3 else 0.5
         return EvaluacionCapacidad(
             puede_responder=True,
