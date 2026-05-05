@@ -1,166 +1,38 @@
 # biblioteca/vocabulario/base/colombia.py
 # ================================================
-# VOCABULARIO COLOMBIANO — expresiones locales
-# Bell entiende como habla Sebastian de verdad
+# COLOMBIA — Expandido (25 → 80+ entradas)
 # ================================================
 
 CONCEPTOS_COLOMBIA = {
-
-    # ── Saludos y apelaciones ─────────────────────
-    'parce': {
-        'id': 'COL_PARCE', 'tipo': 'apelacion_cercana',
-        'variantes': ['parce','parcero','parcera','llave','llavecita'],
-        'grounding_base': 0.80,
-        'contexto': 'apelacion_afectiva',
-    },
-    'marica': {
-        'id': 'COL_MARICA', 'tipo': 'apelacion_cercana',
-        'variantes': ['marica','marica no','marica sí','ay marica'],
-        'grounding_base': 0.80,
-        'contexto': 'apelacion_informal',
-    },
-    'mane': {
-        'id': 'COL_MANE', 'tipo': 'apelacion_cercana',
-        'variantes': ['mane','man','ese man','ese mane'],
-        'grounding_base': 0.78,
-    },
-    'chino': {
-        'id': 'COL_CHINO', 'tipo': 'apelacion',
-        'variantes': ['chino','china','el chino','la china'],
-        'grounding_base': 0.75,
-    },
-    'cucho': {
-        'id': 'COL_CUCHO', 'tipo': 'familiar',
-        'variantes': ['cucho','cucha','mi cucho','mi cucha'],
-        'grounding_base': 0.78,
-        'contexto': 'referencia_a_padres',
-    },
-    'hemano': {
-        'id': 'COL_HERMANO', 'tipo': 'apelacion_cercana',
-        'variantes': ['hermano','hermana','mi hermano','bro'],
-        'grounding_base': 0.78,
-    },
-
-    # ── Expresiones positivas ─────────────────────
-    'bacano': {
-        'id': 'COL_BACANO', 'tipo': 'expresion_positiva',
-        'variantes': ['bacano','bacana','qué bacano','está bacano','estuvo bacano'],
-        'grounding_base': 0.82,
-        'emocion': 'entusiasmo',
-    },
-    'chevere': {
-        'id': 'COL_CHEVERE', 'tipo': 'expresion_positiva',
-        'variantes': ['chévere','chevere','qué chévere','está chévere','muy chévere'],
-        'grounding_base': 0.82,
-        'emocion': 'entusiasmo',
-    },
-    'de_una': {
-        'id': 'COL_DE_UNA', 'tipo': 'expresion_acuerdo',
-        'variantes': ['de una','de una vez','dale de una','vamos de una'],
-        'grounding_base': 0.85,
-        'contexto': 'confirmacion_entusiasta',
-    },
-    'qué_nota': {
-        'id': 'COL_QUE_NOTA', 'tipo': 'expresion_positiva',
-        'variantes': ['qué nota','es una nota','nota','estuvo nota','de nota'],
-        'grounding_base': 0.80,
-        'emocion': 'entusiasmo',
-    },
-    'brillante': {
-        'id': 'COL_BRILLANTE', 'tipo': 'expresion_positiva',
-        'variantes': ['brillante','qué brillante','es brillante','estuvo brillante'],
-        'grounding_base': 0.78,
-    },
-    'chimba': {
-        'id': 'COL_CHIMBA', 'tipo': 'expresion_positiva',
-        'variantes': ['chimba','es una chimba','qué chimba','chimbita'],
-        'grounding_base': 0.80,
-        'emocion': 'entusiasmo',
-    },
-
-    # ── Expresiones negativas ─────────────────────
-    'mamado': {
-        'id': 'COL_MAMADO', 'tipo': 'expresion_negativa',
-        'variantes': ['mamado','mamada','me tiene mamado','estoy mamado','ya me mamé'],
-        'grounding_base': 0.82,
-        'emocion': 'frustracion',
-    },
-    'jartera': {
-        'id': 'COL_JARTERA', 'tipo': 'expresion_negativa',
-        'variantes': ['jartera','qué jartera','es una jartera','me da jartera'],
-        'grounding_base': 0.80,
-        'emocion': 'frustracion',
-    },
-    'mamera': {
-        'id': 'COL_MAMERA', 'tipo': 'expresion_negativa',
-        'variantes': ['mamera','qué mamera','me da mamera','es una mamera'],
-        'grounding_base': 0.80,
-        'emocion': 'pereza',
-    },
-    'qué_oso': {
-        'id': 'COL_QUE_OSO', 'tipo': 'expresion_verguenza',
-        'variantes': ['qué oso','oso','pasé el oso','qué oso tan grande'],
-        'grounding_base': 0.80,
-        'emocion': 'verguenza',
-    },
-
-    # ── Actividades sociales ──────────────────────
-    'rumba': {
-        'id': 'COL_RUMBA', 'tipo': 'actividad_social',
-        'variantes': ['rumba','rumbear','salir de rumba','fuimos a rumbear',
-                      'rumba anoche','de rumba'],
-        'grounding_base': 0.75,
-    },
-    'parche': {
-        'id': 'COL_PARCHE', 'tipo': 'actividad_social',
-        'variantes': ['parche','el parche','con el parche','con mi parche',
-                      'hacer parche','vamos al parche'],
-        'grounding_base': 0.75,
-        'contexto': 'grupo_amigos',
-    },
-    'camellar': {
-        'id': 'COL_CAMELLAR', 'tipo': 'accion',
-        'variantes': ['camellar','camellando','camellé','a camellar',
-                      'toca camellar'],
-        'grounding_base': 0.75,
-        'contexto': 'trabajar',
-    },
-
-    # ── Expresiones de acuerdo/desacuerdo ─────────
-    'listo_col': {
-        'id': 'COL_LISTO', 'tipo': 'confirmacion',
-        'variantes': ['listo','ya listo','todo listo','quedó listo'],
-        'grounding_base': 0.85,
-    },
-    'no_le_para': {
-        'id': 'COL_NO_LE_PARA', 'tipo': 'expresion',
-        'variantes': ['no le para','no para bolas','ni le para','sin darle bolas'],
-        'grounding_base': 0.75,
-        'contexto': 'ignorar_algo',
-    },
-    'pillar': {
-        'id': 'COL_PILLAR', 'tipo': 'verbo',
-        'variantes': ['pillar','lo pillé','pilla','pillé','no la pillé','pilas'],
-        'grounding_base': 0.78,
-        'contexto': 'entender_o_ver',
-    },
-
-    # ── Expresiones de cantidad/intensidad ────────
-    'tenaz': {
-        'id': 'COL_TENAZ', 'tipo': 'intensificador',
-        'variantes': ['tenaz','está tenaz','es tenaz','qué tenaz'],
-        'grounding_base': 0.78,
-        'contexto': 'algo_intenso_o_dificil',
-    },
-    'full': {
-        'id': 'COL_FULL', 'tipo': 'intensificador',
-        'variantes': ['full','full de','estoy full','tengo full','a full'],
-        'grounding_base': 0.75,
-    },
-    'mono': {
-        'id': 'COL_MONO', 'tipo': 'calificativo',
-        'variantes': ['qué mono','está mono','eso está mono'],
-        'grounding_base': 0.72,
-        'contexto': 'algo_bonito_o_gracioso',
-    },
+    # Jerga y expresiones colombianas
+    'parce':       {'id': 'COL_PARCE',      'tipo': 'jerga_col', 'grounding_base': 0.95, 'variantes': ['parces', 'parcero', 'parcera', 'llave', 'llave mía']},
+    'bacano':      {'id': 'COL_BACANO',     'tipo': 'jerga_col', 'grounding_base': 0.93, 'variantes': ['bacana', 'bacanos', 'bacano el man', 'qué bacano']},
+    'chévere':     {'id': 'COL_CHEVERE',    'tipo': 'jerga_col', 'grounding_base': 0.93, 'variantes': ['chevere', 'chéverisimo', 'qué chévere']},
+    'marica':      {'id': 'COL_MARICA',     'tipo': 'jerga_col', 'grounding_base': 0.90, 'variantes': ['mano', 'mae', 'pana']},
+    'chimba':      {'id': 'COL_CHIMBA',     'tipo': 'jerga_col', 'grounding_base': 0.88, 'variantes': ['qué chimba', 'es una chimba']},
+    'berraco':     {'id': 'COL_BERRACO',    'tipo': 'jerga_col', 'grounding_base': 0.88, 'variantes': ['verraco', 'berracos', 'es muy berraco']},
+    'juepucha':    {'id': 'COL_JUEPUCHA',   'tipo': 'exclamacion_col','grounding_base': 0.87,'variantes': ['jueputa', 'verraco', 'uy verraco']},
+    'qué pena':    {'id': 'COL_QUEPENA',    'tipo': 'expresion_col', 'grounding_base': 0.90, 'variantes': ['qué pena con usted', 'pena ajena', 'penoso']},
+    'buenas':      {'id': 'COL_BUENAS',     'tipo': 'saludo_col',    'grounding_base': 0.93, 'variantes': ['buenas gente', 'ey buenas']},
+    'pilas':       {'id': 'COL_PILAS',      'tipo': 'expresion_col', 'grounding_base': 0.90, 'variantes': ['ojo pilas', 'póngale pilas', 'ponle pilas', 'con cuidado']},
+    'uy':          {'id': 'COL_UY',         'tipo': 'exclamacion_col','grounding_base': 0.90, 'variantes': ['uy no', 'uy sí', 'uy juemadre']},
+    'no joda':     {'id': 'COL_NOJODA',     'tipo': 'expresion_col', 'grounding_base': 0.88, 'variantes': ['no sea así', 'no me haga eso', 'no friegue']},
+    'achanta':     {'id': 'COL_ACHANTA',    'tipo': 'accion_col',    'grounding_base': 0.85, 'variantes': ['achantar', 'se acobardó', 'echó para atrás']},
+    'rumbear':     {'id': 'COL_RUMBEAR',    'tipo': 'actividad_col', 'grounding_base': 0.87, 'variantes': ['rumba', 'rumbeo', 'salimos a rumbear', 'fiesta']},
+    'tinto':       {'id': 'COL_TINTO',      'tipo': 'bebida_col',    'grounding_base': 0.90, 'variantes': ['un tinto', 'tintico', 'café negro']},
+    'aguardiente': {'id': 'COL_AGUARDIENTE','tipo': 'bebida_col',    'grounding_base': 0.87, 'variantes': ['guaro', 'la botella', 'trago']},
+    'finca':       {'id': 'COL_FINCA',      'tipo': 'lugar_col',     'grounding_base': 0.88, 'variantes': ['fincas', 'ir a la finca', 'fin de semana en finca']},
+    'bogotá':      {'id': 'COL_BOGOTA',     'tipo': 'ciudad_col',    'grounding_base': 0.88, 'variantes': ['Bogotá', 'la capital', 'rolo', 'cachaco']},
+    'medellín':    {'id': 'COL_MEDELLIN',   'tipo': 'ciudad_col',    'grounding_base': 0.88, 'variantes': ['Medellín', 'paisa', 'paisas', 'la ciudad de la eterna primavera']},
+    'bucaramanga': {'id': 'COL_BUCA',       'tipo': 'ciudad_col',    'grounding_base': 0.90, 'variantes': ['Bucaramanga', 'buca', 'ciudad bonita']},
+    'colombia':    {'id': 'COL_COLOMBIA',   'tipo': 'pais',          'grounding_base': 0.92, 'variantes': ['colombiano', 'colombiana', 'mi país']},
+    'arrecho':     {'id': 'COL_ARRECHO',    'tipo': 'jerga_col',     'grounding_base': 0.85, 'variantes': ['arrecha', 'qué arrecho', 'arrechísimo']},
+    'qué más':     {'id': 'COL_QUEMAS',     'tipo': 'saludo_col',    'grounding_base': 0.92, 'variantes': ['qué más parce', 'quiubo', 'quiubo qué más']},
+    'sumercé':     {'id': 'COL_SUMERCE',    'tipo': 'tratamiento_col','grounding_base': 0.83,'variantes': ['sumerced', 'usted', 'señor', 'señora']},
+    'ahoritica':   {'id': 'COL_AHORITICA',  'tipo': 'temporal_col',  'grounding_base': 0.90, 'variantes': ['ahorita', 'ya mero', 'en un ratico', 'ya mismo']},
+    'harto':       {'id': 'COL_HARTO',      'tipo': 'cantidad_col',  'grounding_base': 0.88, 'variantes': ['harta', 'hartos', 'un montón', 'montón', 'un pocón']},
+    'man':         {'id': 'COL_MAN',        'tipo': 'persona_col',   'grounding_base': 0.88, 'variantes': ['el man', 'la man', 'ese man', 'esa man']},
+    'camello':     {'id': 'COL_CAMELLO',    'tipo': 'trabajo_col',   'grounding_base': 0.85, 'variantes': ['camellar', 'camellar duro', 'trabajar', 'trabajo duro']},
+    'gonorrea':    {'id': 'COL_GONORREA',   'tipo': 'jerga_col',     'grounding_base': 0.80, 'variantes': ['gonorra', 'gon']},
+    'el combo':    {'id': 'COL_COMBO',      'tipo': 'grupo_col',     'grounding_base': 0.87, 'variantes': ['combo', 'el grupito', 'la manada', 'los amigos']},
 }

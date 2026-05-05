@@ -1,0 +1,23 @@
+# biblioteca/vocabulario/base/entretenimiento.py
+ENTRETENIMIENTO = {
+    'música':      {'id': 'ENT_MUSICA',   'tipo': 'entretenimiento',  'grounding_base': 0.92, 'variantes': ['musica', 'canciones', 'ritmo', 'melodía']},
+    'canción':     {'id': 'ENT_CANCION',  'tipo': 'entretenimiento',  'grounding_base': 0.90, 'variantes': ['cancion', 'canciones', 'tema musical', 'tema']},
+    'película':    {'id': 'ENT_PELICULA', 'tipo': 'entretenimiento',  'grounding_base': 0.90, 'variantes': ['pelicula', 'películas', 'film', 'cine']},
+    'serie':       {'id': 'ENT_SERIE',    'tipo': 'entretenimiento',  'grounding_base': 0.90, 'variantes': ['series', 'show', 'programa']},
+    'juego':       {'id': 'ENT_JUEGO',    'tipo': 'entretenimiento',  'grounding_base': 0.90, 'variantes': ['juegos', 'videojuego', 'videojuegos', 'game']},
+    'libro':       {'id': 'ENT_LIBRO',    'tipo': 'entretenimiento',  'grounding_base': 0.88, 'variantes': ['libros', 'lectura', 'novela']},
+    'bailar':      {'id': 'ENT_BAILAR',   'tipo': 'actividad_ocio',   'grounding_base': 0.87, 'variantes': ['baile', 'bailando', 'bailé', 'baila']},
+    'leer':        {'id': 'ENT_LEER',     'tipo': 'actividad_ocio',   'grounding_base': 0.88, 'variantes': ['leyendo', 'lei', 'leí', 'leyó']},
+    'ver':         {'id': 'ENT_VER',      'tipo': 'actividad_ocio',   'grounding_base': 0.87, 'variantes': ['viendo', 'vi', 'mirar', 'mirando']},
+    'escuchar':    {'id': 'ENT_ESCUCHAR', 'tipo': 'actividad_ocio',   'grounding_base': 0.88, 'variantes': ['escuchando', 'escuché', 'oír', 'oyendo']},
+    'jugar':       {'id': 'ENT_JUGAR',    'tipo': 'actividad_ocio',   'grounding_base': 0.88, 'variantes': ['jugando', 'jugué', 'juega', 'jugar']},
+    'salir':       {'id': 'ENT_SALIR',    'tipo': 'actividad_ocio',   'grounding_base': 0.88, 'variantes': ['salgo', 'salí', 'saliendo', 'voy a salir']},
+    'descansar':   {'id': 'ENT_DESCANSAR','tipo': 'actividad_ocio',   'grounding_base': 0.88, 'variantes': ['descansando', 'descansé', 'descanso']},
+    'divertir':    {'id': 'ENT_DIVERTIR', 'tipo': 'emocion_ocio',     'grounding_base': 0.87, 'variantes': ['divertido', 'me divertí', 'divertida', 'entretenido']},
+    'aburrir':     {'id': 'ENT_ABURRIDO', 'tipo': 'emocion_ocio',     'grounding_base': 0.87, 'variantes': ['aburrido', 'aburrida', 'me aburro', 'nada que hacer']},
+    'chiste':      {'id': 'ENT_CHISTE',   'tipo': 'humor',            'grounding_base': 0.87, 'variantes': ['chistes', 'broma', 'bromas', 'cuéntame un chiste']},
+    'reír':        {'id': 'ENT_REIR',     'tipo': 'emocion_ocio',     'grounding_base': 0.88, 'variantes': ['risa', 'risas', 'me hizo reír', 'jaja', 'jajaja', 'haha']},
+    'fútbol':      {'id': 'ENT_FUTBOL',   'tipo': 'deporte',          'grounding_base': 0.90, 'variantes': ['futbol', 'soccer', 'partido de fútbol']},
+    'partido':     {'id': 'ENT_PARTIDO',  'tipo': 'evento_deportivo', 'grounding_base': 0.88, 'variantes': ['partidos', 'game', 'match']},
+    'deporte':     {'id': 'ENT_DEPORTE',  'tipo': 'actividad_fisica', 'grounding_base': 0.88, 'variantes': ['deportes', 'actividad física', 'actividad deportiva']},
+}

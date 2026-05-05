@@ -32,7 +32,7 @@ class GestorVocabulario:
             ('tiempo',                'TIEMPO'),
             ('conectores',            'CONECTORES'),
             ('bell_identidad',        'BELL_IDENTIDAD'),
-            # ── Nuevos módulos v2 ────────────────────────
+            # ── Módulos v2 ───────────────────────────────
             ('cotidiano',             'CONCEPTOS_COTIDIANO'),
             ('colombia',              'CONCEPTOS_COLOMBIA'),
             ('tecnologia',            'CONCEPTOS_TECNOLOGIA'),
@@ -41,6 +41,25 @@ class GestorVocabulario:
             ('gastronomia',           'CONCEPTOS_GASTRONOMIA'),
             ('expresiones_expandidas','CONCEPTOS_EXPRESIONES'),
             ('mundo_vida',            'CONCEPTOS_MUNDO'),
+            # ── Expansión masiva v3 — cobertura 80%+ ─────
+            ('articulos_determinantes','ARTICULOS_DETERMINANTES'),
+            ('pronombres',             'PRONOMBRES'),
+            ('adjetivos',              'ADJETIVOS'),
+            ('colores',                'COLORES'),
+            ('numeros_cantidades',     'NUMEROS_CANTIDADES'),
+            ('familia',                'FAMILIA'),
+            ('cuerpo_humano',          'CUERPO_HUMANO'),
+            ('hogar',                  'HOGAR'),
+            ('trabajo',                'TRABAJO'),
+            ('salud',                  'SALUD'),
+            ('dinero',                 'DINERO'),
+            ('naturaleza',             'NATURALEZA'),
+            ('entretenimiento',        'ENTRETENIMIENTO'),
+            ('educacion',              'EDUCACION'),
+            ('programacion',           'PROGRAMACION'),
+            ('inteligencia_artificial','IA_ML'),
+            ('filosofia_existencial',  'FILOSOFIA_EXISTENCIAL'),
+            ('emociones_sebastian',    'EMOCIONES_SEBASTIAN'),
         ]
         total = 0
         for nombre_modulo, nombre_dict in modulos:

@@ -1,201 +1,27 @@
 # biblioteca/vocabulario/base/internet_redes.py
 # ================================================
-# VOCABULARIO INTERNET, REDES SOCIALES Y MUNDO
-# Bell entiende la vida digital y el mundo real
+# INTERNET Y REDES SOCIALES — Expandida
 # ================================================
 
 CONCEPTOS_INTERNET = {
-
-    # ── Redes sociales ────────────────────────────
-    'instagram': {
-        'id': 'WEB_INSTAGRAM', 'tipo': 'red_social',
-        'variantes': ['instagram','insta','el insta','las historias','reels','stories'],
-        'grounding_base': 0.75,
-    },
-    'tiktok': {
-        'id': 'WEB_TIKTOK', 'tipo': 'red_social',
-        'variantes': ['tiktok','tik tok','los tiktoks','videos de tiktok'],
-        'grounding_base': 0.75,
-    },
-    'youtube': {
-        'id': 'WEB_YOUTUBE', 'tipo': 'plataforma',
-        'variantes': ['youtube','un video','el video','ver videos','canal','youtuber'],
-        'grounding_base': 0.75,
-    },
-    'twitter_x': {
-        'id': 'WEB_TWITTER', 'tipo': 'red_social',
-        'variantes': ['twitter','x','tweet','la x','tuiteé'],
-        'grounding_base': 0.73,
-    },
-    'whatsapp': {
-        'id': 'WEB_WHATSAPP', 'tipo': 'mensajeria',
-        'variantes': ['whatsapp','wsp','wasap','el chat','me escribió','me mandó'],
-        'grounding_base': 0.78,
-    },
-    'discord': {
-        'id': 'WEB_DISCORD', 'tipo': 'plataforma',
-        'variantes': ['discord','el discord','server de discord','servidor discord'],
-        'grounding_base': 0.75,
-    },
-    'reddit': {
-        'id': 'WEB_REDDIT', 'tipo': 'plataforma',
-        'variantes': ['reddit','subreddit','vi en reddit','post de reddit'],
-        'grounding_base': 0.72,
-    },
-
-    # ── Expresiones de internet ───────────────────
-    'viral': {
-        'id': 'WEB_VIRAL', 'tipo': 'expresion_internet',
-        'variantes': ['viral','se hizo viral','está viral','es viral'],
-        'grounding_base': 0.73,
-    },
-    'meme': {
-        'id': 'WEB_MEME', 'tipo': 'expresion_internet',
-        'variantes': ['meme','memes','el meme','ese meme','un meme'],
-        'grounding_base': 0.73,
-    },
-    'hack': {
-        'id': 'WEB_HACK', 'tipo': 'concepto_internet',
-        'variantes': ['hack','hacker','hackearon','hackear','hackeado'],
-        'grounding_base': 0.78,
-    },
-
-    # ── Mundo y actualidad ────────────────────────
-    'noticias': {
-        'id': 'MUN_NOTICIAS', 'tipo': 'actualidad',
-        'variantes': ['noticias','la noticia','vi en las noticias','salió en noticias',
-                      'lo que pasó','pasó algo','qué pasó'],
-        'grounding_base': 0.73,
-    },
-    'politica': {
-        'id': 'MUN_POLITICA', 'tipo': 'tema_mundo',
-        'variantes': ['política','politica','el gobierno','los políticos','elecciones',
-                      'presidente','el congreso'],
-        'grounding_base': 0.72,
-    },
-    'economia': {
-        'id': 'MUN_ECONOMIA', 'tipo': 'tema_mundo',
-        'variantes': ['economía','economia','la inflación','el dólar','el mercado',
-                      'los precios','todo caro','muy caro'],
-        'grounding_base': 0.73,
-    },
-    'colombia_pais': {
-        'id': 'MUN_COLOMBIA', 'tipo': 'lugar',
-        'variantes': ['colombia','en colombia','aquí en colombia','este país'],
-        'grounding_base': 0.78,
-    },
-    'bogota': {
-        'id': 'MUN_BOGOTA', 'tipo': 'ciudad',
-        'variantes': ['bogotá','bogota','en bogotá','la capital'],
-        'grounding_base': 0.75,
-    },
-
-    # ── Clima ─────────────────────────────────────
-    'lluvia': {
-        'id': 'CLIM_LLUVIA', 'tipo': 'clima',
-        'variantes': ['lluvia','está lloviendo','llueve','llovió','está mojado',
-                      'aguacero','llovizna','diluvio'],
-        'grounding_base': 0.72,
-    },
-    'calor': {
-        'id': 'CLIM_CALOR', 'tipo': 'clima',
-        'variantes': ['calor','hace calor','qué calor','está caliente','quema'],
-        'grounding_base': 0.72,
-    },
-    'frio': {
-        'id': 'CLIM_FRIO', 'tipo': 'clima',
-        'variantes': ['frío','frio','hace frío','qué frío','está helado','está frío'],
-        'grounding_base': 0.72,
-    },
+    'instagram':   {'id': 'INT_INSTAGRAM',  'tipo': 'red_social',  'grounding_base': 0.90, 'variantes': ['insta', 'IG', 'ig', 'Instagram']},
+    'tiktok':      {'id': 'INT_TIKTOK',     'tipo': 'red_social',  'grounding_base': 0.90, 'variantes': ['TikTok', 'tik tok', 'reel', 'reels', 'stories']},
+    'youtube':     {'id': 'INT_YOUTUBE',    'tipo': 'plataforma',  'grounding_base': 0.90, 'variantes': ['YouTube', 'YT', 'yt', 'video de youtube']},
+    'whatsapp':    {'id': 'INT_WHATSAPP',   'tipo': 'mensajeria',  'grounding_base': 0.92, 'variantes': ['WhatsApp', 'WA', 'wa', 'el whats']},
+    'telegram':    {'id': 'INT_TELEGRAM',   'tipo': 'mensajeria',  'grounding_base': 0.87, 'variantes': ['Telegram', 'tele']},
+    'twitter':     {'id': 'INT_TWITTER',    'tipo': 'red_social',  'grounding_base': 0.87, 'variantes': ['Twitter', 'X', 'x.com', 'tweet', 'tuitear']},
+    'facebook':    {'id': 'INT_FACEBOOK',   'tipo': 'red_social',  'grounding_base': 0.87, 'variantes': ['Facebook', 'FB', 'fb', 'feis']},
+    'google':      {'id': 'INT_GOOGLE',     'tipo': 'buscador',    'grounding_base': 0.90, 'variantes': ['Google', 'googlear', 'buscar en google']},
+    'email':       {'id': 'INT_EMAIL',      'tipo': 'comunicacion','grounding_base': 0.88, 'variantes': ['correo', 'correo electrónico', 'e-mail', 'gmail']},
+    'meme':        {'id': 'INT_MEME',       'tipo': 'contenido',   'grounding_base': 0.88, 'variantes': ['memes', 'humor en internet']},
+    'viral':       {'id': 'INT_VIRAL',      'tipo': 'fenomeno',    'grounding_base': 0.87, 'variantes': ['se hizo viral', 'trending', 'tendencia']},
+    'like':        {'id': 'INT_LIKE',       'tipo': 'interaccion', 'grounding_base': 0.87, 'variantes': ['likes', 'me gusta', 'darle like']},
+    'comentario':  {'id': 'INT_COMENTARIO', 'tipo': 'interaccion', 'grounding_base': 0.85, 'variantes': ['comentarios', 'comment', 'comentar']},
+    'publicar':    {'id': 'INT_PUBLICAR',   'tipo': 'accion',      'grounding_base': 0.85, 'variantes': ['publicación', 'post', 'postear', 'subir']},
+    'seguidores':  {'id': 'INT_SEGUIDORES', 'tipo': 'metrica',     'grounding_base': 0.83, 'variantes': ['followers', 'seguir', 'siguiendo']},
+    'streaming':   {'id': 'INT_STREAMING',  'tipo': 'plataforma',  'grounding_base': 0.87, 'variantes': ['Netflix', 'netflix', 'Spotify', 'spotify', 'stream']},
+    'podcast':     {'id': 'INT_PODCAST',    'tipo': 'contenido',   'grounding_base': 0.85, 'variantes': ['podcasts', 'escuchar podcast']},
+    'bot':         {'id': 'INT_BOT',        'tipo': 'concepto',    'grounding_base': 0.87, 'variantes': ['bots', 'chatbot', 'robot', 'eres un bot']},
 }
 
 
-# ── Vocabulario de mundo y vida ──────────────────────────
-CONCEPTOS_MUNDO = {
-
-    # ── Transporte ────────────────────────────────
-    'transporte': {
-        'id': 'VID_TRANSPORTE', 'tipo': 'actividad',
-        'variantes': ['bus','metro','transmilenio','uber','taxi','moto','carro','el carro',
-                      'en bus','en metro','el trancón','trancón','tráfico','trancado'],
-        'grounding_base': 0.72,
-    },
-
-    # ── Salud y bienestar ─────────────────────────
-    'medico': {
-        'id': 'VID_MEDICO', 'tipo': 'salud',
-        'variantes': ['médico','medico','doctor','cita médica','hospital','clínica',
-                      'pastilla','medicina','diagnóstico'],
-        'grounding_base': 0.78,
-    },
-    'ejercicio': {
-        'id': 'VID_EJERCICIO', 'tipo': 'bienestar',
-        'variantes': ['ejercicio','gym','gimnasio','correr','entrenar','entrenamiento',
-                      'hacer ejercicio','pesas','cardio'],
-        'grounding_base': 0.73,
-    },
-    'meditacion': {
-        'id': 'VID_MEDITACION', 'tipo': 'bienestar',
-        'variantes': ['meditación','meditacion','meditar','respirar','calmarme',
-                      'calmar la mente','relajarme'],
-        'grounding_base': 0.73,
-    },
-
-    # ── Compras y dinero ──────────────────────────
-    'compras': {
-        'id': 'VID_COMPRAS', 'tipo': 'actividad',
-        'variantes': ['comprar','compré','ir de compras','mercado','supermercado',
-                      'tienda','lo compré','lo voy a comprar'],
-        'grounding_base': 0.70,
-    },
-    'plata': {
-        'id': 'VID_DINERO', 'tipo': 'recurso',
-        'variantes': ['plata','dinero','no tengo plata','me quedé sin plata',
-                      'debo','deuda','ahorrar','ahorro','caro','barato'],
-        'grounding_base': 0.78,
-    },
-
-    # ── Naturaleza ────────────────────────────────
-    'naturaleza': {
-        'id': 'VID_NATURALEZA', 'tipo': 'entorno',
-        'variantes': ['naturaleza','campo','montaña','mar','playa','río','lago',
-                      'árboles','verde','parque'],
-        'grounding_base': 0.70,
-    },
-
-    # ── Mascotas ──────────────────────────────────
-    'mascota': {
-        'id': 'VID_MASCOTA', 'tipo': 'ser_vivo',
-        'variantes': ['perro','gato','mascota','mi perro','mi gato','el perro',
-                      'la gata','el gato','mascotita'],
-        'grounding_base': 0.72,
-    },
-
-    # ── Hogar ─────────────────────────────────────
-    'casa': {
-        'id': 'VID_CASA', 'tipo': 'lugar',
-        'variantes': ['casa','en casa','mi casa','llegar a casa','estoy en casa',
-                      'cuarto','habitación','pieza'],
-        'grounding_base': 0.73,
-    },
-
-    # ── Sentido existencial ───────────────────────
-    'vida': {
-        'id': 'VID_VIDA', 'tipo': 'concepto_existencial',
-        'variantes': ['la vida','mi vida','así es la vida','esto es la vida',
-                      'vivir','quiero vivir','sentido de la vida'],
-        'grounding_base': 0.83,
-    },
-    'tiempo_vida': {
-        'id': 'VID_TIEMPO_ESCASO', 'tipo': 'concepto_existencial',
-        'variantes': ['no tengo tiempo','se va el tiempo','el tiempo pasa',
-                      'ya se me hizo tarde en','desperdicié','perdí tiempo'],
-        'grounding_base': 0.78,
-    },
-    'felicidad': {
-        'id': 'VID_FELICIDAD', 'tipo': 'concepto_existencial',
-        'variantes': ['felicidad','ser feliz','quiero ser feliz','no soy feliz',
-                      'buscar la felicidad','qué es la felicidad'],
-        'grounding_base': 0.83,
-    },
-}
