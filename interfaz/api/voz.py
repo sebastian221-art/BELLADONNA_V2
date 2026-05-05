@@ -1,6 +1,12 @@
 # interfaz/api/voz.py
 # ================================================
 # VOZ — GestorVoz + API integrada al servidor
+#
+# Voz: edge-tts con es-CO-SalomeNeural
+#   Voz femenina neural colombiana — mucho mejor
+#   que gTTS. Sin costo, sin API key.
+#
+# La ruta /audio/<nombre> la registra audio.py.
 # ================================================
 
 import os
@@ -8,6 +14,7 @@ import threading
 import uuid
 import socket
 import time
+import asyncio
 from pathlib import Path
 from flask import request, jsonify
 
@@ -15,6 +22,9 @@ _AUDIO_DIR = Path(__file__).parent.parent.parent / 'datos' / 'audio_temp'
 _AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 
 _CHROMECAST_PORT = 8009
+
+# Voz de Bell — femenina, colombiana, neural
+_VOZ_BELL = 'es-CO-SalomeNeural'
 
 
 def _ip_local() -> str:
@@ -88,15 +98,12 @@ class GestorVoz:
             host_tuple = (ip, _CHROMECAST_PORT, None, None, nombre)
             cast = pychromecast.get_chromecast_from_host(host_tuple, timeout=10)
             cast.wait(timeout=10)
-
             self._cast    = cast
             self._nombre  = cast.cast_info.friendly_name or nombre
             self._ip_cast = ip
             self._activa  = True
             self._emitir_estado()
-
             print(f'  [Voz] Conectado a {self._nombre} ({ip}) | IP local: {self._ip_local}:{self._puerto}')
-
             return {
                 'ok':       True,
                 'nombre':   self._nombre,
@@ -109,11 +116,9 @@ class GestorVoz:
     def _activar_via_mdns(self, nombre_dispositivo: str = None) -> dict:
         import pychromecast
         chromecasts, browser = pychromecast.get_chromecasts(timeout=8)
-
         threading.Thread(
             target=_stop_browser_diferido,
-            args=(browser,),
-            daemon=True
+            args=(browser,), daemon=True
         ).start()
 
         if not chromecasts:
@@ -134,14 +139,10 @@ class GestorVoz:
             )
 
         GestorVoz._dispositivos_cache = [
-            {
-                'nombre': c.cast_info.friendly_name,
-                'ip':     c.cast_info.host,
-                'modelo': c.cast_info.model_name or 'Chromecast',
-            }
+            {'nombre': c.cast_info.friendly_name, 'ip': c.cast_info.host,
+             'modelo': c.cast_info.model_name or 'Chromecast'}
             for c in chromecasts
         ]
-
         return self._conectar_por_ip(target.cast_info.host, target.cast_info.friendly_name)
 
     def desactivar(self):
@@ -159,13 +160,10 @@ class GestorVoz:
         try:
             import pychromecast
             chromecasts, browser = pychromecast.get_chromecasts(timeout=8)
-
             threading.Thread(
                 target=_stop_browser_diferido,
-                args=(browser,),
-                daemon=True
+                args=(browser,), daemon=True
             ).start()
-
             resultado = [
                 {
                     'nombre':    c.cast_info.friendly_name,
@@ -175,12 +173,10 @@ class GestorVoz:
                 }
                 for c in chromecasts
             ]
-
             GestorVoz._dispositivos_cache = [
                 {'nombre': r['nombre'], 'ip': r['ip'], 'modelo': r['modelo']}
                 for r in resultado
             ]
-
             return resultado
         except Exception:
             return []
@@ -194,8 +190,7 @@ class GestorVoz:
             return self._hablar_interno(texto)
         threading.Thread(
             target=self._hablar_interno,
-            args=(texto,),
-            daemon=True,
+            args=(texto,), daemon=True
         ).start()
         return True
 
@@ -204,20 +199,55 @@ class GestorVoz:
             try:
                 ruta = self._generar_audio(texto)
                 if not ruta:
-                    print('  [Voz] Error: no se generó el audio')
                     return False
-
                 url = f'http://{self._ip_local}:{self._puerto}/audio/{ruta.name}'
                 print(f'  [Voz] URL del audio: {url}')
-
                 return self._reproducir(url)
-
             except Exception as e:
-                print(f'  [Voz] Error en _hablar_interno: {e}')
-                import traceback; traceback.print_exc()
+                print(f'  [Voz] Error: {e}')
                 return False
 
     def _generar_audio(self, texto: str) -> Path:
+        """
+        Genera audio con edge-tts usando la voz neural
+        femenina colombiana es-CO-SalomeNeural.
+        Mucho mejor calidad que gTTS.
+        """
+        try:
+            import edge_tts
+            import re
+
+            # Limpiar markdown
+            t = re.sub(r'[\*#`]', '', texto)
+            t = re.sub(r'—', ',', t).strip()
+
+            nombre = f'bell_{uuid.uuid4().hex[:8]}.mp3'
+            ruta   = _AUDIO_DIR / nombre
+
+            # edge-tts es asíncrono — ejecutar en event loop
+            async def _generar():
+                communicate = edge_tts.Communicate(t, _VOZ_BELL)
+                await communicate.save(str(ruta))
+
+            # Crear event loop nuevo para el hilo
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(_generar())
+            loop.close()
+
+            print(f'  [Voz] Audio generado: {ruta.name} ({ruta.stat().st_size} bytes)')
+            threading.Timer(120, lambda: ruta.unlink(missing_ok=True)).start()
+            return ruta
+
+        except ImportError:
+            print('  [Voz] edge-tts no instalado — ejecuta: pip install edge-tts')
+            return self._generar_audio_gtts(texto)
+        except Exception as e:
+            print(f'  [Voz] Error edge-tts: {e}')
+            return self._generar_audio_gtts(texto)
+
+    def _generar_audio_gtts(self, texto: str) -> Path:
+        """Fallback a gTTS si edge-tts no está disponible."""
         try:
             from gtts import gTTS
             import re
@@ -226,33 +256,20 @@ class GestorVoz:
             nombre = f'bell_{uuid.uuid4().hex[:8]}.mp3'
             ruta   = _AUDIO_DIR / nombre
             gTTS(text=t, lang='es', tld='com.co', slow=False).save(str(ruta))
-            print(f'  [Voz] Audio generado: {ruta.name} ({ruta.stat().st_size} bytes)')
             threading.Timer(120, lambda: ruta.unlink(missing_ok=True)).start()
             return ruta
         except Exception as e:
-            print(f'  [Voz] Error gTTS: {e}')
+            print(f'  [Voz] Error gTTS fallback: {e}')
             return None
 
     def _reproducir(self, url: str) -> bool:
-        """
-        Reproduce audio en el Nest Mini.
-        Logs detallados para diagnosticar problemas.
-        NO mata self._activa en errores temporales.
-        """
         try:
+            from pychromecast.controllers.media import STREAM_TYPE_BUFFERED
             mc = self._cast.media_controller
             print(f'  [Voz] Enviando play_media → {url}')
-
-            # BUFFERED = archivo estático (no stream en vivo)
-            # Sin esto el Nest trata el MP3 como stream LIVE y puede fallar
-            from pychromecast.controllers.media import STREAM_TYPE_BUFFERED
             mc.play_media(url, 'audio/mpeg', stream_type=STREAM_TYPE_BUFFERED)
-
-            print('  [Voz] Esperando que el reproductor se active...')
             mc.block_until_active(timeout=15)
-            print(f'  [Voz] Reproductor activo — estado: {mc.status}')
-
-            # Esperar a que termine la reproducción
+            print(f'  [Voz] Reproductor activo')
             tiempo_espera = 0
             while tiempo_espera < 60:
                 time.sleep(0.5)
@@ -263,15 +280,12 @@ class GestorVoz:
                     break
                 if mc.status and mc.status.player_is_idle:
                     break
-
             print(f'  [Voz] Reproducción completada ({tiempo_espera:.1f}s)')
             return True
-
         except Exception as e:
-            # Log completo del error sin matar _activa
-            # (podría ser un error temporal de red, no de conexión)
-            print(f'  [Voz] Error en _reproducir: {type(e).__name__}: {e}')
-            import traceback; traceback.print_exc()
+            print(f'  [Voz] Error Nest: {e}')
+            self._activa = False
+            self._emitir_estado()
             return False
 
     def volumen(self, nivel: float):

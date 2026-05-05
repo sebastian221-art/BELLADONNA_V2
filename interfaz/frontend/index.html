@@ -24,30 +24,21 @@
         }
         #panel-dispositivos.visible { display: block; }
         .panel-titulo {
-            font-size: 11px;
-            font-weight: 700;
-            color: #666688;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 14px;
+            font-size: 11px; font-weight: 700; color: #666688;
+            text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px;
         }
         .voz-toggle-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-            padding: 10px 12px;
-            background: rgba(108,99,255,0.08);
-            border-radius: 10px;
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 18px; padding: 10px 12px;
+            background: rgba(108,99,255,0.08); border-radius: 10px;
             border: 1px solid rgba(108,99,255,0.15);
         }
         .voz-toggle-label { font-size: 14px; font-weight: 500; color: #d0d0ee; }
         .voz-toggle-sub   { font-size: 11px; color: #555577; margin-top: 2px; }
         .toggle-switch    { position: relative; width: 48px; height: 26px; flex-shrink: 0; cursor: pointer; }
         .toggle-track {
-            position: absolute; inset: 0;
-            background: #2a2a45; border-radius: 13px;
-            transition: background 0.25s;
+            position: absolute; inset: 0; background: #2a2a45;
+            border-radius: 13px; transition: background 0.25s;
         }
         .toggle-track.cargando { background: #3a3a55; animation: tpulse 1s infinite; }
         .toggle-track.activo   { background: #6c63ff; }
@@ -60,10 +51,8 @@
         .toggle-track.cargando .toggle-thumb { transform: translateX(11px); }
         @keyframes tpulse { 0%,100%{opacity:1} 50%{opacity:.6} }
         .disp-conectado {
-            background: rgba(108,99,255,0.1);
-            border: 1px solid rgba(108,99,255,0.25);
-            border-radius: 10px; padding: 10px 12px;
-            margin-bottom: 14px; display: none;
+            background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.25);
+            border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; display: none;
         }
         .disp-conectado.visible { display: block; }
         .disp-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
@@ -82,23 +71,19 @@
             padding: 9px 11px; border-radius: 8px;
             cursor: pointer; transition: background 0.15s; margin-bottom: 4px;
         }
-        .disp-card:hover   { background: rgba(108,99,255,0.12); }
-        .disp-card-nombre  { font-size: 13px; color: #d0d0ee; }
-        .disp-card-ip      { font-size: 11px; color: #555577; }
+        .disp-card:hover  { background: rgba(108,99,255,0.12); }
+        .disp-card-nombre { font-size: 13px; color: #d0d0ee; }
+        .disp-card-ip     { font-size: 11px; color: #555577; }
         .btn-buscar {
             width: 100%; padding: 9px;
-            background: rgba(108,99,255,0.15);
-            border: 1px solid rgba(108,99,255,0.3);
+            background: rgba(108,99,255,0.15); border: 1px solid rgba(108,99,255,0.3);
             border-radius: 9px; color: #8888ee; font-size: 13px;
             cursor: pointer; transition: all 0.15s; font-weight: 500;
         }
         .btn-buscar:hover:not(:disabled) { background: rgba(108,99,255,0.25); color: #aaaaff; }
         .btn-buscar:disabled { opacity: 0.5; cursor: not-allowed; }
-        .sin-disp    { font-size: 12px; color: #444466; text-align: center; padding: 6px 0; }
-        .proximamente {
-            margin-top: 14px; padding-top: 12px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-        }
+        .sin-disp { font-size: 12px; color: #444466; text-align: center; padding: 6px 0; }
+        .proximamente { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); }
         #btn-dispositivos {
             display: flex; align-items: center; gap: 6px;
             background: none; border: 1px solid #2a2a45;
@@ -152,7 +137,7 @@
             </div>
             <div id="chat-indicador"></div>
             <div id="chat-input-zona">
-                <!-- Botón micrófono — Web Speech API nativa del navegador -->
+                <!-- 🎤 Micrófono — escucha tu voz (SpeechRecognition) -->
                 <button id="chat-mic" title="Hablar con Bell" class="inactivo">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -160,6 +145,15 @@
                         <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
                         <line x1="12" y1="19" x2="12" y2="23"/>
                         <line x1="8"  y1="23" x2="16" y2="23"/>
+                    </svg>
+                </button>
+                <!-- 🔊 Voz PC — Bell habla por los parlantes (SpeechSynthesis) -->
+                <button id="chat-voz-pc" class="activo" title="Bell habla — clic para silenciar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
                     </svg>
                 </button>
                 <textarea id="chat-input" placeholder="Habla con Bell..." rows="1"></textarea>
@@ -186,13 +180,13 @@
     </main>
 </div>
 
-<!-- Panel dispositivos (Nest Mini) -->
+<!-- Panel dispositivos (Nest Mini — opcional) -->
 <div id="panel-dispositivos">
     <div class="panel-titulo">Dispositivos de Bell</div>
     <div class="voz-toggle-row">
         <div>
-            <div class="voz-toggle-label">Voz activa</div>
-            <div class="voz-toggle-sub" id="voz-sub">Desactivada</div>
+            <div class="voz-toggle-label">Nest Mini</div>
+            <div class="voz-toggle-sub" id="voz-sub">Desactivado</div>
         </div>
         <div class="toggle-switch" onclick="toggleVoz()">
             <div class="toggle-track" id="toggle-track">
@@ -213,29 +207,21 @@
         <div class="vol-row">
             <span class="vol-label">Vol</span>
             <input type="range" class="vol-slider" id="vol-slider"
-                   min="0" max="100" value="80"
-                   oninput="ajustarVol(this.value)">
+                   min="0" max="100" value="80" oninput="ajustarVol(this.value)">
             <span class="vol-val" id="vol-val">80%</span>
         </div>
     </div>
     <div class="panel-titulo" style="margin-top:4px">En tu red</div>
-    <div id="lista-red">
-        <div class="sin-disp">Presiona "Buscar" para encontrar dispositivos</div>
-    </div>
-    <button class="btn-buscar" id="btn-buscar" onclick="buscarDispositivos()">
-        🔍 Buscar dispositivos
-    </button>
+    <div id="lista-red"><div class="sin-disp">Presiona "Buscar" para encontrar dispositivos</div></div>
+    <button class="btn-buscar" id="btn-buscar" onclick="buscarDispositivos()">🔍 Buscar dispositivos</button>
     <div class="proximamente">
         <div class="panel-titulo">Próximamente</div>
         <div class="sin-disp">Luces, cámaras, sensores...</div>
     </div>
 </div>
 
-<!-- Three.js y Socket.IO -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
-
-<!-- Visualización 3D -->
 <script src="/scripts/visualizacion/motor3d.js"></script>
 <script src="/scripts/visualizacion/nodos.js"></script>
 <script src="/scripts/visualizacion/conexiones.js"></script>
@@ -247,15 +233,12 @@
 <script src="/scripts/visualizacion/vistas/vista_flujo.js"></script>
 <script src="/scripts/visualizacion/vistas/vista_consejeras.js"></script>
 <script src="/scripts/visualizacion/vistas/vista_vida.js"></script>
-
-<!-- Chat (incluye GestorVozWeb) y estado -->
 <script src="/scripts/chat/indicador.js"></script>
 <script src="/scripts/chat/chat.js"></script>
 <script src="/scripts/estado/estado_bell.js"></script>
 <script src="/scripts/estado/sincronizador.js"></script>
 <script src="/scripts/main.js"></script>
 
-<!-- Panel dispositivos + control Nest Mini -->
 <script>
 var vozActiva=false, panelAbierto=false, buscando=false;
 
@@ -263,185 +246,116 @@ function togglePanel(){
     panelAbierto=!panelAbierto;
     document.getElementById('panel-dispositivos').classList.toggle('visible',panelAbierto);
 }
-
 document.addEventListener('click',function(e){
     var panel=document.getElementById('panel-dispositivos');
     var btn=document.getElementById('btn-dispositivos');
     if(panelAbierto&&!panel.contains(e.target)&&!btn.contains(e.target)){
-        panelAbierto=false;
-        panel.classList.remove('visible');
+        panelAbierto=false; panel.classList.remove('visible');
     }
 });
-
 function toggleVoz(){
     if(buscando)return;
     if(vozActiva){ desactivarVoz(); }
     else{
         var cards=document.querySelectorAll('.disp-card');
-        if(cards.length>0){
-            // Pasar IP directamente — evita redescubrimiento mDNS
-            activarVoz(cards[0].dataset.nombre, cards[0].dataset.ip);
-        } else {
-            buscarYConectar();
-        }
+        if(cards.length>0){ activarVoz(cards[0].dataset.nombre,cards[0].dataset.ip); }
+        else{ buscarYConectar(); }
     }
 }
-
 function buscarYConectar(){
     if(buscando)return;
-    buscando=true;
-    setCargando(true);
+    buscando=true; setCargando(true);
     document.getElementById('estado-busq').classList.add('visible');
     document.getElementById('voz-sub').textContent='Buscando...';
-    fetch('/api/voz/dispositivos')
-        .then(function(r){ return r.json(); })
-        .then(function(data){
-            var d=data.dispositivos||[];
-            renderDispositivos(d);
-            if(d.length>0){
-                // Conectar por IP directa al primer dispositivo
-                activarVoz(d[0].nombre, d[0].ip);
-            } else {
-                buscando=false; setCargando(false);
-                document.getElementById('estado-busq').classList.remove('visible');
-                document.getElementById('voz-sub').textContent='Sin dispositivos en la red';
-            }
-        })
-        .catch(function(){
+    fetch('/api/voz/dispositivos').then(r=>r.json()).then(data=>{
+        var d=data.dispositivos||[];
+        renderDispositivos(d);
+        if(d.length>0){ activarVoz(d[0].nombre,d[0].ip); }
+        else{
             buscando=false; setCargando(false);
             document.getElementById('estado-busq').classList.remove('visible');
-            document.getElementById('voz-sub').textContent='Error al buscar';
-        });
+            document.getElementById('voz-sub').textContent='Sin dispositivos en la red';
+        }
+    }).catch(()=>{
+        buscando=false; setCargando(false);
+        document.getElementById('estado-busq').classList.remove('visible');
+        document.getElementById('voz-sub').textContent='Error al buscar';
+    });
 }
-
-function activarVoz(nombre, ip){
+function activarVoz(nombre,ip){
     buscando=true; setCargando(true);
     document.getElementById('estado-busq').classList.add('visible');
     document.getElementById('voz-sub').textContent='Conectando a '+nombre+'...';
-
-    // Pasar IP directa si está disponible — evita Zeroconf en el servidor
-    var body = {nombre: nombre||null};
-    if(ip){ body.ip = ip; }
-
-    fetch('/api/voz/activar',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(body)
-    })
-    .then(function(r){ return r.json(); })
-    .then(function(data){
+    var body={nombre:nombre||null};
+    if(ip) body.ip=ip;
+    fetch('/api/voz/activar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(r=>r.json()).then(data=>{
         buscando=false;
         document.getElementById('estado-busq').classList.remove('visible');
-        if(data.ok){ actualizarUI({activa:true, nombre:data.nombre, ip:data.ip}); }
-        else{
-            setCargando(false);
-            document.getElementById('voz-sub').textContent=data.error||'No se pudo conectar';
-        }
-    })
-    .catch(function(){
+        if(data.ok){ actualizarUI({activa:true,nombre:data.nombre,ip:data.ip}); }
+        else{ setCargando(false); document.getElementById('voz-sub').textContent=data.error||'No se pudo conectar'; }
+    }).catch(()=>{
         buscando=false; setCargando(false);
         document.getElementById('estado-busq').classList.remove('visible');
         document.getElementById('voz-sub').textContent='Error de conexión';
     });
 }
-
 function desactivarVoz(){
-    fetch('/api/voz/desactivar',{method:'POST'})
-        .then(function(){ actualizarUI({activa:false}); });
+    fetch('/api/voz/desactivar',{method:'POST'}).then(()=>actualizarUI({activa:false}));
 }
-
 function buscarDispositivos(){
     if(buscando)return;
     buscando=true;
     var btn=document.getElementById('btn-buscar');
-    btn.disabled=true;
-    btn.textContent='⏳ Buscando (8 seg)...';
-    fetch('/api/voz/dispositivos')
-        .then(function(r){ return r.json(); })
-        .then(function(data){
-            buscando=false;
-            btn.disabled=false;
-            btn.textContent='🔍 Buscar dispositivos';
-            renderDispositivos(data.dispositivos||[]);
-        })
-        .catch(function(){
-            buscando=false;
-            btn.disabled=false;
-            btn.textContent='🔍 Buscar dispositivos';
-        });
+    btn.disabled=true; btn.textContent='⏳ Buscando...';
+    fetch('/api/voz/dispositivos').then(r=>r.json()).then(data=>{
+        buscando=false; btn.disabled=false; btn.textContent='🔍 Buscar dispositivos';
+        renderDispositivos(data.dispositivos||[]);
+    }).catch(()=>{ buscando=false; btn.disabled=false; btn.textContent='🔍 Buscar dispositivos'; });
 }
-
 function renderDispositivos(dispositivos){
     var lista=document.getElementById('lista-red');
-    if(!dispositivos.length){
-        lista.innerHTML='<div class="sin-disp">No se encontraron dispositivos</div>';
-        return;
-    }
-    lista.innerHTML=dispositivos.map(function(d){
-        // data-ip guarda la IP para conexión directa posterior
-        return '<div class="disp-card" data-nombre="'+d.nombre+'" data-ip="'+d.ip+'" onclick="activarVoz(\''+d.nombre+'\',\''+d.ip+'\')">'
-            +'<span style="font-size:16px">'+(d.conectado?'🔊':'📻')+'</span>'
-            +'<div>'
-            +'<div class="disp-card-nombre">'+d.nombre+'</div>'
-            +'<div class="disp-card-ip">'+d.ip+' · '+d.modelo+'</div>'
-            +'</div>'
-            +(d.conectado?'<span style="margin-left:auto;font-size:10px;color:#6c63ff">●</span>':'')
-            +'</div>';
-    }).join('');
+    if(!dispositivos.length){ lista.innerHTML='<div class="sin-disp">No se encontraron dispositivos</div>'; return; }
+    lista.innerHTML=dispositivos.map(d=>
+        '<div class="disp-card" data-nombre="'+d.nombre+'" data-ip="'+d.ip+'" onclick="activarVoz(\''+d.nombre+'\',\''+d.ip+'\')">'
+        +'<span style="font-size:16px">'+(d.conectado?'🔊':'📻')+'</span>'
+        +'<div><div class="disp-card-nombre">'+d.nombre+'</div>'
+        +'<div class="disp-card-ip">'+d.ip+' · '+d.modelo+'</div></div>'
+        +(d.conectado?'<span style="margin-left:auto;font-size:10px;color:#6c63ff">●</span>':'')
+        +'</div>'
+    ).join('');
 }
-
 function ajustarVol(val){
     document.getElementById('vol-val').textContent=val+'%';
-    fetch('/api/voz/volumen',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({nivel:val/100})
-    });
+    fetch('/api/voz/volumen',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nivel:val/100})});
 }
-
 function setCargando(c){
     var t=document.getElementById('toggle-track');
-    t.classList.toggle('cargando',c);
-    t.classList.toggle('activo',!c&&vozActiva);
+    t.classList.toggle('cargando',c); t.classList.toggle('activo',!c&&vozActiva);
 }
-
 function actualizarUI(estado){
     vozActiva=estado.activa;
     var track=document.getElementById('toggle-track');
-    track.classList.remove('cargando');
-    track.classList.toggle('activo',vozActiva);
+    track.classList.remove('cargando'); track.classList.toggle('activo',vozActiva);
     document.getElementById('voz-dot').classList.toggle('activa',vozActiva);
     document.getElementById('btn-dispositivos').classList.toggle('activo',vozActiva);
-    var dc=document.getElementById('disp-conectado');
-    dc.classList.toggle('visible',vozActiva);
+    document.getElementById('disp-conectado').classList.toggle('visible',vozActiva);
     if(vozActiva&&estado.nombre){
         document.getElementById('disp-nombre').textContent=estado.nombre;
         document.getElementById('disp-ip').textContent=estado.ip||'';
         document.getElementById('voz-sub').textContent='Conectado: '+estado.nombre;
     } else {
-        document.getElementById('voz-sub').textContent='Desactivada';
+        document.getElementById('voz-sub').textContent='Desactivado';
     }
 }
-
-// Al cargar — sincronizar estado de voz con el servidor
 window.addEventListener('load',function(){
-    fetch('/api/voz/estado')
-        .then(function(r){ return r.json(); })
-        .then(actualizarUI)
-        .catch(function(){});
-
-    // Escuchar actualizaciones de voz via Socket.IO
+    fetch('/api/voz/estado').then(r=>r.json()).then(actualizarUI).catch(()=>{});
     setTimeout(function(){
         if(window.BellApp&&window.BellApp.socket){
-            window.BellApp.socket.on('voz_estado',function(estado){
-                actualizarUI(estado);
-            });
+            window.BellApp.socket.on('voz_estado',actualizarUI);
         }
-    }, 1000);
+    },1000);
 });
-
-window._vozEstadoCallback=actualizarUI;
 </script>
-
 </body>
 </html>

@@ -12,7 +12,6 @@
     border-right: 1px solid var(--borde-suave);
 }
 
-/* Historial de mensajes */
 #chat-historial {
     flex: 1;
     overflow-y: auto;
@@ -22,7 +21,6 @@
     gap: var(--espacio-md);
 }
 
-/* Mensaje de bienvenida */
 .mensaje-bienvenida {
     text-align: center;
     color: var(--texto-apagado);
@@ -30,7 +28,6 @@
     padding: var(--espacio-xl) 0;
 }
 
-/* Mensajes */
 .mensaje {
     display: flex;
     flex-direction: column;
@@ -75,7 +72,6 @@
 
 .mensaje.sebastian .mensaje-autor { text-align: right; }
 
-/* Indicador de estado */
 #chat-indicador {
     min-height: 32px;
     padding: var(--espacio-sm) var(--espacio-lg);
@@ -91,13 +87,10 @@
     opacity: 0;
     transition: opacity var(--transicion-normal);
 }
-
 .indicador-texto.visible { opacity: 1; }
 
 .indicador-punto {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+    width: 6px; height: 6px; border-radius: 50%;
     background-color: var(--neurona-activa);
     animation: pulsar 1.2s ease infinite;
 }
@@ -107,7 +100,6 @@
     50%       { opacity: 0.4; transform: scale(0.8); }
 }
 
-/* Zona de input */
 #chat-input-zona {
     height: var(--alto-input);
     padding: var(--espacio-sm) var(--espacio-md);
@@ -134,10 +126,9 @@
     overflow-y: auto;
 }
 
-#chat-input:focus          { border-color: var(--neurona-activa); }
-#chat-input::placeholder   { color: var(--texto-apagado); }
+#chat-input:focus        { border-color: var(--neurona-activa); }
+#chat-input::placeholder { color: var(--texto-apagado); }
 
-/* Botón enviar */
 #chat-enviar {
     background: var(--neurona-activa);
     border: none;
@@ -155,8 +146,11 @@
 #chat-enviar:hover  { background: var(--conexion-viva); transform: translateY(-1px); }
 #chat-enviar:active { transform: translateY(0); }
 
-/* ── BOTÓN MICRÓFONO ────────────────────────────────────── */
-#chat-mic {
+/* ── BOTONES DE VOZ ─────────────────────────────────────── */
+
+/* Base compartida para mic y voz-pc */
+#chat-mic,
+#chat-voz-pc {
     width: 36px;
     height: 36px;
     flex-shrink: 0;
@@ -170,32 +164,62 @@
     justify-content: center;
     transition: all var(--transicion-rapida);
     padding: 0;
-    position: relative;
-    overflow: hidden;
 }
 
-#chat-mic:hover {
-    border-color: var(--neurona-activa);
-    color: var(--neurona-activa);
-    background: rgba(74, 158, 255, 0.08);
-}
-
-/* Estado: escuchando */
-#chat-mic.escuchando {
-    border-color: #ff4444;
-    color: #ff4444;
-    background: rgba(255, 68, 68, 0.12);
-    animation: mic-pulsar 1.2s ease infinite;
-}
-
-@keyframes mic-pulsar {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.4); }
-    50%       { box-shadow: 0 0 0 6px rgba(255, 68, 68, 0); }
-}
-
-/* SVG del micrófono dentro del botón */
-#chat-mic svg {
+#chat-mic svg,
+#chat-voz-pc svg {
     width: 16px;
     height: 16px;
     pointer-events: none;
 }
+
+/* Micrófono — estado inactivo */
+#chat-mic:hover {
+    border-color: var(--neurona-activa);
+    color: var(--neurona-activa);
+    background: rgba(74,158,255,0.08);
+}
+
+/* Micrófono — estado escuchando (rojo pulsante) */
+#chat-mic.escuchando {
+    border-color: #ff4444;
+    color: #ff4444;
+    background: rgba(255,68,68,0.12);
+    animation: mic-pulsar 1.2s ease infinite;
+}
+
+@keyframes mic-pulsar {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.4); }
+    50%       { box-shadow: 0 0 0 6px rgba(255,68,68,0); }
+}
+
+/* Voz PC — activo (Bell está hablando, azul) */
+#chat-voz-pc.activo {
+    border-color: var(--neurona-activa);
+    color: var(--neurona-activa);
+    background: rgba(74,158,255,0.08);
+}
+
+/* Voz PC — silenciado (gris apagado) */
+#chat-voz-pc:not(.activo) {
+    opacity: 0.4;
+}
+
+#chat-voz-pc:hover {
+    opacity: 1;
+    border-color: var(--neurona-activa);
+    color: var(--neurona-activa);
+    background: rgba(74,158,255,0.08);
+}
+
+
+
+
+
+
+
+
+
+
+
+
