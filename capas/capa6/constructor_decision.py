@@ -1,27 +1,34 @@
 # capas/capa6/constructor_decision.py
 # ================================================
-# CONSTRUCTOR DE DECISIÓN — v5 FINAL
+# CONSTRUCTOR DE DECISIÓN — v6
 #
-# FIXES:
-# — operacion_matematica ANTES del check habilidad
-# — pregunta_arquitectura_bell: respuestas completas
-# — pregunta_sebastian: "quien soy yo" incluye nombre
-# — Detección de negaciones de identidad (openai, meta)
-#   para respuesta siempre con "Sebastian"
+# FIXES v6:
+# — Llaves _CONSEJERAS corregidas (CONSEJERA_X no BELL_X)
+# — pregunta_identidad_otro también responde sobre consejeras
+# — "qué tal" ya no activa path de Sebastian
+# — Groq recibe contexto para no reescribir respuestas factuales
+# — zona_desconocimiento tiene respuesta directa
 # ================================================
 
 import random
 from capas.capa6.paquete_capa6 import DecisionFinal
 
+# Bug 1 fix: claves = IDs reales en la red
 _CONSEJERAS = {
-    'BELL_VEGA':  ('Vega',  'mi consejera de seguridad. Tiene poder de veto total — si algo viola mis valores o puede hacerle daño a Sebastian, Vega lo bloquea. Nadie la pasa.'),
-    'BELL_SAGE':  ('Sage',  'quien sintetiza todo. Recibe lo que deliberan las otras 7 consejeras y toma la decisión final sobre qué respondo y cómo.'),
-    'BELL_ECHO':  ('Echo',  'mi verificadora de lógica y verdad. Si algo que voy a decir es inconsistente o falso, Echo lo detecta antes de que salga.'),
-    'BELL_LYRA':  ('Lyra',  'mi consejera emocional. Lee lo que Sebastian siente detrás de lo que dice y ajusta cómo respondo.'),
-    'BELL_NOVA':  ('Nova',  'mi optimizadora. Busca la respuesta más eficiente y directa para lo que Sebastian necesita.'),
-    'BELL_LUNA':  ('Luna',  'mi detectora de patrones. Ve conexiones entre mensajes y el estado general de Sebastian.'),
-    'BELL_IRIS':  ('Iris',  'mi exploradora de conocimiento. Busca en mi red neuronal la información más relevante.'),
-    'BELL_SOMA':  ('Soma',  'la primera en actuar — verifica que el mensaje llegó bien y está listo para procesarse.'),
+    'CONSEJERA_VEGA': ('Vega',  'mi consejera de seguridad. Tiene poder de veto total — si algo viola mis valores o puede hacerle daño a Sebastian, Vega lo bloquea. Nadie la pasa.'),
+    'CONSEJERA_SAGE': ('Sage',  'quien sintetiza todo. Recibe lo que deliberan las otras 7 consejeras y toma la decisión final sobre qué respondo y cómo.'),
+    'CONSEJERA_ECHO': ('Echo',  'mi verificadora de lógica y verdad. Si algo que voy a decir es inconsistente o falso, Echo lo detecta antes de que salga.'),
+    'CONSEJERA_LYRA': ('Lyra',  'mi consejera emocional. Lee lo que Sebastian siente detrás de lo que dice y ajusta cómo respondo.'),
+    'CONSEJERA_NOVA': ('Nova',  'mi optimizadora. Busca la respuesta más eficiente y directa para lo que Sebastian necesita.'),
+    'CONSEJERA_LUNA': ('Luna',  'mi detectora de patrones. Ve conexiones entre mensajes y el estado general de Sebastian.'),
+    'CONSEJERA_IRIS': ('Iris',  'mi exploradora de conocimiento. Busca en mi red neuronal la información más relevante.'),
+    'CONSEJERA_SOMA': ('Soma',  'la primera en actuar — verifica que el mensaje llegó bien y está listo para procesarse.'),
+}
+
+# Mapa de nombre → descripción para búsqueda por texto
+_CONSEJERAS_POR_NOMBRE = {
+    nombre.lower(): desc
+    for _, (nombre, desc) in _CONSEJERAS.items()
 }
 
 _FRASES_SEBASTIAN = [
@@ -41,11 +48,21 @@ _PATRONES_SEBASTIAN = [
     'donde estudio', 'dónde estudio',
     'cuantos años tengo', 'cuántos años tengo',
     'años tengo', 'mi edad',
-    'bucaramanga', 'jelcon', 'uniminuto',
+    'jelcon', 'uniminuto',
     'que hago yo', 'qué hago yo',
     'a que me dedico', 'a qué me dedico',
     'quién soy yo', 'me conoces',
     'que sabes de mi', 'qué sabes de mí',
+    # Bug 5 fix: 'bucaramanga' puede aparecer en frases como
+    # "qué piensas de bucaramanga" — se deja para pregunta general
+    # NO incluir palabras cortas que aparecen en otros contextos
+]
+
+# Frases que activan NEURONA_SEBASTIAN pero NO son preguntas sobre él
+# → deben ir por el path conversacional normal
+_PATRONES_NO_SEBASTIAN = [
+    'qué tal', 'que tal', 'qué más', 'que mas',
+    'cómo estás', 'como estas', 'cómo te va', 'como te va',
 ]
 
 # Patrones de negación de identidad — Bell responde con "Sebastian me creó"
@@ -189,10 +206,13 @@ class ConstructorDecision:
             )
 
         # ── DETECCIÓN TEMPRANA SEBASTIAN (compatibilidad) ────
+        # Bug 5 fix: ignorar frases conversacionales que activan
+        # NEURONA_SEBASTIAN pero no son preguntas sobre Sebastian
         es_sobre_sebastian = (
             any(p in texto_lower for p in _PATRONES_SEBASTIAN) or
             ('NEURONA_SEBASTIAN' in ids_activos and
-             tipo_mensaje in ('pregunta', 'conversacional'))
+             tipo_mensaje in ('pregunta', 'conversacional') and
+             not any(p in texto_lower for p in _PATRONES_NO_SEBASTIAN))
         )
         if es_sobre_sebastian:
             return DecisionFinal(
@@ -204,6 +224,15 @@ class ConstructorDecision:
                 que_no_sabe                = que_no_sabe,
                 respuesta_base             = random.choice(_FRASES_SEBASTIAN),
             )
+
+        # ══ PRIORIDAD 4: SOLICITUD TÉCNICA PYTHON ════════════
+        # Si el tipo es solicitud_tecnica y hay habilidad Python,
+        # el puente lo manejará. Aquí preparamos el contexto.
+        if tipo_mensaje == 'solicitud_tecnica' and habilidad_req == 'PYTHON_COMPLETO':
+            # Detectar verbosidad pedida por Sebastian
+            verbosidad = self._detectar_verbosidad(texto_lower)
+            # Pasar verbosidad al contexto para que el ejecutor la use
+            profunda['verbosidad_pedida'] = verbosidad
 
         # ── PUENTE ────────────────────────────────────────────
         respuesta_base = self._construir_con_puente(
@@ -233,8 +262,32 @@ class ConstructorDecision:
             respuesta_base=respuesta_base,
         )
 
+    def _detectar_verbosidad(self, texto_lower: str) -> str:
+        """Detecta si Sebastian pide resumen más simple o más detallado."""
+        simples = [
+            'más simple', 'mas simple', 'más sencillo', 'mas sencillo',
+            'resúmelo', 'resumelo', 'brevemente', 'en pocas palabras',
+            'resumido', 'breve', 'más corto', 'mas corto',
+            'sin tecnicismos', 'sin tanto detalle', 'simplifica',
+        ]
+        detallados = [
+            'más detallado', 'mas detallado', 'con más detalle',
+            'profundo', 'completo', 'a fondo', 'técnicamente',
+            'explica cada parte', 'análisis completo',
+        ]
+        if any(s in texto_lower for s in simples):
+            return 'simple'
+        if any(d in texto_lower for d in detallados):
+            return 'detallado'
+        return 'normal'
+
     def _respuesta_arquitectura(self, texto_lower: str, nodos: int) -> str:
         ns = str(nodos) if nodos else '?'
+        if 'zona de desconocimiento' in texto_lower or 'zona desconocimiento' in texto_lower:
+            return random.choice([
+                'Es el registro donde guardo lo que no reconocí. Cada concepto desconocido aterriza ahí — es mi lista de aprendizaje pendiente.',
+                'Mi zona de desconocimiento es donde registro palabras o conceptos que no reconocí. Así sé qué me falta aprender.',
+            ])
         if 'capas' in texto_lower or 'capa' in texto_lower:
             return random.choice([
                 '9 capas de procesamiento: recepción, activación neuronal, comprensión, evaluación, deliberación, decisión, ejecución, expresión e integración.',
@@ -329,10 +382,19 @@ class ConstructorDecision:
             ])
 
         consejeras_presentes = {k: v for k, v in _CONSEJERAS.items() if k in ids}
-        if consejeras_presentes and tipo == 'pregunta_identidad_bell':
+
+        # Bug 3 fix: responder sobre consejeras tanto en identidad_bell como identidad_otro
+        if consejeras_presentes and tipo in ('pregunta_identidad_bell', 'pregunta_identidad_otro', 'pregunta'):
             clave = list(consejeras_presentes.keys())[0]
             nombre_c, desc = consejeras_presentes[clave]
             return random.choice([f'{nombre_c} es {desc}', f'Mi consejera {nombre_c} — {desc}'])
+
+        # Bug 3b fix: búsqueda por nombre en el texto (por si el nodo no activó)
+        for nombre_c_lower, desc in _CONSEJERAS_POR_NOMBRE.items():
+            if nombre_c_lower in texto_lower and any(
+                kw in texto_lower for kw in ['quien es', 'quién es', 'qué hace', 'que hace', 'describe']
+            ):
+                return f'Mi consejera {nombre_c_lower.capitalize()} — {desc}'
 
         if tipo == 'pregunta_identidad_bell' and any(
             p in texto_lower for p in ['consejeras', 'quienes son', 'cuales son']

@@ -1,40 +1,16 @@
-# capas/capa7/ejecutor_habilidad.py
-# ================================================
-# EJECUTOR DE HABILIDAD — Capa 7
-#
-# Simple y directo:
-# — Si hay habilidad disponible → la ejecuta
-# — Si no está disponible → honestidad + zona
-#
-# La habilidad de lenguaje NO pasa por aquí.
-# Vive en Capa 6.
-# ================================================
-
+# capas/capa7/ejecutor_habilidad.py — v5 DIRECTO
+# La habilidad Python ya habla en lenguaje natural porque sus módulos
+# llaman a Groq directamente con prompts expertos.
+# El humanizador anterior recortaba las respuestas a 900 tokens.
+# AHORA: la respuesta del skill llega DIRECTA al usuario — sin re-procesar.
 import random
 from capas.capa7.paquete_capa7 import ResultadoEjecucion
 
 _RESPUESTAS_SIN_HABILIDAD = {
-    'CALCULO': [
-        "Mi habilidad de cálculo todavía está en construcción. Lo guardé — cuando esté lista lo hago.",
-        "Cálculo matemático viene. Lo registré como pendiente.",
-        "Todavía no puedo calcular eso. Ya está en mi zona de habilidades por construir.",
-    ],
-    'ANALISIS_PYTHON': [
-        "Análisis de código está en construcción. Lo registré como pendiente.",
-        "Todavía no tengo esa habilidad lista. Lo guardé.",
-    ],
-    'SHELL': [
-        "Ejecutar comandos del sistema todavía no puedo. Lo guardé como pendiente.",
-        "Esa habilidad está en construcción. Lo registré.",
-    ],
-    'SQLITE': [
-        "Base de datos viene. Lo registré como pendiente.",
-        "Todavía no tengo la habilidad de base de datos lista. Lo guardé.",
-    ],
-    'DEFAULT': [
-        "Esa habilidad todavía no la tengo. Lo registré — viene.",
-        "Registré lo que necesitas. Cuando tenga esa habilidad lo hago.",
-    ],
+    'CALCULO': ['Mi habilidad de cálculo está en construcción.'],
+    'SHELL':   ['Ejecutar comandos del sistema todavía no puedo. Lo guardé como pendiente.'],
+    'SQLITE':  ['Base de datos viene. Lo registré como pendiente.'],
+    'DEFAULT': ['Esa habilidad todavía no la tengo. Lo registré — viene.'],
 }
 
 
@@ -44,77 +20,62 @@ class EjecutorHabilidad:
         habilidad_id = deteccion.get('habilidad_id', '')
         disponible   = deteccion.get('disponible', False)
         texto        = deteccion.get('texto_original', '')
-
+        modo         = deteccion.get('modo', None)
+        verbosidad   = deteccion.get('verbosidad', 'normal')
         if disponible:
-            return self._ejecutar_habilidad(habilidad_id, texto)
-        else:
-            return self._sin_habilidad(habilidad_id, texto)
+            return self._ejecutar_habilidad(habilidad_id, texto, modo, verbosidad)
+        return self._sin_habilidad(habilidad_id, texto)
 
-    def _ejecutar_habilidad(
-        self, habilidad_id: str, texto: str
-    ) -> ResultadoEjecucion:
-        if habilidad_id == 'CALCULO':
-            return self._ejecutar_calculo(texto)
-        if habilidad_id == 'ANALISIS_PYTHON':
-            return self._ejecutar_analisis(texto)
-        if habilidad_id == 'SHELL':
-            return self._ejecutar_shell(texto)
-        if habilidad_id == 'SQLITE':
-            return self._ejecutar_sqlite(texto)
-        return ResultadoEjecucion(
-            ejecuto=False, habilidad_id=habilidad_id,
-            error=f'Habilidad {habilidad_id} marcada disponible sin implementación',
-        )
+    def _ejecutar_habilidad(self, habilidad_id, texto, modo, verbosidad):
+        if habilidad_id == 'PYTHON_COMPLETO':
+            return self._ejecutar_python(texto, modo, verbosidad)
+        if habilidad_id in ('CALCULO', 'SHELL', 'SQLITE'):
+            return ResultadoEjecucion(ejecuto=False, habilidad_id=habilidad_id, error='Pendiente')
+        return ResultadoEjecucion(ejecuto=False, habilidad_id=habilidad_id, error='Sin implementación')
 
-    def _ejecutar_calculo(self, texto: str) -> ResultadoEjecucion:
-        # Implementar cuando llegue la habilidad de cálculo
-        return ResultadoEjecucion(
-            ejecuto=False, habilidad_id='CALCULO',
-            error='Implementación pendiente',
-        )
+    def _ejecutar_python(self, texto: str, modo: str, verbosidad: str) -> ResultadoEjecucion:
+        try:
+            from biblioteca.habilidades.python.motor_python import MotorPython
+            motor     = MotorPython.obtener()
+            resultado = motor.procesar(texto=texto, modo=modo or 'explicacion', verbosidad=verbosidad)
 
-    def _ejecutar_analisis(self, texto: str) -> ResultadoEjecucion:
-        return ResultadoEjecucion(
-            ejecuto=False, habilidad_id='ANALISIS_PYTHON',
-            error='Implementación pendiente',
-        )
+            if not (resultado.get('exitoso') and resultado.get('respuesta')):
+                fallback = resultado.get('respuesta_fallback', '')
+                return ResultadoEjecucion(
+                    ejecuto=False, habilidad_id='PYTHON_COMPLETO',
+                    error=resultado.get('error', 'sin resultado'),
+                    resultado=fallback,
+                )
 
-    def _ejecutar_shell(self, texto: str) -> ResultadoEjecucion:
-        return ResultadoEjecucion(
-            ejecuto=False, habilidad_id='SHELL',
-            error='Implementación pendiente',
-        )
+            # ── RESPUESTA DIRECTA — sin humanizador ───────────────
+            # Los módulos del skill (analizador, explicador, generador,
+            # auto_integrador) ya llaman a Groq con prompts expertos
+            # que producen lenguaje natural perfecto.
+            # Pasar por otro Groq solo trunca y degrada la calidad.
+            return ResultadoEjecucion(
+                ejecuto      = True,
+                habilidad_id = 'PYTHON_COMPLETO',
+                resultado    = resultado['respuesta'],
+            )
 
-    def _ejecutar_sqlite(self, texto: str) -> ResultadoEjecucion:
-        return ResultadoEjecucion(
-            ejecuto=False, habilidad_id='SQLITE',
-            error='Implementación pendiente',
-        )
+        except ImportError:
+            return ResultadoEjecucion(ejecuto=False, habilidad_id='PYTHON_COMPLETO',
+                                       error='MotorPython no disponible',
+                                       resultado='La habilidad Python está en construcción.')
+        except Exception as e:
+            return ResultadoEjecucion(ejecuto=False, habilidad_id='PYTHON_COMPLETO',
+                                       error=str(e),
+                                       resultado='Encontré un problema procesando eso. Dímelo de otra forma.')
 
-    def _sin_habilidad(
-        self, habilidad_id: str, texto: str
-    ) -> ResultadoEjecucion:
-        fue_a_zona = False
+    def _sin_habilidad(self, habilidad_id: str, texto: str) -> ResultadoEjecucion:
         try:
             from biblioteca.zona_desconocimiento.zona import ZonaDesconocimiento
-            zona = ZonaDesconocimiento.obtener()
-            zona.agregar(
-                fragmento  = texto[:100],
-                tipo       = 'habilidad',
-                inferencia = f'necesita_habilidad:{habilidad_id}',
+            ZonaDesconocimiento.obtener().agregar(
+                fragmento=texto[:100], tipo='habilidad',
+                inferencia=f'necesita_habilidad:{habilidad_id}',
             )
-            fue_a_zona = True
         except Exception:
             pass
-
-        opciones  = _RESPUESTAS_SIN_HABILIDAD.get(
-            habilidad_id, _RESPUESTAS_SIN_HABILIDAD['DEFAULT']
-        )
-        respuesta = random.choice(opciones)
-
-        return ResultadoEjecucion(
-            ejecuto      = False,
-            habilidad_id = habilidad_id,
-            resultado    = respuesta,
-            fue_a_zona   = fue_a_zona,
-        )
+        opciones = _RESPUESTAS_SIN_HABILIDAD.get(habilidad_id, _RESPUESTAS_SIN_HABILIDAD['DEFAULT'])
+        return ResultadoEjecucion(ejecuto=False, habilidad_id=habilidad_id,
+                                   resultado=random.choice(opciones), fue_a_zona=True)

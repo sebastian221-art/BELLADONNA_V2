@@ -68,6 +68,7 @@ class CargadorFundacional:
         from biblioteca.fundacional.vocabulario.neuronas_verbos     import crear_neuronas_verbos
         from biblioteca.fundacional.vocabulario.neuronas_tiempo     import crear_neuronas_tiempo
         from biblioteca.fundacional.vocabulario.neuronas_conectores import crear_neuronas_conectores
+        from biblioteca.fundacional.vocabulario.neuronas_vocabulario_auto import crear_neuronas_vocabulario_auto
 
         crear_neuronas_saludos(self.red)
         crear_neuronas_preguntas(self.red)
@@ -75,6 +76,11 @@ class CargadorFundacional:
         crear_neuronas_verbos(self.red)
         crear_neuronas_tiempo(self.red)
         crear_neuronas_conectores(self.red)
+
+        # Carga automática de todos los módulos de vocabulario v3
+        creadas, conexiones = crear_neuronas_vocabulario_auto(self.red)
+        if _DEBUG:
+            print(f'  vocab_auto: {creadas} neuronas, {conexiones} conexiones')
 
     def _cargar_capacidades(self):
         from biblioteca.fundacional.capacidades.neurona_biblioteca   import crear_neurona_biblioteca

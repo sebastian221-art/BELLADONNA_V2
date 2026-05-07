@@ -1,9 +1,9 @@
 // ================================================
-// CHAT.JS — Lógica completa del chat
-// Incluye:
-//   - GestorVozWeb  → micrófono (SpeechRecognition)
-//   - GestorVozPC   → Bell habla por parlantes (SpeechSynthesis)
-//                     Voz femenina en español forzada
+// CHAT.JS — Lógica completa del chat v2
+// Nuevas funciones:
+//   - Detección automática de código pegado (Ctrl+V)
+//   - Renderizado de bloques de código en el chat
+//   - Input visual diferenciado: texto vs código
 // ================================================
 
 class Chat {
@@ -42,6 +42,42 @@ class Chat {
 
         this.elementos.input.addEventListener('input', () => {
             this._ajustarAlturaInput();
+            this._actualizarEstiloInput();
+        });
+
+        // ── Detección de código pegado ────────────────────────
+        this.elementos.input.addEventListener('paste', (e) => {
+            // Leer el texto pegado
+            const textoPegado = (e.clipboardData || window.clipboardData).getData('text');
+            if (!textoPegado) return;
+
+            if (this._esCodigoPython(textoPegado)) {
+                e.preventDefault(); // Evitar el pegado normal
+
+                const inputActual = this.elementos.input.value;
+                const cursor      = this.elementos.input.selectionStart;
+
+                // Si el input ya tiene texto (la instrucción), agregar el código como bloque
+                if (inputActual.trim()) {
+                    // Hay instrucción previa: agregar código como bloque separado
+                    const separador  = inputActual.endsWith('\n') ? '' : '\n';
+                    const bloqueCode = separador + '```python\n' + textoPegado.trim() + '\n```';
+                    const nuevaPos   = inputActual.length + bloqueCode.length;
+
+                    this.elementos.input.value = inputActual + bloqueCode;
+                    this.elementos.input.setSelectionRange(nuevaPos, nuevaPos);
+                } else {
+                    // Input vacío: pegar directo como bloque de código
+                    this.elementos.input.value = '```python\n' + textoPegado.trim() + '\n```';
+                }
+
+                this._ajustarAlturaInput();
+                this._actualizarEstiloInput();
+
+                // Mostrar tooltip brevemente
+                this._mostrarTooltipCodigo();
+            }
+            // Si no es código, dejar el paste normal
         });
 
         if (this.elementos.botonMic) {
@@ -56,6 +92,84 @@ class Chat {
                 this._actualizarBotonVoz();
             });
         }
+
+        // ── Botón panel de código ─────────────────────────────
+        const botonCodigo = document.getElementById('chat-codigo');
+        if (botonCodigo) {
+            botonCodigo.addEventListener('click', () => {
+                this._abrirPanelCodigo();
+            });
+        }
+    }
+
+    _abrirPanelCodigo() {
+        let panel = document.getElementById('bell-panel-codigo');
+        if (!panel) {
+            panel = this._crearPanelCodigo();
+            document.body.appendChild(panel);
+        }
+        panel.style.display = 'flex';
+        panel.querySelector('#panel-codigo-textarea').focus();
+    }
+
+    _crearPanelCodigo() {
+        const panel = document.createElement('div');
+        panel.id = 'bell-panel-codigo';
+        panel.innerHTML = `
+            <div class="panel-codigo-overlay" id="panel-overlay"></div>
+            <div class="panel-codigo-modal">
+                <div class="panel-codigo-header">
+                    <span>{ } Pega tu código aquí</span>
+                    <button class="panel-codigo-cerrar" id="panel-cerrar">✕</button>
+                </div>
+                <textarea
+                    id="panel-codigo-textarea"
+                    class="panel-codigo-area"
+                    placeholder="Pega tu código Python aquí...&#10;&#10;Puede ser cualquier cantidad de líneas."
+                    spellcheck="false"
+                ></textarea>
+                <div class="panel-codigo-footer">
+                    <span class="panel-codigo-hint">Después de confirmar escribe tu instrucción en el chat</span>
+                    <button class="panel-codigo-confirmar" id="panel-confirmar">Confirmar →</button>
+                </div>
+            </div>
+        `;
+
+        const cerrar = () => { panel.style.display = 'none'; };
+
+        panel.querySelector('#panel-overlay').addEventListener('click', cerrar);
+        panel.querySelector('#panel-cerrar').addEventListener('click', cerrar);
+        panel.querySelector('#panel-confirmar').addEventListener('click', () => {
+            const codigo = panel.querySelector('#panel-codigo-textarea').value.trim();
+            if (!codigo) { cerrar(); return; }
+
+            // Poner el código en el input envuelto en marcadores
+            const marcador = '```python\n' + codigo + '\n```';
+            const inputActual = this.elementos.input.value.trim();
+            this.elementos.input.value = inputActual
+                ? inputActual + '\n' + marcador
+                : marcador;
+
+            this.elementos.input.classList.add('input-con-codigo');
+            this._ajustarAlturaInput();
+            this.elementos.input.focus();
+
+            // Limpiar panel
+            panel.querySelector('#panel-codigo-textarea').value = '';
+            cerrar();
+
+            // Tooltip
+            this._mostrarTooltipCodigo('✓ Código adjuntado — escribe tu instrucción y envía');
+        });
+
+        // Ctrl+Enter confirma
+        panel.querySelector('#panel-codigo-textarea').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                panel.querySelector('#panel-confirmar').click();
+            }
+        });
+
+        return panel;
     }
 
     _configurarSocket() {
@@ -66,7 +180,7 @@ class Chat {
 
             if (datos.respuesta) {
                 this._agregarMensaje('bell', datos.respuesta);
-                this._vozPC.hablar(datos.respuesta);
+                this._vozPC.hablar(this._extraerTextoVoz(datos.respuesta));
             }
 
             if (window.sincronizador) {
@@ -102,6 +216,7 @@ class Chat {
 
         this._agregarMensaje('sebastian', texto);
         this.elementos.input.value = '';
+        this.elementos.input.classList.remove('input-con-codigo');
         this._ajustarAlturaInput();
 
         this.procesando = true;
@@ -128,12 +243,107 @@ class Chat {
         }
     }
 
+    // ── Formateador de texto con soporte de código ────────────
     _formatearTexto(texto) {
-        return texto
+        // Escapar HTML primero
+        let html = texto
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/\n/g, '<br>');
+            .replace(/>/g, '&gt;');
+
+        // ── Bloques de código con backticks ──────────────────
+        // ``` python o ``` bash → bloque de código con estilo
+        html = html.replace(
+            /```(?:python|py|bash|js|javascript|sql|json)?\s*\n?([\s\S]*?)```/g,
+            (match, code) => {
+                const codeEscapado = code.trim();
+                return `<div class="bloque-codigo">
+                    <div class="bloque-codigo-header">
+                        <span class="bloque-codigo-icono">{ }</span>
+                        <button class="bloque-codigo-copiar" onclick="navigator.clipboard.writeText(decodeURIComponent('${encodeURIComponent(codeEscapado)}'))">Copiar</button>
+                    </div>
+                    <pre class="bloque-codigo-contenido"><code>${codeEscapado}</code></pre>
+                </div>`;
+            }
+        );
+
+        // ── Código inline con backtick simple ─────────────────
+        html = html.replace(
+            /`([^`\n]+)`/g,
+            '<code class="codigo-inline">$1</code>'
+        );
+
+        // ── Saltos de línea normales ───────────────────────────
+        // Solo fuera de bloques de código (ya fueron reemplazados)
+        html = html.replace(/\n/g, '<br>');
+
+        return html;
+    }
+
+    // ── Detectar si texto pegado es código Python ─────────────
+    _esCodigoPython(texto) {
+        if (!texto || texto.length < 5) return false;
+
+        // Ya tiene backticks → no procesar de nuevo
+        if (texto.trim().startsWith('```')) return false;
+
+        const señales = [
+            /^\s*(def |class |import |from )\s*\w/m,
+            /^\s*if\s+__name__\s*==\s*['"]/m,
+            /Traceback\s*\(most recent call last\)/,
+            /^\s*(try:|except\s*\w*:|finally:|with\s+)/m,
+            /^\s*(for |while |async def |@\w+)\s*/m,
+            /^\s*\w+Error:\s*\S+/m,
+            /```\w*/,
+        ];
+
+        const lineasConIndentacion = texto.split('\n').filter(
+            l => l.match(/^    \S/) || l.match(/^\t\S/)
+        ).length;
+
+        return señales.some(r => r.test(texto)) || lineasConIndentacion >= 2;
+    }
+
+    // ── Actualizar estilo visual del input según contenido ────
+    _actualizarEstiloInput() {
+        const val = this.elementos.input.value;
+        if (val.includes('```')) {
+            this.elementos.input.classList.add('input-con-codigo');
+        } else {
+            this.elementos.input.classList.remove('input-con-codigo');
+        }
+    }
+
+    // ── Tooltip breve "código detectado" ──────────────────────
+    _mostrarTooltipCodigo(texto) {
+        let tip = document.getElementById('bell-tooltip-codigo');
+        if (!tip) {
+            tip = document.createElement('div');
+            tip.id = 'bell-tooltip-codigo';
+            tip.style.cssText = `
+                position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+                background: rgba(80,200,120,0.92); color: #000; padding: 6px 14px;
+                border-radius: 8px; font-size: 13px; z-index: 9999;
+                pointer-events: none; transition: opacity 0.3s;
+            `;
+            document.body.appendChild(tip);
+        }
+        tip.textContent = texto || '{ } Código detectado — agrega tu instrucción arriba';
+        tip.style.opacity = '1';
+        clearTimeout(this._tooltipTimer);
+        clearTimeout(this._tooltipTimer);
+        this._tooltipTimer = setTimeout(() => {
+            tip.style.opacity = '0';
+        }, 2500);
+    }
+
+    // ── Para voz: extraer solo el texto (sin código) ──────────
+    _extraerTextoVoz(texto) {
+        // Quitar bloques de código para que Bell no lea el código en voz
+        return texto
+            .replace(/```[\s\S]*?```/g, ' [ejemplo de código] ')
+            .replace(/`[^`]+`/g, '')
+            .trim();
     }
 
     _scrollAlFinal() {
@@ -143,7 +353,7 @@ class Chat {
     _ajustarAlturaInput() {
         const input = this.elementos.input;
         input.style.height = 'auto';
-        input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+        input.style.height = Math.min(input.scrollHeight, 180) + 'px';
     }
 
     _bloquearInput() {
@@ -162,8 +372,6 @@ class Chat {
 
 
 // ── VOZ PC (SpeechSynthesis) ──────────────────────────────
-// Bell habla por los parlantes del PC.
-// Busca específicamente voces femeninas en español.
 
 class GestorVozPC {
     constructor() {
@@ -173,7 +381,6 @@ class GestorVozPC {
         this._listo     = false;
 
         if (this._soportado) {
-            // Las voces pueden cargar de forma asíncrona
             this._cargarVoz();
             window.speechSynthesis.onvoiceschanged = () => {
                 this._cargarVoz();
@@ -185,33 +392,27 @@ class GestorVozPC {
         const voces = window.speechSynthesis.getVoices();
         if (!voces.length) return;
 
-        // Imprimir voces disponibles para debug (solo la primera vez)
         if (!this._listo) {
             const vocesEs = voces.filter(v => v.lang.startsWith('es'));
             console.log('[Bell Voz] Voces en español disponibles:');
             vocesEs.forEach(v => console.log(`  ${v.name} | ${v.lang} | local: ${v.localService}`));
         }
 
-        // Orden de preferencia — voces femeninas en español
-        // Microsoft tiene las mejores en Windows
         const preferidas = [
-            // Microsoft Neural (Windows 11)
-            v => v.name.includes('Dalia'),         // es-MX femenina
-            v => v.name.includes('Sabina'),       // es-MX femenina
-            v => v.name.includes('Salome'),        // es-CO femenina
-            v => v.name.includes('Elvira'),        // es-ES femenina
-            v => v.name.includes('Laura'),         // es femenina
-            v => v.name.includes('Paulina'),       // es-MX femenina
-            v => v.name.includes('Monica'),        // es femenina
-            v => v.name.includes('Conchita'),      // es-ES femenina
-            v => v.name.includes('Camila'),        // es-US femenina
-            // Genérico — cualquier voz femenina en español
+            v => v.name.includes('Dalia'),
+            v => v.name.includes('Sabina'),
+            v => v.name.includes('Salome'),
+            v => v.name.includes('Elvira'),
+            v => v.name.includes('Laura'),
+            v => v.name.includes('Paulina'),
+            v => v.name.includes('Monica'),
+            v => v.name.includes('Conchita'),
+            v => v.name.includes('Camila'),
             v => v.lang.startsWith('es') && (
                 v.name.toLowerCase().includes('female') ||
                 v.name.toLowerCase().includes('mujer') ||
                 v.name.toLowerCase().includes('femenin')
             ),
-            // Fallback — cualquier voz en español
             v => v.lang === 'es-CO',
             v => v.lang === 'es-MX',
             v => v.lang === 'es-ES',
@@ -229,7 +430,6 @@ class GestorVozPC {
             }
         }
 
-        // Último recurso — primera voz disponible
         this._voz   = voces[0];
         this._listo = true;
         console.warn(`[Bell Voz] Sin voz en español — usando: ${voces[0].name}`);
@@ -237,31 +437,21 @@ class GestorVozPC {
 
     hablar(texto) {
         if (!this._soportado || !this.activa || !texto) return;
-
-        // Cancelar si está hablando algo
         window.speechSynthesis.cancel();
-
-        // Pequeña pausa para que cancel() surta efecto
         setTimeout(() => {
             const frase    = new SpeechSynthesisUtterance(texto);
             frase.lang     = 'es-CO';
             frase.rate     = 1.0;
-            frase.pitch    = 1.1;   // pitch ligeramente más alto → más femenino
+            frase.pitch    = 1.1;
             frase.volume   = 1.0;
-
-            if (this._voz) {
-                frase.voice = this._voz;
-            }
-
+            if (this._voz) frase.voice = this._voz;
             window.speechSynthesis.speak(frase);
         }, 50);
     }
 
     toggleActiva() {
         this.activa = !this.activa;
-        if (!this.activa) {
-            window.speechSynthesis.cancel();
-        }
+        if (!this.activa) window.speechSynthesis.cancel();
     }
 
     silenciar() {
@@ -280,21 +470,17 @@ class GestorVozWeb {
         this._soportado   = false;
         this._boton       = document.getElementById('chat-mic');
         this._input       = document.getElementById('chat-input');
-
         this._inicializar();
     }
 
     _inicializar() {
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-
         if (!SR) {
             if (this._boton) this._boton.style.display = 'none';
             return;
         }
-
         this._soportado   = true;
         this._reconocedor = new SR();
-
         this._reconocedor.lang           = 'es-CO';
         this._reconocedor.continuous     = false;
         this._reconocedor.interimResults = true;
@@ -302,10 +488,7 @@ class GestorVozWeb {
         this._reconocedor.onstart = () => {
             this._escuchando = true;
             this._setEstado('escuchando');
-            // Silenciar a Bell mientras el usuario habla
-            if (this._chat._vozPC) {
-                this._chat._vozPC.silenciar();
-            }
+            if (this._chat._vozPC) this._chat._vozPC.silenciar();
         };
 
         this._reconocedor.onresult = (evento) => {
@@ -347,11 +530,8 @@ class GestorVozWeb {
         } else {
             this._input.value = '';
             this._chat._ajustarAlturaInput();
-            try {
-                this._reconocedor.start();
-            } catch (e) {
-                this._reconocedor.stop();
-            }
+            try { this._reconocedor.start(); }
+            catch (e) { this._reconocedor.stop(); }
         }
     }
 

@@ -39,6 +39,106 @@ _KEYWORDS_ARQUITECTURA_FALLIDAS = [
     'qué es mente pura', 'que es mente pura', 'mente pura',
     'tu arquitectura', 'arquitectura de bell',
     'cómo procesas', 'como procesas',
+    # Bug 6 fix
+    'zona de desconocimiento', 'zona desconocimiento',
+    'qué es la zona', 'que es la zona',
+]
+
+_KEYWORDS_ACCION_BELL = [
+    'qué haces', 'que haces',
+    'qué estás haciendo', 'que estas haciendo',
+    'qué estás pensando', 'que estas pensando',
+    'en qué piensas ahora', 'en que piensas ahora',
+]
+
+# Bug 4 fix: frases cotidianas que el motor HF confunde con comandos
+_KEYWORDS_COTIDIANO = [
+    'hace frío', 'hace frio', 'hace calor', 'hace mucho frío', 'hace mucho calor',
+    'ya dormí', 'ya dormi', 'dormí bien', 'dormi bien',
+    'dormí mal', 'no dormí', 'no dormi',
+    'voy a comer', 'voy a dormir', 'voy a salir', 'ya llegué', 'ya llegue',
+    'ya comí', 'ya comi', 'acabo de llegar', 'estoy en casa',
+    'tengo hambre', 'tengo sueño',
+    'es tarde', 'ya es tarde', 'hace rato',
+]
+
+# Python — palabras clave para los 5 modos (prioridad sobre el motor)
+_KEYWORDS_PYTHON_ANALISIS = [
+    # Español
+    'analiza este código', 'analiza el código', 'analiza mi código',
+    'revisa este código', 'revisa el código', 'qué hace este código',
+    'qué hace esta función', 'tiene errores', 'tiene bugs',
+    'qué está mal', 'malas prácticas', 'cómo mejoro', 'retroalimentación del código',
+    'review del código', 'code review', 'analiza esta clase', 'analiza esta función',
+]
+_KEYWORDS_PYTHON_DEBUG = [
+    # Español
+    'tengo este error', 'me sale este error', 'me da este error',
+    'error de importación', 'error de import', 'por qué falla',
+    'por qué no funciona', 'no corre', 'no arranca', 'cómo debugueo',
+    'por qué da error', 'me da recursionerror', 'me da typeerror',
+    'me da attributeerror', 'me da keyerror', 'me da valueerror',
+    'me da nameerror', 'me da indexerror', 'da recursionerror',
+    # Inglés — errores
+    'recursionerror', 'typeerror', 'attributeerror', 'keyerror',
+    'valueerror', 'nameerror', 'indexerror', 'importerror',
+    'syntaxerror', 'indentationerror', 'zerodivisionerror',
+    'filenotfounderror', 'permissionerror', 'runtimeerror',
+    'stopiteration', 'unicodeerror', 'overflowerror',
+]
+_KEYWORDS_PYTHON_GENERACION = [
+    # Español
+    'crea una función', 'crea un script', 'escribe el código',
+    'hazme el código', 'hazme una función', 'genera el código',
+    'necesito un script', 'código que haga', 'función que',
+    'crea una clase', 'hazme un endpoint', 'crea un decorador',
+    'circuit breaker', 'crea un circuit breaker', 'worker pool',
+    'crea un worker pool', 'sistema de configuración', 'crea un sistema',
+    'pool de conexiones', 'query builder', 'sistema de retry',
+    'sistema de caché', 'pipeline de procesamiento', 'event bus',
+    'hazme una api', 'crea el servidor', 'escríbeme', 'hazme un',
+    'genera una función', 'programa que', 'script que',
+    # Inglés
+    'create a function', 'write a function', 'write code',
+    'create a class', 'create an endpoint', 'make a function',
+    'create a decorator', 'write a decorator', 'make a decorator',
+]
+_KEYWORDS_PYTHON_EXPLICACION = [
+    # Español — conceptos
+    'cómo hago un bucle', 'cómo hago un loop', 'qué es async',
+    'cómo funciona async', 'qué son los generadores', 'qué es yield',
+    'qué es lambda', 'qué es un decorador', 'qué es venv',
+    'qué es pip', 'cómo funciona flask', 'qué es pytest',
+    'qué es async await', 'qué es un entorno virtual',
+    'cómo funciona', 'explícame', 'qué son', 'qué es un',
+    'cómo se usa', 'para qué sirve',
+    # Inglés — conceptos Python
+    'generators', 'generator', 'yield', 'context manager', 'context managers',
+    'deepcopy', 'shallow copy', 'deep copy', 'the gil', 'global interpreter',
+    'gil in python', 'list comprehension', 'dict comprehension',
+    'set comprehension', 'generator expression',
+    'metaclass', 'metaclasses', 'descriptor', 'descriptors',
+    'mro', 'method resolution', 'slots', '__slots__',
+    'dataclass', 'dataclasses', 'pydantic', 'type hints',
+    'typing module', 'protocol', 'abstract class', 'abc',
+    'property decorator', 'staticmethod', 'classmethod',
+    'threading', 'multiprocessing', 'asyncio', 'coroutine',
+    'iterator', 'iterable', 'lazy evaluation',
+    'garbage collection', 'memory management',
+    'pip install', 'virtual environment', 'requirements',
+    'how does', 'what is', 'explain', 'difference between',
+    'when to use', 'how to use',
+]
+_KEYWORDS_PYTHON_AUTO = [
+    # Exactos
+    'analiza tu propio código', 'analiza tu código', 'analiza tus archivos',
+    'qué puedes mejorar de ti', 'tienes bugs en tu código', 'analiza belladonna',
+    # Parciales — "analiza tu [cualquier archivo/capa]"
+    'analiza tu ', 'analiza capa', 'analiza la capa', 'analiza mi capa', 'analiza tu capa',
+    'revisa tu código', 'revisa tu propio', 'revisa tu ',
+    'qué mejorarías de ti', 'qué falla en ti',
+    'qué puedes mejorar de tu', 'mejorar de tu propio', 'mejorar tu código',
+    'cómo está tu código', 'como esta tu codigo',
 ]
 
 _KEYWORDS_OPERACION = [
@@ -53,6 +153,18 @@ _KEYWORDS_ACCION_BELL = [
     'qué estás haciendo', 'que estas haciendo',
     'qué estás pensando', 'que estas pensando',
     'en qué piensas ahora', 'en que piensas ahora',
+]
+
+# Bug 4 fix: frases cotidianas que el motor HF confunde con comandos/acciones
+# Forzarlas a tipo 'conversacional' antes de que el motor las malinterprete
+_KEYWORDS_COTIDIANO = [
+    'hace frío', 'hace frio', 'hace calor', 'hace mucho frío', 'hace mucho calor',
+    'ya dormí', 'ya dormi', 'ya me dormí', 'dormí bien', 'dormi bien',
+    'dormí mal', 'no dormí', 'no dormi',
+    'voy a comer', 'voy a dormir', 'voy a salir', 'ya llegué', 'ya llegue',
+    'ya comí', 'ya comi', 'acabo de llegar', 'estoy en casa',
+    'tengo hambre', 'tengo sueño', 'tengo sueño',
+    'es tarde', 'ya es tarde', 'hace rato',
 ]
 
 
@@ -196,15 +308,39 @@ class ConstructorComprension:
 
     def _override_tipo_conservador(self, texto: str, tipo_actual: str) -> str:
         texto_lower = texto.lower().strip()
+        # Cotidiano primero — evita que el motor los clasifique como comandos
+        for kw in _KEYWORDS_COTIDIANO:
+            if kw in texto_lower:
+                return 'conversacional'
+        # Python — detectar modo específico antes del resto
+        for kw in _KEYWORDS_PYTHON_DEBUG:
+            if kw in texto_lower:
+                return 'solicitud_tecnica'
+        for kw in _KEYWORDS_PYTHON_AUTO:
+            if kw in texto_lower:
+                return 'solicitud_tecnica'
+        for kw in _KEYWORDS_PYTHON_ANALISIS:
+            if kw in texto_lower:
+                return 'solicitud_tecnica'
+        for kw in _KEYWORDS_PYTHON_GENERACION:
+            if kw in texto_lower:
+                return 'solicitud_tecnica'
+        for kw in _KEYWORDS_PYTHON_EXPLICACION:
+            if kw in texto_lower:
+                return 'solicitud_tecnica'
+        # Matemáticas
         for kw in _KEYWORDS_OPERACION:
             if kw in texto_lower:
                 return 'operacion_matematica'
+        # Sebastian
         for kw in _KEYWORDS_SEBASTIAN:
             if kw in texto_lower:
                 return 'pregunta_sebastian'
+        # Arquitectura Bell
         for kw in _KEYWORDS_ARQUITECTURA_FALLIDAS:
             if kw in texto_lower:
                 return 'pregunta_arquitectura_bell'
+        # Acción Bell
         for kw in _KEYWORDS_ACCION_BELL:
             if kw in texto_lower:
                 return 'pregunta_accion_bell'

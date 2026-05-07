@@ -223,3 +223,207 @@
 
 
 
+
+/* ── BLOQUES DE CÓDIGO ─────────────────────────────────── */
+
+.bloque-codigo {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    margin: 8px 0;
+    overflow: hidden;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+.bloque-codigo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 12px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+}
+
+.bloque-codigo-icono {
+    color: #58a6ff;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.bloque-codigo-copiar {
+    background: transparent;
+    border: 1px solid #30363d;
+    color: #8b949e;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bloque-codigo-copiar:hover {
+    background: #21262d;
+    color: #c9d1d9;
+    border-color: #58a6ff;
+}
+
+.bloque-codigo-contenido {
+    padding: 12px 16px;
+    margin: 0;
+    overflow-x: auto;
+    white-space: pre;
+    color: #e6edf3;
+    font-size: 13px;
+    line-height: 1.6;
+    background: #0d1117;
+}
+
+.bloque-codigo-contenido code {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background: none;
+    padding: 0;
+}
+
+/* ── CÓDIGO INLINE ─────────────────────────────────────── */
+
+.codigo-inline {
+    background: rgba(110, 118, 129, 0.2);
+    border: 1px solid rgba(110, 118, 129, 0.3);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.88em;
+    color: #79c0ff;
+}
+
+/* ── INPUT CON CÓDIGO ──────────────────────────────────── */
+
+#chat-input.input-con-codigo {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 12px;
+    background: rgba(13, 17, 23, 0.7);
+    border-color: rgba(88, 166, 255, 0.4);
+    color: #e6edf3;
+}
+
+/* ── PANEL DE CÓDIGO ───────────────────────────────────── */
+
+#bell-panel-codigo {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel-codigo-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+.panel-codigo-modal {
+    position: relative;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    width: min(780px, 94vw);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.panel-codigo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    color: #58a6ff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Consolas', monospace;
+    letter-spacing: 0.5px;
+}
+
+.panel-codigo-cerrar {
+    background: transparent;
+    border: none;
+    color: #8b949e;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: color 0.2s;
+}
+.panel-codigo-cerrar:hover { color: #c9d1d9; }
+
+.panel-codigo-area {
+    flex: 1;
+    background: #0d1117;
+    color: #e6edf3;
+    border: none;
+    outline: none;
+    padding: 16px 20px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    resize: none;
+    min-height: 300px;
+    max-height: 55vh;
+    tab-size: 4;
+}
+
+.panel-codigo-area::placeholder { color: #484f58; }
+
+.panel-codigo-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    background: #161b22;
+    border-top: 1px solid #30363d;
+}
+
+.panel-codigo-hint {
+    font-size: 12px;
+    color: #8b949e;
+}
+
+.panel-codigo-confirmar {
+    background: #238636;
+    border: 1px solid #2ea043;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.panel-codigo-confirmar:hover { background: #2ea043; }
+
+/* Botón de código en el chat */
+#chat-codigo {
+    background: transparent;
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    color: #58a6ff;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Consolas', monospace;
+    transition: all 0.2s;
+}
+#chat-codigo:hover {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: #58a6ff;
+}

@@ -1,15 +1,9 @@
 # biblioteca/habilidades/lenguaje/dimensiones/tecnica.py
 # ================================================
-# DIMENSIÓN TÉCNICA
-#
-# Entiende la intención técnica sin que se le
-# tenga que hablar en lenguaje de máquina.
-#
-# CORRECCIÓN: usa vocab_match para saber si Bell
-# ya reconoció conceptos técnicos (tabla, base de datos,
-# función, etc.) via su vocabulario propio,
-# y los usa como señales de alta confianza
-# antes de buscar por regex.
+# DIMENSIÓN TÉCNICA — v2 con Python completo
+# Detecta los 5 modos de la habilidad Python:
+# analisis, generacion, explicacion, debug, auto_analisis
+# También detecta verbosidad pedida por el usuario
 # ================================================
 
 import re
@@ -46,7 +40,6 @@ class DimensionTecnica(DimensionLenguaje):
                 r'\bpon(?:er)?\s+(?:en\s+)?(?:la\s+)?(?:base|tabla)\b',
                 r'\bconsulta(?:r)?\b.*\b(?:base|tabla|datos)\b',
                 r'\bselect\b', r'\binsert\b', r'\bcreate\s+table\b',
-                r'\b\w+\s*=\s*\d+\b.*\b(?:tabla|base|datos|guardar)\b',
             ],
             'confianza': 0.88,
         },
@@ -75,28 +68,100 @@ class DimensionTecnica(DimensionLenguaje):
             ],
             'confianza': 0.90,
         },
+        # ── PYTHON COMPLETO — 5 modos ──────────────────────────────
         'CODIGO_PYTHON': {
-            'habilidad': 'ANALISIS_PYTHON',
+            'habilidad': 'PYTHON_COMPLETO',
+            # Modo 1: ANÁLISIS — Bell lee código y dice qué hace / qué tiene mal
+            'coloquial_analisis': [
+                'analiza este código', 'analiza el código', 'analiza mi código',
+                'revisa este código', 'revisa el código', 'revísame el código',
+                'qué hace este código', 'qué hace esta función', 'qué hace esta clase',
+                'qué hace este script', 'lee este código', 'mira este código',
+                'tiene errores', 'tiene bugs', 'qué está mal', 'qué falla',
+                'qué malas prácticas', 'cómo mejoro este código', 'cómo optimizo',
+                'retroalimentación del código', 'feedback del código',
+                'qué puedo mejorar', 'está bien escrito', 'está mal escrito',
+            ],
+            # Modo 2: GENERACIÓN — Bell crea código desde descripción
+            'coloquial_generacion': [
+                'crea un script', 'crea una función', 'crea una clase',
+                'escribe el código', 'escribe un script', 'escribe una función',
+                'hazme el código', 'hazme un script', 'hazme una función',
+                'genera el código', 'genera una función', 'programa que',
+                'necesito un script', 'necesito una función', 'necesito el código',
+                'crea el código para', 'escríbeme', 'genérame', 'hazme',
+                'código que haga', 'función que', 'clase que',
+            ],
+            # Modo 3: EXPLICACIÓN — Bell explica conceptos Python
+            'coloquial_explicacion': [
+                'qué es un decorador', 'cómo funciona async', 'qué es async',
+                'qué son los generadores', 'cómo funcionan los generadores',
+                'qué es yield', 'qué es lambda', 'cómo funciona lambda',
+                'qué es una lista por comprensión', 'list comprehension',
+                'qué es gil', 'qué es el gil', 'qué es un context manager',
+                'cómo funciona with', 'qué es unittest', 'qué es pytest',
+                'qué es pip', 'qué es venv', 'qué es virtualenv',
+                'qué son los type hints', 'qué es dataclass', 'qué es pydantic',
+                'cómo funciona flask', 'cómo funciona django',
+                'cómo funciona socketio', 'qué es websocket',
+                'cómo funciona git', 'qué es un commit', 'qué es un branch',
+                'cómo hago un bucle', 'cómo hago un loop', 'cómo itero',
+                'cómo funciona', 'qué es', 'explícame', 'explicame',
+                'no entiendo', 'cuéntame sobre',
+            ],
+            # Modo 4: DEBUG — Bell diagnostica errores
+            'coloquial_debug': [
+                'tengo este error', 'me sale este error', 'me da este error',
+                'error de importación', 'error de import', 'moduleerror',
+                'traceback', 'exception', 'attributeerror', 'typeerror',
+                'valueerror', 'keyerror', 'indexerror', 'nameerror',
+                'syntaxerror', 'indentationerror', 'runtimeerror',
+                'por qué falla', 'por qué no funciona', 'no corre',
+                'no arranca', 'se rompe', 'se cuelga', 'falla en',
+                'ayúdame con el error', 'ayudame con el error',
+                'cómo arreglo', 'cómo soluciono', 'cómo debugueo',
+                'debugueo', 'debug', 'depurar',
+            ],
+            # Modo 5: AUTO-ANÁLISIS — Bell se analiza a sí misma
+            'coloquial_auto': [
+                'analiza tu propio código', 'analiza tu código',
+                'analiza tus archivos', 'analiza tu capa', 'analiza tu biblioteca',
+                'qué puedes mejorar de ti', 'qué puedes mejorar en tu código',
+                'tienes bugs en tu código', 'qué falla en ti',
+                'revisa tu código', 'cómo está tu código',
+                'analiza belladonna', 'analiza tu arquitectura',
+                'qué mejorarías de ti', 'analiza capa', 'analiza la capa',
+            ],
+            # Coloquial general (cualquier modo)
             'coloquial': [
                 'código', 'codigo', 'script', 'programa', 'función', 'funcion',
                 'clase', 'método', 'metodo', 'variable', 'bucle', 'loop',
-                'módulo', 'modulo', 'archivo python', 'crea el código',
-                'escribe el código', 'hazme un script', 'programa que',
+                'módulo', 'modulo', 'archivo python', 'librería', 'libreria',
+                'python', 'pip install', 'entorno virtual', 'venv',
+                'flask', 'django', 'fastapi', 'pytest', 'unittest',
             ],
             'tecnico': [
                 'def ', 'class ', 'import ', 'from ', 'return',
                 'if __name__', 'lambda', 'yield', 'async', 'await',
                 'try:', 'except:', 'for ', 'while ', '.py', 'python',
+                '@', 'self.', '__init__', '__str__', '__repr__',
+                'list(', 'dict(', 'tuple(', 'set(', 'isinstance(',
             ],
             'patrones': [
                 r'\bdef\s+\w+\(',
                 r'\bclass\s+\w+',
                 r'\bimport\s+\w+',
-                r'\bfunci[oó]n\s+(?:que|para|de)\b',
+                r'\bfunci[oó]n\s+(?:que|para|de|que)\b',
                 r'\bescribe(?:r)?\s+(?:un?\s+)?c[oó]digo\b',
                 r'\bcrea(?:r)?\s+(?:un?\s+)?script\b',
+                r'\banaliza\s+(?:este|el|mi|tu)\s+c[oó]digo\b',
+                r'\bqu[eé]\s+hace\s+(?:este|el|esta)\s+c[oó]digo\b',
+                r'\btengo\s+(?:un\s+)?error\b',
+                r'\bTraceback\b',
+                r'\b\w+Error:\s*\w+',
+                r'^\s*def\s+', r'^\s*class\s+', r'^\s*import\s+',
             ],
-            'confianza': 0.85,
+            'confianza': 0.90,
         },
         'SHELL': {
             'habilidad': 'SHELL',
@@ -114,8 +179,8 @@ class DimensionTecnica(DimensionLenguaje):
                 r'\bejecuta(?:r)?\b.*\bcomando\b',
                 r'\blista(?:r)?\s+(?:los?\s+)?archivos\b',
                 r'\bcrea(?:r)?\s+(?:una?\s+)?carpeta\b',
-                r'\b(?:ls|dir|mkdir|cd|rm|cp|mv|cat|grep)\b',
-                r'\bgit\s+(?:init|add|commit|push|pull|clone)\b',
+                r'\b(?:ls|dir|mkdir|cd|rm|cp|mv|cat|grep)(?:\s|$)',
+                r'\bgit\s+(?:init|add|commit|push|pull|clone|status)\b',
                 r'\bnpm\s+(?:install|start|run|build)\b',
             ],
             'confianza': 0.87,
@@ -141,6 +206,24 @@ class DimensionTecnica(DimensionLenguaje):
         },
     }
 
+    # ── Palabras que indican verbosidad deseada ────────────────────
+    _VERBOSIDAD_SIMPLE = [
+        'más simple', 'mas simple', 'más sencillo', 'mas sencillo',
+        'resúmelo', 'resumelo', 'resumir', 'más corto', 'mas corto',
+        'brevemente', 'en pocas palabras', 'resumido', 'breve',
+        'corto', 'simplifica', 'simplificado', 'de manera simple',
+        'sin tecnicismos', 'fácil de entender', 'facil de entender',
+        'como si fuera un niño', 'para alguien que no sabe',
+        'sin tanto detalle', 'no tan técnico', 'no tan tecnico',
+    ]
+    _VERBOSIDAD_DETALLADA = [
+        'más detallado', 'mas detallado', 'con más detalle', 'con mas detalle',
+        'profundo', 'explícame bien', 'explicame bien', 'completo',
+        'todo lo que puedas', 'el análisis completo', 'análisis profundo',
+        'a fondo', 'explica cada parte', 'explícame todo',
+        'en detalle', 'técnicamente', 'con tecnicismos',
+    ]
+
     _ENTIDADES_TECNICAS = {
         'api': 'interfaz', 'endpoint': 'interfaz', 'webhook': 'interfaz',
         'json': 'formato', 'csv': 'formato', 'xml': 'formato',
@@ -160,36 +243,52 @@ class DimensionTecnica(DimensionLenguaje):
     def _analizar_interno(self, texto: str, contexto: dict) -> ResultadoDimension:
         tl = texto.lower().strip()
 
-        # vocab_match: qué reconoció Bell ya
         vocab_match   = contexto.get('vocab_match', [])
         ids_conocidos = contexto.get('ids_conocidos', [])
 
         hallazgos = {}
         senales   = []
 
-        # ── PASO 1: Señales técnicas que Bell ya reconoció ──
-        # Si GestorVocabulario identificó conceptos técnicos
-        # (tabla, función, script...) les damos alta confianza
         conceptos_tecnicos_bell = [
             m for m in vocab_match
-            if m.get('concepto', {}).get('tipo', '') in (
-                'identidad_bell', 'pregunta_bell'
-            )
+            if m.get('concepto', {}).get('tipo', '') in ('identidad_bell', 'pregunta_bell')
         ]
-        # Si son sobre Bell (no técnicos), esta dimensión baja su peso
         if conceptos_tecnicos_bell and not any(
             m.get('concepto', {}).get('tipo', '') == 'tecnico'
             for m in vocab_match
         ):
-            # El mensaje es sobre Bell, no técnico
             return self._resultado(
-                activa    = False,
-                confianza = 0.1,
-                hallazgos = {'sobre_bell': True},
-                senales   = ['no_tecnico_sobre_bell'],
+                activa=False, confianza=0.1,
+                hallazgos={'sobre_bell': True}, senales=['no_tecnico_sobre_bell'],
             )
 
-        # ── PASO 2: Detección de dominio técnico ──
+        # ── Detectar verbosidad ──────────────────────────────────────
+        verbosidad = 'normal'
+        if any(v in tl for v in self._VERBOSIDAD_SIMPLE):
+            verbosidad = 'simple'
+            senales.append('verbosidad:simple')
+        elif any(v in tl for v in self._VERBOSIDAD_DETALLADA):
+            verbosidad = 'detallado'
+            senales.append('verbosidad:detallado')
+        hallazgos['verbosidad'] = verbosidad
+
+        # ── Detectar modo Python específico ─────────────────────────
+        modo_python = None
+        if self._detectar_modo(tl, 'coloquial_analisis'):
+            modo_python = 'analisis'
+        elif self._detectar_modo(tl, 'coloquial_debug'):
+            modo_python = 'debug'
+        elif self._detectar_modo(tl, 'coloquial_auto'):
+            modo_python = 'auto_analisis'
+        elif self._detectar_modo(tl, 'coloquial_generacion'):
+            modo_python = 'generacion'
+        elif self._detectar_modo(tl, 'coloquial_explicacion'):
+            modo_python = 'explicacion'
+
+        if modo_python:
+            hallazgos['modo_python'] = modo_python
+            senales.append(f'modo_python:{modo_python}')
+
         dominios_activos = self._detectar_dominios(tl)
         if dominios_activos:
             dominio_principal = dominios_activos[0]
@@ -201,12 +300,10 @@ class DimensionTecnica(DimensionLenguaje):
             if dominio_principal['habilidad']:
                 senales.append(f'habilidad:{dominio_principal["habilidad"]}')
 
-        # ── Nivel de tecnicismo ──
         nivel = self._evaluar_nivel_tecnicismo(tl)
         hallazgos['nivel_tecnicismo'] = nivel
         senales.append(f'nivel:{nivel}')
 
-        # ── Entidades técnicas ──
         entidades = {
             ent: tipo
             for ent, tipo in self._ENTIDADES_TECNICAS.items()
@@ -216,41 +313,46 @@ class DimensionTecnica(DimensionLenguaje):
             hallazgos['entidades_tecnicas'] = entidades
             senales.append(f'entidades:{len(entidades)}')
 
-        # ── Parámetros técnicos extraídos ──
         parametros = self._extraer_parametros(tl, dominios_activos)
         if parametros:
             hallazgos['parametros_extraidos'] = parametros
             senales.append('parametros_extraidos')
 
-        # ── Lenguaje coloquial vs técnico ──
         if dominios_activos:
             es_coloquial = self._es_coloquial(tl, dominios_activos[0])
-            hallazgos['lenguaje_coloquial']   = es_coloquial
-            hallazgos['necesita_traduccion']  = es_coloquial
+            hallazgos['lenguaje_coloquial']  = es_coloquial
+            hallazgos['necesita_traduccion'] = es_coloquial
             if es_coloquial:
                 senales.append('traduccion_requerida')
 
-        activa    = len(dominios_activos) > 0 or len(entidades) > 0
-        confianza = dominios_activos[0]['confianza'] if dominios_activos else 0.3
+        activa    = len(dominios_activos) > 0 or len(entidades) > 0 or bool(modo_python)
+        confianza = dominios_activos[0]['confianza'] if dominios_activos else (0.80 if modo_python else 0.3)
         confianza = min(0.95, confianza)
 
-        return self._resultado(
-            activa    = activa,
-            confianza = confianza,
-            hallazgos = hallazgos,
-            senales   = senales,
-        )
+        return self._resultado(activa=activa, confianza=confianza,
+                               hallazgos=hallazgos, senales=senales)
+
+    def _detectar_modo(self, texto: str, clave_lista: str) -> bool:
+        lista = self._DOMINIOS.get('CODIGO_PYTHON', {}).get(clave_lista, [])
+        return any(p in texto for p in lista)
 
     def _detectar_dominios(self, texto: str) -> list:
         detectados = []
         for nombre, config in self._DOMINIOS.items():
             score = 0.0
-            if any(p in texto for p in config['coloquial']):
+            if any(p in texto for p in config.get('coloquial', [])):
                 score += 0.3
-            if any(p in texto for p in config['tecnico']):
+            # Para CODIGO_PYTHON también checar las sublistas de modos
+            if nombre == 'CODIGO_PYTHON':
+                for clave in ['coloquial_analisis','coloquial_generacion',
+                              'coloquial_explicacion','coloquial_debug','coloquial_auto']:
+                    if any(p in texto for p in config.get(clave, [])):
+                        score += 0.4
+                        break
+            if any(p in texto for p in config.get('tecnico', [])):
                 score += 0.5
-            for patron in config['patrones']:
-                if re.search(patron, texto, re.IGNORECASE):
+            for patron in config.get('patrones', []):
+                if re.search(patron, texto, re.IGNORECASE | re.MULTILINE):
                     score += 0.4
                     break
             if score > 0:
@@ -277,41 +379,20 @@ class DimensionTecnica(DimensionLenguaje):
         parametros = {}
         if not dominios:
             return parametros
-
         dominio = dominios[0]['dominio']
-
         if dominio == 'BASE_DE_DATOS':
-            tabla = re.search(
-                r'(?:tabla|table|en\s+la?\s+)[\s_"]?(\w+)',
-                texto, re.IGNORECASE
-            )
+            tabla = re.search(r'(?:tabla|table|en\s+la?\s+)[\s_"]?(\w+)', texto, re.IGNORECASE)
             if tabla:
                 parametros['nombre_tabla'] = tabla.group(1)
-
-            pares = re.findall(
-                r'(\w+)\s*(?:=|sea|vale|es|igual\s+a)\s*(["\']?\w+["\']?)',
-                texto
-            )
+            pares = re.findall(r'(\w+)\s*(?:=|sea|vale|es|igual\s+a)\s*([\"\']?\w+[\"\']?)', texto)
             if pares:
                 parametros['pares_clave_valor'] = {k: v for k, v in pares}
-
         elif dominio in ('CALCULO', 'MATEMATICA_AVANZADA'):
             expresion = re.search(r'[\d\+\-\*\/\^\(\)\.\s]+', texto)
             if expresion:
                 parametros['expresion'] = expresion.group(0).strip()
-
-            conversion = re.search(
-                r'(\d+(?:\.\d+)?)\s*(\w+)\s+(?:a|en)\s+(\w+)', texto
-            )
-            if conversion:
-                parametros['valor']          = conversion.group(1)
-                parametros['unidad_origen']  = conversion.group(2)
-                parametros['unidad_destino'] = conversion.group(3)
-
         return parametros
 
     def _es_coloquial(self, texto: str, dominio: dict) -> bool:
-        palabras_tecnicas = self._DOMINIOS.get(
-            dominio['dominio'], {}
-        ).get('tecnico', [])
+        palabras_tecnicas = self._DOMINIOS.get(dominio['dominio'], {}).get('tecnico', [])
         return not any(p in texto for p in palabras_tecnicas)
