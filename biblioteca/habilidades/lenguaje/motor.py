@@ -471,6 +471,24 @@ class MotorComprension:
             r.tipo_mensaje = 'pregunta_capacidad_bell'
             return
 
+        # ── "para qué sirves/existes" ─────────────────────────
+        tl_m = r.texto_original.lower()
+        if any(p in tl_m for p in [
+            'para qué sirves', 'para que sirves',
+            'para qué existes', 'para que existes',
+            'para qué estás aquí', 'para qué te hicieron',
+            'de qué sirves', 'de que sirves',
+        ]):
+            r.tipo_mensaje = 'pregunta_capacidad_bell'
+            return
+
+        # ── "puedes sobrevivir/existir sin mí/Sebastian" ──────
+        if any(p in tl_m for p in ['sin mí', 'sin mi', 'sin sebastian',
+                                     'sobrevivir', 'existir sin']):
+            r.tipo_mensaje = 'pregunta_identidad_bell'
+            r.intencion    = 'conocer_bell'
+            return
+
         if ids_preg and 'VERBO_SABER_TU' in ids and (
             'VERBO_HACER' in ids or 'VERBO_HACER_TU' in ids
         ):

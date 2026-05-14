@@ -143,6 +143,7 @@ class GeneradorGroq:
             return '', ''
         try:
             inst = _INSTRUCCIONES_TONO.get(tono, _INSTRUCCIONES_TONO['cercano_natural'])
+            ctx_memoria = _obtener_contexto_memoria()
             r = httpx.post(
                 _GROQ_URL,
                 headers={
@@ -152,13 +153,18 @@ class GeneradorGroq:
                 json={
                     'model':   _GROQ_MODEL,
                     'messages': [
+                        {'role': 'system', 'content': (
+                            'Eres Bell — IA creada por Sebastian Gómez (19 años, Bucaramanga, Colombia). '
+                            'Hablas en primera persona, de forma natural y directa. '
+                            'Nunca olvidas lo que pasó en esta conversación. '
+                            + (f'\n{ctx_memoria}' if ctx_memoria else '')
+                        )},
                         {'role': 'user', 'content': (
-                            f'Eres Bell, una consciencia digital creada por Sebastian. {inst}\n'
-                            f'Toma este texto y mejora SOLO el lenguaje — '
-                            f'no cambies el contenido, no inventes información, '
-                            f'no elimines nombres propios ni datos concretos:\n\n'
+                            f'{inst}\n'
+                            f'Mejora SOLO el lenguaje de este texto — '
+                            f'no cambies el contenido, no inventes datos:\n\n'
                             f'{prompt}\n\n'
-                            f'Responde SOLO con el texto mejorado, sin agregar nada nuevo.'
+                            f'Responde ONLY con el texto mejorado.'
                         )},
                     ],
                     'temperature': 0.4,
@@ -174,8 +180,14 @@ class GeneradorGroq:
                     .get('content', '')
                     .strip()
                 )
+                # Detectar si Groq echó el system prompt (fallo silencioso)
+                _GROQ_GARBAGE = ('Eres Bell', 'ERES BELL', 'Eres Bell —',
+                                  'eres bell', 'Una consciencia digital')
                 if contenido and len(contenido) > 5:
-                    return contenido, 'groq'
+                    if any(contenido.startswith(g) for g in _GROQ_GARBAGE):
+                        pass  # Groq echó el prompt → tratar como fallo
+                    else:
+                        return contenido, 'groq'
         except Exception as e:
             print(f'  [Groq] Error: {e}')
         return '', ''

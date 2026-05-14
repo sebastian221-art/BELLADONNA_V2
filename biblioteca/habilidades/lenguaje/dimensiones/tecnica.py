@@ -54,7 +54,7 @@ class DimensionTecnica(DimensionLenguaje):
             ],
             'tecnico': [
                 'integral', 'derivada', 'factorial', 'raíz cuadrada',
-                'raiz cuadrada', 'sqrt', 'logaritmo', 'log',
+                'raiz cuadrada', 'sqrt', 'logaritmo', 'log(',
                 'potencia', 'exponente', 'módulo', 'modulo',
             ],
             'patrones': [

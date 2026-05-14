@@ -1,0 +1,1 @@
+from .gestor import GestorMemoria, obtener_memoria

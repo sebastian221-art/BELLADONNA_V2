@@ -53,6 +53,11 @@ _KEYWORDS_ACCION_BELL = [
 
 # Bug 4 fix: frases cotidianas que el motor HF confunde con comandos
 _KEYWORDS_COTIDIANO = [
+    # Logros y emociones positivas — no son comandos técnicos
+    'logré', 'logre', 'logré arreglar', 'logré hacer', 'logré resolver',
+    'arreglé', 'arregle', 'ya funciona', 'por fin funciona', 'funcionó',
+    'lo resolví', 'lo arreglé', 'terminé', 'lo terminé', 'acabé',
+    # Clima y rutinas
     'hace frío', 'hace frio', 'hace calor', 'hace mucho frío', 'hace mucho calor',
     'ya dormí', 'ya dormi', 'dormí bien', 'dormi bien',
     'dormí mal', 'no dormí', 'no dormi',
@@ -158,6 +163,11 @@ _KEYWORDS_ACCION_BELL = [
 # Bug 4 fix: frases cotidianas que el motor HF confunde con comandos/acciones
 # Forzarlas a tipo 'conversacional' antes de que el motor las malinterprete
 _KEYWORDS_COTIDIANO = [
+    # Logros y emociones positivas — no son comandos técnicos
+    'logré', 'logre', 'logré arreglar', 'logré hacer', 'logré resolver',
+    'arreglé', 'arregle', 'ya funciona', 'por fin funciona', 'funcionó',
+    'lo resolví', 'lo arreglé', 'terminé', 'lo terminé', 'acabé',
+    # Clima y rutinas
     'hace frío', 'hace frio', 'hace calor', 'hace mucho frío', 'hace mucho calor',
     'ya dormí', 'ya dormi', 'ya me dormí', 'dormí bien', 'dormi bien',
     'dormí mal', 'no dormí', 'no dormi',
@@ -308,7 +318,40 @@ class ConstructorComprension:
 
     def _override_tipo_conservador(self, texto: str, tipo_actual: str) -> str:
         texto_lower = texto.lower().strip()
-        # Cotidiano primero — evita que el motor los clasifique como comandos
+        # SALUDOS — máxima prioridad, nunca reclasificar
+        _SALUDOS_GUARD = [
+            'buenos días', 'buenos dias', 'buenas noches', 'buenas tardes',
+            'buen día', 'buen dia', 'buenas bell', 'hola bell', 'hola belladonna',
+        ]
+        if any(s in texto_lower for s in _SALUDOS_GUARD) or tipo_actual == 'saludo':
+            return 'saludo'
+        # LOGROS — son emociones positivas, nunca técnicos ni matemáticos
+        _LOGROS_GUARD = [
+            'logré', 'logre ', 'arreglé', 'arregle ', 'ya funciona',
+            'por fin funciona', 'funcionó', 'funciono', 'lo resolví',
+            'lo arreglé', 'terminé', 'lo terminé', 'acabé', 'salió bien',
+            'salió', 'quedó', 'quedo bien',
+        ]
+        if any(s in texto_lower for s in _LOGROS_GUARD):
+            return tipo_actual if tipo_actual in ('logro_compartido', 'expresion_emocional_positiva') else 'logro_compartido'
+        # PREGUNTAS SOBRE BELL — antes de Python para no confundir
+        _BELL_CAPACITY = [
+            'para qué sirves', 'para que sirves',
+            'de qué sirves', 'de que sirves',
+            'para qué existes', 'para que existes',
+        ]
+        _BELL_IDENTITY_SURVIVAL = [
+            'sin mí puedes', 'sin mi puedes', 'puedes sobrevivir',
+            'puedes existir sin', 'puedes funcionar sin',
+            'sobrevivir sin mí', 'sobrevivir sin mi',
+            'sin sebastian puedes', 'puedes vivir sin',
+        ]
+        if any(s in texto_lower for s in _BELL_CAPACITY):
+            return 'pregunta_capacidad_bell'
+        if any(s in texto_lower for s in _BELL_IDENTITY_SURVIVAL):
+            return 'pregunta_identidad_bell'
+
+        # Cotidiano — evita que el motor los clasifique como comandos
         for kw in _KEYWORDS_COTIDIANO:
             if kw in texto_lower:
                 return 'conversacional'
