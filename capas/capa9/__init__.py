@@ -51,9 +51,7 @@ def procesar(paquete_capa8: dict) -> dict:
         from biblioteca.memoria import obtener_memoria
         mem = obtener_memoria()
 
-        # Debug: ver paquete_capa8
         reg_raw = paquete_capa8.get('registro_turno')
-        print(f"  [DEBUG C9] registro_turno: {type(reg_raw)} = {repr(reg_raw)[:80]}")
 
         # Extraer mensaje_user
         mensaje_user = ''
@@ -93,8 +91,6 @@ def procesar(paquete_capa8: dict) -> dict:
                                  else str(getattr(ejec, 'habilidad_id', '') or ''))
             except Exception:
                 pass
-
-        print(f"  [DEBUG C9] mensaje_user='{mensaje_user[:40]}' habilidad='{habilidad}'")
 
         # Guardar intercambio
         if mensaje_user and respuesta_final:
