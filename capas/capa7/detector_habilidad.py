@@ -52,7 +52,7 @@ HABILIDADES = {
     },
     # ── AUTO-ANÁLISIS TOTAL — Bell se conoce a sí misma ─────────────
     'AUTO_ANALISIS_TOTAL': {
-        'disponible': True,
+        'disponible': False,  # DESACTIVADA — rediseño pendiente
         'descripcion': 'Bell lee su propia arquitectura, archivos, habilidades y estado',
         'patrones': [
             r'\bqu[eé]\s+(?:archivos?|habilidades?|capas?|consejeras?)\s+(?:tienes?|tenés|hay)\b',
@@ -97,7 +97,7 @@ HABILIDADES = {
     },
     # ── BÚSQUEDA EN INTERNET ─────────────────────────────────────────
     'BUSQUEDA_INTERNET': {
-        'disponible': True,
+        'disponible': False,  # DESACTIVADA — rediseño pendiente
         'descripcion': 'Bell busca en internet, lee páginas y responde con información real',
         'patrones': [
             # ── QUÉ ES / SON / SIGNIFICA ─────────────────────────
@@ -370,7 +370,7 @@ HABILIDADES = {
         ],
     },
     'MEMORIA': {
-        'disponible': True,
+        'disponible': False,  # DESACTIVADA — rediseño pendiente
         'descripcion': 'Bell recuerda conversaciones previas, perfil de Sebastian y su propia historia',
         'patrones': [
             r'\brecuerdas\b', r'\brecuerda\b',
@@ -462,22 +462,7 @@ class DetectorHabilidad:
         es_info = any(k in texto_lower for k in _KW_BUSQUEDA_C7) or _es_palabra_sola
         es_mem  = any(k in texto_lower for k in _KW_MEM_C7)
 
-        # ── C3 ya decidió — si tiene habilidad_req válida, úsala directamente ──
-        # Esto evita que C4/C5 cancelen búsquedas legítimas con 'conversacional'
-        hab_c3_early = decision_final.get('habilidad_req', '')
-        if hab_c3_early in ('BUSQUEDA_INTERNET', 'MEMORIA', 'AUTO_ANALISIS_TOTAL'):
-            cfg_early = HABILIDADES.get(hab_c3_early, {})
-            print(f'  [C7 Bell] {hab_c3_early} ← C3 early (skip bypass)')
-            return {
-                'necesita_habilidad': True,
-                'habilidad_id':       hab_c3_early,
-                'modo':               cfg_early.get('modo_default', None),
-                'disponible':         cfg_early.get('disponible', True),
-                'descripcion':        cfg_early.get('descripcion', ''),
-                'texto_original':     texto,
-                'verbosidad':         'normal',
-                'fuente_deteccion':   'clasificador_bell',
-            }
+        # Early-exit C3 desactivado — habilidades búsqueda/memoria/auto en rediseño
 
         if tipo_respuesta in _BYPASS:
             return {
@@ -720,8 +705,23 @@ class DetectorHabilidad:
                 return 'generacion'
 
         # Explicación
+        _KW_PYTHON_EXPL = [
+            'async', 'await', 'yield', 'lambda', 'decorator', 'decorador',
+            'generator', 'generador', 'list comprehension', 'dict comprehension',
+            'threading', 'multiprocessing', 'asyncio', 'coroutine', 'coroutina',
+            'dataclass', 'metaclass', 'descriptor', 'protocol', 'abc',
+            'flask', 'django', 'numpy', 'pandas', 'pytorch', 'tensorflow',
+            'pip', 'venv', 'pytest', 'type hint', 'type hints', 'typing',
+            'context manager', 'with statement', 'dunder', 'magic method',
+            'gil', 'global interpreter', 'bytecode', 'cpython',
+            'list', 'dict', 'tuple', 'set ', 'frozenset',
+        ]
         for pat in cfg.get('patrones_explicacion', []):
             if re.search(pat, tl, re.IGNORECASE):
+                # Guard: "diferencia entre X y Y" sin concepto Python → es BUSQUEDA
+                if re.search(r'\bdiferencia\s+entre\b', tl):
+                    if not any(kw in tl for kw in _KW_PYTHON_EXPL):
+                        continue  # No es diferencia entre conceptos Python
                 return 'explicacion'
 
         # Patrones generales Python (código pegado directamente)

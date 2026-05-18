@@ -7,6 +7,8 @@ from flask import Flask, send_from_directory
 from flask_socketio import SocketIO
 from pathlib import Path
 
+import socketio
+
 FRONTEND = Path(__file__).parent / 'frontend'
 
 
@@ -118,3 +120,11 @@ def _iniciar_servicios(socketio):
         import traceback
         print(f'Error iniciando servicios: {e}')
         traceback.print_exc()
+
+
+from biblioteca.habilidades.python.observador_proyecto import iniciar_pair_programmer
+
+def alerta_callback(ruta, alertas, analisis):
+    socketio.emit('bell_alerta', {'ruta': ruta, 'alertas': alertas})
+
+iniciar_pair_programmer('/ruta/a/BELLADONNA', alerta_callback)

@@ -160,12 +160,9 @@ def _guardar_en_memoria(paquete_capa8: dict, resultado: dict):
         # Extraer datos de Sebastian y aprender
         if mensaje_user:
             mem.extraer_datos_sebastian(mensaje_user, respuesta_bell)
-            mem.aprender_de_mensaje(mensaje_user)
-            _procesar_fyi(mem, mensaje_user, resultado)
+            # FYI learning desactivado — habilidad búsqueda en rediseño
 
-        # Cache de búsqueda web
-        if habilidad == 'BUSQUEDA_INTERNET' and respuesta_bell and mensaje_user:
-            mem.guardar_busqueda_web(mensaje_user.lower(), respuesta_bell)
+        # Cache de búsqueda web — DESACTIVADO (habilidad en rediseño)
 
         mem.actualizar_self_post_sesion()
 
@@ -214,20 +211,46 @@ def _extraer_datos_pipeline(paquete_capa8: dict) -> dict:
     }
 
 
-def _procesar_fyi(mem, mensaje_user: str, resultado: dict):
-    """Detecta prefijos FYI y guarda como conocimiento."""
+def _procesar_fyi(mem, mensaje_user: str, resultado: dict, habilidad_real: str = ''):
+    """
+    Detecta prefijos FYI y guarda como conocimiento.
+    Usa habilidad_real (del executor) no habilidad_ejecutada (del detector C7).
+    Si búsqueda ya verificó → no aprender el claim sin verificar.
+    """
     PREFIJOS_FYI = ('fyi:', 'fyi :', 'tip:', 'dato:', 'recuerda:', 'nota:')
     tl = mensaje_user.lower().strip()
+
+    es_fyi = any(tl.startswith(pref) for pref in PREFIJOS_FYI)
+    if not es_fyi:
+        return
+
+    # habilidad_real = lo que ejecutor REALMENTE corrió (no lo que C7 detectó)
+    if habilidad_real == 'BUSQUEDA_INTERNET':
+        respuesta = resultado.get('respuesta_final', '').lower()
+        _SEÑALES_INCORRECTO = [
+            'no es correcto', 'incorrecto', 'no es exacto',
+            'el año correcto', 'está mal', 'dato incorrecto',
+            'ese dato no', 'no fue en', 'no se creó en',
+            'la fecha correcta', 'en realidad fue',
+        ]
+        if any(s in respuesta for s in _SEÑALES_INCORRECTO):
+            print(f"  C9 ⚠️  FYI incorrecto — no aprendido")
+            return
+        # Correcto o verificado → L7 ya guardó la info
+        resultado['respuesta_final'] = 'Verificado y guardado.'
+        print(f"  C9 ✅ FYI verificado por búsqueda — delegado a L7")
+        return
+
+    # Sin búsqueda → aprender con confianza media (0.70, no 0.95 — sin verificar)
     for pref in PREFIJOS_FYI:
         if tl.startswith(pref):
             conocimiento = mensaje_user[len(pref):].strip()
             if len(conocimiento) > 10:
                 mem.guardar_conocimiento(
                     conocimiento[:40], conocimiento,
-                    'general', 'sebastian', confianza=0.95
+                    'general', 'sebastian', confianza=0.70
                 )
-                print(f"  C9 📚 FYI aprendido: '{conocimiento[:60]}'")
-                # Bell acusa recibo
+                print(f"  C9 📚 FYI aprendido (sin verificar): '{conocimiento[:60]}'")
                 import hashlib
                 opciones = [
                     'Anotado.', 'Lo tendré en cuenta.',

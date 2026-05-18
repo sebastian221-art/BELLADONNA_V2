@@ -583,21 +583,24 @@ class GestorMemoria:
     def aprender_de_mensaje(self, mensaje: str):
         tl = mensaje.lower()
         _PATRONES = [
-            r'(?:o sea|significa que|quiere decir que|se llama)\s+(.{10,80})',
-            r'(?:fyi|dato|tip|nota)[:;]\s*(.{10,80})',
-            r'recuerda que\s+(.{10,80})',
-            r'te cuento que\s+(.{10,80})',
+            # Sin FYI aquí — FYI va a verificación en C9._procesar_fyi
+            (r'(?:o sea|significa que|quiere decir que|se llama)\s+(.{10,80})', 0.75),
+            (r'recuerda que\s+(.{10,80})', 0.70),
+            (r'te cuento que\s+(.{10,80})', 0.65),
+            # FYI sin verificar → confianza baja (0.30), C9 maneja el flujo verificado
+            (r'(?:fyi|dato|tip|nota)[:;]\s*(.{10,80})', 0.30),
         ]
-        for patron in _PATRONES:
+        for patron, confianza in _PATRONES:
             m = re.search(patron, tl)
             if m:
                 conocimiento = m.group(1).strip()
                 if len(conocimiento) > 15:
                     self.guardar_conocimiento(
                         conocimiento[:30], conocimiento,
-                        'general', 'sebastian', confianza=0.9
+                        'general', 'sebastian', confianza=confianza
                     )
-                    print(f"  [Memoria] 📚 Aprendí: '{conocimiento[:50]}'")
+                    if confianza >= 0.65:
+                        print(f"  [Memoria] 📚 Aprendí: '{conocimiento[:50]}'")
                     break
 
     # ══════════════════════════════════════════════════════

@@ -25,7 +25,7 @@ _ejecutor  = EjecutorHabilidad()
 
 # Tipos de respuesta que NUNCA necesitan habilidad externa
 _TIPOS_SIN_HABILIDAD = {
-    'conversacional', 'emocional', 'veto_respuesta',
+    'emocional', 'veto_respuesta',
     'matematica_python', 'honestidad_limitacion',
     'presentacion_sebastian',
 }
@@ -84,22 +84,7 @@ def _procesar_interno(paquete_capa6: dict) -> dict:
     modo         = deteccion.get('modo', '')
     print(f'  C7 habilidad: {habilidad_id} | modo: {modo or "-"}')
 
-    # ── 3. Revisar memoria antes de buscar internet ───────────────
-    if habilidad_id == 'BUSQUEDA_INTERNET':
-        desde_memoria = _buscar_en_memoria(texto_original)
-        if desde_memoria:
-            print(f'  C7 📚 Desde memoria: True | ejecuto: True')
-            return PaqueteCapa7(
-                respuesta_final      = desde_memoria,
-                ejecucion            = ResultadoEjecucion(
-                    ejecuto=True, habilidad_id='MEMORIA', resultado=desde_memoria
-                ),
-                tiene_resultado_real = True,
-                paquete_capa6        = paquete_capa6,
-                motor_sugerido       = motor_sugerido,
-                contiene_codigo      = contiene_codigo,
-                habilidad_ejecutada  = 'MEMORIA',
-            ).a_dict()
+    # ── 3. Revisar memoria — DESACTIVADO (habilidad en rediseño) ─
 
     # ── 4. Ejecutar habilidad ─────────────────────────────────────
     resultado = _ejecutor.ejecutar(deteccion)
@@ -191,25 +176,49 @@ def _check_clarificacion(texto: str, paquete_capa6: dict) -> dict | None:
 
 
 def _buscar_en_memoria(texto: str) -> str:
-    """Busca en memoria antes de ir a internet — API limpia, sin SQL directo."""
+    """
+    Busca en memoria antes de ir a internet.
+    Valida relevancia real con overlap de tokens antes de devolver cache.
+    El threshold del gestor (0.12) es demasiado bajo — aquí exigimos 0.40.
+    """
+    # Nunca usar cache para FYI/verificación — necesita búsqueda fresca
+    tl_check = texto.lower().strip()
+    if any(tl_check.startswith(p) for p in ('fyi:', 'fyi :', 'tip:', 'dato:', 'nota:')):
+        return ''
+
     try:
         from biblioteca.memoria import obtener_memoria
-        import unicodedata
+        import unicodedata, re
         mem = obtener_memoria()
 
-        # 1. Búsqueda semántica en conocimiento (API oficial)
-        resultado = mem.buscar_semantico(texto)
-        if resultado and len(resultado) > 15:
-            return resultado
+        _STOP = {
+            'qué','que','es','son','la','el','de','del','un','una','en',
+            'y','a','por','para','con','como','cómo','cual','cuál','los',
+            'las','fue','era','hay','ser','tiene','su','sus',
+        }
 
-        # 2. Cache de búsquedas web recientes
+        def _overlap(q: str, r: str) -> float:
+            qt = set(w for w in re.findall(r'\b\w{3,}\b', q.lower()) if w not in _STOP)
+            rt = set(w for w in re.findall(r'\b\w{3,}\b', r[:250].lower()) if w not in _STOP)
+            if not qt:
+                return 0.0
+            return len(qt & rt) / len(qt)
+
+        # 1. Búsqueda semántica — validar overlap ≥ 0.40
+        resultado = mem.buscar_semantico(texto)
+        if resultado and len(resultado) > 30:
+            if _overlap(texto, resultado) >= 0.40:
+                return resultado
+
+        # 2. Cache exacto de búsquedas web recientes
         query_norm = ''.join(
             ch for ch in unicodedata.normalize('NFD', texto.lower().strip())
             if unicodedata.category(ch) != 'Mn'
         )
         cached = mem.buscar_cache_web(query_norm, max_horas=48)
-        if cached:
+        if cached and _overlap(texto, cached) >= 0.35:
             return cached
+
     except Exception:
         pass
     return ''
@@ -241,7 +250,7 @@ _ejecutor  = EjecutorHabilidad()
 
 # Tipos de respuesta que NUNCA necesitan habilidad externa
 _TIPOS_SIN_HABILIDAD = {
-    'conversacional', 'emocional', 'veto_respuesta',
+    'emocional', 'veto_respuesta',
     'matematica_python', 'honestidad_limitacion',
     'presentacion_sebastian',
 }
@@ -300,22 +309,7 @@ def _procesar_interno(paquete_capa6: dict) -> dict:
     modo         = deteccion.get('modo', '')
     print(f'  C7 habilidad: {habilidad_id} | modo: {modo or "-"}')
 
-    # ── 3. Revisar memoria antes de buscar internet ───────────────
-    if habilidad_id == 'BUSQUEDA_INTERNET':
-        desde_memoria = _buscar_en_memoria(texto_original)
-        if desde_memoria:
-            print(f'  C7 📚 Desde memoria: True | ejecuto: True')
-            return PaqueteCapa7(
-                respuesta_final      = desde_memoria,
-                ejecucion            = ResultadoEjecucion(
-                    ejecuto=True, habilidad_id='MEMORIA', resultado=desde_memoria
-                ),
-                tiene_resultado_real = True,
-                paquete_capa6        = paquete_capa6,
-                motor_sugerido       = motor_sugerido,
-                contiene_codigo      = contiene_codigo,
-                habilidad_ejecutada  = 'MEMORIA',
-            ).a_dict()
+    # ── 3. Revisar memoria — DESACTIVADO (habilidad en rediseño) ─
 
     # ── 4. Ejecutar habilidad ─────────────────────────────────────
     resultado = _ejecutor.ejecutar(deteccion)

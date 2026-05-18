@@ -238,9 +238,7 @@ def _modo_ejecutar(codigo: str, nombre: str) -> dict:
         }
 
     partes = [resultado.resumen_bell]
-
-    if resultado.stdout:
-        partes.append(f"\nOutput:\n{resultado.stdout.strip()}")
+    # No añadir stdout separado — resumen_bell ya lo incluye en ejecución exitosa
 
     if not resultado.exitoso and resultado.stderr:
         exp = get_explicador().explicar_error(resultado.stderr, codigo)
