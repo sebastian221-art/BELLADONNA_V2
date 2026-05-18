@@ -1,14 +1,111 @@
 {
   "version": 2,
   "creada": "2026-05-14T21:22:33.069187",
-  "ultima_sesion": "2026-05-17T03:48:52.376234",
+  "ultima_sesion": "2026-05-17T22:02:24.939352",
   "datos_sebastian": {},
   "momentos": [],
-  "temas": {},
-  "estados": [],
+  "temas": {
+    "programacion": {
+      "count": 69,
+      "primera_vez": "2026-05-17T16:43:05.890053",
+      "ultima_vez": "2026-05-17T22:04:31.175184"
+    },
+    "belladonna": {
+      "count": 14,
+      "primera_vez": "2026-05-17T16:44:46.628772",
+      "ultima_vez": "2026-05-17T20:17:45.659700"
+    },
+    "salud": {
+      "count": 4,
+      "primera_vez": "2026-05-17T17:13:39.575177",
+      "ultima_vez": "2026-05-17T20:16:02.673563"
+    },
+    "emociones": {
+      "count": 8,
+      "primera_vez": "2026-05-17T17:13:39.575177",
+      "ultima_vez": "2026-05-17T20:16:02.673563"
+    },
+    "tecnologia": {
+      "count": 6,
+      "primera_vez": "2026-05-17T21:47:14.258503",
+      "ultima_vez": "2026-05-17T22:03:41.239900"
+    }
+  },
+  "estados": [
+    {
+      "fecha": "2026-05-17T17:13:39.575211",
+      "estado": "cansancio",
+      "texto": "estoy muy cansado hoy no quiero hacer nada"
+    },
+    {
+      "fecha": "2026-05-17T17:13:39.581181",
+      "estado": "cansancio",
+      "texto": "estoy muy cansado hoy no quiero hacer nada"
+    },
+    {
+      "fecha": "2026-05-17T17:13:56.229560",
+      "estado": "orgullo",
+      "texto": "por fin terminé el módulo que llevaba días arreglando"
+    },
+    {
+      "fecha": "2026-05-17T17:13:56.231958",
+      "estado": "orgullo",
+      "texto": "por fin terminé el módulo que llevaba días arreglando"
+    },
+    {
+      "fecha": "2026-05-17T20:11:22.241366",
+      "estado": "positivo",
+      "texto": "tambien estoy bien y tu q haces"
+    },
+    {
+      "fecha": "2026-05-17T20:11:22.244676",
+      "estado": "positivo",
+      "texto": "tambien estoy bien y tu q haces"
+    },
+    {
+      "fecha": "2026-05-17T20:15:30.152572",
+      "estado": "positivo",
+      "texto": "también estoy bien y tú qué haces"
+    },
+    {
+      "fecha": "2026-05-17T20:15:30.159153",
+      "estado": "positivo",
+      "texto": "también estoy bien y tú qué haces"
+    },
+    {
+      "fecha": "2026-05-17T20:16:02.667807",
+      "estado": "cansancio",
+      "texto": "estoy muy cansado"
+    },
+    {
+      "fecha": "2026-05-17T20:16:02.673599",
+      "estado": "cansancio",
+      "texto": "estoy muy cansado"
+    },
+    {
+      "fecha": "2026-05-17T20:17:45.653332",
+      "estado": "determinacion",
+      "texto": "te quiero bell"
+    },
+    {
+      "fecha": "2026-05-17T20:17:45.659739",
+      "estado": "determinacion",
+      "texto": "te quiero bell"
+    }
+  ],
   "pendientes": [],
-  "proyectos": {},
+  "proyectos": {
+    "BELLADONNA": {
+      "menciones": 14,
+      "primera": "2026-05-17T16:44:46.628813",
+      "ultima": "2026-05-17T20:17:45.659746"
+    },
+    "se llama BELLADONNA y lo hago ": {
+      "menciones": 2,
+      "primera": "2026-05-17T17:12:28.739898"
+    }
+  },
   "preferencias": {},
-  "total_sesiones": 7,
-  "total_turnos": 11
+  "total_sesiones": 17,
+  "total_turnos": 141
 }

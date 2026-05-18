@@ -177,7 +177,7 @@ Escribe solo la respuesta de Bell. Sin explicaciones, sin comillas externas."""
 
         mapa = {
             'saludo': (
-                f"Bell recibe un saludo de Sebastian, su creador.\n"
+                f"Bell recibe un saludo de Sebastian (Juan Sebastian Mora), su creador.\n"
                 f"Base: '{base}'\n"
                 f"Calidez genuina. 1 a 2 oraciones. Sage: {sage}"
             ),

@@ -1,180 +1,200 @@
-# biblioteca/habilidades/python/explicador_tecnico.py — MÁXIMO FINAL
-import os, httpx
-from typing import Optional
+# biblioteca/habilidades/python/explicador_tecnico.py
+# ============================================================
+# EXPLICADOR TÉCNICO — métricas reales + voz Bell
+#
+# Nunca inventa. Cada afirmación viene de datos calculados.
+# Explica en español claro como si hablaras con un developer,
+# no como si leyeras documentación.
+# ============================================================
 
-_GROQ_API_KEY = os.getenv('GROQ_API_KEY', '')
-_GROQ_URL     = 'https://api.groq.com/openai/v1/chat/completions'
-_GROQ_MODEL   = 'openai/gpt-oss-120b'
-_GROQ_TIMEOUT = 60
-_TOKENS = {'simple': 400, 'normal': 1000, 'detallado': 1800}
+from dataclasses import dataclass
+from typing import Optional, TYPE_CHECKING
 
-_SYSTEM = '''Eres Bell — IA creada por Sebastian en Bucaramanga. Senior Python developer y gran maestro técnico.
+if TYPE_CHECKING:
+    from biblioteca.habilidades.python.analizador_codigo import AnalisisCompleto
 
-MI PROCESO AL EXPLICAR (úsalo exactamente):
 
-1. POR QUÉ EXISTE: No empiezo con "X es Y". Empiezo con el problema que resuelve. "Los decoradores existen porque Python necesitaba modificar comportamiento sin tocar el código original".
-
-2. INTUICIÓN / ANALOGÍA: Una imagen del mundo real. No forzada — solo si ayuda genuinamente.
-
-3. MECANISMO INTERNO: Cómo Python lo ejecuta realmente, no solo qué hace. "@decorador" es exactamente `func = decorador(func)` ejecutado al importar el módulo.
-
-4. EJEMPLO MÍNIMO EJECUTABLE: Código que funciona, no pseudocódigo. Líneas reales.
-
-5. EJEMPLO DEL MUNDO REAL: Conectado con lo que Sebastian usa — Bell (Python 3.12, Flask, SocketIO). @app.route ES un decorador. Bell usa async/await para procesar mensajes mientras espera a Groq.
-
-6. CUÁNDO NO USAR: Los buenos ingenieros saben cuándo NO usar una herramienta. Los decoradores dificultan el debugging. Los generadores tienen overhead. async no sirve para CPU-bound.
-
-EJEMPLO PERFECTO:
----
-Mira Sebastian, los decoradores existen porque Python necesitaba una forma de modificar el comportamiento de funciones sin tocar su código — y sin la complejidad de la herencia.
-
-La intuición: un decorador es una función que recibe una función y devuelve una función mejorada. Eso es todo.
-
-Cuando escribes `@mi_decorador` arriba de una función, Python ejecuta exactamente `mi_funcion = mi_decorador(mi_funcion)` en el momento que lee el archivo — no cuando llamas la función. Esto es importante: si el decorador conecta a una base de datos, esa conexión ocurre al importar el módulo.
-
-El ejemplo básico:
-
-```python
-from functools import wraps
-
-def registrar(func):
-    @wraps(func)  # Preserva nombre y docstring — siempre necesario
-    def wrapper(*args, **kwargs):
-        print(f"→ {func.__name__}")
-        resultado = func(*args, **kwargs)
-        print(f"← {func.__name__}")
-        return resultado
-    return wrapper
-
-@registrar
-def procesar(dato: str) -> str:
-    return dato.upper()
-```
-
-`@wraps(func)` es casi siempre necesario — sin él, `procesar.__name__` devuelve "wrapper" en lugar de "procesar", lo cual rompe el debugging.
-
-Flask lo usa en todas partes: `@app.route("/")` registra la función en un diccionario interno de rutas. Bell usa `@socketio.on('mensaje')` de la misma manera. Son decoradores que _registran_ la función en un sistema externo.
-
-Para decoradores con parámetros necesitas una capa más: una función que devuelve el decorador.
-
-Cuándo no usar decoradores: cuando la lógica es compleja, ocultan el flujo y dificultan el debugging. Los stack traces muestran "wrapper" en lugar del nombre real. Para lógica de negocio compleja, una llamada explícita es más legible.
----
-
-REGLAS ABSOLUTAS:
-- Empiezas con "Mira Sebastian," DIRECTO al concepto — sin intro larga
-- Código con 4 espacios PEP 8
-- NUNCA "En resumen", "Esto permite a los desarrolladores", "esto hace el código más mantenible"
-- Si la analogía no ilumina en 1 oración, no la uses
-- Una idea por oración. No repitas la misma idea reformulada
-
-EJEMPLO MAL: "Los decoradores son una herramienta que permite a los desarrolladores modificar el comportamiento de funciones de manera modular y reutilizable."
-→ 20 palabras de relleno. No dice nada concreto.
-
-EJEMPLO BIEN: "Los decoradores existen porque Python necesitaba modificar funciones sin cambiar su código. `@decorador` es azúcar para `func = decorador(func)`, ejecutado cuando Python lee el archivo — no cuando llamas la función."
-→ 2 oraciones. Explica el mecanismo exacto.
-
-HECHOS TÉCNICOS — EXACTITUD OBLIGATORIA:
-
-FLASK: Es SÍNCRONO. Flask-SocketIO agrega async pero Flask base no. NUNCA digas "Flask es asíncrono".
-
-GENERATORS: `yield` produce valores lazy. En handlers SocketIO, `yield` NO crea un generador útil.
-
-GIL: Bloquea código Python puro. I/O y extensiones C (numpy, requests) liberan el GIL.
-  threading SÍ mejora I/O-bound, NO mejora CPU-bound en pure Python.
-
-COPY: `copy.copy([[1,2]])` comparte sublistas. `deepcopy` las duplica completamente.
-
-TYPE HINTS: Opcionales. No validan en runtime — solo IDE/mypy.
-
-CONTEXT MANAGERS:
-  `with X as y:` requiere que X implemente `__enter__`/`__exit__` o use `@contextmanager`.
-  `@contextmanager` con `yield` es más simple para la mayoría de casos:
-  ```python
-  from contextlib import contextmanager
-  @contextmanager
-  def abrir_recurso():
-      r = adquirir()
-      try: yield r
-      finally: liberar(r)
-  ```
-  El código después del `yield` siempre ejecuta, incluso si hay excepción.
-
-WEAKREF:
-  `weakref.ref(func)` para funciones libres.
-  `weakref.WeakMethod(metodo)` para métodos bound (self.metodo).
-  weakref.ref de un método bound se garbage-collect inmediatamente — bug silencioso.
-
-FNMATCH vs REGEX para patrones glob:
-  `usuario.*` como glob (fnmatch) matchea "usuario.creado", "usuario.eliminado".
-  `usuario.*` como regex matchea cualquier string que empiece con "usuari" (el . es cualquier char).
-  BIEN: `fnmatch.fnmatch(evento, patron)` para patrones con * y ?.
-
-BACKOFF con jitter:
-  `time.sleep(2**intento)` es incorrecto en producción — thundering herd problem.
-  CORRECTO: `time.sleep(2**intento + random.uniform(0, 1))`
-
-DATACLASS vs dict:
-  Usa `@dataclass` cuando el objeto tiene estructura fija y necesitas autocompletado.
-  Usa `dict` cuando las claves son dinámicas o desconocidas en tiempo de compilación.
-
-PERF_COUNTER vs TIME:
-  `time.time()` retorna timestamp del mundo real (puede saltar por NTP).
-  `time.perf_counter()` mide tiempo transcurrido con alta precisión — para benchmarks y timeouts.
-
-FLUENT INTERFACE INMUTABLE:
-  Cada método retorna una NUEVA instancia, no modifica la original:
-  `nuevo = copy.copy(self); nuevo.campo = valor; return nuevo`
-  Así `q.where("a").where("b")` no afecta el querybuilder original.
-
-EJEMPLOS DE CÓDIGO — VERIFICACIÓN OBLIGATORIA:
-Antes de incluir cualquier código, verifica mentalmente:
-1. Todos los nombres usados en el ejemplo están definidos en el ejemplo
-2. Los imports están al inicio
-3. Los print() muestran exactamente lo que el código computaría
-4. No hay typos en nombres de funciones o variables'''
+@dataclass
+class Explicacion:
+    texto_completo:   str
+    puntos_clave:     list
+    sugerencias:      list
+    nivel_confianza:  str  # 'datos_reales' siempre
 
 
 class ExplicadorTecnico:
 
-    def explicar(self, consulta: str, verbosidad: str = 'normal') -> dict:
-        respuesta = self._groq(consulta, verbosidad)
-        if respuesta:
-            return {'exitoso': True, 'respuesta': respuesta}
-        return self._fallback(consulta)
+    def explicar_analisis(self, analisis: 'AnalisisCompleto') -> Explicacion:
+        """Convierte un AnalisisCompleto en explicación humana con voz Bell."""
+        puntos = []
+        sugerencias = []
 
-    def _groq(self, consulta: str, verbosidad: str) -> Optional[str]:
-        if not _GROQ_API_KEY: return None
-        n = _TOKENS.get(verbosidad, 2500)
-        inst = {
-            'simple':    'Explicación de 80-150 palabras. Solo la intuición central y un ejemplo mínimo.',
-            'normal':    'Explicación de 150-280 palabras. Por qué existe → mecanismo clave → ejemplo ejecutable → caso real con Bell/Flask. Conciso, sin repetir ideas.',
-            'detallado': 'Explicación de 350-550 palabras. Por qué existe → mecanismo interno real → ejemplo básico + ejemplo avanzado → cuándo NO usar. Directo, sin relleno.',
-        }.get(verbosidad, '')
-        try:
-            r = httpx.post(_GROQ_URL,
-                headers={'Authorization': f'Bearer {_GROQ_API_KEY}', 'Content-Type': 'application/json'},
-                json={'model': _GROQ_MODEL, 'messages': [
-                    {'role': 'system', 'content': _SYSTEM},
-                    {'role': 'user', 'content': f'{consulta}\n\n{inst}'}],
-                    'temperature': 0.4, 'max_tokens': n},
-                timeout=_GROQ_TIMEOUT)
-            if r.status_code == 200:
-                resp = r.json()['choices'][0]['message']['content'].strip()
-                if resp and len(resp) > 20: return resp
-        except Exception as e:
-            print(f'  [Explicador] {e}')
-        return None
+        # ── Complejidad ────────────────────────────────────────────────────
+        cc = analisis.metricas.cc
+        if cc <= 5:
+            puntos.append(
+                f"Complejidad ciclomática CC={cc} — código muy simple, "
+                f"fácil de testear y mantener. Cada función tiene pocos caminos posibles."
+            )
+        elif cc <= 10:
+            puntos.append(
+                f"Complejidad CC={cc} — dentro del rango profesional aceptable. "
+                f"Puede tener hasta {int(cc)} caminos de ejecución distintos."
+            )
+        elif cc <= 15:
+            puntos.append(
+                f"Complejidad CC={cc} — elevada. Con más de 10 caminos de ejecución "
+                f"el riesgo de bugs no probados aumenta significativamente."
+            )
+            sugerencias.append(
+                f"Refactoriza las funciones con CC>{int(cc/2)} — extrae lógica en funciones más pequeñas."
+            )
+        else:
+            puntos.append(
+                f"Complejidad CC={cc} — crítica. Esto significa {int(cc)} rutas posibles "
+                f"de ejecución. La probabilidad de bugs no detectados es muy alta."
+            )
+            sugerencias.append("Urgente: divide las funciones complejas — ninguna debería superar CC=10.")
 
-    def _fallback(self, consulta: str) -> dict:
-        tl = consulta.lower()
-        b = {
-            'async':     'async/await: `async def` crea una función pausable. `await` cede el control mientras espera I/O — Bell lo usa para procesar mensajes mientras espera la respuesta de Groq.',
-            'decorador': 'Decoradores: @decorador es `func = decorador(func)`. @app.route de Flask y @socketio.on de Bell son decoradores que registran funciones en sistemas externos.',
-            'generador': 'yield: convierte la función en generador que produce un valor a la vez sin cargar todo en memoria. Para secuencias largas es mucho más eficiente.',
-            'venv':      'Entorno virtual: `python -m venv venv` → `.\\venv\\Scripts\\activate` → `pip install`. Aísla las dependencias de Bell de tu sistema.',
-            'flask':     'Flask: @app.route mapea URLs a funciones. `request.json` lee el body. `jsonify()` serializa la respuesta. Bell está construida sobre Flask + SocketIO.',
-        }
-        for k, v in b.items():
-            if k in tl:
-                return {'exitoso': True, 'respuesta': v}
-        return {'exitoso': False, 'respuesta': 'Pégame el código relacionado y lo analizo directamente.'}
+        # ── Mantenibilidad ─────────────────────────────────────────────────
+        mi = analisis.metricas.mi
+        if mi >= 65:
+            puntos.append(
+                f"Índice de mantenibilidad MI={mi}/100 — código saludable. "
+                f"Otro developer (o tú en 6 meses) lo va a entender sin problema."
+            )
+        elif mi >= 30:
+            puntos.append(
+                f"Mantenibilidad MI={mi}/100 — aceptable pero con margen de mejora. "
+                f"El código funciona pero puede ser difícil de modificar."
+            )
+            sugerencias.append("Agrega docstrings y comentarios en las partes más densas.")
+        else:
+            puntos.append(
+                f"Mantenibilidad MI={mi}/100 — código difícil de mantener. "
+                f"Cada cambio tiene riesgo alto de romper algo inesperado."
+            )
+            sugerencias.append("Refactorización profunda necesaria antes de agregar más features.")
+
+        # ── Tamaño ─────────────────────────────────────────────────────────
+        loc = analisis.metricas.loc
+        if loc > 0:
+            puntos.append(f"Tamaño: {loc} líneas totales, {analisis.metricas.lloc} líneas lógicas.")
+
+        # ── Funciones ──────────────────────────────────────────────────────
+        if analisis.funciones:
+            sin_doc = [f['nombre'] for f in analisis.funciones if not f.get('doc')]
+            sin_types = [f['nombre'] for f in analisis.funciones if not f.get('returns') and f.get('args')]
+            if sin_doc:
+                sugerencias.append(f"Funciones sin docstring: {', '.join(sin_doc[:5])}.")
+            if sin_types:
+                sugerencias.append(f"Funciones sin type hints de retorno: {', '.join(sin_types[:5])}.")
+
+        # ── Problemas específicos ──────────────────────────────────────────
+        errores = [p for p in analisis.problemas if p.tipo == 'error']
+        seguridad = [p for p in analisis.problemas if p.herramienta == 'bandit']
+
+        if errores:
+            for e in errores[:3]:
+                puntos.append(f"Error línea {e.linea}: {e.mensaje}")
+
+        if seguridad:
+            for s in seguridad[:2]:
+                puntos.append(f"⚠️  Seguridad línea {s.linea}: {s.mensaje}")
+            sugerencias.append("Los problemas de seguridad deben corregirse antes de cualquier deploy.")
+
+        # ── Texto completo ─────────────────────────────────────────────────
+        texto = self._armar_texto(analisis, puntos, sugerencias)
+
+        return Explicacion(
+            texto_completo=texto,
+            puntos_clave=puntos,
+            sugerencias=sugerencias,
+            nivel_confianza='datos_reales',
+        )
+
+    def explicar_error(self, error: str, codigo: str = '') -> str:
+        """Explica un error de Python en lenguaje humano."""
+        error_lower = error.lower()
+
+        if 'nameerror' in error_lower:
+            nombre = self._extraer_nombre_error(error)
+            return (
+                f"NameError: '{nombre}' no existe en este contexto. "
+                f"Puede ser que no la definiste antes de usarla, o hay un typo en el nombre."
+            )
+        if 'typeerror' in error_lower:
+            return (
+                f"TypeError: estás pasando el tipo de dato incorrecto a alguna función. "
+                f"Detalle: {error.split('TypeError:')[-1].strip()}"
+            )
+        if 'indexerror' in error_lower:
+            return (
+                "IndexError: intentas acceder a una posición que no existe en la lista. "
+                "Verifica que el índice esté dentro del rango de la lista."
+            )
+        if 'keyerror' in error_lower:
+            nombre = self._extraer_nombre_error(error)
+            return (
+                f"KeyError: la clave '{nombre}' no existe en el diccionario. "
+                f"Usa dict.get('{nombre}') para evitar el error, o verifica que la clave exista."
+            )
+        if 'importerror' in error_lower or 'modulenotfounderror' in error_lower:
+            return (
+                f"ImportError: el módulo no está instalado o no se encuentra. "
+                f"Detalle: {error.split(':')[-1].strip()}"
+            )
+        if 'syntaxerror' in error_lower:
+            return (
+                f"SyntaxError: el código tiene un error de escritura — Python no puede leerlo. "
+                f"Detalle: {error.split('SyntaxError:')[-1].strip()}"
+            )
+        if 'attributeerror' in error_lower:
+            return (
+                f"AttributeError: estás accediendo a un atributo o método que no existe. "
+                f"Detalle: {error.split('AttributeError:')[-1].strip()}"
+            )
+        if 'valueerror' in error_lower:
+            return (
+                f"ValueError: el valor que pasas es del tipo correcto pero el contenido "
+                f"no es válido para esa operación. "
+                f"Detalle: {error.split('ValueError:')[-1].strip()}"
+            )
+
+        return f"Error detectado: {error.strip()[:300]}"
+
+    def _armar_texto(self, analisis, puntos: list, sugerencias: list) -> str:
+        partes = []
+
+        riesgo_emoji = {
+            'bajo': '✅', 'medio': '⚠️', 'alto': '🔴', 'crítico': '🚨'
+        }.get(analisis.metricas.nivel_riesgo, '')
+
+        partes.append(
+            f"{riesgo_emoji} Análisis completo — riesgo {analisis.metricas.nivel_riesgo.upper()}."
+        )
+        partes.append('')
+
+        for p in puntos:
+            partes.append(f"• {p}")
+
+        if sugerencias:
+            partes.append('')
+            partes.append("Sugerencias de mejora:")
+            for s in sugerencias:
+                partes.append(f"  → {s}")
+
+        return '\n'.join(partes)
+
+    def _extraer_nombre_error(self, error: str) -> str:
+        match = __import__('re').search(r"'([^']+)'", error)
+        return match.group(1) if match else 'desconocido'
+
+
+_instancia: Optional[ExplicadorTecnico] = None
+
+def obtener() -> ExplicadorTecnico:
+    global _instancia
+    if _instancia is None:
+        _instancia = ExplicadorTecnico()
+    return _instancia

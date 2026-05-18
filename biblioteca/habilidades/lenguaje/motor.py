@@ -142,10 +142,16 @@ _EMOCIONES_DIRECTAS = {
                       'vamos','hagamos','de una vez'],
     'alivio':        ['por fin','qué alivio','ya terminó','ya termino','se resolvió',
                       'funcionó al fin','menos mal','uff que bien'],
-    # Colombianismos emocionales
-    'parcero':       ['parcero','parce','llave','marica','mane','gonorrea',  # contexto neutro/positivo
-                      'hermano','man','chino','cucho'],
+    # Sin parcero aquí — es colombianismo neutro, no emoción
+    # Los colombianismos van en _afinar_con_texto_completo
 }
+
+# Colombianismos neutros — no son emociones, son tono
+_COLOMBIANISMOS_NEUTROS = [
+    'parce', 'parcero', 'marica', 'llave', 'mane',
+    'gonorrea', 'hermano', 'man', 'chino', 'cucho',
+    'bacano', 'chévere', 'de una',
+]
 
 # Palabras de humor / ironía
 _INDICADORES_HUMOR = [
@@ -254,8 +260,6 @@ class MotorComprension:
         }
 
         for emocion, palabras in _EMOCIONES_DIRECTAS.items():
-            if emocion == 'parcero':
-                continue  # Colombianismos no son emociones
             for palabra in palabras:
                 if palabra in tl:
                     intensidad = intensidades.get(emocion, 0.6)
@@ -332,7 +336,12 @@ class MotorComprension:
             if emocion_psi and emocion_psi != 'neutra' and r.emocion_detectada == 'neutra':
                 r.emocion_detectada = emocion_psi
                 r.intensidad        = h.get('intensidad_emocional', 0.0)
-            r.tono_base    = h.get('tono_base', r.tono_base or 'neutral')
+            # Solo sobreescribir tono_base si psicologica encontró emoción real
+            tono_psi = h.get('tono_base', '')
+            if tono_psi and tono_psi != 'neutral':
+                r.tono_base = tono_psi
+            elif not r.tono_base or r.tono_base == 'neutral':
+                r.tono_base = tono_psi or 'neutral'
             r.necesidad_real = h.get('necesidad_real', '')
             id_lyra = h.get('id_lyra', '')
             r.id_lyra = id_lyra
@@ -641,8 +650,7 @@ class MotorComprension:
             r.nivel_energia = 'bajo'
 
         # Colombianismos de contexto positivo/neutro
-        colombianismos_neutros = ['parce', 'parcero', 'marica', 'llave', 'mane',
-                                   'chino', 'cucho', 'bacano', 'chévere', 'de una']
+        colombianismos_neutros = _COLOMBIANISMOS_NEUTROS
         if any(c in tl for c in colombianismos_neutros):
             # Si hay colombianismos pero no hay emoción fuerte → tono cercano
             if r.emocion_detectada == 'neutra':

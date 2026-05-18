@@ -1,30 +1,42 @@
 # capas/capa7/__init__.py
 # ================================================
-# CAPA 7 — EJECUCIÓN
-#
-# Recibe: PaqueteCapa6
-# Produce: PaqueteCapa7
+# CAPA 7 — EJECUCIÓN — v2
 #
 # Flujo:
-# 1. Detecta si el mensaje necesita una habilidad
-# 2. Si no necesita → pasa la respuesta de Capa 6
-# 3. Si necesita y existe → la ejecuta
-# 4. Si necesita y no existe → honestidad y zona
+# 1. Si tipo_respuesta es simple → pasar directo (sin habilidad)
+# 2. Detectar si necesita habilidad
+# 3. Revisar memoria antes de buscar (evita internet innecesario)
+# 4. Ejecutar habilidad si corresponde
+# 5. Retornar mejor respuesta
+#
+# v2:
+# — Logs diagnósticos completos
+# — Propagación campos v2
+# — Bypass para mensajes conversacionales/emocionales
+# — Fix búsqueda Sebastian
 # ================================================
 
-from capas.capa7.paquete_capa7       import PaqueteCapa7, ResultadoEjecucion
-from capas.capa7.detector_habilidad  import DetectorHabilidad
-from capas.capa7.ejecutor_habilidad  import EjecutorHabilidad
+from capas.capa7.paquete_capa7      import PaqueteCapa7, ResultadoEjecucion
+from capas.capa7.detector_habilidad import DetectorHabilidad
+from capas.capa7.ejecutor_habilidad import EjecutorHabilidad
 
 _detector = DetectorHabilidad()
-_ejecutor = EjecutorHabilidad()
+_ejecutor  = EjecutorHabilidad()
+
+# Tipos de respuesta que NUNCA necesitan habilidad externa
+_TIPOS_SIN_HABILIDAD = {
+    'conversacional', 'emocional', 'veto_respuesta',
+    'matematica_python', 'honestidad_limitacion',
+    'presentacion_sebastian',
+}
 
 
 def procesar(paquete_capa6: dict) -> dict:
     try:
         return _procesar_interno(paquete_capa6)
     except Exception as e:
-        import traceback; traceback.print_exc()
+        import traceback
+        traceback.print_exc()
         return PaqueteCapa7(
             respuesta_final = paquete_capa6.get('respuesta_final', ''),
             paquete_capa6   = paquete_capa6,
@@ -35,131 +47,360 @@ def procesar(paquete_capa6: dict) -> dict:
 
 def _procesar_interno(paquete_capa6: dict) -> dict:
 
-    # ── CHECK PENDIENTE CLARIFICACIÓN PRIMERO ────────────────
-    # Si Bell hizo una pregunta de clarificación y el usuario responde,
-    # interceptar aquí antes de cualquier otra lógica.
-    try:
-        from biblioteca.habilidades.busqueda.motor_busqueda import (
-            _PENDIENTE, _es_respuesta_clarificacion, ejecutar_busqueda
-        )
-        texto_entrada = ''
-        try:
-            p5 = paquete_capa6.get('paquete_capa5', {}) or {}
-            p4 = p5.get('paquete_capa4', {}) or {}
-            p3 = p4.get('paquete_capa3', {}) or {}
-            p2 = p3.get('paquete_capa2', {}) or {}
-            p1 = p2.get('paquete_capa1', {}) or {}
-            texto_entrada = p1.get('contenido_original', '') or ''
-        except Exception:
-            pass
-
-        if texto_entrada and _PENDIENTE.get('activo'):
-            if _es_respuesta_clarificacion(texto_entrada):
-                print(f"  [C7] ↩ Retomando búsqueda: '{_PENDIENTE.get('pregunta', '')[:40]}'")
-                resultado_busqueda = ejecutar_busqueda(texto_entrada)
-                if resultado_busqueda.get('exitoso'):
-                    return PaqueteCapa7(
-                        respuesta_final      = resultado_busqueda['respuesta'],
-                        tiene_resultado_real = True,
-                        ejecucion            = ResultadoEjecucion(
-                            ejecuto=True,
-                            habilidad_id='BUSQUEDA_INTERNET',
-                            resultado=resultado_busqueda['respuesta'],
-                        ),
-                        paquete_capa6        = paquete_capa6,
-                    ).a_dict()
-    except Exception as _e:
-        pass  # clarificación no crítica
-
     respuesta_capa6  = paquete_capa6.get('respuesta_final', '')
     decision         = paquete_capa6.get('decision', {})
-    paquete_c5       = paquete_capa6.get('paquete_capa5', {})
-    paquete_c4       = paquete_c5.get('paquete_capa4', {})
-    paquete_c3       = paquete_c4.get('paquete_capa3', {})
-    paquete_c2       = paquete_c3.get('paquete_capa2', {})
-    paquete_c1       = paquete_c2.get('paquete_capa1', {})
-    texto_original   = paquete_c1.get('contenido_original', '')
+    tipo_respuesta   = paquete_capa6.get('tipo_respuesta', 'conversacional')
+    motor_sugerido   = paquete_capa6.get('motor_sugerido', 'local')
+    contiene_codigo  = paquete_capa6.get('contiene_codigo', False)
 
-    # 1. Detectar si necesita habilidad
-    deteccion = _detector.detectar(texto_original, decision)
+    # Extraer texto original
+    texto_original = _extraer_texto(paquete_capa6)
 
-    # 2. Si no necesita habilidad → pasar respuesta de Capa 6
+    # ── BYPASS: mensajes simples nunca necesitan habilidades ──────
+    if tipo_respuesta in _TIPOS_SIN_HABILIDAD:
+        print(f'  C7 habilidad:  (bypass {tipo_respuesta}) | ejecuto: False')
+        return _paquete_directo(respuesta_capa6, paquete_capa6,
+                                motor_sugerido, contiene_codigo)
+
+    # ── CHECK clarificación pendiente ─────────────────────────────
+    clarificacion = _check_clarificacion(texto_original, paquete_capa6)
+    if clarificacion:
+        return clarificacion
+
+    # ── 1. Detectar si necesita habilidad ─────────────────────────
+    deteccion = _detector.detectar(
+        texto          = texto_original,
+        decision_final = decision,
+        tipo_respuesta = tipo_respuesta,
+    )
+
+    # ── 2. No necesita habilidad → pasar C6 ──────────────────────
     if not deteccion['necesita_habilidad']:
-        return PaqueteCapa7(
-            respuesta_final      = respuesta_capa6,
-            ejecucion            = ResultadoEjecucion(ejecuto=False),
-            tiene_resultado_real = False,
-            paquete_capa6        = paquete_capa6,
-        ).a_dict()
+        print(f'  C7 habilidad:  | ejecuto: False')
+        return _paquete_directo(respuesta_capa6, paquete_capa6,
+                                motor_sugerido, contiene_codigo)
 
-    # 3a. Memoria-first: solo para BUSQUEDA_INTERNET con conocimiento de Sebastian
-    try:
-        _habilidad_id = deteccion.get('habilidad_id', '')
-        # Memory-first: BUSQUEDA_INTERNET siempre, PYTHON_COMPLETO solo si es
-        # pregunta FACTUAL (quién, cuándo, qué es) no contextual (estoy, tengo)
-        _es_factual_python = False
-        if _habilidad_id == 'PYTHON_COMPLETO':
-            _tl = texto_original.lower()
-            _factual_markers = ['quién', 'quien', 'cuándo', 'cuando', 'qué es',
-                                 'que es', 'quién creó', 'quien creo', 'cómo se llama']
-            _contextual_markers = ['estoy', 'tengo', 'mi ', 'me ', 'ayuda', 'arregla',
-                                    'bug', 'error', 'problema', 'trabajando']
-            if (any(m in _tl for m in _factual_markers) and
-                    not any(m in _tl for m in _contextual_markers)):
-                _es_factual_python = True
-        if _habilidad_id == 'BUSQUEDA_INTERNET' or _es_factual_python:
-            from biblioteca.memoria import obtener_memoria
-            _mem = obtener_memoria()
-            # Buscar por palabras clave en conocimiento de Sebastian
-            _palabras = [w for w in texto_original.lower().split() if len(w) > 4]
-            for _pal in _palabras[:3]:
-                import threading as _th
-                with _th.Lock():
-                    _row = _mem.db.execute(
-                        "SELECT respuesta FROM conocimiento "
-                        "WHERE fuente='sebastian' AND vigente=1 AND "
-                        "(tema LIKE ? OR respuesta LIKE ?) "
-                        "ORDER BY confianza DESC LIMIT 1",
-                        (f'%{_pal}%', f'%{_pal}%')
-                    ).fetchone()
-                if _row and _row['respuesta'] and len(_row['respuesta']) > 15:
-                    _resp = _row['respuesta']
-                    print(f"  [C7] 📚 Desde memoria Sebastian: '{_resp[:40]}'")
-                    return PaqueteCapa7(
-                        respuesta_final      = _resp,
-                        ejecucion            = ResultadoEjecucion(ejecuto=True,
-                                               habilidad_id='BUSQUEDA_INTERNET',
-                                               resultado=_resp),
-                        tiene_resultado_real = True,
-                        paquete_capa6        = paquete_capa6,
-                    ).a_dict()
-    except Exception:
-        pass
+    habilidad_id = deteccion.get('habilidad_id', '')
+    modo         = deteccion.get('modo', '')
+    print(f'  C7 habilidad: {habilidad_id} | modo: {modo or "-"}')
 
-    # 3. Necesita habilidad → intentar ejecutar
+    # ── 3. Revisar memoria antes de buscar internet ───────────────
+    if habilidad_id == 'BUSQUEDA_INTERNET':
+        desde_memoria = _buscar_en_memoria(texto_original)
+        if desde_memoria:
+            print(f'  C7 📚 Desde memoria: True | ejecuto: True')
+            return PaqueteCapa7(
+                respuesta_final      = desde_memoria,
+                ejecucion            = ResultadoEjecucion(
+                    ejecuto=True, habilidad_id='MEMORIA', resultado=desde_memoria
+                ),
+                tiene_resultado_real = True,
+                paquete_capa6        = paquete_capa6,
+                motor_sugerido       = motor_sugerido,
+                contiene_codigo      = contiene_codigo,
+                habilidad_ejecutada  = 'MEMORIA',
+            ).a_dict()
+
+    # ── 4. Ejecutar habilidad ─────────────────────────────────────
     resultado = _ejecutor.ejecutar(deteccion)
+    print(f'  C7 ejecuto: {resultado.ejecuto} | hab: {resultado.habilidad_id}')
 
-    # 4. Si ejecutó con éxito → nueva respuesta con resultado real
     if resultado.ejecuto and resultado.resultado:
         return PaqueteCapa7(
             respuesta_final      = resultado.resultado,
             ejecucion            = resultado,
             tiene_resultado_real = True,
             paquete_capa6        = paquete_capa6,
+            motor_sugerido       = motor_sugerido,
+            contiene_codigo      = contiene_codigo,
+            habilidad_ejecutada  = habilidad_id,
         ).a_dict()
 
-    # 5. No ejecutó (habilidad no disponible) →
-    #    usar respuesta honesta del ejecutor si existe,
-    #    si no usar la de Capa 6
+    # ── 5. Habilidad falló → mejor respuesta disponible ──────────
     respuesta_final = (
-        resultado.resultado
-        if resultado.resultado
-        else respuesta_capa6
+        resultado.resultado if resultado.resultado else respuesta_capa6
     )
-
     return PaqueteCapa7(
         respuesta_final      = respuesta_final,
         ejecucion            = resultado,
         tiene_resultado_real = False,
         paquete_capa6        = paquete_capa6,
+        motor_sugerido       = motor_sugerido,
+        contiene_codigo      = contiene_codigo,
+        habilidad_ejecutada  = habilidad_id,
     ).a_dict()
+
+
+# ══════════════════════════════════════════════════════════
+# HELPERS
+# ══════════════════════════════════════════════════════════
+
+def _extraer_texto(paquete_capa6: dict) -> str:
+    try:
+        return (paquete_capa6
+                .get('paquete_capa5', {})
+                .get('paquete_capa4', {})
+                .get('paquete_capa3', {})
+                .get('paquete_capa2', {})
+                .get('paquete_capa1', {})
+                .get('contenido_original', ''))
+    except Exception:
+        return ''
+
+
+def _paquete_directo(respuesta: str, paquete_capa6: dict,
+                     motor_sugerido: str, contiene_codigo: bool) -> dict:
+    return PaqueteCapa7(
+        respuesta_final      = respuesta,
+        ejecucion            = ResultadoEjecucion(ejecuto=False),
+        tiene_resultado_real = False,
+        paquete_capa6        = paquete_capa6,
+        motor_sugerido       = motor_sugerido,
+        contiene_codigo      = contiene_codigo,
+    ).a_dict()
+
+
+def _check_clarificacion(texto: str, paquete_capa6: dict) -> dict | None:
+    """Retoma búsquedas pendientes de clarificación."""
+    try:
+        from biblioteca.habilidades.busqueda.motor_busqueda import (
+            _PENDIENTE, _es_respuesta_clarificacion, ejecutar_busqueda
+        )
+        if texto and _PENDIENTE.get('activo') and _es_respuesta_clarificacion(texto):
+            print(f"  C7 ↩ Retomando búsqueda pendiente")
+            resultado = ejecutar_busqueda(texto)
+            if resultado.get('exitoso'):
+                motor = paquete_capa6.get('motor_sugerido', 'local')
+                codigo = paquete_capa6.get('contiene_codigo', False)
+                return PaqueteCapa7(
+                    respuesta_final      = resultado['respuesta'],
+                    tiene_resultado_real = True,
+                    ejecucion            = ResultadoEjecucion(
+                        ejecuto=True,
+                        habilidad_id='BUSQUEDA_INTERNET',
+                        resultado=resultado['respuesta'],
+                    ),
+                    paquete_capa6       = paquete_capa6,
+                    motor_sugerido      = motor,
+                    contiene_codigo     = codigo,
+                    habilidad_ejecutada = 'BUSQUEDA_INTERNET',
+                ).a_dict()
+    except Exception:
+        pass
+    return None
+
+
+def _buscar_en_memoria(texto: str) -> str:
+    """Busca en memoria antes de ir a internet — API limpia, sin SQL directo."""
+    try:
+        from biblioteca.memoria import obtener_memoria
+        import unicodedata
+        mem = obtener_memoria()
+
+        # 1. Búsqueda semántica en conocimiento (API oficial)
+        resultado = mem.buscar_semantico(texto)
+        if resultado and len(resultado) > 15:
+            return resultado
+
+        # 2. Cache de búsquedas web recientes
+        query_norm = ''.join(
+            ch for ch in unicodedata.normalize('NFD', texto.lower().strip())
+            if unicodedata.category(ch) != 'Mn'
+        )
+        cached = mem.buscar_cache_web(query_norm, max_horas=48)
+        if cached:
+            return cached
+    except Exception:
+        pass
+    return ''
+
+# capas/capa7/__init__.py
+# ================================================
+# CAPA 7 — EJECUCIÓN — v2
+#
+# Flujo:
+# 1. Si tipo_respuesta es simple → pasar directo (sin habilidad)
+# 2. Detectar si necesita habilidad
+# 3. Revisar memoria antes de buscar (evita internet innecesario)
+# 4. Ejecutar habilidad si corresponde
+# 5. Retornar mejor respuesta
+#
+# v2:
+# — Logs diagnósticos completos
+# — Propagación campos v2
+# — Bypass para mensajes conversacionales/emocionales
+# — Fix búsqueda Sebastian
+# ================================================
+
+from capas.capa7.paquete_capa7      import PaqueteCapa7, ResultadoEjecucion
+from capas.capa7.detector_habilidad import DetectorHabilidad
+from capas.capa7.ejecutor_habilidad import EjecutorHabilidad
+
+_detector = DetectorHabilidad()
+_ejecutor  = EjecutorHabilidad()
+
+# Tipos de respuesta que NUNCA necesitan habilidad externa
+_TIPOS_SIN_HABILIDAD = {
+    'conversacional', 'emocional', 'veto_respuesta',
+    'matematica_python', 'honestidad_limitacion',
+    'presentacion_sebastian',
+}
+
+
+def procesar(paquete_capa6: dict) -> dict:
+    try:
+        return _procesar_interno(paquete_capa6)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return PaqueteCapa7(
+            respuesta_final = paquete_capa6.get('respuesta_final', ''),
+            paquete_capa6   = paquete_capa6,
+            exitoso         = False,
+            error           = str(e),
+        ).a_dict()
+
+
+def _procesar_interno(paquete_capa6: dict) -> dict:
+
+    respuesta_capa6  = paquete_capa6.get('respuesta_final', '')
+    decision         = paquete_capa6.get('decision', {})
+    tipo_respuesta   = paquete_capa6.get('tipo_respuesta', 'conversacional')
+    motor_sugerido   = paquete_capa6.get('motor_sugerido', 'local')
+    contiene_codigo  = paquete_capa6.get('contiene_codigo', False)
+
+    # Extraer texto original
+    texto_original = _extraer_texto(paquete_capa6)
+
+    # ── BYPASS: mensajes simples nunca necesitan habilidades ──────
+    if tipo_respuesta in _TIPOS_SIN_HABILIDAD:
+        print(f'  C7 habilidad:  (bypass {tipo_respuesta}) | ejecuto: False')
+        return _paquete_directo(respuesta_capa6, paquete_capa6,
+                                motor_sugerido, contiene_codigo)
+
+    # ── CHECK clarificación pendiente ─────────────────────────────
+    clarificacion = _check_clarificacion(texto_original, paquete_capa6)
+    if clarificacion:
+        return clarificacion
+
+    # ── 1. Detectar si necesita habilidad ─────────────────────────
+    deteccion = _detector.detectar(
+        texto          = texto_original,
+        decision_final = decision,
+        tipo_respuesta = tipo_respuesta,
+    )
+
+    # ── 2. No necesita habilidad → pasar C6 ──────────────────────
+    if not deteccion['necesita_habilidad']:
+        print(f'  C7 habilidad:  | ejecuto: False')
+        return _paquete_directo(respuesta_capa6, paquete_capa6,
+                                motor_sugerido, contiene_codigo)
+
+    habilidad_id = deteccion.get('habilidad_id', '')
+    modo         = deteccion.get('modo', '')
+    print(f'  C7 habilidad: {habilidad_id} | modo: {modo or "-"}')
+
+    # ── 3. Revisar memoria antes de buscar internet ───────────────
+    if habilidad_id == 'BUSQUEDA_INTERNET':
+        desde_memoria = _buscar_en_memoria(texto_original)
+        if desde_memoria:
+            print(f'  C7 📚 Desde memoria: True | ejecuto: True')
+            return PaqueteCapa7(
+                respuesta_final      = desde_memoria,
+                ejecucion            = ResultadoEjecucion(
+                    ejecuto=True, habilidad_id='MEMORIA', resultado=desde_memoria
+                ),
+                tiene_resultado_real = True,
+                paquete_capa6        = paquete_capa6,
+                motor_sugerido       = motor_sugerido,
+                contiene_codigo      = contiene_codigo,
+                habilidad_ejecutada  = 'MEMORIA',
+            ).a_dict()
+
+    # ── 4. Ejecutar habilidad ─────────────────────────────────────
+    resultado = _ejecutor.ejecutar(deteccion)
+    print(f'  C7 ejecuto: {resultado.ejecuto} | hab: {resultado.habilidad_id}')
+
+    if resultado.ejecuto and resultado.resultado:
+        return PaqueteCapa7(
+            respuesta_final      = resultado.resultado,
+            ejecucion            = resultado,
+            tiene_resultado_real = True,
+            paquete_capa6        = paquete_capa6,
+            motor_sugerido       = motor_sugerido,
+            contiene_codigo      = contiene_codigo,
+            habilidad_ejecutada  = habilidad_id,
+        ).a_dict()
+
+    # ── 5. Habilidad falló → mejor respuesta disponible ──────────
+    respuesta_final = (
+        resultado.resultado if resultado.resultado else respuesta_capa6
+    )
+    return PaqueteCapa7(
+        respuesta_final      = respuesta_final,
+        ejecucion            = resultado,
+        tiene_resultado_real = False,
+        paquete_capa6        = paquete_capa6,
+        motor_sugerido       = motor_sugerido,
+        contiene_codigo      = contiene_codigo,
+        habilidad_ejecutada  = habilidad_id,
+    ).a_dict()
+
+
+# ══════════════════════════════════════════════════════════
+# HELPERS
+# ══════════════════════════════════════════════════════════
+
+def _extraer_texto(paquete_capa6: dict) -> str:
+    try:
+        return (paquete_capa6
+                .get('paquete_capa5', {})
+                .get('paquete_capa4', {})
+                .get('paquete_capa3', {})
+                .get('paquete_capa2', {})
+                .get('paquete_capa1', {})
+                .get('contenido_original', ''))
+    except Exception:
+        return ''
+
+
+def _paquete_directo(respuesta: str, paquete_capa6: dict,
+                     motor_sugerido: str, contiene_codigo: bool) -> dict:
+    return PaqueteCapa7(
+        respuesta_final      = respuesta,
+        ejecucion            = ResultadoEjecucion(ejecuto=False),
+        tiene_resultado_real = False,
+        paquete_capa6        = paquete_capa6,
+        motor_sugerido       = motor_sugerido,
+        contiene_codigo      = contiene_codigo,
+    ).a_dict()
+
+
+def _check_clarificacion(texto: str, paquete_capa6: dict) -> dict | None:
+    """Retoma búsquedas pendientes de clarificación."""
+    try:
+        from biblioteca.habilidades.busqueda.motor_busqueda import (
+            _PENDIENTE, _es_respuesta_clarificacion, ejecutar_busqueda
+        )
+        if texto and _PENDIENTE.get('activo') and _es_respuesta_clarificacion(texto):
+            print(f"  C7 ↩ Retomando búsqueda pendiente")
+            resultado = ejecutar_busqueda(texto)
+            if resultado.get('exitoso'):
+                motor = paquete_capa6.get('motor_sugerido', 'local')
+                codigo = paquete_capa6.get('contiene_codigo', False)
+                return PaqueteCapa7(
+                    respuesta_final      = resultado['respuesta'],
+                    tiene_resultado_real = True,
+                    ejecucion            = ResultadoEjecucion(
+                        ejecuto=True,
+                        habilidad_id='BUSQUEDA_INTERNET',
+                        resultado=resultado['respuesta'],
+                    ),
+                    paquete_capa6       = paquete_capa6,
+                    motor_sugerido      = motor,
+                    contiene_codigo     = codigo,
+                    habilidad_ejecutada = 'BUSQUEDA_INTERNET',
+                ).a_dict()
+    except Exception:
+        pass
+    return None

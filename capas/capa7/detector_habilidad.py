@@ -4,6 +4,7 @@
 # ================================================
 
 import re
+# clasificador_habilidad_groq reemplazado por clasificador_bell (C3 provee habilidad_req)
 
 def _podria_ser_autoanalisis_semantico(texto_lower: str) -> bool:
     """Universal: detecta si la pregunta es sobre la arquitectura interna de Bell."""
@@ -401,8 +402,50 @@ _VERBOSIDAD_DETALLADA = [
 
 class DetectorHabilidad:
 
-    def detectar(self, texto: str, decision_final: dict) -> dict:
+    # Temas que Bell ya conoce — no buscar en internet
+    _TEMAS_INTERNOS = {
+        'bell', 'belladonna', 'grounding', 'capa', 'capas',
+        'consejera', 'consejeras', 'habilidad', 'habilidades',
+        'motor', 'pipeline', 'bell_core', 'bellcore',
+        'vega', 'echo', 'lyra', 'nova', 'luna', 'iris', 'sage', 'soma',
+        'mente pura', 'arquitectura', 'zona de desconocimiento',
+        'vocabulario', 'neurona', 'nodo', 'sebastian', 'sebas',
+        'jelcon', 'uniminuto', 'bucaramanga',
+    }
+
+    def detectar(self, texto: str, decision_final: dict,
+                 tipo_respuesta: str = 'conversacional') -> dict:
         texto_lower = texto.lower().strip()
+
+        # Tipos conversacionales/emocionales → nunca necesitan habilidad
+        _BYPASS = {
+            'conversacional', 'emocional', 'matematica_python',
+            'honestidad_limitacion', 'veto_respuesta',
+        }
+        if tipo_respuesta in _BYPASS:
+            return {
+                'necesita_habilidad': False,
+                'habilidad_id': None,
+                'disponible': False,
+                'texto_original': texto,
+                'verbosidad': 'normal',
+            }
+
+        # Si el texto es sobre Bell/Sebastian → Bell lo responde sola
+        _es_tema_interno = any(t in texto_lower for t in self._TEMAS_INTERNOS)
+        _NO_BUSCAR_TIPOS = {
+            'pregunta_identidad_bell', 'pregunta_estado_bell',
+            'pregunta_arquitectura_bell', 'pregunta_accion_bell',
+            'pregunta_sebastian', 'pregunta_capacidad_bell',
+        }
+        if tipo_respuesta in _NO_BUSCAR_TIPOS:
+            return {
+                'necesita_habilidad': False,
+                'habilidad_id': None,
+                'disponible': False,
+                'texto_original': texto,
+                'verbosidad': 'normal',
+            }
 
         # Si el texto pregunta por un archivo específico → AUTO_ANALISIS gana
         import re as _re_det
@@ -463,6 +506,9 @@ class DetectorHabilidad:
                 continue
             for patron in config.get('patrones', []):
                 if re.search(patron, texto_lower, re.IGNORECASE):
+                    # Si es BUSQUEDA pero habla de temas internos → no buscar
+                    if habilidad_id == 'BUSQUEDA_INTERNET' and _es_tema_interno:
+                        continue
                     return {
                         'necesita_habilidad': True,
                         'habilidad_id':       habilidad_id,
@@ -507,7 +553,6 @@ class DetectorHabilidad:
             }
 
         # ── FALLBACK UNIVERSAL: detectar preguntas sobre Bell que no matchearon ──
-        # Cubre frases como "qué te falta", "tus archivos más grandes", etc.
         if _podria_ser_autoanalisis_semantico(texto_lower):
             return {
                 'necesita_habilidad': True,
@@ -516,6 +561,24 @@ class DetectorHabilidad:
                 'modo':               'resumen_general',
                 'texto_original':     texto,
                 'verbosidad':         verbosidad,
+            }
+
+        # ── CLASIFICADOR BELL — usa habilidad_req de C3 ─────────
+        # C3 ya entregó habilidad_req en decision_final.
+        # Si llegamos aquí, lo leemos directamente sin API.
+        hab_c3 = decision_final.get('habilidad_req', '')
+        if hab_c3 in ('BUSQUEDA_INTERNET', 'PYTHON_COMPLETO', 'AUTO_ANALISIS_TOTAL', 'MEMORIA'):
+            cfg_b = HABILIDADES.get(hab_c3, {})
+            print(f'  [C7 Bell] {hab_c3} ← habilidad_req de C3')
+            return {
+                'necesita_habilidad': True,
+                'habilidad_id':       hab_c3,
+                'modo':               cfg_b.get('modo_default', None),
+                'disponible':         cfg_b.get('disponible', True),
+                'descripcion':        cfg_b.get('descripcion', ''),
+                'texto_original':     texto,
+                'verbosidad':         verbosidad,
+                'fuente_deteccion':   'clasificador_bell',
             }
 
         return {
@@ -530,6 +593,11 @@ class DetectorHabilidad:
 
     def _detectar_modo_python(self, tl: str, texto_orig: str, cfg: dict, es_generacion: bool = False) -> str:
         """Detecta cuál de los 5 modos Python se necesita."""
+        # Ejecutar tiene prioridad si pide correr/ejecutar código
+        _KW_EJECUTAR = ['ejecuta esto', 'ejecuta el', 'corre esto', 'corre el', 'prueba esto', 'ejecuta ']
+        if any(k in tl for k in _KW_EJECUTAR):
+            return 'ejecutar'
+
         # Debug tiene prioridad si hay traceback o error explícito
         for pat in cfg.get('patrones_debug', []):
             if re.search(pat, texto_orig, re.IGNORECASE | re.MULTILINE):

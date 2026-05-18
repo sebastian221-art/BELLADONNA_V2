@@ -155,6 +155,39 @@ class MemoriaPersistente:
             if mm:
                 sd[clave] = mm.group(1).strip()[:50]
 
+        # Sincronizar datos nuevos al SQLite (GestorMemoria)
+        self._sincronizar_perfil_al_sqlite(sd)
+
+    def _sincronizar_perfil_al_sqlite(self, datos_sebastian: dict):
+        """
+        Cuando el JSON aprende algo nuevo de Sebastian,
+        lo sincroniza al SQLite para que GestorMemoria lo sepa también.
+        Sin esto los dos sistemas divergen silenciosamente.
+        """
+        if not datos_sebastian:
+            return
+        try:
+            from biblioteca.memoria import obtener_memoria
+            mem = obtener_memoria()
+            # Mapeo JSON → SQLite
+            _MAP = {
+                'nombre_real': ('nombre', 'dato'),
+                'edad':        ('edad',   'dato'),
+                'lugar':       ('ciudad', 'dato'),
+                'ocupacion':   ('ocupacion', 'dato'),
+                'carrera':     ('estudio', 'dato'),
+                'empresa':     ('trabajo', 'dato'),
+            }
+            for json_key, (sql_key, tipo) in _MAP.items():
+                valor = datos_sebastian.get(json_key)
+                if valor:
+                    mem.actualizar_perfil(
+                        str(sql_key), str(valor),
+                        tipo, 'memoria_persistente', 0.85
+                    )
+        except Exception:
+            pass  # nunca bloquear por sincronización
+
     def _extraer_temas(self, texto: str):
         tl = texto.lower()
         temas = self._datos['temas']

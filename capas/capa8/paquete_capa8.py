@@ -1,8 +1,8 @@
 # capas/capa8/paquete_capa8.py
 # ================================================
-# PAQUETE CAPA 8 — Expresión Final
-# Lo que sale de aquí va directo al usuario.
-# Este es el último paquete interno de Bell.
+# PAQUETE CAPA 8 — v2
+# Lo que sale de aquí va al usuario y a C9.
+# v2: Propagación campos v2 + habilidad_ejecutada
 # ================================================
 
 from dataclasses import dataclass, field
@@ -11,18 +11,16 @@ from typing import Optional, Dict, Any
 
 @dataclass
 class RegistroTurno:
-    """
-    Registro de lo que pasó en este turno.
-    Capa 9 lo usará para aprender.
-    """
-    texto_usuario:    str   = ''
-    respuesta_bell:   str   = ''
-    tono_usado:       str   = ''
-    tipo_mensaje:     str   = ''
-    hubo_ejecucion:   bool  = False
-    hubo_veto:        bool  = False
-    certeza:          float = 0.8
-    timestamp:        float = 0.0
+    """Registro del turno para que C9 aprenda."""
+    texto_usuario:       str   = ''
+    respuesta_bell:      str   = ''
+    tono_usado:          str   = ''
+    tipo_mensaje:        str   = ''
+    hubo_ejecucion:      bool  = False
+    hubo_veto:           bool  = False
+    certeza:             float = 0.8
+    habilidad_ejecutada: str   = ''
+    timestamp:           float = 0.0
 
     def a_dict(self) -> dict:
         return self.__dict__.copy()
@@ -30,33 +28,42 @@ class RegistroTurno:
 
 @dataclass
 class PaqueteCapa8:
-    # La respuesta final — lo que ve Sebastian
-    respuesta_final:  str            = ''
+    # ── La respuesta final — lo que ve Sebastian ──────────
+    respuesta_final:     str            = ''
 
-    # Metadatos de la respuesta
-    tono_final:       str            = 'cercano_natural'
-    tipo_respuesta:   str            = 'conversacional'
-    longitud_chars:   int            = 0
+    # ── Metadatos ─────────────────────────────────────────
+    tono_final:          str            = 'cercano_natural'
+    tipo_respuesta:      str            = 'conversacional'
+    longitud_chars:      int            = 0
 
-    # El registro para Capa 9
-    registro_turno:   RegistroTurno  = field(
+    # ── Para C9 ───────────────────────────────────────────
+    registro_turno:      RegistroTurno  = field(
         default_factory=RegistroTurno
     )
 
-    # Paquetes anteriores
-    paquete_capa7:    Dict[str, Any] = field(default_factory=dict)
+    # ── Paquetes anteriores ───────────────────────────────
+    paquete_capa7:       Dict[str, Any] = field(default_factory=dict)
 
-    exitoso:          bool           = True
-    error:            Optional[str]  = None
+    # ── Estado ───────────────────────────────────────────
+    exitoso:             bool           = True
+    error:               Optional[str]  = None
+
+    # ── v2: Propagación ──────────────────────────────────
+    motor_sugerido:      str            = 'local'
+    contiene_codigo:     bool           = False
+    habilidad_ejecutada: str            = ''
 
     def a_dict(self) -> dict:
         return {
-            'respuesta_final':  self.respuesta_final,
-            'tono_final':       self.tono_final,
-            'tipo_respuesta':   self.tipo_respuesta,
-            'longitud_chars':   self.longitud_chars,
-            'registro_turno':   self.registro_turno.a_dict(),
-            'paquete_capa7':    self.paquete_capa7,
-            'exitoso':          self.exitoso,
-            'error':            self.error,
+            'respuesta_final':     self.respuesta_final,
+            'tono_final':          self.tono_final,
+            'tipo_respuesta':      self.tipo_respuesta,
+            'longitud_chars':      self.longitud_chars,
+            'registro_turno':      self.registro_turno.a_dict(),
+            'paquete_capa7':       self.paquete_capa7,
+            'exitoso':             self.exitoso,
+            'error':               self.error,
+            'motor_sugerido':      self.motor_sugerido,
+            'contiene_codigo':     self.contiene_codigo,
+            'habilidad_ejecutada': self.habilidad_ejecutada,
         }

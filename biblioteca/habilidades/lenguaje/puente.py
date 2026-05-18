@@ -78,6 +78,7 @@ class PuenteTecnicoConversacional:
         if tipo == 'reflexion_compartida': return self._reflexion(c)
         if tipo == 'solicitud_ayuda':  return self._ayuda(c)
         if tipo == 'solicitud_accion': return self._accion(c)
+        if tipo == 'solicitud_tecnica': return self._tecnica(c)
         if tipo == 'pregunta':         return self._pregunta_general(c)
 
         return self._presencia(c)
@@ -245,7 +246,7 @@ class PuenteTecnicoConversacional:
                 f"Ahí está. Funcionando.",
                 f"Eso se siente bien, {nombre} — cuando algo por fin funciona.",
             ])
-        if any(p in texto for p in ['terminé', 'terminé', 'acabé', 'terminé']):
+        if any(p in texto for p in ['terminé', 'termine', 'acabé', 'listo', 'se acabo']):
             return random.choice([
                 f"Lo terminaste. Bien, {nombre}.",
                 "Terminado. ¿Cómo quedó?",
@@ -301,6 +302,43 @@ class PuenteTecnicoConversacional:
             f"Cuéntame qué necesitas, {nombre}.",
             "Aquí. ¿En qué?",
             "Dime qué hay.",
+        ])
+
+    def _tecnica(self, c: ResultadoMotor) -> str:
+        """Respuesta breve mientras Bell ejecuta la habilidad técnica."""
+        habilidad = c.habilidad_requerida or ''
+        modo      = c.parametros_tecnicos.get('modo_python', '') if c.parametros_tecnicos else ''
+        nombre    = c.nombre_usuario
+
+        if 'PYTHON' in habilidad:
+            if modo == 'analisis':
+                return random.choice(['Revisando el código.', 'Lo analizo.', 'Veo el código.'])
+            if modo == 'generacion':
+                return random.choice(['Generando.', 'Lo escribo.', 'En eso estoy.'])
+            if modo == 'debug':
+                return random.choice(['Revisando el error.', 'Veo qué falló.', 'Diagnosticando.'])
+            if modo == 'explicacion':
+                return ''  # Groq explica directamente
+            if modo == 'auto_analisis':
+                return random.choice(['Me reviso.', 'Analizando mi código.', 'En eso estoy.'])
+            return random.choice(['Lo proceso.', 'En eso estoy.', 'Ejecutando.'])
+
+        if 'CALCULO' in habilidad or 'MATEMATICA' in habilidad:
+            return random.choice(['Calculando.', 'Lo resuelvo.', 'Procesando.'])
+
+        if 'BUSQUEDA' in habilidad or 'INTERNET' in habilidad:
+            return random.choice(['Buscando.', 'Consultando internet.', 'Busco eso.'])
+
+        if 'SQLITE' in habilidad or 'BASE' in habilidad:
+            return random.choice(['Consultando la base de datos.', 'Procesando.', 'En eso estoy.'])
+
+        if 'SHELL' in habilidad:
+            return random.choice(['Ejecutando.', 'Corriendo el comando.', 'En eso estoy.'])
+
+        return random.choice([
+            'Procesando.',
+            f'En eso estoy, {nombre}.',
+            'Ejecutando.',
         ])
 
     def _accion(self, c: ResultadoMotor) -> str:

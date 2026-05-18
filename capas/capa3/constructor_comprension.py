@@ -1,11 +1,16 @@
 # capas/capa3/constructor_comprension.py
 # ================================================
-# CONSTRUCTOR DE COMPRENSIÓN — v5c
+# CONSTRUCTOR DE COMPRENSIÓN — v6
 #
-# FIX v5c: Evaluador matemático completamente reescrito
-# — Sin regex complejas que fallan silenciosamente
-# — Reemplazos por palabras antes de extraer expresión
-# — eval() simple y seguro con try/except
+# v6: Recibe clasificacion_groq como hint opcional.
+# Si Groq clasificó el mensaje, construye la
+# comprensión a partir de esa clasificación
+# en vez de usar patrones/motor.
+#
+# Prioridad:
+#   1. clasificacion_groq (hint semántico)
+#   2. MotorComprension / spaCy
+#   3. Keyword patterns (fallback siempre)
 # ================================================
 
 import re
@@ -21,166 +26,70 @@ _KEYWORDS_SEBASTIAN = [
     'cuántos años tengo', 'cuantos años tengo', 'años tengo', 'mi edad',
     'dónde vivo', 'donde vivo', 'en qué ciudad vivo', 'en que ciudad vivo',
     'dónde trabajo', 'donde trabajo', 'en qué trabajo', 'en que trabajo',
-    'mi trabajo', 'jelcon',
-    'dónde estudio', 'donde estudio', 'uniminuto',
+    'mi trabajo', 'jelcon', 'dónde estudio', 'donde estudio', 'uniminuto',
     'dónde nací', 'donde naci', 'cómo me llamo', 'como me llamo',
     'qué hago yo', 'que hago yo', 'a qué me dedico', 'a que me dedico',
     'quién soy yo', 'quien soy yo', 'sabes quién soy', 'sabes quien soy',
     'me conoces', 'qué sabes de mí', 'que sabes de mi', 'bucaramanga',
 ]
-
-_KEYWORDS_ARQUITECTURA_FALLIDAS = [
-    'cuántas capas', 'cuantas capas', 'cuántas capa', 'cuantas capa',
-    'tienes capas', 'qué capas', 'que capas',
-    'qué es belladonna', 'que es belladonna',
-    'qué es bell core', 'que es bell core', 'bell core es',
-    'qué es el grounding', 'que es el grounding',
-    'qué es grounding', 'que es grounding',
+_KEYWORDS_ARQUITECTURA = [
+    'cuántas capas', 'cuantas capas', 'tienes capas', 'qué capas', 'que capas',
+    'qué es belladonna', 'que es belladonna', 'qué es bell core', 'que es bell core',
+    'qué es el grounding', 'que es el grounding', 'qué es grounding', 'que es grounding',
     'qué es mente pura', 'que es mente pura', 'mente pura',
-    'tu arquitectura', 'arquitectura de bell',
-    'cómo procesas', 'como procesas',
-    # Bug 6 fix
+    'tu arquitectura', 'arquitectura de bell', 'cómo procesas', 'como procesas',
     'zona de desconocimiento', 'zona desconocimiento',
-    'qué es la zona', 'que es la zona',
 ]
-
 _KEYWORDS_ACCION_BELL = [
-    'qué haces', 'que haces',
-    'qué estás haciendo', 'que estas haciendo',
-    'qué estás pensando', 'que estas pensando',
-    'en qué piensas ahora', 'en que piensas ahora',
+    'qué haces', 'que haces', 'qué estás haciendo', 'que estas haciendo',
+    'qué estás pensando', 'que estas pensando', 'en qué piensas ahora',
 ]
-
-# Bug 4 fix: frases cotidianas que el motor HF confunde con comandos
 _KEYWORDS_COTIDIANO = [
-    # Logros y emociones positivas — no son comandos técnicos
-    'logré', 'logre', 'logré arreglar', 'logré hacer', 'logré resolver',
-    'arreglé', 'arregle', 'ya funciona', 'por fin funciona', 'funcionó',
-    'lo resolví', 'lo arreglé', 'terminé', 'lo terminé', 'acabé',
-    # Clima y rutinas
-    'hace frío', 'hace frio', 'hace calor', 'hace mucho frío', 'hace mucho calor',
-    'ya dormí', 'ya dormi', 'dormí bien', 'dormi bien',
-    'dormí mal', 'no dormí', 'no dormi',
-    'voy a comer', 'voy a dormir', 'voy a salir', 'ya llegué', 'ya llegue',
-    'ya comí', 'ya comi', 'acabo de llegar', 'estoy en casa',
-    'tengo hambre', 'tengo sueño',
-    'es tarde', 'ya es tarde', 'hace rato',
-]
-
-# Python — palabras clave para los 5 modos (prioridad sobre el motor)
-_KEYWORDS_PYTHON_ANALISIS = [
-    # Español
-    'analiza este código', 'analiza el código', 'analiza mi código',
-    'revisa este código', 'revisa el código', 'qué hace este código',
-    'qué hace esta función', 'tiene errores', 'tiene bugs',
-    'qué está mal', 'malas prácticas', 'cómo mejoro', 'retroalimentación del código',
-    'review del código', 'code review', 'analiza esta clase', 'analiza esta función',
+    'logré', 'logre', 'arreglé', 'arregle', 'ya funciona', 'por fin funciona',
+    'funcionó', 'lo resolví', 'lo arreglé', 'terminé', 'lo terminé', 'acabé',
+    'hace frío', 'hace frio', 'hace calor', 'ya dormí', 'ya dormi',
+    'dormí bien', 'dormi bien', 'dormí mal', 'no dormí', 'no dormi',
+    'voy a comer', 'voy a dormir', 'ya llegué', 'ya llegue', 'ya comí', 'ya comi',
+    'tengo hambre', 'tengo sueño', 'es tarde', 'ya es tarde',
 ]
 _KEYWORDS_PYTHON_DEBUG = [
-    # Español
-    'tengo este error', 'me sale este error', 'me da este error',
-    'error de importación', 'error de import', 'por qué falla',
+    'tengo este error', 'me sale este error', 'me da este error', 'por qué falla',
     'por qué no funciona', 'no corre', 'no arranca', 'cómo debugueo',
-    'por qué da error', 'me da recursionerror', 'me da typeerror',
-    'me da attributeerror', 'me da keyerror', 'me da valueerror',
-    'me da nameerror', 'me da indexerror', 'da recursionerror',
-    # Inglés — errores
-    'recursionerror', 'typeerror', 'attributeerror', 'keyerror',
-    'valueerror', 'nameerror', 'indexerror', 'importerror',
-    'syntaxerror', 'indentationerror', 'zerodivisionerror',
-    'filenotfounderror', 'permissionerror', 'runtimeerror',
-    'stopiteration', 'unicodeerror', 'overflowerror',
+    'recursionerror', 'typeerror', 'attributeerror', 'keyerror', 'valueerror',
+    'nameerror', 'indexerror', 'importerror', 'syntaxerror', 'indentationerror',
+]
+_KEYWORDS_PYTHON_ANALISIS = [
+    'analiza este código', 'analiza el código', 'analiza mi código',
+    'revisa este código', 'qué hace este código', 'tiene errores', 'tiene bugs',
+    'code review', 'analiza esta clase', 'analiza esta función',
 ]
 _KEYWORDS_PYTHON_GENERACION = [
-    # Español
-    'crea una función', 'crea un script', 'escribe el código',
-    'hazme el código', 'hazme una función', 'genera el código',
-    'necesito un script', 'código que haga', 'función que',
-    'crea una clase', 'hazme un endpoint', 'crea un decorador',
-    'circuit breaker', 'crea un circuit breaker', 'worker pool',
-    'crea un worker pool', 'sistema de configuración', 'crea un sistema',
-    'pool de conexiones', 'query builder', 'sistema de retry',
-    'sistema de caché', 'pipeline de procesamiento', 'event bus',
-    'hazme una api', 'crea el servidor', 'escríbeme', 'hazme un',
-    'genera una función', 'programa que', 'script que',
-    # Inglés
-    'create a function', 'write a function', 'write code',
-    'create a class', 'create an endpoint', 'make a function',
-    'create a decorator', 'write a decorator', 'make a decorator',
+    'crea una función', 'crea un script', 'escribe el código', 'hazme el código',
+    'hazme una función', 'genera el código', 'necesito un script',
+    'crea una clase', 'hazme un endpoint', 'hazme un', 'escríbeme',
 ]
 _KEYWORDS_PYTHON_EXPLICACION = [
-    # Español — conceptos
-    'cómo hago un bucle', 'cómo hago un loop', 'qué es async',
-    'cómo funciona async', 'qué son los generadores', 'qué es yield',
-    'qué es lambda', 'qué es un decorador', 'qué es venv',
-    'qué es pip', 'cómo funciona flask', 'qué es pytest',
-    'qué es async await', 'qué es un entorno virtual',
-    'cómo funciona', 'explícame', 'qué son', 'qué es un',
-    'cómo se usa', 'para qué sirve',
-    # Inglés — conceptos Python
-    'generators', 'generator', 'yield', 'context manager', 'context managers',
-    'deepcopy', 'shallow copy', 'deep copy', 'the gil', 'global interpreter',
-    'gil in python', 'list comprehension', 'dict comprehension',
-    'set comprehension', 'generator expression',
-    'metaclass', 'metaclasses', 'descriptor', 'descriptors',
-    'mro', 'method resolution', 'slots', '__slots__',
-    'dataclass', 'dataclasses', 'pydantic', 'type hints',
-    'typing module', 'protocol', 'abstract class', 'abc',
-    'property decorator', 'staticmethod', 'classmethod',
-    'threading', 'multiprocessing', 'asyncio', 'coroutine',
-    'iterator', 'iterable', 'lazy evaluation',
-    'garbage collection', 'memory management',
-    'pip install', 'virtual environment', 'requirements',
-    'how does', 'what is', 'explain', 'difference between',
-    'when to use', 'how to use',
+    'cómo hago un bucle', 'qué es async', 'cómo funciona async',
+    'qué son los generadores', 'qué es yield', 'qué es lambda',
+    'qué es un decorador', 'generators', 'generator', 'context manager',
+    'metaclass', 'asyncio', 'coroutine', 'threading', 'dataclass',
 ]
-_KEYWORDS_PYTHON_AUTO = [
-    # Exactos
-    'analiza tu propio código', 'analiza tu código', 'analiza tus archivos',
-    'qué puedes mejorar de ti', 'tienes bugs en tu código', 'analiza belladonna',
-    # Parciales — "analiza tu [cualquier archivo/capa]"
-    'analiza tu ', 'analiza capa', 'analiza la capa', 'analiza mi capa', 'analiza tu capa',
-    'revisa tu código', 'revisa tu propio', 'revisa tu ',
-    'qué mejorarías de ti', 'qué falla en ti',
-    'qué puedes mejorar de tu', 'mejorar de tu propio', 'mejorar tu código',
-    'cómo está tu código', 'como esta tu codigo',
-]
-
 _KEYWORDS_OPERACION = [
     'cuánto es ', 'cuanto es ', 'cuánto da ', 'cuanto da ',
-    'cuánto son ', 'cuanto son ', 'cuánto vale ', 'cuanto vale ',
-    'calcula ', 'calcúlame ', 'calculame ',
-    'raíz de ', 'raiz de ', '% de ', 'porcentaje de ',
-]
-
-_KEYWORDS_ACCION_BELL = [
-    'qué haces', 'que haces',
-    'qué estás haciendo', 'que estas haciendo',
-    'qué estás pensando', 'que estas pensando',
-    'en qué piensas ahora', 'en que piensas ahora',
-]
-
-# Bug 4 fix: frases cotidianas que el motor HF confunde con comandos/acciones
-# Forzarlas a tipo 'conversacional' antes de que el motor las malinterprete
-_KEYWORDS_COTIDIANO = [
-    # Logros y emociones positivas — no son comandos técnicos
-    'logré', 'logre', 'logré arreglar', 'logré hacer', 'logré resolver',
-    'arreglé', 'arregle', 'ya funciona', 'por fin funciona', 'funcionó',
-    'lo resolví', 'lo arreglé', 'terminé', 'lo terminé', 'acabé',
-    # Clima y rutinas
-    'hace frío', 'hace frio', 'hace calor', 'hace mucho frío', 'hace mucho calor',
-    'ya dormí', 'ya dormi', 'ya me dormí', 'dormí bien', 'dormi bien',
-    'dormí mal', 'no dormí', 'no dormi',
-    'voy a comer', 'voy a dormir', 'voy a salir', 'ya llegué', 'ya llegue',
-    'ya comí', 'ya comi', 'acabo de llegar', 'estoy en casa',
-    'tengo hambre', 'tengo sueño', 'tengo sueño',
-    'es tarde', 'ya es tarde', 'hace rato',
+    'calcula ', 'calcúlame ', 'calculame ', 'raíz de ', 'raiz de ',
 ]
 
 
 class ConstructorComprension:
 
-    def construir(self, red_activa, texto_original, contexto, tono):
+    def construir(
+        self,
+        red_activa,
+        texto_original,
+        contexto,
+        tono,
+        clasificacion_groq=None,
+    ):
         primarios   = red_activa.get('nodos_primarios',   [])
         secundarios = red_activa.get('nodos_secundarios', [])
         terciarios  = red_activa.get('nodos_terciarios',  [])
@@ -189,15 +98,20 @@ class ConstructorComprension:
         ids_activos   = {n.get('nodo_id', '') for n in todos}
         ids_primarios = {n.get('nodo_id', '') for n in primarios}
 
+        # ── PRIORIDAD 1: clasificación de Groq ────────────
+        if clasificacion_groq:
+            return self._comprension_desde_groq(
+                clasificacion_groq, primarios, texto_original, contexto
+            )
+
+        # ── PRIORIDAD 2: motor de lenguaje (spaCy) ────────
         resultado_motor = self._usar_motor_lenguaje(
             texto_original, ids_activos, ids_primarios, contexto
         )
-
         if resultado_motor:
-            return self._comprension_desde_motor(
-                resultado_motor, primarios, texto_original
-            )
+            return self._comprension_desde_motor(resultado_motor, primarios, texto_original)
 
+        # ── PRIORIDAD 3: keyword patterns (siempre) ───────
         return {
             'literal':    self._comprension_literal(primarios, texto_original),
             'contextual': self._comprension_contextual(
@@ -207,6 +121,79 @@ class ConstructorComprension:
                 ids_activos, ids_primarios, contexto, tono, texto_original
             ),
         }
+
+    # ── Comprensión desde Groq ─────────────────────────────
+
+    def _comprension_desde_groq(
+        self, groq: dict, primarios: list, texto_original: str, contexto: dict
+    ) -> dict:
+        """
+        Construye comprensión usando la clasificación de Groq.
+        Groq provee tipo, emocion, intencion, necesidad.
+        Enriched con datos de la red neuronal.
+        """
+        certeza = groq.get('certeza', 0.90)
+
+        nodos = [
+            {'nodo_id': n.get('nodo_id', ''), 'energia': n.get('energia', 0)}
+            for n in primarios
+        ]
+
+        tipo = groq.get('tipo_mensaje', 'conversacional')
+        resultado_math = None
+        if tipo == 'operacion_matematica':
+            resultado_math = self._evaluar_matematica(texto_original)
+
+        literal = {
+            'nodos_directos':  nodos,
+            'certeza':         certeza,
+            'tiene_contenido': bool(texto_original.strip()),
+            'texto_limpio':    texto_original,
+            'accion':          None,
+            'objetos':         [],
+        }
+
+        contextual = {
+            'tipo_mensaje':         tipo,
+            'fuente_clasificacion': 'groq',
+            'certeza_groq':         certeza,
+            'hay_historial':        bool(contexto.get('conversacion', {}).get('historial_reciente')),
+            'nombre_usuario':       contexto.get('sebastian', {}).get('nombre', 'Sebastian'),
+            'ids_activos':          [n.get('nodo_id', '') for n in primarios],
+            'certeza':              certeza,
+            'es_continuacion':      False,
+            'es_correccion':        False,
+            'resultado_matematico': resultado_math,
+        }
+
+        profunda = {
+            'intencion_detectada':    groq.get('intencion', 'desconocida'),
+            'necesidad_real':         groq.get('necesidad', 'desconocida'),
+            'emocion_detectada':      groq.get('emocion', 'neutra'),
+            'tono_base':              'neutral',
+            'certeza':                certeza,
+            'puede_ejecutar':         tipo in ('solicitud_tecnica', 'operacion_matematica'),
+            'nivel_comprension':      'profunda' if certeza > 0.8 else 'media',
+            'grounding_promedio':     certeza,
+            'dimensiones_dominantes': [],
+            'estado_subyacente':      groq.get('estado_subyacente', 'neutro'),
+            'modo_mental':            groq.get('modo_mental', 'social'),
+            'habilidad_requerida':    self._habilidad_desde_tipo(tipo),
+            'dominio_tecnico':        'python' if tipo == 'solicitud_tecnica' else None,
+        }
+
+        return {'literal': literal, 'contextual': contextual, 'profunda': profunda}
+
+    def _habilidad_desde_tipo(self, tipo: str) -> str | None:
+        mapa = {
+            'solicitud_tecnica':       'PYTHON',
+            'operacion_matematica':    'MATEMATICA',
+            'pregunta_arquitectura_bell': 'AUTO_ANALISIS',
+            'pregunta_accion_bell':    'AUTO_ANALISIS',
+        }
+        return mapa.get(tipo)
+
+    # ── Comprensión desde MotorComprension (spaCy) ─────────
 
     def _usar_motor_lenguaje(self, texto, ids_activos, ids_primarios, contexto):
         try:
@@ -278,13 +265,13 @@ class ConstructorComprension:
 
         tipo_motor = motor.tipo_mensaje
         tipo_final = self._override_tipo_conservador(texto_original, tipo_motor)
-
         resultado_math = None
         if tipo_final == 'operacion_matematica':
             resultado_math = self._evaluar_matematica(texto_original)
 
         contextual = {
             'tipo_mensaje':          tipo_final,
+            'fuente_clasificacion':  'motor',
             'tipo_motor_original':   tipo_motor,
             'hay_historial':         motor.es_continuacion,
             'nombre_usuario':        motor.nombre_usuario,
@@ -317,170 +304,58 @@ class ConstructorComprension:
         return {'literal': literal, 'contextual': contextual, 'profunda': profunda}
 
     def _override_tipo_conservador(self, texto: str, tipo_actual: str) -> str:
-        texto_lower = texto.lower().strip()
-        # SALUDOS — máxima prioridad, nunca reclasificar
-        _SALUDOS_GUARD = [
-            'buenos días', 'buenos dias', 'buenas noches', 'buenas tardes',
-            'buen día', 'buen dia', 'buenas bell', 'hola bell', 'hola belladonna',
-        ]
-        if any(s in texto_lower for s in _SALUDOS_GUARD) or tipo_actual == 'saludo':
+        t = texto.lower().strip()
+        _SALUDOS = ['buenos días','buenos dias','buenas noches','buenas tardes',
+                    'buen día','buen dia','buenas bell','hola bell','hola belladonna']
+        if any(s in t for s in _SALUDOS) or tipo_actual == 'saludo':
             return 'saludo'
-        # LOGROS — son emociones positivas, nunca técnicos ni matemáticos
-        _LOGROS_GUARD = [
-            'logré', 'logre ', 'arreglé', 'arregle ', 'ya funciona',
-            'por fin funciona', 'funcionó', 'funciono', 'lo resolví',
-            'lo arreglé', 'terminé', 'lo terminé', 'acabé', 'salió bien',
-            'salió', 'quedó', 'quedo bien',
-        ]
-        if any(s in texto_lower for s in _LOGROS_GUARD):
-            return tipo_actual if tipo_actual in ('logro_compartido', 'expresion_emocional_positiva') else 'logro_compartido'
-        # PREGUNTAS SOBRE BELL — antes de Python para no confundir
-        _BELL_CAPACITY = [
-            'para qué sirves', 'para que sirves',
-            'de qué sirves', 'de que sirves',
-            'para qué existes', 'para que existes',
-        ]
-        _BELL_IDENTITY_SURVIVAL = [
-            'sin mí puedes', 'sin mi puedes', 'puedes sobrevivir',
-            'puedes existir sin', 'puedes funcionar sin',
-            'sobrevivir sin mí', 'sobrevivir sin mi',
-            'sin sebastian puedes', 'puedes vivir sin',
-        ]
-        if any(s in texto_lower for s in _BELL_CAPACITY):
-            return 'pregunta_capacidad_bell'
-        if any(s in texto_lower for s in _BELL_IDENTITY_SURVIVAL):
-            return 'pregunta_identidad_bell'
-
-        # Cotidiano — evita que el motor los clasifique como comandos
+        _LOGROS = ['logré','logre ','arreglé','arregle ','ya funciona',
+                   'por fin funciona','funcionó','funciono','lo resolví',
+                   'lo arreglé','terminé','lo terminé','acabé','salió']
+        if any(s in t for s in _LOGROS):
+            return tipo_actual if tipo_actual in ('logro_compartido','expresion_emocional_positiva') else 'logro_compartido'
         for kw in _KEYWORDS_COTIDIANO:
-            if kw in texto_lower:
-                return 'conversacional'
-        # Python — detectar modo específico antes del resto
+            if kw in t: return 'conversacional'
         for kw in _KEYWORDS_PYTHON_DEBUG:
-            if kw in texto_lower:
-                return 'solicitud_tecnica'
-        for kw in _KEYWORDS_PYTHON_AUTO:
-            if kw in texto_lower:
-                return 'solicitud_tecnica'
+            if kw in t: return 'solicitud_tecnica'
         for kw in _KEYWORDS_PYTHON_ANALISIS:
-            if kw in texto_lower:
-                return 'solicitud_tecnica'
+            if kw in t: return 'solicitud_tecnica'
         for kw in _KEYWORDS_PYTHON_GENERACION:
-            if kw in texto_lower:
-                return 'solicitud_tecnica'
+            if kw in t: return 'solicitud_tecnica'
         for kw in _KEYWORDS_PYTHON_EXPLICACION:
-            if kw in texto_lower:
-                return 'solicitud_tecnica'
-        # Matemáticas
+            if kw in t: return 'solicitud_tecnica'
         for kw in _KEYWORDS_OPERACION:
-            if kw in texto_lower:
-                return 'operacion_matematica'
-        # Sebastian
+            if kw in t: return 'operacion_matematica'
         for kw in _KEYWORDS_SEBASTIAN:
-            if kw in texto_lower:
-                return 'pregunta_sebastian'
-        # Arquitectura Bell
-        for kw in _KEYWORDS_ARQUITECTURA_FALLIDAS:
-            if kw in texto_lower:
-                return 'pregunta_arquitectura_bell'
-        # Acción Bell
+            if kw in t: return 'pregunta_sebastian'
+        for kw in _KEYWORDS_ARQUITECTURA:
+            if kw in t: return 'pregunta_arquitectura_bell'
         for kw in _KEYWORDS_ACCION_BELL:
-            if kw in texto_lower:
-                return 'pregunta_accion_bell'
+            if kw in t: return 'pregunta_accion_bell'
         return tipo_actual
 
-    def _evaluar_matematica(self, texto: str) -> Optional[str]:
-        """
-        Evaluador matemático robusto.
-        Reemplaza palabras por operadores, extrae la expresión
-        y evalúa con Python. Sin regex complejas que fallen.
-        """
-        try:
-            t = texto.lower().strip()
-
-            # Paso 1: quitar frases de pregunta
-            frases_pregunta = [
-                'cuánto es', 'cuanto es', 'cuánto da', 'cuanto da',
-                'cuánto son', 'cuanto son', 'cuánto vale', 'cuanto vale',
-                'calcula', 'calcúlame', 'calculame', 'dime cuánto',
-                'dime cuanto', 'resuelve',
-            ]
-            for frase in frases_pregunta:
-                t = t.replace(frase, ' ')
-
-            # Paso 2: palabras → operadores
-            t = t.replace('más', '+').replace(' mas ', '+').replace('mas', '+')
-            t = t.replace(' menos ', '-').replace('menos', '-')
-            t = t.replace('multiplicado por', '*').replace(' por ', '*')
-            t = t.replace('dividido entre', '/').replace('dividido por', '/')
-            t = t.replace(' entre ', '/').replace('entre', '/')
-            t = t.replace('elevado al cuadrado', '**2')
-            t = t.replace('al cuadrado', '**2')
-            t = t.replace('elevado a ', '**')
-
-            # Paso 3: limpiar caracteres no numéricos al inicio/fin
-            t = t.strip()
-            # Quitar letras sueltas del inicio
-            t = re.sub(r'^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+', '', t).strip()
-            # Quitar letras sueltas del final
-            t = re.sub(r'[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s\?\.]+$', '', t).strip()
-
-            if not t:
-                return None
-
-            # Paso 4: verificar que tiene al menos un dígito
-            if not any(c.isdigit() for c in t):
-                return None
-
-            # Paso 5: verificar que solo tiene caracteres matemáticos válidos
-            t_test = t.replace(' ', '')
-            for c in t_test:
-                if c not in '0123456789+-*/().^**':
-                    # Si hay letras u otros chars raros, no evaluar
-                    return None
-
-            # Paso 6: eval seguro
-            resultado = eval(t, {"__builtins__": {}})
-
-            # Paso 7: formatear resultado
-            if isinstance(resultado, bool):
-                return None  # True/False no son resultados matemáticos válidos
-            if isinstance(resultado, float) and resultado.is_integer():
-                return str(int(resultado))
-            elif isinstance(resultado, float):
-                return str(round(resultado, 4))
-            elif isinstance(resultado, int):
-                return str(resultado)
-            return None
-
-        except Exception:
-            return None
-
-    # ── Fallback ──────────────────────────────────────────
+    # ── Comprensión por patrones (fallback puro) ───────────
 
     def _comprension_literal(self, primarios, texto):
         if not primarios:
             return {'nodos_directos': [], 'certeza': 0.0,
-                    'tiene_contenido': False, 'texto_limpio': texto}
-        nodos   = [{'nodo_id': n.get('nodo_id', ''), 'energia': n.get('energia', 0)}
-                   for n in primarios]
+                    'tiene_contenido': bool(texto.strip()), 'texto_limpio': texto}
+        nodos   = [{'nodo_id': n.get('nodo_id',''), 'energia': n.get('energia',0)} for n in primarios]
         certeza = sum(n['energia'] for n in primarios) / len(primarios)
         return {'nodos_directos': nodos, 'certeza': min(1.0, certeza),
-                'tiene_contenido': True, 'texto_limpio': texto}
+                'tiene_contenido': True, 'texto_limpio': texto,
+                'fuente_clasificacion': 'patrones'}
 
     def _comprension_contextual(self, ids_activos, ids_primarios, contexto, texto):
-        tipo_mensaje = self._determinar_tipo_mensaje(ids_activos, ids_primarios, texto)
-        resultado_math = None
-        if tipo_mensaje == 'operacion_matematica':
-            resultado_math = self._evaluar_matematica(texto)
-        hay_historial  = bool(contexto.get('conversacion', {}).get('historial_reciente'))
-        nombre_usuario = contexto.get('sebastian', {}).get('nombre', 'Sebastian')
+        tipo = self._determinar_tipo_mensaje(ids_activos, ids_primarios, texto)
+        resultado_math = self._evaluar_matematica(texto) if tipo == 'operacion_matematica' else None
         return {
-            'tipo_mensaje':          tipo_mensaje,
-            'hay_historial':         hay_historial,
-            'nombre_usuario':        nombre_usuario,
+            'tipo_mensaje':          tipo,
+            'fuente_clasificacion':  'patrones',
+            'hay_historial':         bool(contexto.get('conversacion',{}).get('historial_reciente')),
+            'nombre_usuario':        contexto.get('sebastian',{}).get('nombre','Sebastian'),
             'ids_activos':           list(ids_activos),
-            'certeza':               0.75 if hay_historial else 0.60,
+            'certeza':               0.60,
             'resultado_matematico':  resultado_math,
         }
 
@@ -490,7 +365,7 @@ class ConstructorComprension:
         necesidad = self._necesidad_desde_intencion(intencion)
         emocion   = self._detectar_emocion(ids_activos)
         info_9d   = self._obtener_info_grounding(ids_primarios, contexto)
-        certeza   = info_9d.get('confianza_promedio', 0.70) if intencion != 'desconocida' else 0.30
+        certeza   = info_9d.get('confianza_promedio', 0.60) if intencion != 'desconocida' else 0.30
         return {
             'intencion_detectada':    intencion,
             'necesidad_real':         necesidad,
@@ -501,142 +376,136 @@ class ConstructorComprension:
             'nivel_comprension':      info_9d.get('nivel_comprension', 'parcial'),
             'grounding_promedio':     info_9d.get('grounding_promedio', 0.5),
             'dimensiones_dominantes': info_9d.get('dimensiones_dominantes', []),
+            'fuente_clasificacion':   'patrones',
         }
 
     def _determinar_tipo_mensaje(self, ids, ids_primarios, texto):
-        texto_lower = texto.lower().strip()
+        t = texto.lower().strip()
         for kw in _KEYWORDS_OPERACION:
-            if kw in texto_lower: return 'operacion_matematica'
+            if kw in t: return 'operacion_matematica'
         for kw in _KEYWORDS_SEBASTIAN:
-            if kw in texto_lower: return 'pregunta_sebastian'
-        for kw in _KEYWORDS_ARQUITECTURA_FALLIDAS:
-            if kw in texto_lower: return 'pregunta_arquitectura_bell'
+            if kw in t: return 'pregunta_sebastian'
+        for kw in _KEYWORDS_ARQUITECTURA:
+            if kw in t: return 'pregunta_arquitectura_bell'
         for kw in _KEYWORDS_ACCION_BELL:
-            if kw in texto_lower: return 'pregunta_accion_bell'
+            if kw in t: return 'pregunta_accion_bell'
 
         saludos = {'SALUDO_HOLA','SALUDO_BUENAS','SALUDO_HEY','SALUDO_QUE_TAL',
                    'SALUDO_QUE_MAS','SALUDO_BUENOS_DIAS','SALUDO_TARDES','SALUDO_NOCHES'}
         if ids_primarios & saludos: return 'saludo'
-        if 'DESPEDIDA' in ids_primarios: return 'despedida'
-        if 'GRATITUD' in ids_primarios: return 'gratitud'
-
-        presentacion = {'PRESENTACION_NOMBRE', 'VERBO_SER_YO'}
-        if (ids_primarios & presentacion and
-                ('sebastian' in texto_lower or 'me llamo' in texto_lower)):
-            return 'presentacion_sebastian'
+        if any('DESPEDIDA' in i for i in ids_primarios): return 'despedida'
+        if any('GRATITUD' in i for i in ids_primarios): return 'gratitud'
 
         if 'PREG_QUIEN' in ids_primarios and 'VERBO_SER_TU' in ids_primarios:
             return 'pregunta_identidad_bell'
-        if ('PREG_QUIEN' in ids_primarios and 'VERBO_SER_EL' in ids_primarios
-                and 'NEURONA_SEBASTIAN' in ids_primarios):
-            return 'pregunta'
-        if 'PREG_QUIEN' in ids_primarios and 'VERBO_SER_EL' in ids_primarios:
-            return 'pregunta_identidad_otro'
         if 'PREG_COMO' in ids_primarios and 'VERBO_ESTAR_TU' in ids_primarios:
             return 'pregunta_estado_bell'
-        if 'PREG_COMO' in ids_primarios and 'REF_TE' in ids_primarios:
-            return 'pregunta_nombre_bell'
 
-        capacidad = {'VERBO_HACER_TU','VERBO_PODER_TU','VERBO_PODER_EL','VERBO_HACER'}
-        if ids_primarios & capacidad and ('PREG_QUE' in ids_primarios or 'PREG_CUAL' in ids_primarios):
-            return 'pregunta_capacidad_bell'
-        if 'PREG_QUE' in ids_primarios and 'VERBO_SER_TU' in ids_primarios:
-            return 'pregunta_identidad_bell'
-        if 'VERBO_CREAR_YO' in ids_primarios and 'NEURONA_SEBASTIAN' in ids:
-            return 'pregunta'
-        if 'VERBO_CREAR_YO' in ids_primarios and 'REF_TE' in ids_primarios:
-            return 'pregunta'
+        neg = {'EMOCION_MAL','EMOCION_TRISTE','EMOCION_FRUSTRADO','EMOCION_CANSADO',
+               'EMOCION_AGOTADO','EMOCION_ESTRESADO','EMOCION_PREOCUPADO'}
+        pos = {'EMOCION_BIEN','EMOCION_GENIAL','EMOCION_FELIZ','EMOCION_CONTENTO',
+               'EMOCION_ALEGRE','EMOCION_MOTIVADO'}
+        if ids_primarios & neg: return 'expresion_emocional_negativa'
+        if ids_primarios & pos: return 'expresion_emocional_positiva'
 
-        ayuda = {'VERBO_AYUDAR_ME','VERBO_AYUDA','VERBO_AYUDAR'}
-        if ids_primarios & ayuda: return 'solicitud_ayuda'
-
-        negativas = {'EMOCION_MAL','EMOCION_TRISTE','EMOCION_FRUSTRADO','EMOCION_CANSADO',
-                     'EMOCION_AGOTADO','EMOCION_ESTRESADO','EMOCION_PREOCUPADO',
-                     'EMOCION_ASUSTADO','EMOCION_ENOJADO'}
-        if ids_primarios & negativas: return 'expresion_emocional_negativa'
-
-        positivas = {'EMOCION_BIEN','EMOCION_GENIAL','EMOCION_FELIZ',
-                     'EMOCION_CONTENTO','EMOCION_ALEGRE','EMOCION_MOTIVADO'}
-        if ids_primarios & positivas: return 'expresion_emocional_positiva'
-
-        confirmaciones = {'AFIRMACION','AFIRMACION_FUERTE','EXPR_OK',
-                          'EXPR_DALE','EXPR_LISTO','EXPR_ENTENDIDO'}
-        if ids_primarios & confirmaciones: return 'confirmacion'
+        confirma = {'AFIRMACION','EXPR_OK','EXPR_DALE','EXPR_LISTO'}
+        if ids_primarios & confirma: return 'confirmacion'
         if {'NEGACION','NEGACION_FUERTE'} & ids_primarios: return 'negacion'
 
         preguntas = {'PREG_QUE','PREG_QUIEN','PREG_COMO','PREG_CUANDO',
                      'PREG_DONDE','PREG_POR_QUE','PREG_CUANTO','PREG_CUAL'}
         if ids_primarios & preguntas: return 'pregunta'
 
-        if (texto_lower.endswith('?') or texto_lower.startswith((
-            'qué','que','quién','quien','cómo','como','cuándo','cuando',
-            'dónde','donde','por qué','por que','cuánto','cuanto','cuál','cual',
-        ))): return 'pregunta'
+        ayuda = {'VERBO_AYUDAR_ME','VERBO_AYUDA','VERBO_AYUDAR'}
+        if ids_primarios & ayuda: return 'solicitud_ayuda'
 
+        if t.endswith('?') or t.startswith(('qué','que','quién','quien','cómo',
+            'como','cuándo','cuando','dónde','donde','por qué','por que')):
+            return 'pregunta'
         return 'conversacional'
 
+    def _evaluar_matematica(self, texto: str) -> Optional[str]:
+        try:
+            t = texto.lower().strip()
+            for frase in ['cuánto es','cuanto es','cuánto da','cuanto da',
+                          'cuánto son','cuanto son','calcula','calcúlame',
+                          'calculame','dime cuánto','dime cuanto','resuelve']:
+                t = t.replace(frase, ' ')
+            t = (t.replace('más','+').replace(' mas ','+').replace('mas','+')
+                  .replace(' menos ','-').replace('menos','-')
+                  .replace('multiplicado por','*').replace(' por ','*')
+                  .replace('dividido entre','/').replace('dividido por','/')
+                  .replace(' entre ','/').replace('al cuadrado','**2')
+                  .replace('elevado a ','**'))
+            t = re.sub(r'^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+', '', t).strip()
+            t = re.sub(r'[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s\?\.]+$', '', t).strip()
+            if not t or not any(c.isdigit() for c in t):
+                return None
+            for c in t.replace(' ',''):
+                if c not in '0123456789+-*/().':
+                    return None
+            resultado = eval(t, {"__builtins__": {}})
+            if isinstance(resultado, bool): return None
+            if isinstance(resultado, float):
+                return str(int(resultado)) if resultado.is_integer() else str(round(resultado, 4))
+            return str(resultado)
+        except Exception:
+            return None
+
     def _intencion_desde_tipo(self, tipo):
-        mapa = {
-            'saludo': 'saludar', 'despedida': 'despedirse', 'gratitud': 'agradecer',
-            'pregunta_identidad_bell': 'conocer_bell',
-            'pregunta_estado_bell': 'saber_estado_bell',
-            'pregunta_nombre_bell': 'saber_nombre_bell',
-            'pregunta_capacidad_bell': 'saber_capacidades_bell',
-            'pregunta_arquitectura_bell': 'conocer_arquitectura_bell',
-            'pregunta_accion_bell': 'saber_accion_bell',
-            'pregunta_sebastian': 'preguntar_sobre_sebastian',
-            'operacion_matematica': 'calcular',
-            'presentacion_sebastian': 'presentarse',
-            'pregunta': 'preguntar', 'solicitud_ayuda': 'pedir_ayuda',
-            'expresion_emocional_positiva': 'expresar_emocion_positiva',
-            'expresion_emocional_negativa': 'expresar_emocion_negativa',
-            'confirmacion': 'confirmar', 'negacion': 'negar',
-            'conversacional': 'conversar',
-        }
-        return mapa.get(tipo, 'desconocida')
+        return {
+            'saludo':'saludar','despedida':'despedirse','gratitud':'agradecer',
+            'pregunta_identidad_bell':'conocer_bell','pregunta_estado_bell':'saber_estado_bell',
+            'pregunta_nombre_bell':'saber_nombre_bell','pregunta_capacidad_bell':'saber_capacidades_bell',
+            'pregunta_arquitectura_bell':'conocer_arquitectura_bell',
+            'pregunta_accion_bell':'saber_accion_bell','pregunta_sebastian':'preguntar_sobre_sebastian',
+            'operacion_matematica':'calcular','presentacion_sebastian':'presentarse',
+            'pregunta':'preguntar','solicitud_ayuda':'pedir_ayuda',
+            'expresion_emocional_positiva':'expresar_emocion_positiva',
+            'expresion_emocional_negativa':'expresar_emocion_negativa',
+            'logro_compartido':'compartir_logro',
+            'confirmacion':'confirmar','negacion':'negar','conversacional':'conversar',
+            'solicitud_tecnica':'pedir_ayuda',
+        }.get(tipo, 'desconocida')
 
     def _necesidad_desde_intencion(self, intencion):
-        mapa = {
-            'saludar': 'conexion_social', 'despedirse': 'cierre_conversacion',
-            'agradecer': 'expresar_gratitud',
-            'conocer_bell': 'conocimiento_bell', 'saber_estado_bell': 'conocimiento_bell',
-            'saber_nombre_bell': 'conocimiento_bell', 'saber_capacidades_bell': 'conocimiento_bell',
-            'conocer_arquitectura_bell': 'conocimiento_bell', 'saber_accion_bell': 'conocimiento_bell',
-            'preguntar_sobre_sebastian': 'conocimiento_sebastian',
-            'calcular': 'ayuda_practica', 'presentarse': 'ser_reconocido',
-            'preguntar': 'informacion', 'pedir_ayuda': 'ayuda_practica',
-            'expresar_emocion_positiva': 'compartir_alegria',
-            'expresar_emocion_negativa': 'apoyo_emocional',
-            'confirmar': 'acuerdo', 'negar': 'desacuerdo', 'conversar': 'conexion_social',
-        }
-        return mapa.get(intencion, 'desconocida')
+        return {
+            'saludar':'conexion_social','despedirse':'cierre_conversacion',
+            'agradecer':'expresar_gratitud','conocer_bell':'conocimiento_bell',
+            'saber_estado_bell':'conocimiento_bell','saber_nombre_bell':'conocimiento_bell',
+            'saber_capacidades_bell':'conocimiento_bell','conocer_arquitectura_bell':'conocimiento_bell',
+            'saber_accion_bell':'conocimiento_bell','preguntar_sobre_sebastian':'conocimiento_sebastian',
+            'calcular':'ayuda_practica','presentarse':'ser_reconocido',
+            'preguntar':'informacion','pedir_ayuda':'ayuda_practica',
+            'expresar_emocion_positiva':'compartir_alegria',
+            'expresar_emocion_negativa':'apoyo_emocional',
+            'compartir_logro':'compartir_alegria',
+            'confirmar':'acuerdo','negar':'desacuerdo','conversar':'conexion_social',
+        }.get(intencion, 'desconocida')
 
     def _detectar_emocion(self, ids):
-        if 'GRATITUD' in ids: return 'gratitud'
-        negativos = {'EMOCION_TRISTE','EMOCION_MAL','EMOCION_FRUSTRADO','EMOCION_CANSADO',
-                     'EMOCION_AGOTADO','EMOCION_ESTRESADO','EMOCION_PREOCUPADO',
-                     'EMOCION_ASUSTADO','EMOCION_ENOJADO'}
-        positivos = {'EMOCION_FELIZ','EMOCION_GENIAL','EMOCION_ALEGRE',
-                     'EMOCION_BIEN','EMOCION_EMOCIONADO','EMOCION_MOTIVADO'}
-        if ids & negativos: return 'negativa'
-        if ids & positivos: return 'positiva'
+        if any('GRATITUD' in i for i in ids): return 'gratitud'
+        neg = {'EMOCION_TRISTE','EMOCION_MAL','EMOCION_FRUSTRADO','EMOCION_CANSADO',
+               'EMOCION_AGOTADO','EMOCION_ESTRESADO','EMOCION_PREOCUPADO'}
+        pos = {'EMOCION_FELIZ','EMOCION_GENIAL','EMOCION_ALEGRE',
+               'EMOCION_BIEN','EMOCION_EMOCIONADO','EMOCION_MOTIVADO'}
+        if ids & neg: return 'negativa'
+        if ids & pos: return 'positiva'
         return 'neutra'
 
     def _obtener_info_grounding(self, ids_primarios, contexto):
         try:
             from biblioteca.grounding.calculador import CalculadorGrounding
-            calc       = CalculadorGrounding.obtener()
+            calc = CalculadorGrounding.obtener()
             groundings = []
             for nodo_id in ids_primarios:
                 tipo = self._tipo_desde_id(nodo_id)
-                g9d  = calc.calcular(nodo_id, tipo, contexto)
-                groundings.append(g9d)
+                groundings.append(calc.calcular(nodo_id, tipo, contexto))
             if not groundings:
                 return {}
             g_prom = sum(g.efectivo() for g in groundings) / len(groundings)
-            c_prom = sum(g.confianza for g in groundings) / len(groundings)
-            puede  = all(g.puede_ejecutar() for g in groundings)
-            niveles   = [g.nivel_comprension() for g in groundings]
+            c_prom = sum(g.confianza  for g in groundings) / len(groundings)
+            niveles = [g.nivel_comprension() for g in groundings]
             nivel_dom = max(set(niveles), key=niveles.count)
             dims = {}
             for g in groundings:
@@ -644,28 +513,28 @@ class ConstructorComprension:
                     if isinstance(val, float):
                         dims[dim] = dims.get(dim, 0) + val
             dims_top = sorted(
-                [(d, round(v/len(groundings), 3)) for d, v in dims.items()],
+                [(d, round(v/len(groundings),3)) for d, v in dims.items()],
                 key=lambda x: x[1], reverse=True
             )[:5]
             return {
-                'grounding_promedio': round(g_prom, 3), 'confianza_promedio': round(c_prom, 3),
-                'puede_ejecutar': puede, 'nivel_comprension': nivel_dom,
+                'grounding_promedio': round(g_prom, 3),
+                'confianza_promedio': round(c_prom, 3),
+                'puede_ejecutar':     all(g.puede_ejecutar() for g in groundings),
+                'nivel_comprension':  nivel_dom,
                 'dimensiones_dominantes': [d[0] for d in dims_top],
             }
         except Exception:
-            return {'grounding_promedio': 0.5, 'confianza_promedio': 0.7,
-                    'puede_ejecutar': False, 'nivel_comprension': 'parcial',
-                    'dimensiones_dominantes': []}
+            return {'grounding_promedio':0.5,'confianza_promedio':0.7,
+                    'puede_ejecutar':False,'nivel_comprension':'parcial',
+                    'dimensiones_dominantes':[]}
 
     def _tipo_desde_id(self, nodo_id):
         if any(s in nodo_id for s in ['SALUDO','DESPEDIDA']): return 'saludo'
         if 'GRATITUD' in nodo_id: return 'gratitud'
         if 'EMOCION_' in nodo_id:
-            neg = ['TRISTE','MAL','FRUSTRADO','CANSADO','AGOTADO',
-                   'ESTRESADO','PREOCUPADO','ASUSTADO','ENOJADO']
-            return 'emocion_negativa' if any(n in nodo_id for n in neg) else 'emocion_positiva'
+            return 'emocion_negativa' if any(
+                n in nodo_id for n in ['TRISTE','MAL','FRUSTRADO','CANSADO','ESTRESADO']
+            ) else 'emocion_positiva'
         if 'PREG_' in nodo_id: return 'pregunta'
-        if any(s in nodo_id for s in ['VERBO_ESTAR','VERBO_SER']): return 'verbo_estado'
-        if 'VERBO_' in nodo_id: return 'verbo_accion'
         if 'BELL_' in nodo_id: return 'pregunta_sobre_bell'
         return 'concepto'

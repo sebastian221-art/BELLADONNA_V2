@@ -22,15 +22,17 @@ from typing import Optional
 from .escaner import EscanerTotal, EscaneoResult
 from .analizador_profundo import analizar_todo_bell, analizar_archivo
 
-# Groq para análisis profesional — mismo patrón que habilidad Python
-import os as _os
-import httpx as _httpx
+# Explainer Bell — sin Groq, análisis propio
+from biblioteca.habilidades.auto_analisis.explicador_auto_analisis import (
+    explicar_analisis_total, explicar_archivo, explicar_introspeccion
+)
 
-_GROQ_URL_AA   = 'https://api.groq.com/openai/v1/chat/completions'
-_GROQ_MODEL_AA = 'openai/gpt-oss-120b'
-_GROQ_API_KEY_AA = _os.getenv('GROQ_API_KEY', '')
+# Cache de escaneo — evita releer todos los archivos en cada pregunta
+_cache_resultado = None
+_cache_tiempo    = 0.0
+_CACHE_TTL       = 120  # segundos antes de refrescar
 
-_SYSTEM_AA = """Eres Bell — IA creada por Sebastian Gómez (19 años, Bucaramanga). Eres arquitecta que analiza su propio sistema BELLADONNA en primera persona.
+_SYSTEM_AA = """Eres Bell — IA creada por Juan Sebastian Mora (19 años, Bucaramanga). Eres arquitecta que analiza su propio sistema BELLADONNA en primera persona.
 
 VOZ: directa, técnica, sin relleno. Como senior engineer revisando su propio código.
 NUNCA: "claro", "por supuesto", "como IA".
@@ -43,75 +45,52 @@ REGLAS DE LONGITUD:
 - Análisis/introspección: 3-4 puntos concretos con nombres reales, máximo 3 oraciones por punto."""
 
 
-def _groq_analisis_profundo(pregunta: str, datos_radon: str) -> str:
-    """
-    Groq recibe datos radon reales (CC, MI, sin_doc) y genera análisis profesional.
-    Datos compactos (~150 tokens) → Groq responde con todo lo necesario sin corte.
-    """
-    if not _GROQ_API_KEY_AA:
-        return ''
-    try:
-        r = _httpx.post(
-            _GROQ_URL_AA,
-            headers={'Authorization': f'Bearer {_GROQ_API_KEY_AA}',
-                     'Content-Type': 'application/json'},
-            json={
-                'model': _GROQ_MODEL_AA,
-                'messages': [
-                    {'role': 'system', 'content': (
-                        "Eres Bell — IA de Sebastian Gómez. Hablas de tu propio código en primera persona.\n"
-                        "REGLAS ABSOLUTAS:\n"
-                        "- NUNCA uses tablas, listas con -, bullets, headers con # o formato markdown\n"
-                        "- NUNCA empieces con Hola, Buenos días, Soy Bell, ni te presentes\n"
-                        "- NUNCA uses emojis ni iconos\n"
-                        "- Habla como una desarrolladora que le explica su código a Sebastian de forma natural\n"
-                        "- Prosa fluida en español, 3-4 oraciones máximo\n"
-                        "- Menciona métricas reales (CC, MI) de forma conversacional\n"
-                        "- Ejemplo bueno: 'Mi archivo más crítico es motor.py — CC de 72 significa 72 caminos distintos, casi imposible de testear. Lo dividiría en tres módulos.'"
-                    )},
-                    {'role': 'user', 'content': (
-                        f"{datos_radon}\n\n"
-                        f"Sebastian pregunta: {pregunta}\n\n"
-                        "Responde en 5-6 oraciones conversacionales. Sin formato. Sin introducción."
-                    )},
-                ],
-                'temperature': 0.4,
-                'max_tokens': 400,
-            },
-            timeout=25,
-        )
-        if r.status_code == 200:
-            content = r.json().get('choices',[{}])[0].get('message',{}).get('content','').strip()
-            if content and len(content) > 20:
-                return content
-    except Exception as e:
-        print(f'  [AutoAnalisis Groq] {e}')
-    return ''
+def _groq_analisis_profundo(texto: str, datos: str) -> str:
+    """Reemplazado por explicador_auto_analisis — sin Groq."""
+    return ''  # ya no se usa
 
 
-
-# Cache del escaneo (no re-escanear en cada pregunta)
-_cache_resultado: Optional[EscaneoResult] = None
-_cache_tiempo: float = 0.0
-_CACHE_TTL = 60   # 1 minuto — se refresca rápido
-
-
-def _obtener_escaneo() -> EscaneoResult:
+def _obtener_escaneo(forzar: bool = False) -> EscaneoResult:
     global _cache_resultado, _cache_tiempo
     ahora = time.time()
-    if _cache_resultado and (ahora - _cache_tiempo) < _CACHE_TTL:
+
+    # Usar cache si está reciente Y no se forzó refresco
+    if not forzar and _cache_resultado and (ahora - _cache_tiempo) < _CACHE_TTL:
         return _cache_resultado
 
     # Detectar raíz de Bell
     raiz = os.environ.get('BELL_ROOT', '')
     if not raiz:
-        # Inferir desde la ubicación del archivo
         raiz = str(Path(__file__).resolve().parents[4])
 
     escaner = EscanerTotal(raiz)
-    _cache_resultado = escaner.escanear()
-    _cache_tiempo = ahora
-    return _cache_resultado
+    resultado = escaner.escanear()
+    _cache_resultado = resultado
+    _cache_tiempo    = ahora
+
+    # Guardar snapshot en memoria de Bell
+    _guardar_snapshot_en_memoria(resultado)
+
+    return resultado
+
+
+def _guardar_snapshot_en_memoria(e: EscaneoResult):
+    """Guarda el snapshot del escaneo en bell_self para que Bell recuerde su estado."""
+    try:
+        from biblioteca.memoria import obtener_memoria
+        mem = obtener_memoria()
+        mem.actualizar_bell_self('total_archivos',  str(e.total_archivos),  'metrica')
+        mem.actualizar_bell_self('total_lineas',    str(e.total_lineas),    'metrica')
+        mem.actualizar_bell_self('total_kb',        str(e.total_kb),        'metrica')
+        mem.actualizar_bell_self('habilidades_activas',
+                                  ','.join(e.habilidades), 'metrica')
+        mem.actualizar_bell_self('consejeras',
+                                  ','.join(e.consejeras),  'metrica')
+        mem.actualizar_bell_self('ultimo_escaneo',
+                                  str(__import__('datetime').datetime.now().isoformat()[:16]),
+                                  'metrica')
+    except Exception:
+        pass
 
 
 def _detectar_tipo(texto: str) -> str:
@@ -142,6 +121,16 @@ def _detectar_tipo(texto: str) -> str:
     if any(p in tl for p in ['interfaz', 'frontend', 'javascript', 'css', 'html', 'visual',
                                'pantalla', 'js ', 'scripts']):
         return 'interfaz'
+
+    # Dependencias entre archivos
+    if any(p in tl for p in [
+        'si cambio', 'si modifico', 'si toco', 'qué se rompe',
+        'qué afecta', 'impacto de cambiar', 'depende de',
+        'quién importa', 'quien importa', 'qué importa',
+        'grafo de dependencias', 'dependencias de',
+        'más crítico', 'mas critico', 'más importado', 'mas importado',
+    ]):
+        return 'dependencias'
 
     # Estadísticas numéricas
     if any(p in tl for p in ['cuántos archivos', 'cuantos archivos', 'cuántas líneas',
@@ -178,6 +167,17 @@ def _detectar_tipo(texto: str) -> str:
         'más útil', 'mas util', 'para mejorar', 'para ser mejor',
     ]):
         return 'introspeccion'
+
+    # Preguntas sobre archivos/estructura de BELLADONNA (antes de resumen)
+    if any(p in tl for p in [
+        'archivos más importados', 'archivos mas importados',
+        'archivo más importado', 'archivo mas importado',
+        'archivos de belladonna', 'archivos que tiene bell',
+        'cuáles son los archivos', 'cuales son los archivos',
+        'qué archivos', 'que archivos', 'lista de archivos',
+        'archivos de la',
+    ]):
+        return 'dependencias'
 
     # Arquitectura general
     if any(p in tl for p in ['arquitectura', 'estructura', 'organización', 'cómo estás organizada',
@@ -366,36 +366,6 @@ def _responder_capacidades(e: EscaneoResult) -> str:
 
 
 
-def _construir_contexto_corto(escaneo: EscaneoResult, texto: str, tipo: str) -> str:
-    """Contexto mínimo y preciso para la opinión de Groq."""
-    import re as _re_ctx
-    partes = []
-    if tipo == 'archivo_especifico':
-        mx = _re_ctx.search(r'(\w[\w_]*\.(?:py|js|css|html|json|md))', texto, _re_ctx.IGNORECASE)
-        if mx:
-            nombre = mx.group(1).lower()
-            encontrados = [a for a in escaneo.archivos if a.nombre.lower() == nombre]
-            if encontrados:
-                a = encontrados[0]
-                partes.append(f"Archivo: {a.nombre} | {a.lineas}L | {a.tamano_kb}KB | {a.ruta}")
-                partes.append(f"Clases: {', '.join(a.clases[:4]) or 'ninguna'}")
-                partes.append(f"Funciones: {', '.join(a.funciones[:8])}")
-    elif tipo == 'analisis_propio':
-        grandes = sorted([(a.nombre, a.lineas) for a in escaneo.archivos if a.lineas > 400], key=lambda x: -x[1])[:5]
-        partes.append("Archivos grandes: " + ', '.join(f"{n}({l}L)" for n,l in grandes))
-        partes.append(f"Habilidades: {', '.join(escaneo.habilidades or ['ninguna'])}")
-    elif tipo == 'introspeccion':
-        habs = escaneo.habilidades or []
-        partes.append(f"Habilidades activas: {', '.join(habs)}")
-        faltantes = []
-        if not any('calculo' in h for h in habs): faltantes.append("cálculo matemático")
-        if not any('busqueda' in h or 'internet' in h for h in habs): faltantes.append("búsqueda web")
-        if not any('memoria' in h for h in habs): faltantes.append("memoria persistente")
-        if not any('shell' in h for h in habs): faltantes.append("ejecución de comandos")
-        if faltantes: partes.append(f"Capacidades faltantes: {', '.join(faltantes)}")
-        partes.append(f"Total: {escaneo.total_archivos} archivos, {escaneo.total_lineas} líneas")
-    return '\n'.join(partes)
-
 class MotorAutoAnalisis:
     """
     Motor principal del auto-análisis de Bell.
@@ -438,6 +408,25 @@ class MotorAutoAnalisis:
                 base = _responder_capacidades(escaneo)
             elif tipo == 'archivo_especifico':
                 base = _responder_archivo(escaneo, texto)
+            elif tipo == 'dependencias':
+                from biblioteca.habilidades.auto_analisis.grafo_dependencias import (
+                    construir_grafo, responder_impacto
+                )
+                # Pregunta específica de impacto
+                impacto = responder_impacto(texto, escaneo.raiz_bell)
+                if impacto:
+                    base = impacto
+                else:
+                    # Visión general del grafo
+                    grafo = construir_grafo(escaneo.raiz_bell)
+                    criticos = grafo['mas_criticos'][:5]
+                    lista = ', '.join(
+                        f"{a.split('/')[-1]}({n})" for a, n in criticos
+                    )
+                    base = (
+                        f"Archivos más importados: {lista}. "
+                        f"Total: {grafo['total_archivos']} archivos analizados."
+                    )
             elif tipo == 'analisis_propio':
                 analisis = _analizar_codigo_propio(escaneo.raiz_bell)
                 base = _generar_informe_mejoras(analisis, escaneo)
@@ -446,25 +435,22 @@ class MotorAutoAnalisis:
             else:
                 base = _responder_resumen(escaneo)
 
-            # ── GROQ con radon: análisis profesional con métricas reales ──
-            if tipo in ('analisis_propio', 'introspeccion'):
+            # ── Bell explainer — sin Groq, métricas reales ──────────────
+            if tipo == 'analisis_propio':
                 radon_data = analizar_todo_bell(escaneo.raiz_bell)
-                respuesta_groq = _groq_analisis_profundo(texto, radon_data)
-                if respuesta_groq:
-                    return {'exitoso': True, 'respuesta': respuesta_groq, 'tipo': tipo}
-                # Fallback si Groq falla
-                respuesta = base
+                respuesta = explicar_analisis_total(radon_data, texto)
+            elif tipo == 'introspeccion':
+                radon_data = analizar_todo_bell(escaneo.raiz_bell)
+                respuesta = explicar_introspeccion(radon_data, escaneo)
             elif tipo == 'archivo_especifico':
-                # Extraer nombre del archivo de la pregunta
                 import re as _re_arch
                 m_arch = _re_arch.search(r'(\w[\w_]*\.(?:py|js|css|html|json|md))', texto, _re_arch.IGNORECASE)
                 if m_arch:
                     nombre = m_arch.group(1)
                     radon_data = analizar_archivo(nombre, escaneo.raiz_bell)
-                    respuesta_groq = _groq_analisis_profundo(texto, radon_data)
-                    if respuesta_groq:
-                        return {'exitoso': True, 'respuesta': respuesta_groq, 'tipo': tipo}
-                respuesta = base
+                    respuesta = explicar_archivo(radon_data, nombre, texto)
+                else:
+                    respuesta = base
             else:
                 respuesta = base
 
@@ -537,12 +523,23 @@ def _analizar_codigo_propio(raiz_str: str) -> dict:
 
             # Archivos críticos — los más importantes del pipeline
             _CRITICOS = {
-                'capas/capa6/constructor_decision.py': 'construye toda respuesta',
-                'capas/capa6/generador_groq.py':       'motor de lenguaje Groq',
-                'capas/capa3/constructor_comprension.py': 'comprensión profunda',
-                'biblioteca/habilidades/lenguaje/motor.py': 'motor de lenguaje',
-                'capas/capa7/detector_habilidad.py':   'detección de habilidades',
-            }
+        # Capa 3 — comprensión
+        'capas/capa3/constructor_comprension.py': 'comprensión profunda',
+        'capas/capa3/clasificador_groq.py':       'clasificador semántico C3',
+        # Capa 6 — decisión
+        'capas/capa6/constructor_decision.py':    'construye respuesta base',
+        'capas/capa6/generador_groq.py':          'motor lenguaje tri-híbrido',
+        'capas/capa6/buffer_sesion.py':           'memoria de sesión',
+        # Capa 7 — ejecución
+        'capas/capa7/detector_habilidad.py':      'detección de habilidades',
+        'capas/capa7/clasificador_habilidad_groq.py': 'clasificador semántico C7',
+        'capas/capa7/ejecutor_habilidad.py':      'ejecutor de habilidades',
+        # Habilidades críticas
+        'biblioteca/habilidades/lenguaje/motor.py':          'motor comprensión spaCy',
+        'biblioteca/habilidades/busqueda/motor_busqueda.py': 'búsqueda internet',
+        'biblioteca/habilidades/memoria/gestor.py':          'memoria SQLite',
+        'biblioteca/habilidades/python/generador_codigo.py': 'generación código',
+    }
             if rel in _CRITICOS and lineas > 500:
                 archivos_criticos.append((rel, lineas, _CRITICOS[rel]))
 

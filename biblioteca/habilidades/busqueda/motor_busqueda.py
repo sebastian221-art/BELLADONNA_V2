@@ -2,259 +2,350 @@
 # ============================================================
 # MOTOR BÚSQUEDA — Bell busca, entiende y responde
 #
-# Flujo completo:
-# 1. Detectar ambigüedad → pedir clarificación si es necesario
-# 2. Construir query rica con contexto
-# 3. Buscar + leer página
-# 4. Groq procesa y responde en voz de Bell
+# NIVELES IMPLEMENTADOS:
+#   L1 — Búsqueda básica + cache + clarificación (fix: query limpia)
+#   L2 — Decisión inteligente: buscar vs memoria + frescura
+#   L3 — Multi-fuente para preguntas importantes
+#   L6 — Búsqueda contextualizada con perfil Sebastian
+#   L8 — Verificación de hechos (FYI)
+#
+# NIVELES EN ESPERA (infraestructura lista):
+#   L5 — Búsqueda proactiva (requiere background worker)
+#   L7 — Aprendizaje permanente (requiere habilidad Memoria avanzada)
+#   L9 — Agente multi-paso (requiere habilidad Agentes)
 # ============================================================
 
 import os
 import re
-import httpx
+import unicodedata
 from typing import Optional
 
-from .buscador import buscar_y_leer
+from .buscador     import buscar_y_leer, buscar_multifuente
+from .sintetizador import _groq_sintetizar, _groq_respuesta_simple, _groq_clarificacion
+from .verificador  import verificar_hecho, _es_verificable
 
 # ── Estado de búsqueda pendiente (entre turnos) ──────────────
-# Cuando Bell pide clarificación, guarda la pregunta original
-# para retomarla cuando el usuario responda.
 _PENDIENTE: dict = {
-    'activo':    False,
-    'pregunta':  '',   # "qué es Rust"
-    'termino':   '',   # "rust"
-    'opcion1':   '',
-    'opcion2':   '',
+    'activo':   False,
+    'pregunta': '',
+    'termino':  '',
+    'opcion1':  '',
+    'opcion2':  '',
 }
 
-# ── Frases que indican respuesta de clarificación ────────────
-_FRASES_CLARIFICACION = [
-    r'me refiero',
-    r'el lenguaje',
-    r'el lenguaje de programacion',
-    r'programacion',
-    r'programar',
-    r'el oxido',
-    r'el metal',
-    r'la ciudad',
-    r'el animal',
-    r'la planta',
-    r'es el lenguaje',
-    r'es la ciudad',
-    r'es el metal',
+# ── Temas que cambian rápido → siempre buscar aunque haya cache ──
+_TEMAS_VOLATILES = {
+    'precio', 'costo', 'cotización', 'tasa', 'dólar', 'bitcoin',
+    'noticia', 'hoy', 'ahora', 'hoy ', 'este año', 'este mes',
+    'resultado', 'ganó', 'perdió', 'elección', 'partido',
+    'clima', 'temperatura', 'versión', 'lanzó', 'nuevo',
+}
+
+# ── Preguntas complejas que merecen multi-fuente ─────────────
+_TRIGGERS_MULTIFUENTE = [
+    r'\bcompara\b', r'\bdiferencia\s+entre\b', r'\bvs\b', r'\bversus\b',
+    r'\bqué\s+es\s+mejor\b', r'\bcuál\s+es\s+mejor\b',
+    r'\bpros\s+y\s+contras\b', r'\bventajas\s+y\s+desventajas\b',
+    r'\bhistoria\s+de\b', r'\bbiografía\s+de\b', r'\bbiografia\s+de\b',
+    r'\bexplícame?\s+(bien|completo|todo)\b',
+    r'\bcómo\s+(funciona|se\s+hace|se\s+usa)\b',
+    r'\bqué\s+es\s+exactamente\b',
+    r'\btutorial\b', r'\bguía\b', r'\bguia\b',
 ]
 
-_GROQ_URL   = 'https://api.groq.com/openai/v1/chat/completions'
-_GROQ_MODEL = 'openai/gpt-oss-120b'
-_GROQ_KEY   = os.getenv('GROQ_API_KEY', '')
+# ── Preguntas de datos simples → respuesta corta ─────────────
+_TRIGGERS_SIMPLE = [
+    r'\bcapital\s+de\b', r'\bcuántos\s+habitantes\b', r'\bpoblación\s+de\b',
+    r'\bcuándo\s+nació\b', r'\bcuándo\s+murió\b', r'\bfecha\s+de\s+nacimiento\b',
+    r'\bcuánto\s+cuesta\b', r'\bprecio\s+de\b', r'\bedad\s+de\b',
+]
 
 # ── Términos conocidos con múltiples significados ────────────
 _AMBIGUOS = {
+    # Lenguajes vs cosas físicas
     'rust':    ('lenguaje de programación de sistemas', 'óxido o corrosión en metales'),
     'python':  ('lenguaje de programación', 'serpiente pitón'),
     'swift':   ('lenguaje de programación de Apple', 'Taylor Swift o ave vencejo'),
-    'java':    ('lenguaje de programación', 'isla de Indonesia o café'),
+    'java':    ('lenguaje de programación', 'isla de Indonesia o café java'),
     'go':      ('lenguaje de programación de Google', 'juego de mesa asiático'),
-    'mercury': ('planeta del sistema solar', 'elemento químico o empresa'),
-    'cobra':   ('serpiente venenosa', 'herramienta o lenguaje'),
-    'scala':   ('lenguaje de programación', 'ciudad en Italia'),
-    'ruby':    ('lenguaje de programación', 'piedra preciosa o nombre'),
+    'ruby':    ('lenguaje de programación', 'piedra preciosa o nombre de persona'),
     'crystal': ('lenguaje de programación', 'cristal mineral'),
-    'phoenix': ('framework de Elixir', 'ciudad de Arizona o ave mítica'),
-    'elm':     ('lenguaje de programación', 'árbol olmo'),
+    'elm':     ('lenguaje de programación funcional', 'árbol olmo'),
+    'scala':   ('lenguaje de programación JVM', 'ciudad italiana o escala musical'),
+    'cobra':   ('lenguaje de programación', 'serpiente venenosa cobra'),
+    'phoenix': ('framework web de Elixir', 'ciudad de Arizona o ave mítica'),
+    # Tecnología vs personas
+    'mercury': ('planet del sistema solar', 'elemento químico o banda de rock'),
+    'apollo':  ('framework o proyecto NASA', 'nombre propio o misión lunar'),
+    'ada':     ('lenguaje de programación militar', 'nombre de persona'),
+    'grace':   ('framework web', 'nombre de persona'),
+    # Frameworks vs conceptos generales
+    'django':  ('framework web Python', 'Django Unchained o nombre'),
+    'rails':   ('framework Ruby on Rails', 'trenes o rieles'),
+    'spring':  ('framework Java', 'primavera estación del año'),
+    'flask':   ('microframework Python', 'frasco o termo'),
+    'vapor':   ('framework Swift', 'vapor de agua o gas'),
+    'falcon':  ('framework Python REST', 'halcón o película/personaje'),
+    # Conceptos de hardware vs software
+    'butterfly': ('efecto butterfly', 'mariposa insecto'),
+    'docker':  ('herramienta de contenedores', 'trabajador del muelle'),
+    'harbor':  ('registro de contenedores', 'puerto marítimo'),
+    # Nombres de proyectos ambiguos
+    'atlas':   ('base de datos MongoDB o proyecto IA', 'gigante mitológico o atlas geográfico'),
+    'titan':   ('proyecto tecnológico', 'luna de Saturno o titán mitológico'),
+    'aurora':  ('base de datos AWS', 'aurora boreal o nombre propio'),
+    'cassandra': ('base de datos NoSQL', 'personaje mitológico o nombre'),
+    'redis':   ('base de datos en memoria', 'nada — siempre es la BD'),
+    'kafka':   ('sistema de mensajería', 'Franz Kafka escritor'),
+    'spark':   ('procesamiento de datos Apache', 'chispa o nombre'),
+    'hadoop':  ('framework big data', 'nada — siempre es el framework'),
+    'elastic': ('Elasticsearch', 'elástico material'),
+    'grafana': ('herramienta de dashboards', 'nada — siempre es la herramienta'),
 }
 
-# ── Palabras que indican contexto de programación ────────────
+# ── Contexto técnico → no preguntar ambigüedad ───────────────
 _CONTEXTO_TECH = {
     'lenguaje', 'programacion', 'programación', 'codigo', 'código',
     'framework', 'libreria', 'librería', 'biblioteca', 'compilador',
     'backend', 'frontend', 'web', 'software', 'desarrollar', 'instalar',
     'aprender', 'tutorial', 'syntax', 'sintaxis', 'tipos', 'funciones',
-    'async', 'concurrencia', 'memoria', 'ownership',
+    'async', 'concurrencia', 'memoria', 'ownership', 'container',
+    'contenedor', 'docker', 'kubernetes', 'deploy', 'desplegar',
+    'servidor', 'api', 'endpoint', 'base de datos', 'query',
+    'python', 'javascript', 'java ', 'nodejs', 'react', 'flask',
 }
+
+# ── Frases de clarificación que Bell reconoce ────────────────
+_FRASES_CLARIFICACION = [
+    r'\bme\s+refiero',
+    r'\bel\s+lenguaje\b',
+    r'\bde\s+programacion\b', r'\bde\s+programación\b',
+    r'\bprogramar\b', r'\bprogramacion\b',
+    r'\bel\s+oxido\b', r'\bel\s+metal\b',
+    r'\bla\s+ciudad\b', r'\bel\s+animal\b',
+    r'\bla\s+planta\b', r'\bla\s+serpiente\b',
+    r'\bla\s+piedra\b', r'\bel\s+ave\b',
+    r'\bes\s+el\s+lenguaje\b',
+    r'\bes\s+la\s+herramienta\b',
+    r'\bes\s+el\s+framework\b',
+    r'\bes\s+la\s+base\s+de\s+datos\b',
+    r'\bno\s+la\s+(roca|planta|persona|animal)\b',
+    r'\bla\s+(primera|segunda|tercera)\s+opcion\b',
+    r'\b(1|2|opcion\s+1|opcion\s+2)\b',
+]
+
+_AÑO_ACTUAL = '2026'
+
+
+def _normalizar(texto: str) -> str:
+    """Normaliza texto: minúsculas + sin acentos."""
+    texto = texto.lower().strip()
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', texto)
+        if unicodedata.category(c) != 'Mn'
+    )
+
+
+def _es_tema_volatile(texto: str) -> bool:
+    tl = texto.lower()
+    return any(t in tl for t in _TEMAS_VOLATILES)
+
+
+def _necesita_multifuente(texto: str) -> bool:
+    tl = texto.lower()
+    return any(re.search(p, tl) for p in _TRIGGERS_MULTIFUENTE)
+
+
+def _es_simple(texto: str) -> bool:
+    tl = texto.lower()
+    return any(re.search(p, tl) for p in _TRIGGERS_SIMPLE)
 
 
 def _detectar_ambiguedad(texto: str) -> Optional[tuple]:
-    """
-    Detecta si la pregunta es sobre un término ambiguo sin suficiente contexto.
-    Retorna (termino, opcion1, opcion2) si es ambiguo, None si está claro.
-    """
     tl = texto.lower()
     palabras = set(re.findall(r'\b\w+\b', tl))
-
-    # Si ya hay contexto técnico, no preguntar
     if palabras & _CONTEXTO_TECH:
         return None
-
-    # Buscar término ambiguo en la pregunta
     for termino, (op1, op2) in _AMBIGUOS.items():
         if termino in palabras:
             return (termino, op1, op2)
     return None
 
 
+def _es_respuesta_clarificacion(texto: str) -> bool:
+    if not _PENDIENTE['activo']:
+        return False
+    tl = texto.lower().strip()
+    if len(tl.split()) > 10:
+        return False
+    return any(re.search(p, tl, re.IGNORECASE) for p in _FRASES_CLARIFICACION)
+
+
 def _construir_query(texto: str, clarificacion: Optional[str] = None) -> str:
     """
-    Construye una query de búsqueda precisa a partir del texto del usuario.
-    Si hay clarificación de Bell, la usa para enriquecer la query.
+    L1 fix + L6: Construye query limpia y enriquecida.
+    Elimina prefijos conversacionales y añade contexto según tipo.
     """
     tl = texto.lower().strip()
 
     # Eliminar prefijos conversacionales
     prefijos = [
-        r'^busca\s+(en\s+internet\s+|en\s+la\s+web\s+)?',
-        r'^(?:qué|que)\s+es\s+',
-        r'^(?:cómo|como)\s+funciona\s+',
-        r'^(?:dime|cuéntame|cuentame)\s+(?:qué|que)\s+es\s+',
+        r'^busca\s+(?:en\s+(?:internet|la\s+web)\s+)?',
+        r'^(?:qué|que)\s+es\s+(?:exactamente\s+)?',
+        r'^(?:qué|que)\s+son\s+',
+        r'^(?:cómo|como)\s+(?:funciona|se\s+hace|se\s+usa|se\s+instala)\s+',
+        r'^(?:dime|cuéntame|cuentame|háblame|hablame)\s+(?:qué|que|sobre|de|acerca\s+de)\s+',
         r'^busca\s+información\s+(?:sobre|de)\s+',
         r'^investiga\s+(?:sobre\s+|acerca\s+de\s+)?',
-        r'^explícame\s+|^explicame\s+',
-        r'^quiero\s+saber\s+(?:sobre|de)\s+',
+        r'^(?:explícame?|explicame?)\s+',
+        r'^quiero\s+saber\s+(?:sobre|de|acerca\s+de)?\s+',
         r'^información\s+(?:de|sobre)\s+',
         r'^para\s+qué\s+sirve\s+',
+        r'^(?:quién|quien)\s+es\s+',
+        r'^(?:dónde|donde)\s+queda\s+',
+        r'^(?:cuándo|cuando)\s+(?:fue|nació|murió)\s+',
+        r'^histori(?:a|a\s+de)\s+',
+        r'^biografi(?:a|a\s+de)\s+',
+        r'^define\s+',
+        r'^definición\s+de\s+', r'^definicion\s+de\s+',
     ]
     query = tl
     for p in prefijos:
         nuevo = re.sub(p, '', query, flags=re.IGNORECASE).strip()
-        if nuevo:
+        if nuevo and len(nuevo) > 2:
             query = nuevo
             break
 
     query = query.strip('?¿ ')
 
-    # Enriquecer con clarificación si viene
+    # Enriquecer con clarificación si hay
     if clarificacion:
-        query = f"{query} {clarificacion}"
+        query = f'{query} {clarificacion}'
 
-    # Si la query es muy corta (1 palabra) y no tiene contexto, añadir contexto de la pregunta original
-    if len(query.split()) == 1:
-        if 'funciona' in tl or 'cómo' in tl or 'como' in tl:
-            query += ' cómo funciona'
-        elif 'qué es' in tl or 'que es' in tl:
-            query += ' qué es definición'
+    # Añadir año para temas volátiles
+    if _es_tema_volatile(texto):
+        if _AÑO_ACTUAL not in query:
+            query = f'{query} {_AÑO_ACTUAL}'
+
+    # Enriquecer según tipo de pregunta
+    original_lower = texto.lower()
+    if any(w in original_lower for w in ['quién es', 'quien es', 'quién fue', 'quien fue']):
+        if 'wikipedia' not in query and 'biography' not in query:
+            query = f'{query} wikipedia'
+    elif any(w in original_lower for w in ['cómo funciona', 'como funciona',
+                                            'cómo se hace', 'como se hace']):
+        query = f'{query} explicación'
+    elif any(w in original_lower for w in ['precio', 'cuánto cuesta', 'cuanto cuesta']):
+        query = f'{query} precio Colombia'
 
     return query.strip()
 
 
-def _groq_procesar(pregunta: str, contenido_web: str, url: str) -> str:
-    """Groq lee el contenido web y genera respuesta en voz de Bell."""
-    if not _GROQ_KEY:
-        return ''
+def _obtener_perfil_sebastian() -> str:
+    """
+    L6: Obtiene contexto de Sebastian para enriquecer búsquedas.
+    Retorna string compacto para incluir en prompts.
+    """
     try:
-        contexto = (
-            f"CONTENIDO REAL DE INTERNET:\n"
-            f"Fuente: {url}\n\n"
-            f"{contenido_web[:1800]}"
-        )
-        r = httpx.post(
-            _GROQ_URL,
-            headers={'Authorization': f'Bearer {_GROQ_KEY}',
-                     'Content-Type': 'application/json'},
-            json={
-                'model': _GROQ_MODEL,
-                'messages': [
-                    {'role': 'system', 'content': (
-                        "Eres Bell — IA de Sebastian Gómez (Bucaramanga). "
-                        "Encontraste esta información en internet y la explicas en primera persona. "
-                        "NUNCA inventes ni añadas datos que no estén en el contenido. "
-                        "NUNCA uses markdown, tablas ni bullets. "
-                        "NUNCA empieces con Claro, Por supuesto, Hola ni te presentes. "
-                        "Prosa fluida en español. 3-4 oraciones directas y completas."
-                    )},
-                    {'role': 'user', 'content': (
-                        f"{contexto}\n\n"
-                        f"Sebastian pregunta: {pregunta}\n\n"
-                        "Responde basándote SOLO en el contenido encontrado. "
-                        "Si el contenido no responde bien la pregunta, dilo honestamente."
-                    )},
-                ],
-                'temperature': 0.25,
-                'max_tokens':  280,
-            },
-            timeout=25,
-        )
-        if r.status_code == 200:
-            content = r.json().get('choices', [{}])[0].get('message', {}).get('content', '').strip()
-            if content and len(content) > 20:
-                if content[-1] not in '.!?':
-                    content += '.'
-                return content
-    except Exception as e:
-        print(f"  [Busqueda Groq] {e}")
-    return ''
+        from biblioteca.memoria import obtener_memoria
+        mem = obtener_memoria()
+        perfil = mem.obtener_perfil()
+        if not perfil:
+            return ''
+        items = []
+        for k in ('nombre', 'ciudad', 'trabajo', 'proyectos', 'lenguaje_favorito'):
+            v = perfil.get(k, '')
+            if v:
+                items.append(f'{k}={v}')
+        return ', '.join(items[:6])
+    except Exception:
+        return 'nombre=Sebastian, ciudad=Bucaramanga, trabajo=Jelcon, proyecto=BELLADONNA'
 
 
-def _groq_pedir_clarificacion(termino: str, opcion1: str, opcion2: str) -> str:
-    """Bell pide clarificación antes de buscar un término ambiguo."""
-    if not _GROQ_KEY:
-        return f"Cuando dices '{termino}', ¿te refieres al {opcion1} o al {opcion2}?"
+def _enriquecer_query_con_perfil(query: str, texto_original: str, perfil: str) -> str:
+    """
+    L6: Añade contexto de Sebastian si es relevante.
+    Solo para preguntas que se benefician del contexto.
+    """
+    if not perfil:
+        return query
+    tl = texto_original.lower()
+    # "qué framework usar" → añadir Python al contexto de búsqueda
+    if any(w in tl for w in ['framework', 'librería', 'libreria', 'qué usar',
+                               'que usar', 'recomienda', 'mejor para',
+                               'para mi proyecto']):
+        return f'{query} Python Flask'
+    return query
+
+
+def _revision_memoria_l2(query: str, texto: str) -> Optional[str]:
+    """
+    L2: Antes de ir a internet, verificar si Bell ya sabe esto.
+    Usa TF-IDF semántico + cache + conocimiento propio.
+    """
+    if _es_tema_volatile(texto):
+        return None  # temas volátiles → siempre buscar
+
     try:
-        r = httpx.post(
-            _GROQ_URL,
-            headers={'Authorization': f'Bearer {_GROQ_KEY}',
-                     'Content-Type': 'application/json'},
-            json={
-                'model': _GROQ_MODEL,
-                'messages': [
-                    {'role': 'system', 'content': (
-                        "Eres Bell — IA de Sebastian. Hablas en primera persona, natural y directa. "
-                        "NUNCA uses markdown ni bullets. Una sola pregunta corta."
-                    )},
-                    {'role': 'user', 'content': (
-                        f"El usuario preguntó sobre '{termino}' que puede significar: "
-                        f"(1) {opcion1} o (2) {opcion2}. "
-                        "Pide clarificación en UNA oración natural, sin listar opciones numéricas."
-                    )},
-                ],
-                'temperature': 0.3,
-                'max_tokens': 60,
-            },
-            timeout=10,
-        )
-        if r.status_code == 200:
-            content = r.json().get('choices', [{}])[0].get('message', {}).get('content', '').strip()
-            if content:
-                return content
+        from biblioteca.memoria import obtener_memoria
+        mem = obtener_memoria()
+
+        # 1. Cache exacto reciente (48h)
+        query_norm = _normalizar(query)
+        cached = mem.buscar_cache_web(query_norm, max_horas=48)
+        if cached:
+            print('  [Búsqueda L2] ✓ Cache reciente')
+            return cached
+
+        # 2. Búsqueda semántica TF-IDF (nuevo en v2)
+        semantico = mem.buscar_semantico(query)
+        if semantico and len(semantico) > 50:
+            print('  [Búsqueda L2] ✓ TF-IDF semántico')
+            return semantico
+
+        # 3. Conocimiento aprendido con alta confianza
+        tema = re.sub(r'\b(wikipedia|definicion|definición|explicacion|explicación)\b',
+                      '', query_norm).strip()
+        conocido = mem.consultar_conocimiento(tema)
+        if conocido and conocido.get('confianza', 0) >= 0.78:
+            print('  [Búsqueda L2] ✓ Conocimiento propio')
+            return conocido['respuesta']
+
     except Exception:
         pass
-    return f"Cuando dices '{termino}', ¿te refieres al {opcion1} o al {opcion2}?"
 
-
-def _es_respuesta_clarificacion(texto: str) -> bool:
-    """Detecta si el texto es una respuesta a la pregunta de clarificación de Bell."""
-    if not _PENDIENTE['activo']:
-        return False
-    tl = texto.lower().strip()
-    # Respuesta corta (menos de 8 palabras) → probable clarificación
-    if len(tl.split()) > 8:
-        return False
-    for patron in _FRASES_CLARIFICACION:
-        if re.search(patron, tl, re.IGNORECASE):
-            return True
-    return False
+    return None
 
 
 def ejecutar_busqueda(texto: str, clarificacion_previa: Optional[str] = None) -> dict:
     """
-    Punto de entrada principal.
-    clarificacion_previa: si el usuario ya aclaró ('el lenguaje', 'el óxido'), se usa directamente.
+    Punto de entrada principal. Orquesta todos los niveles.
     """
-
     global _PENDIENTE
 
-    # 1. Verificar si es respuesta a clarificación pendiente
+    # ── 1. Verificación de hecho FYI (L8) ─────────────────
+    if _es_verificable(texto) and not clarificacion_previa:
+        verif = verificar_hecho(texto)
+        if verif.get('verificado') and verif.get('respuesta'):
+            print(f'  [Búsqueda L8] Verificación: correcto={verif["correcto"]}')
+            return {
+                'exitoso':   True,
+                'respuesta': verif['respuesta'],
+                'url':       verif.get('fuente', ''),
+                'tipo':      'verificacion_hecho',
+            }
+
+    # ── 2. Respuesta a clarificación pendiente ─────────────
     if _es_respuesta_clarificacion(texto):
         pregunta_original = _PENDIENTE['pregunta']
         _PENDIENTE['activo'] = False
-        # Usar la respuesta como clarificación para la pregunta original
         return ejecutar_busqueda(pregunta_original, clarificacion_previa=texto)
 
-    # 2. Detectar ambigüedad (solo si no hay clarificación previa)
+    # ── 3. Detectar ambigüedad (L1) ────────────────────────
     if not clarificacion_previa:
         ambiguedad = _detectar_ambiguedad(texto)
         if ambiguedad:
             termino, op1, op2 = ambiguedad
-            # Guardar estado pendiente
             _PENDIENTE.update({
                 'activo':   True,
                 'pregunta': texto,
@@ -262,83 +353,117 @@ def ejecutar_busqueda(texto: str, clarificacion_previa: Optional[str] = None) ->
                 'opcion1':  op1,
                 'opcion2':  op2,
             })
-            pregunta_clarificacion = _groq_pedir_clarificacion(termino, op1, op2)
+            pregunta_clar = _groq_clarificacion(termino, op1, op2)
             return {
                 'exitoso':   True,
-                'respuesta': pregunta_clarificacion,
+                'respuesta': pregunta_clar,
                 'tipo':      'pide_clarificacion',
             }
 
-    # Limpiar pendiente si llegamos aquí con clarificación
     _PENDIENTE['activo'] = False
 
-    # 3. Construir query rica
-    _query_original = texto  # guardar para cache con query limpia
-    query = _construir_query(texto, clarificacion_previa)
-    print(f"  [Busqueda] Query: '{query}'")
+    # ── 4. Construir query limpia + enriquecida ────────────
+    perfil = _obtener_perfil_sebastian()  # L6
+    query  = _construir_query(texto, clarificacion_previa)
+    query  = _enriquecer_query_con_perfil(query, texto, perfil)  # L6
+    print(f'  [Búsqueda] Query: "{query}"')
 
-    # 3a. Revisar cache de memoria antes de buscar en internet
+    # ── 5. L2: Revisar memoria antes de internet ───────────
+    desde_memoria = _revision_memoria_l2(query, texto)
+    if desde_memoria:
+        return {
+            'exitoso':   True,
+            'respuesta': desde_memoria,
+            'url':       '(memoria)',
+            'tipo':      'desde_memoria',
+        }
+
+    # ── 6. Decidir modo: multi-fuente vs simple ────────────
+    usar_multifuente = _necesita_multifuente(texto)
+    es_simple        = _es_simple(texto)
+
+    if usar_multifuente:
+        # L3: Multi-fuente
+        print('  [Búsqueda L3] Multi-fuente')
+        datos = buscar_multifuente(query, max_fuentes=3)
+        if datos['total_fuentes'] == 0:
+            return {
+                'exitoso':   False,
+                'respuesta': f"Busqué '{query}' pero no encontré fuentes válidas.",
+                'tipo':      'sin_resultados',
+            }
+        detallado = datos['total_fuentes'] >= 2 or not es_simple
+        respuesta = _groq_sintetizar(
+            pregunta   = texto,
+            fuentes    = datos['fuentes'],
+            perfil_ctx = perfil,
+            detallado  = detallado,
+        )
+        if not respuesta:
+            # Fallback: concatenar snippets
+            respuesta = '\n'.join(
+                f['resumen'] for f in datos['fuentes'][:2] if f.get('resumen')
+            )[:400]
+        url = datos['fuentes'][0]['url'] if datos['fuentes'] else ''
+
+    else:
+        # L1/L4: Una fuente, lectura profunda
+        resultado = buscar_y_leer(query)
+        if not resultado['contenido']:
+            return {
+                'exitoso':   False,
+                'respuesta': f"Busqué '{query}' pero no encontré información útil.",
+                'url':       '',
+                'tipo':      'sin_resultados',
+            }
+        url       = resultado['url']
+        detallado = not es_simple
+        respuesta = _groq_respuesta_simple(
+            pregunta   = texto,
+            contenido  = resultado['contenido'],
+            url        = url,
+            perfil_ctx = perfil,
+            detallado  = detallado,
+        )
+        if not respuesta:
+            # Fallback: snippet del primer resultado
+            snippets  = [r['resumen'] for r in resultado['resultados'][:2] if r.get('resumen')]
+            respuesta = ' '.join(snippets)[:350] if snippets else 'No pude procesar los resultados.'
+
+    # ── 7. Guardar en memoria L7 — aprendizaje permanente activo ──
     try:
         from biblioteca.memoria import obtener_memoria
         mem = obtener_memoria()
+        query_norm = _normalizar(query)
+        calidad    = 0.85 if len(respuesta) > 80 else 0.5
 
-        # ¿Ya tenemos esta búsqueda en cache reciente?
-        cached = mem.buscar_cache_web(query, max_horas=48)
-        if cached:
-            print(f"  [Busqueda] ✓ Desde memoria cache")
-            return {
-                'exitoso':   True,
-                'respuesta': cached,
-                'url':       '(memoria)',
-                'tipo':      'desde_memoria',
-            }
+        # L7a: Cache de búsqueda web (temporal, 48h)
+        mem.guardar_busqueda_web(query_norm, respuesta, url, calidad=calidad)
 
-        # ¿Bell ya conoce el tema?
-        tema = query.replace('que es ', '').replace('quien es ', '')                     .replace('donde queda ', '').strip()
-        conocido = mem.consultar_conocimiento(tema)
-        if conocido and conocido.get('confianza', 0) >= 0.7:
-            print(f"  [Busqueda] ✓ Desde conocimiento")
-            return {
-                'exitoso':   True,
-                'respuesta': conocido['respuesta'],
-                'url':       conocido.get('url', '(conocimiento)'),
-                'tipo':      'desde_conocimiento',
-            }
-    except Exception:
-        pass  # memoria no bloquea la búsqueda
-
-    # 3b. Buscar en internet
-    resultado = buscar_y_leer(query)
-
-    if not resultado['contenido']:
-        return {
-            'exitoso':   False,
-            'respuesta': f"Busqué '{query}' en internet pero no encontré información útil.",
-            'url':       '',
-            'tipo':      'sin_resultados',
-        }
-
-    # 4. Groq procesa y responde
-    respuesta = _groq_procesar(texto, resultado['contenido'], resultado['url'])
-
-    if not respuesta:
-        # Fallback: resumen de los snippets de DDG
-        snippets = [r['resumen'] for r in resultado['resultados'][:2] if r.get('resumen')]
-        respuesta = ' '.join(snippets)[:350] if snippets else "No pude procesar los resultados."
-
-    # Guardar en memoria para uso futuro
-    try:
-        from biblioteca.memoria import obtener_memoria
-        obtener_memoria().guardar_busqueda_web(
-            query, respuesta, resultado['url'],
-            calidad=0.8 if respuesta and len(respuesta) > 50 else 0.4
-        )
+        # L7b: Aprendizaje permanente — guarda como conocimiento
+        # Solo si la respuesta tiene calidad suficiente
+        if calidad >= 0.75 and len(respuesta) > 80:
+            tema_limpio = re.sub(
+                r'\b(wikipedia|definicion|explicacion|que es|quien es)\b',
+                '', query_norm
+            ).strip()
+            if tema_limpio:
+                mem.guardar_conocimiento(
+                    tema       = tema_limpio,
+                    respuesta  = respuesta,
+                    tipo       = _detectar_tipo_conocimiento(query),
+                    fuente     = 'busqueda_internet',
+                    pregunta   = query,
+                    url        = url,
+                    confianza  = calidad,
+                )
+                print(f'  [Búsqueda L7] 📚 Aprendido: "{tema_limpio[:40]}"')
     except Exception:
         pass
 
     return {
         'exitoso':   True,
         'respuesta': respuesta,
-        'url':       resultado['url'],
-        'tipo':      'busqueda_directa',
+        'url':       url,
+        'tipo':      'busqueda_multifuente' if usar_multifuente else 'busqueda_directa',
     }

@@ -157,6 +157,7 @@ def analizar_archivo(nombre_archivo: str, raiz_str: str) -> str:
 def analizar_todo_bell(raiz_str: str, top_n: int = 10) -> str:
     """
     Analiza TODOS los archivos Python de Bell.
+    Usa cache de memoria para archivos que no cambiaron.
     Retorna paquete compacto con los más críticos para Groq.
     """
     raiz = Path(raiz_str)
@@ -166,14 +167,62 @@ def analizar_todo_bell(raiz_str: str, top_n: int = 10) -> str:
     total_archivos = 0
     total_lineas   = 0
 
+    # Intentar obtener memoria para usar cache de análisis
+    try:
+        from biblioteca.memoria import obtener_memoria
+        mem = obtener_memoria()
+    except Exception:
+        mem = None
+
     for ruta in raiz.rglob('*.py'):
         if any(p in ruta.parts for p in _IGNORAR):
             continue
+
+        # Usar cache si el archivo no cambió
+        if mem:
+            try:
+                if not mem.necesita_reanalisis(str(ruta)):
+                    cached = mem.obtener_analisis_archivo(ruta.name)
+                    if cached and cached.get('resumen_python'):
+                        # Reconstruir métricas desde cache
+                        m = {
+                            'ruta':         str(ruta.relative_to(raiz)).replace('\\', '/'),
+                            'nombre':       ruta.name,
+                            'lineas':       cached.get('lineas', 0),
+                            'cc_total':     cached.get('cc_max', 0),
+                            'cc_max':       cached.get('cc_max', 0),
+                            'cc_complejos': [],
+                            'mi':           cached.get('mi_score', 0),
+                            'clases':       cached.get('n_clases', 0),
+                            'funciones':    cached.get('n_funciones', 0),
+                            'sin_doc':      cached.get('sin_doc', 0),
+                            'func_largas':  [],
+                        }
+                        if m['lineas'] > 50:
+                            resultados.append(m)
+                            total_archivos += 1
+                            total_lineas += m['lineas']
+                        continue
+            except Exception:
+                pass
+
         m = _analizar_archivo_python(ruta, raiz)
         if m and m['lineas'] > 50:
             resultados.append(m)
             total_archivos += 1
             total_lineas   += m['lineas']
+            # Guardar en memoria para próximo análisis
+            if mem:
+                try:
+                    mem.guardar_analisis_archivo(
+                        str(ruta), ruta.name,
+                        {'lineas': m['lineas'], 'cc_max': m['cc_max'],
+                         'mi': m['mi'], 'funciones': m['funciones'],
+                         'clases': m['clases'], 'sin_doc': m['sin_doc']},
+                        f"{m['nombre']}: {m['lineas']}L, CC={m['cc_max']}, MI={m['mi']}"
+                    )
+                except Exception:
+                    pass
 
     if not resultados:
         return "No encontré archivos Python para analizar."

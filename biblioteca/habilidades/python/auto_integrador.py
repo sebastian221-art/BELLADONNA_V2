@@ -10,16 +10,42 @@ _GROQ_TIMEOUT = 60
 _RAIZ         = Path(__file__).parent.parent.parent.parent
 
 _ARCHIVOS = {
+    # ── Capa 3 ────────────────────────────────────────────────
+    'clasificador_groq_c3':    'capas/capa3/clasificador_groq.py',
+    'constructor_comprension': 'capas/capa3/constructor_comprension.py',
+    # ── Capa 5 ────────────────────────────────────────────────
+    'sintetizador_c5':         'capas/capa5/sintetizador.py',
+    # ── Capa 6 ────────────────────────────────────────────────
     'generador_groq':          'capas/capa6/generador_groq.py',
     'constructor_decision':    'capas/capa6/constructor_decision.py',
-    'constructor_comprension': 'capas/capa3/constructor_comprension.py',
+    'buffer_sesion':           'capas/capa6/buffer_sesion.py',
+    'verificador_respuesta':   'capas/capa6/verificador_respuesta.py',
+    'constructor_prompt':      'capas/capa6/constructor_prompt.py',
+    # ── Capa 7 ────────────────────────────────────────────────
+    'detector_habilidad':      'capas/capa7/detector_habilidad.py',
+    'ejecutor_habilidad':      'capas/capa7/ejecutor_habilidad.py',
+    'clasificador_habilidad':  'capas/capa7/clasificador_habilidad_groq.py',
+    # ── Capa 8 ────────────────────────────────────────────────
+    'formateador':             'capas/capa8/formateador.py',
+    'verificador_tono':        'capas/capa8/verificador_tono.py',
+    'registrador_turno':       'capas/capa8/registrador_turno.py',
+    # ── Capa 9 ────────────────────────────────────────────────
+    'actualizador_bell_core':  'capas/capa9/actualizador_bell_core.py',
+    # ── Habilidades ───────────────────────────────────────────
     'motor_lenguaje':          'biblioteca/habilidades/lenguaje/motor.py',
     'motor_python':            'biblioteca/habilidades/python/motor_python.py',
     'analizador_codigo':       'biblioteca/habilidades/python/analizador_codigo.py',
+    'generador_codigo':        'biblioteca/habilidades/python/generador_codigo.py',
+    'motor_busqueda':          'biblioteca/habilidades/busqueda/motor_busqueda.py',
+    'buscador':                'biblioteca/habilidades/busqueda/buscador.py',
+    'sintetizador_busqueda':   'biblioteca/habilidades/busqueda/sintetizador.py',
+    'verificador_busqueda':    'biblioteca/habilidades/busqueda/verificador.py',
+    'gestor_memoria':          'biblioteca/habilidades/memoria/gestor.py',
+    'motor_auto_analisis':     'biblioteca/habilidades/auto_analisis/motor_auto_analisis.py',
+    # ── Vocabulario y consejeras ──────────────────────────────
     'gestor_vocabulario':      'biblioteca/vocabulario/gestor_vocabulario.py',
-    'detector_habilidad':      'capas/capa7/detector_habilidad.py',
-    'ejecutor_habilidad':      'capas/capa7/ejecutor_habilidad.py',
-    'formateador':             'capas/capa8/formateador.py',
+    'gestor_consejeras':       'biblioteca/consejeras/gestor_consejeras.py',
+    # ── Capas completas ───────────────────────────────────────
     'capa1':'capas/capa1','capa2':'capas/capa2','capa3':'capas/capa3',
     'capa4':'capas/capa4','capa5':'capas/capa5','capa6':'capas/capa6',
     'capa7':'capas/capa7','capa8':'capas/capa8','capa9':'capas/capa9',
@@ -29,8 +55,13 @@ _PRINCIPALES = [
     'capas/capa6/constructor_decision.py',
     'capas/capa6/generador_groq.py',
     'capas/capa3/constructor_comprension.py',
+    'capas/capa3/clasificador_groq.py',
     'capas/capa7/detector_habilidad.py',
+    'capas/capa7/clasificador_habilidad_groq.py',
     'capas/capa7/ejecutor_habilidad.py',
+    'capas/capa8/formateador.py',
+    'biblioteca/habilidades/busqueda/motor_busqueda.py',
+    'biblioteca/habilidades/memoria/gestor.py',
 ]
 
 _SYSTEM = '''Eres Bell — IA creada por Sebastian. Senior Python developer analizando TU PROPIO código.

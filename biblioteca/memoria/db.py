@@ -197,7 +197,7 @@ def _crear_tablas(c: sqlite3.Connection) -> None:
     c.execute("""
         INSERT OR IGNORE INTO perfil_sebastian (clave, valor, tipo, fuente)
         VALUES
-        ('nombre', 'Sebastian Gómez', 'dato', 'sistema'),
+        ('nombre', 'Juan Sebastian Mora', 'dato', 'sistema'),
         ('edad', '19', 'dato', 'sistema'),
         ('ciudad', 'Bucaramanga', 'dato', 'sistema'),
         ('pais', 'Colombia', 'dato', 'sistema'),
@@ -210,7 +210,7 @@ def _crear_tablas(c: sqlite3.Connection) -> None:
         INSERT OR IGNORE INTO bell_self (clave, valor, categoria)
         VALUES
         ('nombre', 'Bell (BELLADONNA)', 'identidad'),
-        ('creadora', 'Sebastian Gómez', 'identidad'),
+        ('creadora', 'Juan Sebastian Mora', 'identidad'),
         ('version', '1.0', 'identidad'),
         ('motor_lenguaje', 'openai/gpt-oss-120b via Groq', 'habilidad'),
         ('arquitectura', '9 capas, 8 consejeras', 'identidad')

@@ -66,6 +66,15 @@ class DetectorModo:
         }
 
         # ── Detectar traceback ────────────────────────────────
+        _EJECUTAR = [
+            'corre este', 'ejecuta esto', 'ejecuta el código', 'ejecuta este',
+            'corre el código', 'prueba esto', 'prueba el código', 'prueba si funciona',
+            'comprueba si funciona', 'verifica si funciona', 'testa el código',
+            'corre esta función', 'ejecuta esta función', 'ejecuta el script',
+        ]
+        if any(t in texto.lower() for t in _EJECUTAR):
+            resultado['modo'] = 'ejecutar'
+
         if re.search(r'Traceback\s*\(most recent call last\)', texto, re.IGNORECASE):
             resultado['tiene_traceback'] = True
             resultado['modo']            = 'debug'

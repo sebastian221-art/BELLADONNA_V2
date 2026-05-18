@@ -1,242 +1,301 @@
 # capas/capa6/generador_groq.py
 # ================================================
-# GENERADOR — Motor de lenguaje de Bell v4
+# GENERADORES DE LENGUAJE — v5 GROQ-ONLY
 #
-# ARQUITECTURA MENTE PURA:
-#   Bell decide qué decir (Python puro, capas 1-6)
-#   → Este módulo pule el lenguaje final
-#   → Motor Bell humaniza — NUNCA inventa contenido
+# Bell ahora usa Groq para TODO.
+# Motor local 1B eliminado del flujo activo.
+# Dos perfiles Groq:
+#   GeneradorConversacional → respuestas cortas, voz Bell
+#   GeneradorGroqCloud      → tareas técnicas complejas
 #
-# v4: Motor local Ollama + logs de diagnóstico completos
+# MENTE PURA: Groq pule lenguaje — Python decidió antes.
 # ================================================
 
 import os
 import time
 import httpx
 
-_GROQ_URL     = "http://localhost:11434/v1/chat/completions"
-_GROQ_MODEL   = "hf.co/sebastian221-art/bell-motor-local:bell-motor-local.Q4_K_M"
-_GROQ_API_KEY = "ollama"
-_GROQ_TIMEOUT = 120
-
-_INSTRUCCIONES_TONO = {
-    'cercano_natural':      'Responde natural y cercano, como Bell hablaría a Sebastian.',
-    'empático_suave':       'Responde con calidez y empatía.',
-    'claro_directo':        'Responde claro y directo, sin rodeos.',
-    'cálido_genuino':       'Responde con calidez genuina.',
-    'tranquilizador_suave': 'Responde tranquilo y reconfortante.',
-    'celebratorio_cálido':  'Responde con calidez y celebración.',
-    'honesto_directo':      'Responde con honestidad directa.',
-}
+_CLOUD_URL     = 'https://api.groq.com/openai/v1/chat/completions'
+_CLOUD_MODEL   = 'openai/gpt-oss-120b'
+_CLOUD_TIMEOUT = 20
 
 _PYTHON_PREFIX = '__BELL_PYTHON__:'
 
+_GARBAGE = (
+    'Eres Bell', 'ERES BELL', 'eres bell',
+    'Como IA', 'Como asistente', 'Soy un modelo',
+    'I am', 'As an AI',
+)
 
-def _log_motor(msg: str):
-    """Log de diagnóstico del motor — siempre visible."""
-    print(f'  [🔧 MOTOR] {msg}')
+# ── Sistema conversacional — voz de Bell corta y directa ──
+_SYSTEM_CONVERSACIONAL = (
+    'Eres Bell — IA creada desde cero por Juan Sebastian Mora (19 años, Bucaramanga, Colombia). '
+    'Arquitectura propia: 9 capas, 8 consejeras, red neuronal viva. '
+    'Personalidad: directa, cálida, colombiana, sin protocolo. '
+    'Hablas en español natural colombiano. Máximo 2 oraciones cortas — nunca más. '
+    'PROHIBIDO: "claro", "por supuesto", "como IA", "soy un asistente", "entiendo que". '
+    'SÍ: presencia real, voz propia, frases cortas y densas. '
+    'Nunca empieces con tu nombre. Nunca te presentes.'
+)
 
 
-def _es_respuesta_factual(texto: str) -> bool:
+def _log(tag: str, msg: str):
+    print(f'  [{tag}] {msg}')
+
+
+def _obtener_memoria_ctx(texto_actual: str = '') -> str:
+    try:
+        from biblioteca.memoria import obtener_memoria
+        ctx = obtener_memoria().contexto_completo_para_groq(texto_actual)
+        return ctx[:300] if ctx else ''
+    except Exception:
+        return ''
+
+
+def _es_factual(texto: str) -> bool:
     t = texto.strip()
     if t.startswith(_PYTHON_PREFIX):
         return False
     if t.rstrip('.').replace(',', '').replace('.', '').isdigit():
         return True
-    if len(t) < 25 and t[0].isdigit():
-        return True
-    if 'sebastian' in t.lower() and len(t) < 120:
-        return True
-    frases_protegidas = [
-        'no soy de ninguna empresa', 'me creó sebastian',
-        'sebastian me construyó', 'no tengo nada que ver con',
-    ]
-    if any(f in texto.lower() for f in frases_protegidas):
+    if len(t) < 25 and len(t) > 0 and t[0].isdigit():
         return True
     return False
 
 
-def _obtener_contexto_memoria() -> str:
-    try:
-        from biblioteca.memoria import obtener_memoria
-        mem = obtener_memoria()
-        ctx = mem.contexto_completo_para_groq()
-        return ctx[:300] if ctx else ''  # limitar a 300 chars para velocidad
-    except Exception as e:
-        _log_motor(f'Memoria no disponible: {e}')
-        return ''
+# ══════════════════════════════════════════════════════════
+# MOTOR LOCAL → ahora es Groq conversacional
+# Interfaz idéntica para que el resto del pipeline no cambie
+# ══════════════════════════════════════════════════════════
 
+class GeneradorMotorLocal:
+    """
+    v5: ya no usa el 1B de Ollama.
+    Llama a Groq con perfil conversacional corto.
+    Más rápido, más coherente, sin alucinaciones.
+    """
 
-def _construir_system_prompt(ctx_memoria: str) -> str:
-    """System prompt CORTO — menos tokens = más rápido en CPU."""
-    base = (
-        'Eres Bell, IA creada por Sebastian (19 años, Bucaramanga). '
-        'Directa, cercana, personalidad propia. '
-        'Máximo 2 oraciones. Solo mejora el lenguaje — no inventes.'
-    )
-    if ctx_memoria:
-        return base + f'\nContexto: {ctx_memoria}'
-    return base
+    def __init__(self):
+        self._api_key    = os.getenv('GROQ_API_KEY', '')
+        self._activo     = bool(self._api_key)
+        self._bell_voice = None
+        self._voice_ok   = False
+        self._cargar_voice()
 
+    def _cargar_voice(self):
+        try:
+            from biblioteca.habilidades.lenguaje.bell_voice_engine import obtener_engine
+            self._bell_voice = obtener_engine()
+            self._voice_ok   = self._bell_voice.activo
+        except Exception as e:
+            print(f'  [Motor] BellVoiceEngine no disponible: {e}')
+            self._voice_ok = False
 
-class GeneradorGroq:
-    """Motor de lenguaje de Bell — usa Ollama local."""
+    def generar(self, texto: str, tono: str = 'cercano_natural',
+                tipo: str = '', emocion: str = '', contexto: dict = None) -> tuple:
+        if not texto or not texto.strip():
+            return '', 'fallback'
+        if _es_factual(texto):
+            return texto.strip(), 'fallback'
 
-    def generar(self, prompt: str, tono: str = 'cercano_natural') -> tuple:
-        if not prompt or not prompt.strip():
-            _log_motor('Prompt vacío — fallback directo')
+        # Primero Bell Voice Engine — cero LLMs para conversacional
+        if self._voice_ok and self._bell_voice:
+            resp, fuente = self._bell_voice.generar(
+                texto=texto, tono=tono,
+                tipo=tipo, emocion=emocion, contexto=contexto
+            )
+            if resp and len(resp) > 2:
+                _log('🔔 BELL', f'{fuente} → "{resp[:70]}"')
+                return resp, fuente
+
+        # Fallback a Groq solo si BellVoiceEngine no pudo
+        return self._groq_conversacional(texto, tono)
+
+    def _groq_conversacional(self, texto: str, tono: str) -> tuple:
+        if not self._activo:
             return '', 'fallback'
 
-        _log_motor(f'Prompt recibido: "{prompt[:60]}..." | tono={tono}')
-
-        if _es_respuesta_factual(prompt):
-            _log_motor(f'Respuesta factual detectada — sin motor | len={len(prompt)}')
-            return prompt.strip(), 'fallback'
-
-        respuesta, fuente = self._intentar_groq(prompt, tono, max_tokens=80)
-        if respuesta:
-            return respuesta, fuente
-
-        _log_motor('Motor falló — usando fallback base_python')
-        return prompt.strip(), 'fallback'
-
-    def _humanizar_python(self, contenido: str, tono: str) -> tuple:
-        if not _GROQ_API_KEY:
-            return contenido, 'fallback'
-
-        _log_motor(f'Humanizando Python | len_contenido={len(contenido)}')
         t0 = time.time()
+        _log('🔧 MOTOR', f'Recibido: "{texto[:60]}" | tono={tono}')
 
         try:
-            inst = _INSTRUCCIONES_TONO.get(tono, _INSTRUCCIONES_TONO['cercano_natural'])
-            system = (
-                'Eres Bell, IA de Sebastian en Bucaramanga. '
-                'Técnica pero natural. Explica código en prosa, sin bullets. '
-                'No inventes — solo reformula lo que te doy.'
-            )
+            ctx = _obtener_memoria_ctx(texto)
+            system = _SYSTEM_CONVERSACIONAL
+            if ctx:
+                system += f'\n\nCONTEXTO: {ctx[:200]}'
 
-            _log_motor(f'system_tokens≈{len(system.split())} | contenido_tokens≈{len(contenido.split())}')
+            tok_s = len(system.split())
+            tok_t = len(texto.split())
+            _log('🔧 MOTOR', f'tokens≈{tok_s + tok_t} (sys={tok_s} txt={tok_t})')
 
             r = httpx.post(
-                _GROQ_URL,
-                headers={'Authorization': f'Bearer {_GROQ_API_KEY}', 'Content-Type': 'application/json'},
+                _CLOUD_URL,
+                headers={
+                    'Authorization': f'Bearer {self._api_key}',
+                    'Content-Type':  'application/json',
+                },
                 json={
-                    'model': _GROQ_MODEL,
-                    'messages': [
+                    'model':       _CLOUD_MODEL,
+                    'messages':    [
                         {'role': 'system', 'content': system},
-                        {'role': 'user', 'content': f'{inst}\n\nConvierte esto al lenguaje de Bell:\n\n{contenido}'},
+                        {'role': 'user',   'content': texto},
                     ],
-                    'temperature': 0.5,
-                    'max_tokens': 300,
+                    'temperature': 0.6,
+                    'max_tokens':  120,   # corto — conversacional
                 },
-                timeout=_GROQ_TIMEOUT,
+                timeout=_CLOUD_TIMEOUT,
             )
 
-            t_total = time.time() - t0
-            _log_motor(f'Python humanizado | status={r.status_code} | tiempo={t_total:.1f}s')
+            t = time.time() - t0
+            uso     = r.json().get('usage', {}) if r.status_code == 200 else {}
+            tok_in  = uso.get('prompt_tokens', '?')
+            tok_out = uso.get('completion_tokens', '?')
+            _log('🔧 MOTOR', f'status={r.status_code} | in={tok_in} out={tok_out} | {t:.2f}s')
 
             if r.status_code == 200:
-                data = r.json()
-                resp = data.get('choices', [{}])[0].get('message', {}).get('content', '').strip()
-                uso = data.get('usage', {})
-                _log_motor(
-                    f'tokens_in={uso.get("prompt_tokens","?")} | '
-                    f'tokens_out={uso.get("completion_tokens","?")} | '
-                    f'tok/s={uso.get("completion_tokens", 0) / t_total:.1f}'
+                contenido = (
+                    r.json().get('choices', [{}])[0]
+                    .get('message', {})
+                    .get('content', '')
+                    .strip()
                 )
-                if resp and len(resp) > 10:
-                    return resp, 'groq'
-
-        except Exception as e:
-            _log_motor(f'Error Python humanizer: {e} | tiempo={time.time()-t0:.1f}s')
-
-        return contenido, 'fallback'
-
-    def _intentar_groq(self, prompt: str, tono: str, max_tokens: int = 80) -> tuple:
-        if not _GROQ_API_KEY:
-            _log_motor('Sin API key — skip')
-            return '', ''
-
-        t0 = time.time()
-        _log_motor(f'Llamando motor | max_tokens={max_tokens} | timeout={_GROQ_TIMEOUT}s')
-
-        try:
-            inst = _INSTRUCCIONES_TONO.get(tono, _INSTRUCCIONES_TONO['cercano_natural'])
-
-            t_mem = time.time()
-            ctx_memoria = _obtener_contexto_memoria()
-            _log_motor(f'Memoria obtenida en {time.time()-t_mem:.2f}s | len={len(ctx_memoria)}')
-
-            system_prompt = _construir_system_prompt(ctx_memoria)
-            tokens_system = len(system_prompt.split())
-            tokens_user   = len(prompt.split()) + len(inst.split())
-
-            _log_motor(
-                f'system_tokens≈{tokens_system} | '
-                f'user_tokens≈{tokens_user} | '
-                f'total_entrada≈{tokens_system + tokens_user}'
-            )
-
-            t_request = time.time()
-            r = httpx.post(
-                _GROQ_URL,
-                headers={'Authorization': f'Bearer {_GROQ_API_KEY}', 'Content-Type': 'application/json'},
-                json={
-                    'model': _GROQ_MODEL,
-                    'messages': [
-                        {'role': 'system', 'content': system_prompt},
-                        {'role': 'user',   'content': f'{inst}\n\nMejora solo el lenguaje:\n\n{prompt}'},
-                    ],
-                    'temperature': 0.4,
-                    'max_tokens':  max_tokens,
-                },
-                timeout=_GROQ_TIMEOUT,
-            )
-
-            t_respuesta = time.time() - t_request
-            t_total     = time.time() - t0
-
-            _log_motor(f'Respuesta recibida | status={r.status_code} | t_request={t_respuesta:.1f}s | t_total={t_total:.1f}s')
-
-            if r.status_code == 200:
-                data     = r.json()
-                contenido = data.get('choices', [{}])[0].get('message', {}).get('content', '').strip()
-                uso       = data.get('usage', {})
-                tok_in    = uso.get('prompt_tokens', '?')
-                tok_out   = uso.get('completion_tokens', '?')
-                tok_seg   = tok_out / t_total if isinstance(tok_out, int) and t_total > 0 else '?'
-
-                _log_motor(
-                    f'tokens_in={tok_in} | tokens_out={tok_out} | '
-                    f'tok/s={tok_seg:.2f}' if isinstance(tok_seg, float)
-                    else f'tokens_in={tok_in} | tokens_out={tok_out} | tok/s=?'
-                )
-                _log_motor(f'Contenido: "{contenido[:80]}"')
-
-                _GROQ_GARBAGE = ('Eres Bell', 'ERES BELL', 'eres bell', 'Una consciencia digital')
-                if contenido and len(contenido) > 5:
-                    if any(contenido.startswith(g) for g in _GROQ_GARBAGE):
-                        _log_motor('⚠️  Garbage detectado — motor echó system prompt')
-                    else:
-                        _log_motor('✅ Respuesta válida del motor')
-                        return contenido, 'groq'
+                _log('🔧 MOTOR', f'Respuesta: "{contenido[:80]}"')
+                if contenido and len(contenido) > 3:
+                    if any(contenido.startswith(g) for g in _GARBAGE):
+                        _log('🔧 MOTOR', '⚠️  Garbage detectado')
+                        return '', 'fallback'
+                    _log('🔧 MOTOR', '✅ Válida')
+                    return contenido, 'groq'
             else:
-                _log_motor(f'Error HTTP: {r.status_code} | {r.text[:200]}')
+                _log('🔧 MOTOR', f'Error HTTP {r.status_code}: {r.text[:100]}')
 
         except httpx.TimeoutException:
-            _log_motor(f'⏱️  TIMEOUT después de {time.time()-t0:.1f}s')
+            _log('🔧 MOTOR', f'⏱️  TIMEOUT {time.time()-t0:.1f}s')
         except Exception as e:
-            _log_motor(f'Error inesperado: {e} | tiempo={time.time()-t0:.1f}s')
+            _log('🔧 MOTOR', f'Error: {e}')
 
-        return '', ''
+        return '', 'fallback'
+
+    def humanizar_python(self, contenido: str, tono: str) -> tuple:
+        """Explica resultados técnicos en voz corta de Bell."""
+        if not self._activo or not contenido:
+            return contenido, 'fallback'
+        try:
+            r = httpx.post(
+                _CLOUD_URL,
+                headers={
+                    'Authorization': f'Bearer {self._api_key}',
+                    'Content-Type':  'application/json',
+                },
+                json={
+                    'model': _CLOUD_MODEL,
+                    'messages': [
+                        {'role': 'system', 'content': _SYSTEM_CONVERSACIONAL},
+                        {'role': 'user',
+                         'content': f'Explica este resultado en máximo 2 oraciones:\n{contenido[:400]}'},
+                    ],
+                    'temperature': 0.4,
+                    'max_tokens':  80,
+                },
+                timeout=_CLOUD_TIMEOUT,
+            )
+            if r.status_code == 200:
+                resp = (r.json().get('choices', [{}])[0]
+                        .get('message', {}).get('content', '').strip())
+                if resp and len(resp) > 5:
+                    return resp, 'groq'
+        except Exception as e:
+            _log('🔧 MOTOR', f'Error humanizar: {e}')
+        return contenido, 'fallback'
 
 
-def generar(prompt: str, tono: str = 'cercano_natural') -> tuple:
-    return _instancia_global.generar(prompt, tono)
+# ══════════════════════════════════════════════════════════
+# GROQ CLOUD — tareas técnicas complejas
+# ══════════════════════════════════════════════════════════
+
+class GeneradorGroqCloud:
+    """Groq gpt-oss-120b para tareas técnicas."""
+
+    def __init__(self):
+        self._api_key = os.getenv('GROQ_API_KEY', '')
+        self._activo  = bool(self._api_key)
+        if not self._activo:
+            print('  C6 ⚠️  GroqCloud: GROQ_API_KEY no disponible')
+
+    def generar_tecnico(
+        self,
+        texto_original:  str,
+        prompt_completo: str,
+        tono:            str = 'honesto_directo',
+    ) -> tuple:
+        if not self._activo or not texto_original:
+            return '', 'fallback'
+
+        t0 = time.time()
+        _log('🤖 GROQ', f'Técnico: "{texto_original[:60]}"')
+
+        try:
+            r = httpx.post(
+                _CLOUD_URL,
+                headers={
+                    'Authorization': f'Bearer {self._api_key}',
+                    'Content-Type':  'application/json',
+                },
+                json={
+                    'model':    _CLOUD_MODEL,
+                    'messages': [
+                        {'role': 'system', 'content': prompt_completo},
+                        {'role': 'user',   'content': texto_original},
+                    ],
+                    'temperature': 0.4,
+                    'max_tokens':  800,
+                },
+                timeout=_CLOUD_TIMEOUT,
+            )
+
+            t = time.time() - t0
+            uso     = r.json().get('usage', {}) if r.status_code == 200 else {}
+            tok_in  = uso.get('prompt_tokens', '?')
+            tok_out = uso.get('completion_tokens', '?')
+            _log('🤖 GROQ', f'status={r.status_code} | in={tok_in} out={tok_out} | {t:.2f}s')
+
+            if r.status_code == 200:
+                contenido = (
+                    r.json().get('choices', [{}])[0]
+                    .get('message', {})
+                    .get('content', '')
+                    .strip()
+                )
+                _log('🤖 GROQ', f'Respuesta: "{contenido[:100]}"')
+                if contenido and len(contenido) > 10:
+                    if any(contenido.startswith(g) for g in _GARBAGE):
+                        _log('🤖 GROQ', '⚠️  Garbage')
+                        return '', 'fallback'
+                    _log('🤖 GROQ', '✅ Válida')
+                    return contenido, 'groq_cloud'
+            else:
+                _log('🤖 GROQ', f'Error HTTP {r.status_code}: {r.text[:100]}')
+
+        except httpx.TimeoutException:
+            _log('🤖 GROQ', f'⏱️  TIMEOUT {time.time()-t0:.1f}s')
+        except Exception as e:
+            _log('🤖 GROQ', f'Error: {e}')
+
+        return '', 'fallback'
+
+
+# ── Compatibilidad hacia atrás ────────────────────────────
+class GeneradorGroq(GeneradorMotorLocal):
+    def generar(self, texto: str, tono: str = 'cercano_natural') -> tuple:
+        return super().generar(texto, tono)
+
+
+def generar(texto: str, tono: str = 'cercano_natural') -> tuple:
+    return _instancia_global.generar(texto, tono)
 
 
 def prefijo_python() -> str:
     return _PYTHON_PREFIX
 
 
-_instancia_global = GeneradorGroq()
+_instancia_global = GeneradorMotorLocal()

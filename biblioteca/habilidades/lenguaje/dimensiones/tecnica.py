@@ -249,18 +249,37 @@ class DimensionTecnica(DimensionLenguaje):
         hallazgos = {}
         senales   = []
 
-        conceptos_tecnicos_bell = [
+        conceptos_bell = [
             m for m in vocab_match
             if m.get('concepto', {}).get('tipo', '') in ('identidad_bell', 'pregunta_bell')
         ]
-        if conceptos_tecnicos_bell and not any(
+        conceptos_tecnicos_vocab = any(
             m.get('concepto', {}).get('tipo', '') == 'tecnico'
             for m in vocab_match
-        ):
-            return self._resultado(
-                activa=False, confianza=0.1,
-                hallazgos={'sobre_bell': True}, senales=['no_tecnico_sobre_bell'],
+        )
+        # Solo suprimir si hay concepto Bell Y no hay indicadores técnicos
+        # TAMBIÉN checar los patrones regex antes de decidir — fix del early return
+        if conceptos_bell and not conceptos_tecnicos_vocab:
+            # Verificar patrones técnicos en el texto crudo antes de rendirse
+            tl_check = texto.lower()
+            tiene_patron_tecnico = any(
+                re.search(p, tl_check, re.IGNORECASE | re.MULTILINE)
+                for cfg in self._DOMINIOS.values()
+                for p in cfg.get('patrones', [])
             )
+            if not tiene_patron_tecnico:
+                # Verificar también palabras técnicas simples
+                tiene_tecnico_simple = any(
+                    word in tl_check
+                    for cfg in self._DOMINIOS.values()
+                    for word in cfg.get('tecnico', [])[:5]  # solo primeras 5 por eficiencia
+                )
+                if not tiene_tecnico_simple:
+                    return self._resultado(
+                        activa=False, confianza=0.1,
+                        hallazgos={'sobre_bell': True},
+                        senales=['no_tecnico_sobre_bell'],
+                    )
 
         # ── Detectar verbosidad ──────────────────────────────────────
         verbosidad = 'normal'

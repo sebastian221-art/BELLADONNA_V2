@@ -1,18 +1,21 @@
 # capas/capa9/__init__.py
 # ================================================
-# CAPA 9 — INTEGRACIÓN
-# La última capa. Cierra el loop.
+# CAPA 9 — INTEGRACIÓN — v2
 #
-# Recibe: PaqueteCapa8
-# Produce: PaqueteCapa9
+# Cierra el loop del pipeline de Bell.
+# No cambia la respuesta — integra la experiencia.
 #
-# Lo que hace:
-# 1. Lee el historial de Capa 8
-# 2. Actualiza BELL_CORE — por primera vez
-#    acción, relaciones, crecimiento suben
-# 3. Ordena la zona de desconocimiento
-# 4. Genera resumen de sesión
-# 5. Pasa la respuesta final intacta
+# Flujo:
+#   1. Actualizar BELL_CORE (dimensiones suben)
+#   2. Ordenar zona de desconocimiento
+#   3. Generar resumen de sesión
+#   4. Guardar en memoria (habilidad biblioteca)
+#   5. Logs diagnósticos
+#
+# v2:
+# — Logs siempre visibles (no solo BELL_DEBUG)
+# — Memoria en función propia (limpio)
+# — Propagación v2
 # ================================================
 
 import time
@@ -24,20 +27,15 @@ from capas.capa9.generador_resumen      import GeneradorResumen
 _actualizador_bell = ActualizadorBellCore()
 _actualizador_zona = ActualizadorZona()
 _generador_resumen = GeneradorResumen()
-
-# Timestamp de inicio de sesión — primera vez que se llama
-_timestamp_inicio = time.time()
-
+_timestamp_inicio  = time.time()
 
 
 def procesar(paquete_capa8: dict) -> dict:
-    """C9: integración final + memoria."""
-    # 1. Procesar normalmente
-    resultado = {}
     try:
         resultado = _procesar_interno(paquete_capa8)
     except Exception as e:
-        import traceback; traceback.print_exc()
+        import traceback
+        traceback.print_exc()
         resultado = PaqueteCapa9(
             respuesta_final = paquete_capa8.get('respuesta_final', ''),
             paquete_capa8   = paquete_capa8,
@@ -45,162 +43,30 @@ def procesar(paquete_capa8: dict) -> dict:
             error           = str(e),
         ).a_dict()
 
-    # 2. Memoria — SIEMPRE corre, no bloquea el flujo
-    respuesta_final = resultado.get('respuesta_final', '') if resultado else ''
-    try:
-        from biblioteca.memoria import obtener_memoria
-        mem = obtener_memoria()
-
-        reg_raw = paquete_capa8.get('registro_turno')
-
-        # Extraer mensaje_user
-        mensaje_user = ''
-        tipo = ''
-        desconocidos = []
-        habilidad = ''
-
-        # Ruta 1: registro_turno
-        if reg_raw is not None:
-            if isinstance(reg_raw, dict):
-                mensaje_user = reg_raw.get('texto_usuario', '') or ''
-                tipo = reg_raw.get('tipo_mensaje', '') or ''
-            elif hasattr(reg_raw, 'texto_usuario'):
-                mensaje_user = str(reg_raw.texto_usuario or '')
-                tipo = str(getattr(reg_raw, 'tipo_mensaje', '') or '')
-
-        # Ruta 2: cadena de paquetes
-        if not mensaje_user:
-            try:
-                p7 = paquete_capa8.get('paquete_capa7', {}) or {}
-                p6 = p7.get('paquete_capa6', {}) or {}
-                p5 = p6.get('paquete_capa5', {}) or {}
-                p4 = p5.get('paquete_capa4', {}) or {}
-                p3 = p4.get('paquete_capa3', {}) or {}
-                p2 = p3.get('paquete_capa2', {}) or {}
-                p1 = p2.get('paquete_capa1', {}) or {}
-                for campo in ('contenido_original', 'texto_original', 'texto', 'mensaje'):
-                    val = p1.get(campo, '')
-                    if val and isinstance(val, str):
-                        mensaje_user = val
-                        break
-                tipo = tipo or p3.get('tipo_mensaje', '') or ''
-                desconocidos = p1.get('desconocidos', []) or []
-                ejec = p7.get('ejecucion')
-                if ejec:
-                    habilidad = (ejec.get('habilidad_id', '') if isinstance(ejec, dict)
-                                 else str(getattr(ejec, 'habilidad_id', '') or ''))
-            except Exception:
-                pass
-
-        # Guardar intercambio
-        if mensaje_user and respuesta_final:
-            mem.guardar_intercambio(mensaje_user, respuesta_final,
-                                     tipo=tipo, habilidad=habilidad)
-
-        # Desconocidos
-        for word in desconocidos:
-            if len(word) > 2:
-                mem.registrar_desconocido(word, mensaje_user[:100])
-
-        # Perfil + aprendizaje
-        if mensaje_user:
-            mem.extraer_datos_sebastian(mensaje_user, respuesta_final)
-            mem.aprender_de_mensaje(mensaje_user)
-            tl = mensaje_user.lower()
-            for pref in ('fyi:', 'fyi :', 'tip:', 'dato:', 'recuerda:', 'nota:'):
-                if tl.startswith(pref):
-                    conocimiento = mensaje_user[len(pref):].strip()
-                    if len(conocimiento) > 10:
-                        mem.guardar_conocimiento(conocimiento[:40], conocimiento,
-                                                  'general', 'sebastian', confianza=0.95)
-                        print(f"  [Memoria] 📚 FYI aprendido: '{conocimiento[:60]}'")
-                        # Actualizar respuesta para que Bell acuse recibo
-                        import hashlib
-                        _opciones = ["Anotado.", "Lo tendré en cuenta.",
-                                     "Guardado. Gracias por decirme.",
-                                     "Lo tengo. Gracias."]
-                        _idx = int(hashlib.md5(conocimiento.encode()).hexdigest(), 16) % len(_opciones)
-                        _nueva_resp = _opciones[_idx]
-                        resultado['respuesta_final'] = _nueva_resp
-                        paquete_capa8['respuesta_final'] = _nueva_resp
-                    break
-
-        # Cache búsqueda
-        if habilidad == 'BUSQUEDA_INTERNET' and respuesta_final and mensaje_user:
-            mem.guardar_busqueda_web(mensaje_user.lower(), respuesta_final)
-
-
-        # ── CORRECCIÓN DE RESPUESTAS INCORRECTAS ─────────────
-        # Cuando Python base genera "Mi creador se llama Sebastian"
-        # para preguntas donde debería responder sobre Sebastian.
-        _resp_actual = resultado.get('respuesta_final', '')
-        # Todos los patrones incorrectos que C6 Python genera para preguntas
-        # sobre Sebastian o sesión — confirmados en logs reales
-        _patrones_error = [
-            'Mi creador se llama Sebastian',
-            'Sebastian. Mi creador.',
-            'Mi creador. Tiene 19',
-            'Sebastian — él me creó',
-            'él me creó. Cada capa mía',
-            'Sebastian. Mi creador. Tiene',
-        ]
-        if any(p in _resp_actual for p in _patrones_error) and mensaje_user:
-            tl_msg = mensaje_user.lower()
-
-            # Preguntas de auto-referencia
-            _autoref = ['de dónde soy', 'donde soy', 'cuántos años', 'cuantos años',
-                        'cómo me llamo', 'como me llamo', 'quién soy', 'quien soy',
-                        'dónde vivo', 'donde vivo', 'mi ciudad', 'cuál es mi nombre']
-            if any(p in tl_msg for p in _autoref):
-                _perfil = mem.obtener_perfil()
-                _ciudad = _perfil.get('ciudad', 'Bucaramanga')
-                _pais   = _perfil.get('pais', 'Colombia')
-                _edad   = _perfil.get('edad', '19')
-                _corr   = f"De {_ciudad}, {_pais}. Tienes {_edad} años."
-                resultado['respuesta_final'] = _corr
-                paquete_capa8['respuesta_final'] = _corr
-                print(f"  [Memoria] 🔧 Auto-ref corregida: '{_corr}'")
-
-            # Preguntas sobre sesión
-            elif any(p in tl_msg for p in ['qué hice', 'que hice', 'cuéntame hoy',
-                     'cuentame hoy', 'qué pasó hoy', 'hice hoy', 'de qué hablamos']):
-                _ctx = mem.obtener_contexto_sesion(6)
-                if _ctx and len(_ctx) > 1:
-                    _n = len(_ctx)
-                    _t0 = _ctx[0].get('user', '')[:50]
-                    _tN = _ctx[-1].get('user', '')[:50]
-                    _plural = "intercambio" if _n == 1 else "intercambios"
-                    _corr = f"Esta sesión llevamos {_n} {_plural}. Empezaste con '{_t0}'"
-                    if _n > 1:
-                        _corr += f" y terminamos hablando de '{_tN}'"
-                    _corr += "."
-                    resultado['respuesta_final'] = _corr
-                    paquete_capa8['respuesta_final'] = _corr
-                    print(f"  [Memoria] 🔧 Sesión corregida: {_n} intercambios")
-
-        mem.actualizar_self_post_sesion()
-
-    except Exception as _mem_err:
-        print(f"  [Memoria] ⚠ Error C9: {_mem_err}")
-        import traceback; traceback.print_exc()
+    # Memoria — siempre corre, nunca bloquea el flujo
+    _guardar_en_memoria(paquete_capa8, resultado)
 
     return resultado
 
 
-
 def _procesar_interno(paquete_capa8: dict) -> dict:
 
-    respuesta_final = paquete_capa8.get('respuesta_final', '')
+    respuesta_final     = paquete_capa8.get('respuesta_final', '')
+    habilidad_ejecutada = paquete_capa8.get('habilidad_ejecutada', '')
+    motor_sugerido      = paquete_capa8.get('motor_sugerido', 'local')
+    contiene_codigo     = paquete_capa8.get('contiene_codigo', False)
 
-    # ── 1. LEER HISTORIAL DE CAPA 8 ─────────────────────
+    # ── 1. Leer historial de C8 ────────────────────────────
     try:
         from capas.capa8.historial_sesion import HistorialSesion
-        historial       = HistorialSesion.obtener()
-        historial_stats = historial.obtener_stats()
+        historial_stats = HistorialSesion.obtener().obtener_stats()
     except Exception:
-        historial_stats = {'total_turnos': 0, 'vetos': 0, 'ejecuciones': 0, 'tipos_mensajes': {}, 'tonos_usados': {}}
+        historial_stats = {
+            'total_turnos': 0, 'vetos': 0, 'ejecuciones': 0,
+            'tipos_mensajes': {}, 'tonos_usados': {},
+        }
 
-    # ── 2. ACTUALIZAR BELL_CORE ──────────────────────────
+    # ── 2. Actualizar BELL_CORE ────────────────────────────
     try:
         from biblioteca.zona_desconocimiento.zona import ZonaDesconocimiento
         zona_pendientes = ZonaDesconocimiento.obtener().cantidad_pendientes()
@@ -212,10 +78,10 @@ def _procesar_interno(paquete_capa8: dict) -> dict:
         zona_pendientes = zona_pendientes,
     )
 
-    # ── 3. ACTUALIZAR ZONA ───────────────────────────────
+    # ── 3. Ordenar zona ────────────────────────────────────
     zona_stats = _actualizador_zona.actualizar()
 
-    # ── 4. GENERAR RESUMEN ───────────────────────────────
+    # ── 4. Generar resumen ─────────────────────────────────
     resumen = _generador_resumen.generar(
         historial_stats  = historial_stats,
         zona_stats       = zona_stats,
@@ -223,9 +89,179 @@ def _procesar_interno(paquete_capa8: dict) -> dict:
         timestamp_inicio = _timestamp_inicio,
     )
 
+    # ── 5. Logs diagnósticos ───────────────────────────────
+    _log_diagnostico(historial_stats, actualizacion, zona_stats, habilidad_ejecutada)
+
     return PaqueteCapa9(
-        respuesta_final = respuesta_final,
-        actualizacion   = actualizacion,
-        resumen_sesion  = resumen,
-        paquete_capa8   = paquete_capa8,
+        respuesta_final     = respuesta_final,
+        actualizacion       = actualizacion,
+        resumen_sesion      = resumen,
+        paquete_capa8       = paquete_capa8,
+        motor_sugerido      = motor_sugerido,
+        contiene_codigo     = contiene_codigo,
+        habilidad_ejecutada = habilidad_ejecutada,
     ).a_dict()
+
+
+# ══════════════════════════════════════════════════════════
+# MEMORIA — delega en biblioteca/habilidades/memoria
+# ══════════════════════════════════════════════════════════
+
+def _guardar_en_memoria(paquete_capa8: dict, resultado: dict):
+    """
+    Guarda la experiencia del turno en la memoria persistente.
+    Si la habilidad de memoria no está disponible → no falla.
+    """
+    try:
+        from biblioteca.memoria import obtener_memoria
+        mem = obtener_memoria()
+    except Exception:
+        return  # habilidad memoria no disponible — ok
+
+    try:
+        # Extraer datos del pipeline
+        datos = _extraer_datos_pipeline(paquete_capa8)
+        mensaje_user    = datos['mensaje_user']
+        respuesta_bell  = resultado.get('respuesta_final', '')
+        tipo            = datos['tipo']
+        habilidad       = datos['habilidad']
+        desconocidos    = datos['desconocidos']
+
+        # Guardar intercambio en SQLite
+        if mensaje_user and respuesta_bell:
+            mem.guardar_intercambio(
+                mensaje_user, respuesta_bell,
+                tipo=tipo, habilidad=habilidad
+            )
+            # Sincronizar al JSON (MemoriaPersistente) si no lo hizo buffer_sesion
+            try:
+                from biblioteca.memoria.memoria_persistente import MemoriaPersistente
+                comp_c9 = {}
+                try:
+                    p7 = paquete_capa8.get('paquete_capa7', {}) or {}
+                    p6 = p7.get('paquete_capa6', {}) or {}
+                    p5 = p6.get('paquete_capa5', {}) or {}
+                    p4 = p5.get('paquete_capa4', {}) or {}
+                    p3 = p4.get('paquete_capa3', {}) or {}
+                    comp_c9 = p3.get('comprension', {})
+                except Exception:
+                    pass
+                MemoriaPersistente.obtener().registrar_turno(
+                    mensaje_user, respuesta_bell, comp_c9
+                )
+            except Exception:
+                pass
+
+        # Registrar conceptos desconocidos
+        for word in desconocidos:
+            if len(word) > 2:
+                mem.registrar_desconocido(word, mensaje_user[:100])
+
+        # Extraer datos de Sebastian y aprender
+        if mensaje_user:
+            mem.extraer_datos_sebastian(mensaje_user, respuesta_bell)
+            mem.aprender_de_mensaje(mensaje_user)
+            _procesar_fyi(mem, mensaje_user, resultado)
+
+        # Cache de búsqueda web
+        if habilidad == 'BUSQUEDA_INTERNET' and respuesta_bell and mensaje_user:
+            mem.guardar_busqueda_web(mensaje_user.lower(), respuesta_bell)
+
+        mem.actualizar_self_post_sesion()
+
+    except Exception as e:
+        print(f'  C9 ⚠️  Memoria error: {e}')
+
+
+def _extraer_datos_pipeline(paquete_capa8: dict) -> dict:
+    """Extrae datos navegando la cadena de paquetes."""
+    # Navegar la cadena
+    p7 = paquete_capa8.get('paquete_capa7', {}) or {}
+    p6 = p7.get('paquete_capa6', {}) or {}
+    p5 = p6.get('paquete_capa5', {}) or {}
+    p4 = p5.get('paquete_capa4', {}) or {}
+    p3 = p4.get('paquete_capa3', {}) or {}
+    p2 = p3.get('paquete_capa2', {}) or {}
+    p1 = p2.get('paquete_capa1', {}) or {}
+
+    # Mensaje del usuario
+    mensaje_user = ''
+    for campo in ('contenido_original', 'texto_original', 'texto', 'mensaje'):
+        val = p1.get(campo, '')
+        if val and isinstance(val, str):
+            mensaje_user = val
+            break
+
+    # Tipo de mensaje
+    tipo = (p3.get('comprension', {}).get('contextual', {})
+               .get('tipo_mensaje', '') or '')
+
+    # Habilidad ejecutada
+    ejec = p7.get('ejecucion') or {}
+    habilidad = ejec.get('habilidad_id', '') if isinstance(ejec, dict) else ''
+
+    # Desconocidos
+    desconocidos = [
+        d.get('fragmento', str(d)) if isinstance(d, dict) else str(d)
+        for d in p1.get('desconocidos', [])
+    ]
+
+    return {
+        'mensaje_user': mensaje_user,
+        'tipo':         tipo,
+        'habilidad':    habilidad,
+        'desconocidos': desconocidos,
+    }
+
+
+def _procesar_fyi(mem, mensaje_user: str, resultado: dict):
+    """Detecta prefijos FYI y guarda como conocimiento."""
+    PREFIJOS_FYI = ('fyi:', 'fyi :', 'tip:', 'dato:', 'recuerda:', 'nota:')
+    tl = mensaje_user.lower().strip()
+    for pref in PREFIJOS_FYI:
+        if tl.startswith(pref):
+            conocimiento = mensaje_user[len(pref):].strip()
+            if len(conocimiento) > 10:
+                mem.guardar_conocimiento(
+                    conocimiento[:40], conocimiento,
+                    'general', 'sebastian', confianza=0.95
+                )
+                print(f"  C9 📚 FYI aprendido: '{conocimiento[:60]}'")
+                # Bell acusa recibo
+                import hashlib
+                opciones = [
+                    'Anotado.', 'Lo tendré en cuenta.',
+                    'Guardado. Gracias por decirme.', 'Lo tengo.',
+                ]
+                idx = int(hashlib.md5(conocimiento.encode()).hexdigest(), 16) % len(opciones)
+                resultado['respuesta_final'] = opciones[idx]
+            break
+
+
+# ══════════════════════════════════════════════════════════
+# LOGS
+# ══════════════════════════════════════════════════════════
+
+def _log_diagnostico(
+    historial_stats:  dict,
+    actualizacion:    ActualizacionBellCore,
+    zona_stats:       dict,
+    habilidad:        str,
+):
+    total  = historial_stats.get('total_turnos', 0)
+    vetos  = historial_stats.get('vetos', 0)
+    ejec   = historial_stats.get('ejecuciones', 0)
+
+    print(f'  C9 turnos: {total} | vetos: {vetos} | ejecuciones: {ejec}')
+
+    if actualizacion.hubo_cambio():
+        print(f'  C9 BELL_CORE: {actualizacion.descripcion}')
+
+    zona_total = zona_stats.get('total_pendientes', 0)
+    if zona_total > 0:
+        habs = zona_stats.get('habilidades_prioritarias', [])
+        print(f'  C9 zona: {zona_total} pendientes'
+              + (f' | habs: {habs}' if habs else ''))
+
+    if habilidad:
+        print(f'  C9 hab_ejecutada: {habilidad}')
