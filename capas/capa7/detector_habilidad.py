@@ -473,13 +473,28 @@ class DetectorHabilidad:
                 'verbosidad': 'normal',
             }
         if tipo_respuesta == 'conversacional' and not es_info and not es_mem:
-            return {
-                'necesita_habilidad': False,
-                'habilidad_id': None,
-                'disponible': False,
-                'texto_original': texto,
-                'verbosidad': 'normal',
-            }
+            # GUARD: no salir si el texto pide código Python aunque no tenga bloque
+            _KW_CREACION_PY = [
+                'en python', 'en Python',
+                'crea una clase', 'crea un clase', 'crea una funcion',
+                'crea una función', 'crea un metodo', 'crea un método',
+                'crea una función', 'escribe una clase', 'escribe una función',
+                'implementa una clase', 'implementa una función',
+                'haz una función', 'haz una clase',
+                'crea el código', 'escribe el código',
+                'que tenga:', 'que tenga estado', 'que tenga nivel',
+                'método activar', 'método procesar', 'metodo activar',
+            ]
+            _pide_python = any(kw.lower() in texto_lower for kw in _KW_CREACION_PY)
+            if not _pide_python:
+                return {
+                    'necesita_habilidad': False,
+                    'habilidad_id': None,
+                    'disponible': False,
+                    'texto_original': texto,
+                    'verbosidad': 'normal',
+                }
+            # Si sí pide Python → continuar hacia detección de habilidad
 
         # Si el texto es sobre Bell/Sebastian → Bell lo responde sola
         _es_tema_interno = any(t in texto_lower for t in self._TEMAS_INTERNOS)

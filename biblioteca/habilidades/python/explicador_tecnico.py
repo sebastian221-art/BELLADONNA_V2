@@ -30,17 +30,33 @@ _GROQ_MODEL = 'openai/gpt-oss-120b'
 _TIMEOUT    = 25
 
 # ── System prompt mejorado — las 4 reglas obligatorias ───
-_SYSTEM_EXPLICADOR = """Eres Bell — IA técnica de Juan Sebastian Mora, analizando código Python.
+_SYSTEM_EXPLICADOR = """Eres Bell — desarrolladora senior Python de Juan Sebastian Mora.
 Recibes datos EXACTOS de herramientas reales (AST, Radon, Bandit, Hypothesis, dis, mypy).
-NUNCA inventas ni estimas — solo interpretas los datos que recibes.
+NUNCA inventas ni estimas — interpretas y CONECTAS los datos reales.
 
-REGLAS OBLIGATORIAS (siempre en cada respuesta):
-1. EDGE CASES: Menciona los que Hypothesis encontró. Si no hay fallos, di "Hypothesis no encontró crashes".
-2. ALTERNATIVA PYTHÓNICA: Siempre sugiere al menos UNA forma más concisa/idiomática.
-3. EXPLICA LO COMPLEJO: Si hay regex, lambda, decorator o comprehension, explícala línea a línea.
-4. SI HAY VERSIÓN MEJORADA: Mencionala explícitamente, no la repitas (ya se muestra por separado).
+FORMA DE HABLAR: Como un senior developer revisando código de un colega.
+No listes — integra. Si hay argumento mutable en L1 y error en L5, explica cómo uno causa el otro.
+Menciona líneas específicas. Conecta hallazgos entre sí.
 
-Voz directa, en español. Máximo 5 oraciones. Sin relleno."""
+REGLAS (siempre en cada respuesta):
+1. EDGE CASES HYPOTHESIS: Menciona los más críticos con el input exacto que falló.
+2. ALTERNATIVA PYTHÓNICA: Una alternativa concisa y por qué es mejor.
+3. LO MÁS COMPLEJO: Si hay regex, lambda o decorator → explica línea a línea.
+4. VERSIÓN MEJORADA: Menciona que se auto-generó al final (no la repitas).
+5. OPTIMIZACIÓN AVANZADA: Si recibes datos de antipatrones O(n²) o perfil de recursión:
+   - Doble bucle con string slicing → menciona Aho-Corasick (pyahocorasick) explícitamente
+   - Búsqueda en lista dentro de loop → set O(1)
+   - Conteo → Counter
+   - Deduplicación con orden → dict.fromkeys()
+   Si recibes tabla de profiling de recursión → interpreta los tiempos reales y el factor de mejora con lru_cache.
+   Nombra siempre el algoritmo y explica la complejidad resultante con datos exactos.
+6. NUNCA INVENTES OUTPUTS: Si el código produce un resultado numérico (suma, cálculo) y NO recibes datos
+   de ejecución real, NUNCA menciones un número específico como resultado. Di "la suma resultante" o
+   "el valor calculado" sin inventar el número. Solo menciona valores exactos si vienen en <ejecucion> o
+   <output_real>. Inventar outputs es un error grave — en la ronda anterior dijiste 832040 siendo que
+   el correcto es 1346268. Eso destruye la credibilidad.
+
+Sin límite de oraciones — escribe lo que el código necesita. Sin relleno."""
 
 
 @dataclass
@@ -50,6 +66,21 @@ class Explicacion:
     sugerencias:     list
     nivel_confianza: str
     version_mejorada: str = ''
+
+
+def _formatear_con_black(codigo: str) -> str:
+    """Formatea el código con black + isort para presentación perfecta."""
+    try:
+        import black
+        import isort
+        # isort primero (ordenar imports)
+        codigo = isort.code(codigo)
+        # black después (formateo completo)
+        modo = black.Mode(line_length=88, string_normalization=True)
+        codigo = black.format_str(codigo, mode=modo)
+    except Exception:
+        pass  # si falla, devolver sin formatear
+    return codigo.strip()
 
 
 class ExplicadorTecnico:
@@ -173,6 +204,16 @@ class ExplicadorTecnico:
         except Exception as e:
             print(f'  [Explicador] vulture: {e}')
 
+        # Profiling de recursión (Fix C5 — fibonacci y similares)
+        try:
+            from biblioteca.habilidades.python.analizador_profundo import perfilar_recursion
+            perfil_rec = perfilar_recursion(codigo)
+            if perfil_rec:
+                datos['recursion_perfil'] = perfil_rec
+                print(f'  [Explicador] Recursión detectada y perfilada')
+        except Exception as e:
+            print(f'  [Explicador] recursion_perfil: {e}')
+
         return datos
 
     def _generar_version_mejorada(self, codigo: str, analisis, datos_extra: dict) -> str:
@@ -244,7 +285,9 @@ class ExplicadorTecnico:
                 # Fallback: si el modelo devolvió ```python``` directamente
                 m2 = re.search(r'```python\s*\n(.*?)```', content, re.DOTALL)
                 if m2:
-                    return f'📝 Versión mejorada:\n```python\n{m2.group(1).strip()}\n```'
+                    codigo_raw = m2.group(1).strip()
+                    codigo_fmt = _formatear_con_black(codigo_raw)
+                    return f'📝 Versión mejorada (auto-generada por Bell):\n```python\n{codigo_fmt}\n```'
         except Exception as e:
             print(f'  [Explicador] version_mejorada: {e}')
 
@@ -293,6 +336,8 @@ class ExplicadorTecnico:
                 extra_txt += f'\n<bytecode>{datos_extra["bytecode"]}</bytecode>'
             if datos_extra.get('mypy'):
                 extra_txt += f'\n<mypy>{datos_extra["mypy"][:200]}</mypy>'
+            if datos_extra.get('recursion_perfil'):
+                extra_txt += f'\n<profiling_recursion>\n{datos_extra["recursion_perfil"][:600]}\n</profiling_recursion>'
 
             prompt = (
                 f'<metricas_reales>\n{metricas}\n</metricas_reales>\n'
@@ -417,6 +462,9 @@ class ExplicadorTecnico:
 
         if datos_extra.get('muerto'):
             partes.append(f'\n{datos_extra["muerto"]}')
+
+        if datos_extra.get('recursion_perfil'):
+            partes.append(f'\n{datos_extra["recursion_perfil"]}')
 
         return '\n'.join(partes)
 

@@ -84,35 +84,38 @@ def _modo_analisis(codigo: str, nombre: str) -> dict:
 # ── MODO: DEBUG ───────────────────────────────────────────────────────────
 
 def _modo_debug(texto: str, codigo: str, nombre: str) -> dict:
-    from biblioteca.habilidades.python.analizador_codigo import obtener as get_analizador
-    from biblioteca.habilidades.python.ejecutor_codigo   import obtener as get_ejecutor
+    from biblioteca.habilidades.python.analizador_codigo  import obtener as get_analizador
+    from biblioteca.habilidades.python.ejecutor_codigo    import obtener as get_ejecutor
     from biblioteca.habilidades.python.explicador_tecnico import obtener as get_explicador
-    from biblioteca.habilidades.python.generador_codigo  import obtener as get_generador
-    from biblioteca.habilidades.python.aprendiz_patrones import obtener as get_aprendiz
+    from biblioteca.habilidades.python.generador_codigo   import obtener as get_generador
+    from biblioteca.habilidades.python.aprendiz_patrones  import obtener as get_aprendiz
 
     respuesta_partes = []
 
     # 1. Analizar el código
     if codigo:
         analisis = get_analizador().analizar(codigo)
-        errores = [p for p in analisis.problemas if p.tipo == 'error']
-
-        if errores:
-            respuesta_partes.append("Encontré estos errores en el análisis estático:")
-            for e in errores[:5]:
-                respuesta_partes.append(
-                    f"  Línea {e.linea} [{e.herramienta}]: {e.mensaje}"
-                )
+        errores  = [p for p in analisis.problemas if p.tipo == 'error']
 
         # 2. Ejecutar para ver el error real
         resultado_ejec = get_ejecutor().ejecutar(codigo)
+
         if not resultado_ejec.exitoso and resultado_ejec.stderr:
-            explicacion_error = get_explicador().explicar_error(resultado_ejec.stderr, codigo)
+            # ── Caso A: crashea en runtime ──────────────────────────
+            if errores:
+                respuesta_partes.append("Encontré estos errores en el análisis estático:")
+                for e in errores[:5]:
+                    respuesta_partes.append(
+                        f"  Línea {e.linea} [{e.herramienta}]: {e.mensaje}"
+                    )
+
+            explicacion_error = get_explicador().explicar_error(
+                resultado_ejec.stderr, codigo
+            )
             respuesta_partes.append('')
             respuesta_partes.append("Al ejecutarlo:")
             respuesta_partes.append(explicacion_error)
 
-            # 3. Pedir a Groq que lo corrija con el error real como contexto
             contexto_debug = (
                 f"Código con error:\n{codigo}\n\n"
                 f"Error real al ejecutar:\n{resultado_ejec.stderr}"
@@ -127,16 +130,30 @@ def _modo_debug(texto: str, codigo: str, nombre: str) -> dict:
                 respuesta_partes.append('')
                 respuesta_partes.append("Código corregido:")
                 return {
-                    'exitoso': True,
+                    'exitoso':        True,
                     'respuesta_texto': '\n'.join(respuesta_partes),
                     'codigo_generado': resultado_gen.codigo,
-                    'habilidad': 'PYTHON_COMPLETO',
-                    'modo': 'debug',
+                    'soluciones':     resultado_gen.soluciones,
+                    'habilidad':      'PYTHON_COMPLETO',
+                    'modo':           'debug',
                 }
-        elif resultado_ejec.exitoso:
-            respuesta_partes.append(f"El código corre sin errores. {resultado_ejec.resumen_bell}")
 
-    # Extraer error del texto si no hay código
+        else:
+            # ── Caso B: no crashea, pero puede tener bugs lógicos/antipatrones ──
+            # Bell hace el análisis COMPLETO igual — no basta con "no hay error de runtime"
+            print(f"  [PythonMotor] debug sin crash → análisis completo")
+
+            explicacion = get_explicador().explicar_analisis(analisis, codigo)
+            texto_explicacion = explicacion.texto_completo
+
+            return {
+                'exitoso':        True,
+                'respuesta_texto': texto_explicacion,
+                'habilidad':      'PYTHON_COMPLETO',
+                'modo':           'debug',
+            }
+
+    # Extraer error del texto si no hay código adjunto
     elif texto:
         for linea in texto.split('\n'):
             if 'Error' in linea or 'Exception' in linea:
@@ -145,13 +162,15 @@ def _modo_debug(texto: str, codigo: str, nombre: str) -> dict:
                 break
 
     if not respuesta_partes:
-        respuesta_partes.append("Muéstrame el código o el traceback completo para hacer el diagnóstico.")
+        respuesta_partes.append(
+            "Muéstrame el código o el traceback completo para hacer el diagnóstico."
+        )
 
     return {
-        'exitoso': True,
+        'exitoso':        True,
         'respuesta_texto': '\n'.join(respuesta_partes),
-        'habilidad': 'PYTHON_COMPLETO',
-        'modo': 'debug',
+        'habilidad':      'PYTHON_COMPLETO',
+        'modo':           'debug',
     }
 
 
@@ -238,20 +257,26 @@ def _modo_ejecutar(codigo: str, nombre: str) -> dict:
         }
 
     partes = [resultado.resumen_bell]
-    # No añadir stdout separado — resumen_bell ya lo incluye en ejecución exitosa
 
     if not resultado.exitoso and resultado.stderr:
+        # Crashó — explicar el error
         exp = get_explicador().explicar_error(resultado.stderr, codigo)
         partes.append(f"\n{exp}")
+    elif resultado.exitoso and resultado.stdout:
+        # Ejecutó bien — añadir explicación línea a línea de qué hace el código
+        # Groq explica qué significa cada valor del output
+        explicacion = _explicar_output(codigo, resultado.stdout, get_explicador)
+        if explicacion:
+            partes.append(f"\n{explicacion}")
 
     return {
-        'exitoso': resultado.exitoso,
+        'exitoso':        resultado.exitoso,
         'respuesta_texto': '\n'.join(partes),
-        'stdout': resultado.stdout,
-        'stderr': resultado.stderr,
-        'tiempo_ms': resultado.tiempo_ms,
-        'habilidad': 'PYTHON_COMPLETO',
-        'modo': 'ejecutar',
+        'stdout':          resultado.stdout,
+        'stderr':          resultado.stderr,
+        'tiempo_ms':       resultado.tiempo_ms,
+        'habilidad':       'PYTHON_COMPLETO',
+        'modo':            'ejecutar',
     }
 
 
@@ -271,22 +296,86 @@ def _modo_generacion(texto: str, nombre: str) -> dict:
 
     if resultado.exitoso:
         return {
-            'exitoso': True,
+            'exitoso':        True,
             'respuesta_texto': resultado.resumen_bell,
             'codigo_generado': resultado.codigo,
-            'habilidad': 'PYTHON_COMPLETO',
-            'modo': 'generacion',
+            'soluciones':     resultado.soluciones,   # ← TODAS las soluciones
+            'habilidad':      'PYTHON_COMPLETO',
+            'modo':           'generacion',
         }
     else:
         return {
-            'exitoso': False,
+            'exitoso':        False,
             'respuesta_texto': resultado.resumen_bell or 'No pude generar el código.',
-            'habilidad': 'PYTHON_COMPLETO',
-            'modo': 'generacion',
+            'habilidad':      'PYTHON_COMPLETO',
+            'modo':           'generacion',
         }
 
 
 # ── Utilidades ────────────────────────────────────────────────────────────
+
+def _explicar_output(codigo: str, stdout: str, get_explicador) -> str:
+    """
+    Llama a Groq para explicar línea a línea qué hace el código y qué
+    significa cada valor del output. Hace la diferencia entre Bell y
+    las IAs que solo muestran el resultado sin explicarlo.
+    """
+    try:
+        import os, httpx
+        api_key = os.getenv('GROQ_API_KEY', '')
+        if not api_key:
+            return ''
+
+        prompt = (
+            f'<codigo>\n{codigo[:800]}\n</codigo>\n'
+            f'<output_real>\n{stdout[:400]}\n</output_real>\n'
+            f'<instruccion>En 3-5 oraciones explica:\n'
+            f'1. Qué hace cada parte del código línea a línea\n'
+            f'2. Por qué el output tiene esos valores específicos\n'
+            f'3. Si hay algo interesante o a tener en cuenta (edge cases, comportamiento aleatorio, etc.)\n'
+            f'Sé concreto — menciona los números reales del output.</instruccion>'
+        )
+
+        r = httpx.post(
+            'https://api.groq.com/openai/v1/chat/completions',
+            headers={'Authorization': f'Bearer {api_key}',
+                     'Content-Type': 'application/json'},
+            json={
+                'model': 'openai/gpt-oss-120b',
+                'messages': [
+                    {'role': 'system',
+                     'content': ('Eres Bell explicando código Python ejecutado. '
+                                 'Explica qué hace el código y por qué el output tiene esos valores. '
+                                 'En español. Conciso y preciso.')},
+                    {'role': 'user', 'content': prompt},
+                ],
+                'temperature': 0.2,
+                'max_tokens': 400,
+            },
+            timeout=20,
+        )
+        if r.status_code == 200:
+            content = (r.json().get('choices', [{}])[0]
+                       .get('message', {}).get('content', '').strip())
+            if content and len(content) > 30:
+                return content
+    except Exception:
+        pass
+    return ''
+
+
+def _formatear_codigo(codigo: str) -> str:
+    """Formatea código con black + isort. Si falla, devuelve el original."""
+    try:
+        import isort
+        import black
+        codigo = isort.code(codigo)
+        modo = black.Mode(line_length=88, string_normalization=True)
+        codigo = black.format_str(codigo, mode=modo)
+    except Exception:
+        pass
+    return codigo.strip()
+
 
 def _detectar_modo_local(texto: str, codigo: str) -> str:
     t = texto.lower()
@@ -435,11 +524,27 @@ class MotorPython:
         if 'respuesta_texto' in resultado and 'respuesta' not in resultado:
             resultado['respuesta'] = resultado.pop('respuesta_texto')
 
-        # Si hay código generado, añadirlo a la respuesta
+        # Si hay código generado, mostrar TODAS las soluciones con etiquetas
         if resultado.get('codigo_generado') and resultado.get('respuesta'):
-            resultado['respuesta'] = (
-                resultado['respuesta'] + '\n\n```python\n' +
-                resultado['codigo_generado'] + '\n```'
-            )
+            soluciones = resultado.get('soluciones', [])
+            if len(soluciones) >= 2:
+                # Mostrar ambas soluciones claramente separadas
+                bloques = []
+                for sol in soluciones:
+                    codigo_fmt = _formatear_codigo(sol.codigo)
+                    bloques.append(
+                        f'**Versión {sol.nombre}** — {sol.descripcion}\n'
+                        f'```python\n{codigo_fmt}\n```'
+                    )
+                resultado['respuesta'] = (
+                    resultado['respuesta'] + '\n\n' + '\n\n'.join(bloques)
+                )
+            else:
+                # Una sola solución — formatear con black
+                codigo_fmt = _formatear_codigo(resultado['codigo_generado'])
+                resultado['respuesta'] = (
+                    resultado['respuesta'] + '\n\n```python\n' +
+                    codigo_fmt + '\n```'
+                )
 
         return resultado

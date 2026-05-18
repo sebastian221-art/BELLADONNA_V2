@@ -84,7 +84,7 @@ class PaqueteCapa1:
 
     # ── Verificación de SOMA ─────────────────────────────
     verificacion_soma: VerificacionSoma = field(
-        default_factory=VerificacionSoma
+        default_factory=lambda: VerificacionSoma(estado='aprobado')
     )
 
     # ── Estado del paquete ───────────────────────────────

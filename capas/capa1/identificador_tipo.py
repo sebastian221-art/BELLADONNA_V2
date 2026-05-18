@@ -114,7 +114,14 @@ class IdentificadorTipo:
     def _identificar_string(self, estimulo: str) -> str:
         # Verificar si es ruta de archivo existente
         ruta = Path(estimulo.strip())
-        if len(estimulo) < 300 and ruta.exists() and ruta.is_file():
+        # Fix macOS OSError 63: límite 255 bytes por nombre de archivo
+        _es_ruta = False
+        if len(estimulo) < 255:
+            try:
+                _es_ruta = ruta.exists() and ruta.is_file()
+            except (OSError, ValueError, TypeError):
+                _es_ruta = False
+        if _es_ruta:
             ext = ruta.suffix.lower()
             if ext in self.EXTENSIONES_IMAGEN:
                 return 'imagen'

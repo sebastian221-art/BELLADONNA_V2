@@ -1,14 +1,14 @@
 {
   "version": 2,
   "creada": "2026-05-14T21:22:33.069187",
-  "ultima_sesion": "2026-05-18T03:08:21.971772",
+  "ultima_sesion": "2026-05-18T13:09:16.396475",
   "datos_sebastian": {},
   "momentos": [],
   "temas": {
     "programacion": {
-      "count": 173,
+      "count": 293,
       "primera_vez": "2026-05-17T16:43:05.890053",
-      "ultima_vez": "2026-05-18T03:09:02.801162"
+      "ultima_vez": "2026-05-18T13:11:23.920348"
     },
     "belladonna": {
       "count": 32,
@@ -26,27 +26,22 @@
       "ultima_vez": "2026-05-18T02:57:42.031585"
     },
     "tecnologia": {
-      "count": 6,
+      "count": 46,
       "primera_vez": "2026-05-17T21:47:14.258503",
-      "ultima_vez": "2026-05-17T22:03:41.239900"
+      "ultima_vez": "2026-05-18T13:09:58.210671"
     },
     "trabajo": {
       "count": 4,
       "primera_vez": "2026-05-18T02:53:53.570405",
       "ultima_vez": "2026-05-18T02:57:08.486650"
+    },
+    "estudio": {
+      "count": 28,
+      "primera_vez": "2026-05-18T04:02:24.350310",
+      "ultima_vez": "2026-05-18T13:09:22.273730"
     }
   },
   "estados": [
-    {
-      "fecha": "2026-05-17T17:13:39.575211",
-      "estado": "cansancio",
-      "texto": "estoy muy cansado hoy no quiero hacer nada"
-    },
-    {
-      "fecha": "2026-05-17T17:13:39.581181",
-      "estado": "cansancio",
-      "texto": "estoy muy cansado hoy no quiero hacer nada"
-    },
     {
       "fecha": "2026-05-17T17:13:56.229560",
       "estado": "orgullo",
@@ -166,6 +161,36 @@
       "fecha": "2026-05-18T03:08:38.537302",
       "estado": "negativo",
       "texto": "```python\ntengo este error, qué tiene de malo:\n\ndef saludar(nombre):\n    print(\""
+    },
+    {
+      "fecha": "2026-05-18T04:02:38.633623",
+      "estado": "negativo",
+      "texto": "```python\ntengo este error, qué tiene de malo:\n\nestados = {\"activo\": True, \"ener"
+    },
+    {
+      "fecha": "2026-05-18T04:02:40.394546",
+      "estado": "negativo",
+      "texto": "```python\ntengo este error, qué tiene de malo:\n\nestados = {\"activo\": True, \"ener"
+    },
+    {
+      "fecha": "2026-05-18T04:13:05.634003",
+      "estado": "negativo",
+      "texto": "```python\ntengo este error, qué tiene de malo:\n\nestados = {\"activo\": True, \"ener"
+    },
+    {
+      "fecha": "2026-05-18T04:13:11.171901",
+      "estado": "negativo",
+      "texto": "```python\ntengo este error, qué tiene de malo:\n\nestados = {\"activo\": True, \"ener"
+    },
+    {
+      "fecha": "2026-05-18T04:33:00.667565",
+      "estado": "negativo",
+      "texto": "```python\ntengo este error, qué tiene de malo:\n\nestados = {\"activo\": True, \"ener"
+    },
+    {
+      "fecha": "2026-05-18T04:33:05.839920",
+      "estado": "negativo",
+      "texto": "```python\ntengo este error, qué tiene de malo:\n\nestados = {\"activo\": True, \"ener"
     }
   ],
   "pendientes": [],
@@ -185,6 +210,6 @@
     }
   },
   "preferencias": {},
-  "total_sesiones": 36,
-  "total_turnos": 372
+  "total_sesiones": 50,
+  "total_turnos": 492
 }

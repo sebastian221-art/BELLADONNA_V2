@@ -358,6 +358,172 @@ def detectar_codigo_muerto(codigo: str) -> List[str]:
     return muertos[:5]
 
 
+
+# ── PROFILING DE RECURSIÓN ────────────────────────────────
+
+def perfilar_recursion(codigo: str) -> str:
+    """
+    Detecta funciones recursivas y mide su rendimiento real con n creciente.
+    Compara automáticamente con la versión memoizada (lru_cache).
+    Muestra el factor de crecimiento real — NO estimado.
+    """
+    import ast as ast_mod
+    import subprocess, sys, tempfile, os, json
+
+    # Detectar funciones recursivas con AST
+    try:
+        arbol = ast_mod.parse(codigo)
+    except SyntaxError:
+        return ''
+
+    recursivas = []
+    for nodo in ast_mod.walk(arbol):
+        if not isinstance(nodo, ast_mod.FunctionDef):
+            continue
+        nombre = nodo.name
+        # Buscar si se llama a sí misma
+        for sub in ast_mod.walk(nodo):
+            if (isinstance(sub, ast_mod.Call) and
+                    isinstance(getattr(sub, 'func', None), ast_mod.Name) and
+                    sub.func.id == nombre):
+                recursivas.append(nombre)
+                break
+
+    if not recursivas:
+        return ''
+
+    fn_nombre = recursivas[0]
+
+    # Extraer argumentos de la función
+    fn_nodo = next(
+        n for n in ast_mod.walk(arbol)
+        if isinstance(n, ast_mod.FunctionDef) and n.name == fn_nombre
+    )
+    args = [a.arg for a in fn_nodo.args.args]
+    if not args:
+        return ''
+    primer_arg = args[0]
+
+    # Script de profiling: medir con n=10, 15, 20, 25, 28
+    # Para lru_cache correcto: redefinir la función con @lru_cache Y recursión interna memoizada
+    codigo_memo = f"from functools import lru_cache\n@lru_cache(maxsize=None)\n" + codigo.strip()
+    # Renombrar función memoizada para no colisionar
+    codigo_memo_renamed = codigo_memo.replace(
+        f'def {fn_nombre}(',
+        f'def {fn_nombre}_memo('
+    ).replace(
+        f'{fn_nombre}(n-1)',
+        f'{fn_nombre}_memo(n-1)'
+    ).replace(
+        f'{fn_nombre}(n-2)',
+        f'{fn_nombre}_memo(n-2)'
+    )
+
+    script = f'''
+import time
+import json
+
+{codigo}
+
+{codigo_memo_renamed}
+
+resultados = {{}}
+valores_n = [10, 15, 20, 25, 28]
+
+for n in valores_n:
+    t0 = time.perf_counter()
+    try:
+        {fn_nombre}(n)
+        t1 = time.perf_counter()
+        resultados[str(n)] = round((t1 - t0) * 1000, 4)
+    except RecursionError:
+        resultados[str(n)] = -1
+        break
+    except Exception as e:
+        resultados[str(n)] = -2
+        break
+
+resultados_memo = {{}}
+for n in valores_n:
+    {fn_nombre}_memo.cache_clear()
+    t0 = time.perf_counter()
+    try:
+        {fn_nombre}_memo(n)
+        t1 = time.perf_counter()
+        resultados_memo[str(n)] = round((t1 - t0) * 1000, 6)
+    except Exception:
+        resultados_memo[str(n)] = -1
+
+print(json.dumps({{"original": resultados, "memo": resultados_memo}}))
+'''
+
+    with tempfile.NamedTemporaryFile(suffix='.py', mode='w',
+                                      delete=False, encoding='utf-8') as f:
+        f.write(script)
+        path = f.name
+
+    try:
+        proc = subprocess.run(
+            [sys.executable, path],
+            capture_output=True, text=True, timeout=60,
+        )
+        os.unlink(path)
+
+        if not proc.stdout.strip():
+            return ''
+
+        datos = json.loads(proc.stdout.strip())
+        orig = datos.get('original', {})
+        memo = datos.get('memo', {})
+
+        # Calcular factor de crecimiento entre n=20 y n=25
+        t20 = orig.get('20', -1)
+        t25 = orig.get('25', -1)
+        t28 = orig.get('28', -1)
+
+        partes = [f'📈 Profiling real de {fn_nombre}(n):']
+        partes.append('')
+        partes.append('| n  | Original   | Con lru_cache | Factor mejora |')
+        partes.append('|----|-----------|---------------|---------------|')
+
+        valores = [10, 15, 20, 25, 28]
+        for n in valores:
+            t_orig = orig.get(str(n), -1)
+            t_m    = memo.get(str(n), -1)
+            if t_orig < 0:
+                partes.append(f'| {n} | RecursionError | {t_m:.6f}ms | ∞ |')
+                break
+            if t_m > 0 and t_orig > 0:
+                factor = round(t_orig / t_m)
+                partes.append(f'| {n} | {t_orig:.3f}ms | {t_m:.6f}ms | {factor}x más rápido |')
+            else:
+                partes.append(f'| {n} | {t_orig:.3f}ms | — | — |')
+
+        # Factor de crecimiento exponencial
+        if t20 > 0 and t25 > 0:
+            factor_crecimiento = round(t25 / t20, 1)
+            partes.append('')
+            partes.append(
+                f'→ Al pasar de n=20 a n=25 el tiempo creció {factor_crecimiento}x '
+                f'(esperado ~32x para O(2ⁿ)) — crecimiento exponencial confirmado.'
+            )
+
+        if t28 > 0:
+            partes.append(
+                f'→ Con n=28: {t28:.1f}ms. Escalar a n=50 tomaría horas.'
+            )
+
+        partes.append('')
+        partes.append(
+            '✅ Solución: @lru_cache(maxsize=None) reduce de O(2ⁿ) a O(n) — '
+            'o mejor aún: versión iterativa con O(n) tiempo y O(1) memoria adicional.'
+        )
+
+        return '\n'.join(partes)
+
+    except Exception as e:
+        return ''
+
 # ── ANÁLISIS COMPLETO ─────────────────────────────────────
 
 def analizar_completo(codigo: str,

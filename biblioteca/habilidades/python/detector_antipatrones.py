@@ -128,6 +128,49 @@ class _VisitorAntipatrones(ast.NodeVisitor):
 
     # ── 5. for i in range(len(x)) ────────────────────────────
     def visit_For(self, nodo):
+        # Sub-detector de doble bucle O(n²) con string slicing
+        for hijo in ast.walk(nodo):
+            if hijo is nodo:
+                continue
+            if not isinstance(hijo, ast.For):
+                continue
+            tiene_slice = any(
+                isinstance(sub, ast.Subscript) and isinstance(
+                    getattr(sub, 'slice', None), ast.Slice)
+                for sub in ast.walk(hijo)
+            )
+            tiene_rango = any(
+                isinstance(sub, ast.Call) and
+                isinstance(getattr(sub, 'func', None), ast.Name) and
+                sub.func.id == 'range' and len(sub.args) == 1 and
+                isinstance(sub.args[0], ast.Call) and
+                isinstance(getattr(sub.args[0], 'func', None), ast.Name) and
+                sub.args[0].func.id == 'len'
+                for sub in ast.walk(hijo)
+            )
+            tiene_not_in = any(
+                isinstance(sub, ast.Compare) and
+                any(isinstance(op, ast.NotIn) for op in sub.ops)
+                for sub in ast.walk(hijo)
+            )
+            if tiene_slice and tiene_rango:
+                self._add(nodo, 'bucle_on2_string',
+                    'Doble bucle O(n×T×M) con slicing de string — catastrófico con vocabularios grandes',
+                    'Aho-Corasick (pyahocorasick) reduce a O(T) en UNA sola pasada sin importar tamaño del vocabulario',
+                    'critico',
+                    ok=(
+                        'import ahocorasick\n'
+                        'A = ahocorasick.Automaton()\n'
+                        'for p in patrones: A.add_word(p, p)\n'
+                        'A.make_automaton()\n'
+                        'for _, pat in A.iter(texto): coincidencias.add(pat)'
+                    ))
+            elif tiene_not_in:
+                self._add(nodo, 'lookup_lista_en_loop',
+                    '"X not in lista" dentro de un loop es O(n²) — usa set para O(1)',
+                    'Cambia lista por set para búsquedas O(1)',
+                    'advertencia', ok='coincidencias = set()')
+
         if isinstance(nodo.iter, ast.Call):
             fn = nodo.iter
             if (isinstance(fn.func, ast.Name) and fn.func.id == 'range'
@@ -211,6 +254,63 @@ class _VisitorAntipatrones(ast.NodeVisitor):
                 ok=f'from {nodo.module} import ClaseEspecifica')
         self.generic_visit(nodo)
 
+
+    # ── NUEVO: Doble bucle O(n²) con slicing de string ──────────
+    # Detecta: for patron in X: for i in range(len(texto)): texto[i:i+len...]
+    # Solución: Aho-Corasick → O(T) en una sola pasada
+    def visit_For(self_v, nodo):
+        # Buscar bucles anidados dentro de este for
+        for hijo in ast.walk(nodo):
+            if hijo is nodo:
+                continue
+            if not isinstance(hijo, ast.For):
+                continue
+            # Hay un for dentro de for — buscar slicing de string
+            tiene_slice = False
+            tiene_rango_len = False
+            tiene_in_lista = False
+
+            for sub in ast.walk(hijo):
+                # texto[i:i+len(patron)] → Slice dentro de for
+                if isinstance(sub, ast.Subscript) and isinstance(
+                        getattr(sub, 'slice', None), ast.Slice):
+                    tiene_slice = True
+                # range(len(x)) → ya detectado por visit_For original
+                if isinstance(sub, ast.Call):
+                    fn = sub.func
+                    if (isinstance(fn, ast.Name) and fn.id == 'range'
+                            and len(sub.args) == 1
+                            and isinstance(sub.args[0], ast.Call)):
+                        inner = sub.args[0]
+                        if isinstance(getattr(inner, 'func', None), ast.Name):
+                            if inner.func.id == 'len':
+                                tiene_rango_len = True
+                # X not in lista dentro del loop → O(n) lookup
+                if isinstance(sub, ast.Compare):
+                    if any(isinstance(op, ast.NotIn) for op in sub.ops):
+                        tiene_in_lista = True
+
+            if tiene_slice and tiene_rango_len:
+                self_v._add(nodo, 'bucle_on2_string',
+                    'Doble bucle O(n×T×M) con slicing de string — catastrófico con vocabularios grandes',
+                    'Usa Aho-Corasick (pip install pyahocorasick) → reduce a O(T) en UNA pasada sin importar el tamaño del vocabulario',
+                    'critico',
+                    mal=self_v._linea(nodo),
+                    ok=(
+                        'import ahocorasick\n'
+                        'A = ahocorasick.Automaton()\n'
+                        'for p in patrones: A.add_word(p, p)\n'
+                        'A.make_automaton()\n'
+                        'for _, pat in A.iter(texto): coincidencias.add(pat)'
+                    ))
+            elif tiene_in_lista:
+                self_v._add(nodo, 'lookup_lista_en_loop',
+                    '"X not in lista" dentro de un loop es O(n) — usa set para O(1)',
+                    'Usa un set en lugar de lista para coincidencias: set() en vez de []',
+                    'advertencia',
+                    ok='coincidencias = set()  # lookup O(1)')
+
+        self_v.generic_visit(nodo)
 
 def _detectar_con_regex(codigo: str) -> List[Antipatron]:
     """Antipatrones detectables con regex (más rápido que AST para algunos casos)."""
