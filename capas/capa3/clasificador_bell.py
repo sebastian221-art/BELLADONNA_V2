@@ -90,12 +90,54 @@ _KW_FRUSTRACION = [
     'no entiendo por qué', 'no funciona',
 ]
 _KW_BUSQUEDA = [
-    'qué es ', 'que es ', 'quién es ', 'quien es ', 'cuándo fue', 'cuando fue',
-    'dónde queda', 'donde queda', 'busca ', 'buscar ', 'qué pasó con',
+    # Preguntas de definición
+    'qué es ', 'que es ', 'quién es ', 'quien es ', 'qué son ', 'que son ',
+    'qué significa ', 'que significa ', 'define ', 'definición de ', 'definicion de ',
+    # Preguntas geográficas / capitales / ubicación
+    'capital de', 'capital del', 'capital del pais',
+    'cuántos habitantes', 'cuantos habitantes', 'población de', 'poblacion de',
+    'dónde queda', 'donde queda', 'dónde está', 'donde esta',
+    'moneda de', 'idioma de', 'presidente de', 'gobernador de',
+    # Preguntas temporales/espaciales
+    'cuándo fue', 'cuando fue', 'dónde queda', 'donde queda',
+    'cuándo nació', 'cuando nacio', 'cuándo murió', 'cuando murio',
+    'cuándo se creó', 'cuando se creo', 'cuándo salió', 'cuando salio',
     'cuándo se juega', 'cuando se juega', 'cuándo sale', 'cuando sale',
-    'precio de ', 'dónde vive', 'donde vive', 'último disco', 'ultimo disco',
-    'campeón de', 'campeon de', 'ganó el', 'gano el',
+    'dónde vive', 'donde vive', 'dónde está', 'donde esta',
+    # Búsqueda explícita
+    'busca ', 'buscar ', 'qué pasó con', 'que paso con',
+    'investiga ', 'busca en internet', 'busca en la web',
+    # Precios y datos volátiles
+    'precio de ', 'precio del ', 'cuánto cuesta', 'cuanto cuesta',
+    'cuánto vale', 'cuanto vale', 'cotización', 'tasa de',
+    'dólar hoy', 'dolar hoy', 'hoy ',
+    # Comparaciones → multi-fuente
+    'diferencia entre', 'diferencia de', 'comparar ', 'compara ',
+    'vs ', 'versus ', 'mejor que', 'pros y contras',
+    'ventajas de', 'desventajas de',
+    # Cómo funciona
+    'cómo funciona', 'como funciona', 'cómo se hace', 'como se hace',
+    'cómo se usa', 'como se usa', 'cómo instalar', 'como instalar',
+    'tutorial de', 'guía de', 'guia de',
+    # Noticias/actualidad
+    'noticias de', 'noticias sobre', 'lo último de', 'lo ultimo de',
+    'último lanzamiento', 'ultimo lanzamiento',
+    # Verificación
+    'fyi:', 'fyi ', 'dato:', 'tip:', 'sabías que', 'sabias que',
+    'leí que', 'lei que', 'dicen que',
+    # Entretenimiento/cultura
+    'último disco', 'ultimo disco', 'campeón de', 'campeon de',
+    'ganó el', 'gano el',
 ]
+_KW_MEMORIA = [
+    'recuerdas', 'recuerdo que', 'hablamos de', 'me dijiste',
+    'dijiste sobre', 'que recuerdas', 'qué recuerdas',
+    'mi perfil', 'archivos que has', 'archivos analizados',
+    'cuántas conversaciones', 'cuantas conversaciones',
+    'cuánto llevamos', 'cuanto llevamos', 'nuestra historia',
+    'qué sabes de ti', 'que sabes de ti',
+]
+
 _KW_AUTO_ANALISIS = [
     'cuántos archivos', 'cuantos archivos',
     'archivos más importados', 'archivos mas importados',
@@ -199,6 +241,10 @@ def _detectar_tipo(t, ids, prim, contiene_codigo, es_pregunta):
     if contiene_codigo:
         return 'solicitud_tecnica'
 
+    # Memoria — siempre técnico aunque suene conversacional
+    if any(k in t for k in _KW_MEMORIA):
+        return 'solicitud_tecnica'
+
     # Keywords de alta especificidad primero
     if any(k in t for k in _KW_LOGRO):
         return 'logro_compartido'
@@ -241,6 +287,17 @@ def _detectar_tipo(t, ids, prim, contiene_codigo, es_pregunta):
     # Preguntas sobre mundo real con PREG_QUIEN sin contexto Bell
     if 'PREG_QUIEN' in prim and not (prim & _NODOS_BELL_TECH) and not any(k in t for k in _KW_SEBASTIAN):
         if any(k in t for k in ['ganó','gano','es el','son los','es la','cuándo','cuando']):
+            return 'solicitud_informacion'
+
+    # Pregunta + palabra desconocida (gap) → probablemente buscar en internet
+    # Ej: "qué es Vue", "cómo funciona React"
+    if not (prim & _NODOS_BELL_TECH) and not contiene_codigo:
+        _PREG_NODOS = {'PREG_QUE','PREG_CUAL','PREG_CUANTO','PREG_COMO','PREG_QUIEN',
+                       'PREG_DONDE','PREG_CUANDO','PRON_INTERR_QUE','PRON_INTERR_CUAL'}
+        if prim & _PREG_NODOS and len(t.split()) >= 2:
+            return 'solicitud_informacion'
+        # Palabra sola o frase corta desconocida → buscar (ej: "rust", "vue 3")
+        if len(t.split()) <= 3 and not prim and not any(k in t for k in ['hola','hey','ok','sí','si','no ']):
             return 'solicitud_informacion'
 
     # Técnico Python
@@ -343,6 +400,11 @@ def _detectar_habilidad(t, ids, prim, tipo, contiene_codigo):
     Detecta qué habilidad de Bell necesita el mensaje.
     Más específico que el tipo_mensaje.
     """
+    # Pregunta sobre archivo específico → SIEMPRE auto-análisis
+    import re as _re_c3
+    if _re_c3.search(r'\w[\w_]*\.(?:py|js|css|html|json|md)\b', t):
+        return 'AUTO_ANALISIS_TOTAL'
+
     if tipo != 'solicitud_tecnica' and not contiene_codigo:
         # Búsqueda de información externa
         if tipo == 'solicitud_informacion' or any(k in t for k in _KW_BUSQUEDA):
@@ -352,7 +414,20 @@ def _detectar_habilidad(t, ids, prim, tipo, contiene_codigo):
             return 'MEMORIA'
         return ''
 
+    # Memoria — recuerdos, historial, perfil
+    if any(k in t for k in _KW_MEMORIA):
+        return 'MEMORIA'
+
     # Técnico — distinguir Python / Auto-análisis / Búsqueda
+    # Auto-análisis: cualquier pregunta sobre Bell+archivo o Bell+código
+    _KW_BELL_PROPIO = [
+        'tu código', 'tu propio', 'tus archivos', 'tu archivo',
+        'cómo estás', 'como estas', 'tu arquitectura',
+        'tu capa', 'tus capas', 'tu habilidad', 'tus habilidades',
+        'te falta', 'qué te falta', 'que te falta',
+    ]
+    if any(k in t for k in _KW_BELL_PROPIO):
+        return 'AUTO_ANALISIS_TOTAL'
     if any(k in t for k in _KW_AUTO_ANALISIS) or (prim & _NODOS_BELL_TECH and prim & _NODOS_PREGUNTAS):
         return 'AUTO_ANALISIS_TOTAL'
 

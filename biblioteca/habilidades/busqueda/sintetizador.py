@@ -45,7 +45,7 @@ def _groq_sintetizar(
     perfil_bloque = f'\nCONTEXTO DE SEBASTIAN:\n{perfil_ctx}\n' if perfil_ctx else ''
 
     system = (
-        'Eres Bell — IA de Sebastian Gómez (Bucaramanga, Colombia). '
+        'Eres Bell — IA de Sebastian Mora (Bucaramanga, Colombia). '
         'Encontraste esta información en internet desde múltiples fuentes. '
         'SINTETIZA las fuentes en una respuesta coherente y precisa. '
         'Si las fuentes se contradicen, menciónalo brevemente. '
@@ -117,7 +117,7 @@ def _groq_respuesta_simple(
     perfil_bloque = f'\nCONTEXTO DE SEBASTIAN:\n{perfil_ctx}\n' if perfil_ctx else ''
 
     system = (
-        'Eres Bell — IA de Sebastian Gómez (Bucaramanga, Colombia). '
+        'Eres Bell — IA de Sebastian Mora (Bucaramanga, Colombia). '
         'Encontraste esta información en internet y la explicas en primera persona. '
         'NUNCA inventes ni añadas datos que no estén en el contenido. '
         'NUNCA uses markdown, tablas ni bullets. '

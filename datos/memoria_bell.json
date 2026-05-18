@@ -1,19 +1,19 @@
 {
   "version": 2,
   "creada": "2026-05-14T21:22:33.069187",
-  "ultima_sesion": "2026-05-17T22:02:24.939352",
+  "ultima_sesion": "2026-05-18T00:40:09.792128",
   "datos_sebastian": {},
   "momentos": [],
   "temas": {
     "programacion": {
-      "count": 69,
+      "count": 137,
       "primera_vez": "2026-05-17T16:43:05.890053",
-      "ultima_vez": "2026-05-17T22:04:31.175184"
+      "ultima_vez": "2026-05-18T00:40:21.360782"
     },
     "belladonna": {
-      "count": 14,
+      "count": 32,
       "primera_vez": "2026-05-17T16:44:46.628772",
-      "ultima_vez": "2026-05-17T20:17:45.659700"
+      "ultima_vez": "2026-05-18T00:16:27.491802"
     },
     "salud": {
       "count": 4,
@@ -96,9 +96,9 @@
   "pendientes": [],
   "proyectos": {
     "BELLADONNA": {
-      "menciones": 14,
+      "menciones": 32,
       "primera": "2026-05-17T16:44:46.628813",
-      "ultima": "2026-05-17T20:17:45.659746"
+      "ultima": "2026-05-18T00:16:27.491852"
     },
     "se llama BELLADONNA y lo hago ": {
       "menciones": 2,
@@ -106,6 +106,6 @@
     }
   },
   "preferencias": {},
-  "total_sesiones": 17,
-  "total_turnos": 141
+  "total_sesiones": 29,
+  "total_turnos": 266
 }

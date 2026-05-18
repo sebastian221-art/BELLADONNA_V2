@@ -172,6 +172,20 @@ def _detectar_ambiguedad(texto: str) -> Optional[tuple]:
     return None
 
 
+def _detectar_tipo_conocimiento(query: str) -> str:
+    """Detecta el tipo de conocimiento basado en la query."""
+    q = query.lower()
+    if any(w in q for w in ['quién', 'quien', 'nació', 'nacio', 'murió', 'murio', 'fundó', 'fundo']):
+        return 'persona'
+    if any(w in q for w in ['cómo funciona', 'como funciona', 'qué es', 'que es', 'define', 'definición']):
+        return 'concepto'
+    if any(w in q for w in ['precio', 'costo', 'cuánto cuesta', 'cuanto cuesta', 'cotización']):
+        return 'precio'
+    if any(w in q for w in ['noticias', 'hoy', 'actualidad', 'último', 'ultimo']):
+        return 'noticia'
+    return 'general'
+
+
 def _es_respuesta_clarificacion(texto: str) -> bool:
     if not _PENDIENTE['activo']:
         return False
@@ -253,7 +267,7 @@ def _obtener_perfil_sebastian() -> str:
         if not perfil:
             return ''
         items = []
-        for k in ('nombre', 'ciudad', 'trabajo', 'proyectos', 'lenguaje_favorito'):
+        for k in ('nombre', 'ciudad', 'pais', 'proyecto_principal', 'lenguaje_principal'):
             v = perfil.get(k, '')
             if v:
                 items.append(f'{k}={v}')
@@ -299,7 +313,14 @@ def _revision_memoria_l2(query: str, texto: str) -> Optional[str]:
 
         # 2. Búsqueda semántica TF-IDF (nuevo en v2)
         semantico = mem.buscar_semantico(query)
-        if semantico and len(semantico) > 50:
+        if semantico and len(semantico) > 50 and len(semantico) < 2000:
+            # Solo usar si la respuesta parece realmente relevante (no solo similar)
+            query_words = set(_normalizar(query).split())
+            resp_words  = set(_normalizar(semantico[:200]).split())
+            overlap = len(query_words & resp_words) / max(len(query_words), 1)
+            if overlap < 0.3:  # menos del 30% de palabras en común → ignorar
+                semantico = None
+        if semantico and semantico:
             print('  [Búsqueda L2] ✓ TF-IDF semántico')
             return semantico
 

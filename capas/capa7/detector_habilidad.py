@@ -369,6 +369,23 @@ HABILIDADES = {
             r'\bpip\s+install\b',
         ],
     },
+    'MEMORIA': {
+        'disponible': True,
+        'descripcion': 'Bell recuerda conversaciones previas, perfil de Sebastian y su propia historia',
+        'patrones': [
+            r'\brecuerdas\b', r'\brecuerda\b',
+            r'\bqu[eé]\s+recuerdas\b',
+            r'\bqu[eé]\s+sabes\s+de\s+m[ií]\b',
+            r'\bqu[eé]\s+sabes\s+de\s+ti\b',
+            r'\bmi\s+perfil\b',
+            r'\bhistoria\s+(?:de\s+)?(?:nuestras?|mis)\s+conversaci[oó]n',
+            r'\bqu[eé]\s+me\s+dijiste\b',
+            r'\bhablamos\s+de\b',
+            r'\barchivos\s+(?:que\s+has|analizados?)\b',
+            r'\bcu[aá]ntas?\s+conversaciones\b',
+            r'\bcu[aá]nto\s+llevamos\b',
+        ],
+    },
     'SQLITE': {
         'disponible':  False,
         'descripcion': 'Base de datos SQLite',
@@ -417,12 +434,60 @@ class DetectorHabilidad:
                  tipo_respuesta: str = 'conversacional') -> dict:
         texto_lower = texto.lower().strip()
 
-        # Tipos conversacionales/emocionales → nunca necesitan habilidad
+        # Tipos emocionales puros → nunca necesitan habilidad
         _BYPASS = {
-            'conversacional', 'emocional', 'matematica_python',
+            'emocional', 'matematica_python',
             'honestidad_limitacion', 'veto_respuesta',
         }
+        # 'conversacional' solo hace bypass si NO tiene palabras de búsqueda
+        # y NO tiene patrones de memoria
+        _KW_BUSQUEDA_C7 = [
+            'qué es ', 'que es ', 'quién es ', 'quien es ',
+            'diferencia entre', 'compara ', 'cómo funciona', 'como funciona',
+            'precio del', 'precio de ', 'cuánto cuesta', 'cuanto cuesta',
+            'hoy ', 'hoy?', 'noticias', 'fyi:', 'fyi ',
+            'busca ', 'buscar ', 'dónde', 'donde ', 'cuándo', 'cuando ',
+            'cómo se', 'como se', 'qué son', 'que son',
+            'capital de', 'cuándo fue', 'cuando fue', 'historia de',
+            'cuándo nació', 'cuando nacio', 'quién inventó', 'quien invento',
+            'cómo instalar', 'como instalar', 'tutorial', 'guía', 'guia',
+            'sabías que', 'sabias que', 'dato:', 'tip:',
+        ]
+        # Palabra sola desconocida que podría ser búsqueda (rust, vue, kotlin...)
+        # Si es una sola palabra sin puntuación y no está en vocab Bell → buscar
+        _es_palabra_sola = (len(texto_lower.split()) <= 3 and
+                            '```' not in texto and
+                            not any(c in texto_lower for c in ['def ', 'class ', 'import ']))
+        _KW_MEM_C7 = ['recuerdas', 'hablamos de', 'me dijiste', 'sabes de mí']
+        es_info = any(k in texto_lower for k in _KW_BUSQUEDA_C7) or _es_palabra_sola
+        es_mem  = any(k in texto_lower for k in _KW_MEM_C7)
+
+        # ── C3 ya decidió — si tiene habilidad_req válida, úsala directamente ──
+        # Esto evita que C4/C5 cancelen búsquedas legítimas con 'conversacional'
+        hab_c3_early = decision_final.get('habilidad_req', '')
+        if hab_c3_early in ('BUSQUEDA_INTERNET', 'MEMORIA', 'AUTO_ANALISIS_TOTAL'):
+            cfg_early = HABILIDADES.get(hab_c3_early, {})
+            print(f'  [C7 Bell] {hab_c3_early} ← C3 early (skip bypass)')
+            return {
+                'necesita_habilidad': True,
+                'habilidad_id':       hab_c3_early,
+                'modo':               cfg_early.get('modo_default', None),
+                'disponible':         cfg_early.get('disponible', True),
+                'descripcion':        cfg_early.get('descripcion', ''),
+                'texto_original':     texto,
+                'verbosidad':         'normal',
+                'fuente_deteccion':   'clasificador_bell',
+            }
+
         if tipo_respuesta in _BYPASS:
+            return {
+                'necesita_habilidad': False,
+                'habilidad_id': None,
+                'disponible': False,
+                'texto_original': texto,
+                'verbosidad': 'normal',
+            }
+        if tipo_respuesta == 'conversacional' and not es_info and not es_mem:
             return {
                 'necesita_habilidad': False,
                 'habilidad_id': None,
@@ -450,9 +515,12 @@ class DetectorHabilidad:
         # Si el texto pregunta por un archivo específico → AUTO_ANALISIS gana
         import re as _re_det
         _es_pregunta_archivo = bool(_re_det.search(
-            r'\bqu[eé]\s+(?:hace|es|contiene|tiene)\s+(?:el\s+|tu\s+)?\w[\w_]*\.(?:py|js|css|html|json|md)\b',
+            r'\bqu[eé]\s+(?:hace|es|contiene|tiene)\s+(?:el\s+|tu\s+)?\w[\w_]*\.(?:py|js|css|html|json|md)\b'
+            r'|c[oó]mo\s+est[aá]\s+\w[\w_]*\.(?:py|js|css|html|json|md)\b'
+            r'|c[oó]mo\s+funciona\s+\w[\w_]*\.(?:py|js)\b'
+            r'|analiza\s+(?:el\s+)?\w[\w_]*\.(?:py|js)\b',
             texto_lower
-        ))
+        )) and '```' not in texto and not re.search(r'def\s+\w+\(', texto)
         if _es_pregunta_archivo and 'AUTO_ANALISIS_TOTAL' in HABILIDADES:
             cfg_aa = HABILIDADES['AUTO_ANALISIS_TOTAL']
             if cfg_aa.get('disponible'):
@@ -477,6 +545,27 @@ class DetectorHabilidad:
             verbosidad = 'simple'
         elif any(v in texto_lower for v in _VERBOSIDAD_DETALLADA):
             verbosidad = 'detallado'
+
+        # ── AUTO_ANALISIS: interceptar ANTES de Python ─────────────
+        # "cómo está X.py" / "qué hace X.py" sin bloque de código → Bell analiza su propio archivo
+        _pregunta_archivo_bell = bool(re.search(
+            r'(?:cómo|como)\s+est[aá]\s+\w[\w_]*\.(?:py|js|css|html|json|md)'
+            r'|(?:qué|que)\s+(?:hace|es|contiene|tiene)\s+\w[\w_]*\.(?:py|js|css|html|json|md)'
+            r'|analiza\s+(?:el\s+)?\w[\w_]*\.(?:py|js)'
+            r'|cómo\s+funciona\s+\w[\w_]*\.(?:py|js)',
+            texto_lower
+        ))
+        _tiene_bloque_codigo = '```' in texto or bool(re.search(r'def\s+\w+\(|class\s+\w+', texto))
+        if _pregunta_archivo_bell and not _tiene_bloque_codigo:
+            return {
+                'necesita_habilidad': True,
+                'habilidad_id':       'AUTO_ANALISIS_TOTAL',
+                'modo':               None,
+                'disponible':         HABILIDADES['AUTO_ANALISIS_TOTAL']['disponible'],
+                'descripcion':        HABILIDADES['AUTO_ANALISIS_TOTAL']['descripcion'],
+                'texto_original':     texto,
+                'verbosidad':         'normal',
+            }
 
         # ── Detectar PYTHON primero — es la habilidad prioritaria ──
         cfg_py = HABILIDADES['PYTHON_COMPLETO']
@@ -544,6 +633,17 @@ class DetectorHabilidad:
             any(p in texto_lower for p in _PALABRAS_PREGUNTA)
         )
         es_sobre_bell = any(p in texto_lower for p in _NO_BELL)
+        # Palabra sola desconocida (ej: "rust", "vue", "kotlin") → buscar
+        _texto_corto = len(texto_lower.split()) <= 3
+        if (_texto_corto and _desconocidos and not es_sobre_bell):
+            return {
+                'necesita_habilidad': True,
+                'habilidad_id':       'BUSQUEDA_INTERNET',
+                'disponible':         True,
+                'texto_original':     texto,
+                'verbosidad':         'normal',
+                'fuente':             'semantico_palabra_desconocida',
+            }
         if (tiene_pregunta and _desconocidos and not es_sobre_bell):
             return {
                 'necesita_habilidad': True,

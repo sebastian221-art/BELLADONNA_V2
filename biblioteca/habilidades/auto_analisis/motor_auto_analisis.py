@@ -24,13 +24,36 @@ from .analizador_profundo import analizar_todo_bell, analizar_archivo
 
 # Explainer Bell — sin Groq, análisis propio
 from biblioteca.habilidades.auto_analisis.explicador_auto_analisis import (
-    explicar_analisis_total, explicar_archivo, explicar_introspeccion
+    explicar_analisis_total, combinar_con_informe,
+    explicar_archivo, explicar_introspeccion
 )
+
+import os as _os_aa
+try:
+    import httpx as _httpx_aa
+    _HTTPX_OK = True
+except ImportError:
+    _HTTPX_OK = False
+
+_GROQ_URL_AA   = 'https://api.groq.com/openai/v1/chat/completions'
+_GROQ_MODEL_AA = 'openai/gpt-oss-120b'
+_GROQ_KEY_AA   = _os_aa.getenv('GROQ_API_KEY', '')
+
+_SYSTEM_FUSION = """Eres Bell — IA creada por Juan Sebastian Mora, 19 años, Bucaramanga.
+Recibes datos EXACTOS de tu propia arquitectura calculados por herramientas Python.
+NUNCA inventas ni estimas — solo interpretas los datos reales que recibes.
+Voz directa, en español, como desarrolladora explicando su propio código.
+Sin relleno, sin presentarte, máximo 4 oraciones.""" 
 
 # Cache de escaneo — evita releer todos los archivos en cada pregunta
 _cache_resultado = None
 _cache_tiempo    = 0.0
 _CACHE_TTL       = 120  # segundos antes de refrescar
+
+# Cache de Radon — analizar_todo_bell() tarda 5-8s, se reutiliza 5 minutos
+_cache_radon     = None
+_cache_radon_t   = 0.0
+_CACHE_RADON_TTL = 300
 
 _SYSTEM_AA = """Eres Bell — IA creada por Juan Sebastian Mora (19 años, Bucaramanga). Eres arquitecta que analiza su propio sistema BELLADONNA en primera persona.
 
@@ -366,6 +389,56 @@ def _responder_capacidades(e: EscaneoResult) -> str:
 
 
 
+def _obtener_radon(raiz: str) -> str:
+    """Cache Radon — evita 5-8s de espera en cada pregunta de análisis."""
+    global _cache_radon, _cache_radon_t
+    ahora = time.time()
+    if _cache_radon and (ahora - _cache_radon_t) < _CACHE_RADON_TTL:
+        print('  [AutoAnalisis] Radon desde cache')
+        return _cache_radon
+    print('  [AutoAnalisis] Calculando métricas Radon — puede tardar unos segundos...')
+    _cache_radon   = analizar_todo_bell(raiz)
+    _cache_radon_t = ahora
+    return _cache_radon
+
+
+def _groq_fusion_auto(datos_txt: str, pregunta: str) -> str:
+    """Pasa datos reales de las herramientas a Groq para generar lenguaje Bell."""
+    if not _GROQ_KEY_AA or not _HTTPX_OK:
+        return ''
+    try:
+        prompt = (
+            f"<datos_reales>\n{datos_txt}\n</datos_reales>\n\n"
+            f"<pregunta_sebastian>{pregunta}</pregunta_sebastian>\n\n"
+            f"<instruccion>Responde usando SOLO los datos reales dados. "
+            f"Interprétalos en palabras humanas. No repitas los datos en bruto.</instruccion>"
+        )
+        r = _httpx_aa.post(
+            _GROQ_URL_AA,
+            headers={'Authorization': f'Bearer {_GROQ_KEY_AA}',
+                     'Content-Type': 'application/json'},
+            json={
+                'model':       _GROQ_MODEL_AA,
+                'messages':    [
+                    {'role': 'system', 'content': _SYSTEM_FUSION},
+                    {'role': 'user',   'content': prompt},
+                ],
+                'temperature': 0.25,
+                'max_tokens':  220,
+            },
+            timeout=12,
+        )
+        if r.status_code == 200:
+            resp = (r.json().get('choices',[{}])[0]
+                    .get('message',{}).get('content','').strip())
+            if resp and len(resp) > 20:
+                print(f'  [AutoAnalisis] Groq fusion OK | {len(resp)} chars')
+                return resp
+    except Exception as e:
+        print(f'  [AutoAnalisis] Groq fusion error: {e}')
+    return ''
+
+
 class MotorAutoAnalisis:
     """
     Motor principal del auto-análisis de Bell.
@@ -435,22 +508,38 @@ class MotorAutoAnalisis:
             else:
                 base = _responder_resumen(escaneo)
 
-            # ── Bell explainer — sin Groq, métricas reales ──────────────
+            # ── Fusión herramientas + Groq ──────────────────────────────────
+            # Herramientas recopilan datos exactos → Groq genera lenguaje Bell
             if tipo == 'analisis_propio':
-                radon_data = analizar_todo_bell(escaneo.raiz_bell)
-                respuesta = explicar_analisis_total(radon_data, texto)
+                radon_data = _obtener_radon(escaneo.raiz_bell)
+                metricas   = explicar_analisis_total(radon_data, texto)
+                datos_para_groq = combinar_con_informe(metricas, base)
+                groq_resp  = _groq_fusion_auto(datos_para_groq, texto)
+                respuesta  = groq_resp if groq_resp else datos_para_groq
+
             elif tipo == 'introspeccion':
-                radon_data = analizar_todo_bell(escaneo.raiz_bell)
-                respuesta = explicar_introspeccion(radon_data, escaneo)
+                radon_data = _obtener_radon(escaneo.raiz_bell)
+                datos_para_groq = explicar_introspeccion(radon_data, base, escaneo)
+                groq_resp  = _groq_fusion_auto(datos_para_groq, texto)
+                respuesta  = groq_resp if groq_resp else datos_para_groq
+
             elif tipo == 'archivo_especifico':
                 import re as _re_arch
                 m_arch = _re_arch.search(r'(\w[\w_]*\.(?:py|js|css|html|json|md))', texto, _re_arch.IGNORECASE)
                 if m_arch:
-                    nombre = m_arch.group(1)
-                    radon_data = analizar_archivo(nombre, escaneo.raiz_bell)
-                    respuesta = explicar_archivo(radon_data, nombre, texto)
+                    nombre      = m_arch.group(1)
+                    radon_data  = analizar_archivo(nombre, escaneo.raiz_bell)
+                    datos_base  = explicar_archivo(radon_data, nombre, base)
+                    groq_resp   = _groq_fusion_auto(datos_base, texto)
+                    respuesta   = groq_resp if groq_resp else datos_base
                 else:
                     respuesta = base
+
+            elif tipo in ('resumen_general', 'estadisticas', 'dependencias'):
+                # Para estadísticas/resumen también pasar por Groq para voz natural
+                groq_resp = _groq_fusion_auto(base, texto)
+                respuesta = groq_resp if groq_resp else base
+
             else:
                 respuesta = base
 

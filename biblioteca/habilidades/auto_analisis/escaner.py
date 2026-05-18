@@ -1,10 +1,6 @@
 # biblioteca/habilidades/auto_analisis/escaner.py
 # ================================================
 # ESCÁNER TOTAL — Lee Bell en tiempo real
-#
-# Recorre TODOS los archivos de Bell:
-# Python, JS, CSS, HTML, JSON, Markdown.
-# Retorna un mapa completo y actualizado.
 # ================================================
 
 import os
@@ -25,8 +21,20 @@ _EXTENSIONES = {
     '.txt':  'Texto',
 }
 
-_IGNORAR = {'__pycache__', '.git', '.pytest_cache', 'node_modules',
-            '.venv', 'venv', '.env', 'dist', 'build'}
+# Directorios que NUNCA son código de Bell
+_IGNORAR = {
+    '__pycache__', '.git', '.pytest_cache', 'node_modules',
+    '.venv', 'venv', 'env', '.env', 'dist', 'build',
+    'site-packages', 'lib', 'lib64', 'include', 'bin', 'Scripts',
+    'Frameworks', 'Headers', 'Resources', 'share',
+    '.mypy_cache', '.ruff_cache', 'htmlcov', '.idea', '.vscode',
+}
+
+# Directorios conocidos de Bell (whitelist para Mac)
+_DIRS_BELL = {'capas', 'biblioteca', 'interfaz', 'tests', 'test', 'docs', 'scripts'}
+
+# Tamaño máximo de archivo en bytes (300 KB)
+_MAX_BYTES = 300_000
 
 
 @dataclass
@@ -80,23 +88,17 @@ class EscanerTotal:
                 total_lineas += info.lineas
                 total_kb += info.tamano_kb
 
-        # Capas — leer directo de a.ruta (robusto en Windows)
+        # Capas
         capas: Dict[str, List[ArchivoInfo]] = {}
         for a in archivos:
-            ruta_n = a.ruta.replace('\\', '/').replace('\\', '/')
-            # Buscar segmento 'capaX' en la ruta
+            ruta_n = a.ruta.replace('\\', '/')
             for parte in ruta_n.split('/'):
                 if len(parte) == 5 and parte.startswith('capa') and parte[4].isdigit():
                     capas.setdefault(parte, []).append(a)
                     break
 
-        # Habilidades — extrae de archivos ya escaneados (robusto en cualquier OS)
         habilidades = self._detectar_habilidades_desde_archivos(archivos)
-
-        # Consejeras — igual
-        consejeras = self._detectar_consejeras_desde_archivos(archivos)
-
-        # Vocabulario
+        consejeras  = self._detectar_consejeras_desde_archivos(archivos)
         vocab_mod, vocab_conc = self._contar_vocabulario_desde_archivos(archivos)
 
         return EscaneoResult(
@@ -115,12 +117,101 @@ class EscanerTotal:
         )
 
     def _iterar_archivos(self):
-        for root, dirs, files in os.walk(self.raiz):
+        """
+        Estrategia doble:
+        1. Whitelist — solo directorios conocidos de Bell.
+        2. Si whitelist encuentra < 10 archivos → fallback blacklist con cap 600.
+        Así funciona en cualquier Mac/Windows independiente de nombres de venv.
+        """
+        archivos = list(self._whitelist())
+        if len(archivos) >= 10:
+            yield from archivos
+            return
+        # Fallback: blacklist con cap
+        print(f'  [Escaner] whitelist encontró {len(archivos)}, usando blacklist...')
+        yield from self._blacklist()
+
+    def _whitelist(self):
+        """
+        Escanea directorios Bell usando rglob — más compatible con Mac.
+        Evita os.walk que puede fallar con symlinks o permisos en macOS.
+        """
+        raiz = self.raiz
+
+        # Archivos en raíz directamente (main.py, etc.)
+        try:
+            for f in raiz.iterdir():
+                if f.is_file() and f.suffix in _EXTENSIONES:
+                    try:
+                        if f.stat().st_size <= _MAX_BYTES:
+                            yield f
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
+        # Directorios conocidos de Bell via rglob
+        for dir_name in _DIRS_BELL:
+            dir_path = raiz / dir_name
+            try:
+                if not dir_path.exists():
+                    continue
+                for ruta in dir_path.rglob('*'):
+                    try:
+                        if not ruta.is_file():
+                            continue
+                        if ruta.suffix not in _EXTENSIONES:
+                            continue
+                        # Ignorar si está dentro de directorio problemático
+                        partes = ruta.relative_to(dir_path).parts
+                        if any(p in _IGNORAR for p in partes):
+                            continue
+                        if ruta.stat().st_size > _MAX_BYTES:
+                            continue
+                        yield ruta
+                    except Exception:
+                        continue
+            except Exception as e:
+                print(f'  [Escaner] rglob error {dir_name}: {e}')
+
+    def _blacklist(self):
+        """
+        Fallback: os.walk desde raíz con dos filtros:
+        1. Solo entra en directorios de primer nivel conocidos de Bell
+        2. Blacklist de subdirectorios problemáticos
+        """
+        count = 0
+        for root, dirs, files in os.walk(str(self.raiz)):
+            root_path = Path(root)
+            # Calcular profundidad relativa a la raíz
+            try:
+                rel = root_path.relative_to(self.raiz)
+                parts = rel.parts
+            except ValueError:
+                dirs.clear()
+                continue
+
+            # Primer nivel: solo entrar en directorios conocidos de Bell
+            if len(parts) == 1 and parts[0] not in _DIRS_BELL:
+                dirs.clear()
+                continue
+
+            # Filtrar subdirectorios problemáticos
             dirs[:] = [d for d in dirs if d not in _IGNORAR]
+
             for nombre in files:
-                ruta = Path(root) / nombre
-                if ruta.suffix in _EXTENSIONES:
-                    yield ruta
+                ruta = root_path / nombre
+                if ruta.suffix not in _EXTENSIONES:
+                    continue
+                try:
+                    if ruta.stat().st_size > _MAX_BYTES:
+                        continue
+                except Exception:
+                    continue
+                yield ruta
+                count += 1
+                if count >= 1000:
+                    return
 
     def _analizar_archivo(self, ruta: Path) -> Optional[ArchivoInfo]:
         try:
@@ -134,7 +225,6 @@ class EscanerTotal:
                 contenido = ''
 
             relativa = ruta.relative_to(self.raiz)
-            # Normalizar separadores a '/' para consistencia en cualquier OS
             ruta_norm = str(relativa).replace('\\', '/')
             partes = ruta_norm.split('/')
             categoria, subcategoria = self._clasificar(partes)
@@ -161,22 +251,21 @@ class EscanerTotal:
         except Exception:
             return None
 
-    def _clasificar(self, partes) -> tuple:
+    def _clasificar(self, partes: List[str]) -> tuple:
         if not partes:
             return 'raiz', ''
         p0 = partes[0]
-        if p0 == 'capas' and len(partes) > 1:
-            return partes[1], (partes[2] if len(partes) > 2 else '')
+        if p0 == 'capas':
+            return (partes[1] if len(partes) > 1 else 'capas'), ''
         if p0 == 'biblioteca':
-            sub = '/'.join(partes[1:3]) if len(partes) > 1 else ''
-            return 'biblioteca', sub
+            return 'biblioteca', (partes[2] if len(partes) > 2 else '')
         if p0 == 'interfaz':
             return 'interfaz', (partes[1] if len(partes) > 1 else '')
+        if p0 in ('tests', 'test'):
+            return 'tests', ''
         if p0 == 'docs':
             return 'docs', ''
-        if p0 == 'datos':
-            return 'datos', ''
-        return 'raiz', ''
+        return 'raiz', p0
 
     def _extraer_py(self, contenido: str):
         clases = []
@@ -186,60 +275,41 @@ class EscanerTotal:
             for node in ast.walk(tree):
                 if isinstance(node, ast.ClassDef):
                     clases.append(node.name)
-                elif isinstance(node, ast.FunctionDef):
+                elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     funciones.append(node.name)
         except Exception:
-            clases    = re.findall(r'^class\s+(\w+)', contenido, re.MULTILINE)
-            funciones = re.findall(r'^def\s+(\w+)', contenido, re.MULTILINE)
-        return clases[:20], funciones[:30]
-
-    # ── Detección robusta usando archivos ya escaneados ──────────────
+            pass
+        return clases[:5], funciones[:10]
 
     def _detectar_habilidades_desde_archivos(self, archivos: List[ArchivoInfo]) -> List[str]:
-        """Extrae habilidades desde las rutas ya escaneadas — robusto en cualquier OS."""
         habs = set()
         for a in archivos:
-            if 'biblioteca/habilidades/' in a.ruta:
-                parts = a.ruta.split('biblioteca/habilidades/')
-                if len(parts) > 1:
-                    sub = parts[1].split('/')[0]
-                    if sub and not sub.startswith('_') and not sub.startswith('.') and '.' not in sub:
-                        habs.add(sub)
+            ruta_n = a.ruta.replace('\\', '/')
+            if 'biblioteca/habilidades/' in ruta_n:
+                partes = ruta_n.split('/')
+                try:
+                    idx = partes.index('habilidades')
+                    if idx + 1 < len(partes) and partes[idx + 1]:
+                        habs.add(partes[idx + 1])
+                except ValueError:
+                    pass
         return sorted(habs)
 
     def _detectar_consejeras_desde_archivos(self, archivos: List[ArchivoInfo]) -> List[str]:
-        """Extrae consejeras desde las rutas ya escaneadas."""
-        cons = set()
+        _NOMBRES = {'soma', 'vega', 'nova', 'echo', 'lyra', 'luna', 'iris', 'sage'}
+        encontradas = set()
         for a in archivos:
-            if 'biblioteca/consejeras/' in a.ruta:
-                parts = a.ruta.split('biblioteca/consejeras/')
-                if len(parts) > 1:
-                    sub = parts[1].split('/')[0]
-                    if sub and not sub.startswith('_') and not sub.startswith('.') and '.' not in sub:
-                        cons.add(sub)
-        return sorted(cons)
+            nombre_base = a.nombre.replace('.py', '').lower()
+            if nombre_base in _NOMBRES:
+                encontradas.add(nombre_base)
+        return sorted(encontradas)
 
-    def _contar_vocabulario_desde_archivos(self, archivos: List[ArchivoInfo]) -> tuple:
-        """Cuenta vocabulario desde rutas y contenido escaneado."""
+    def _contar_vocabulario_desde_archivos(self, archivos: List[ArchivoInfo]):
         modulos = 0
         conceptos = 0
         for a in archivos:
-            if ('biblioteca/vocabulario/base/' in a.ruta or
-                    'biblioteca/fundacional/vocabulario/' in a.ruta) and a.extension == '.py':
-                if a.nombre != '__init__.py':
+            if 'vocabulario' in a.ruta or 'vocab' in a.ruta:
+                if a.extension == '.py':
                     modulos += 1
-                    # Leer y contar entradas
-                    try:
-                        ruta_abs = self.raiz / a.ruta.replace('/', os.sep)
-                        with open(ruta_abs, 'r', encoding='utf-8', errors='ignore') as f:
-                            contenido = f.read()
-                        # Formato dict: '  "palabra": {'
-                        n_dict = len(re.findall(
-                            r"^\s+'[^'_][^']*'\s*:\s*\{", contenido, re.MULTILINE))
-                        # Formato tupla: ('NOMBRE', ...)
-                        n_tuple = len(re.findall(
-                            r"^\s+\('[A-Z_]+',", contenido, re.MULTILINE))
-                        conceptos += max(n_dict, n_tuple)
-                    except Exception:
-                        pass
+                    conceptos += max(0, a.lineas // 4)
         return modulos, conceptos

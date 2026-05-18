@@ -68,10 +68,11 @@ def _modo_analisis(codigo: str, nombre: str) -> dict:
     from biblioteca.habilidades.python.explicador_tecnico import obtener as get_explicador
 
     analisis = get_analizador().analizar(codigo)
-    explicacion = get_explicador().explicar_analisis(analisis)
+    # Pasar codigo_original al explicador — Groq lo usa para explicar QUÉ hace + métricas exactas
+    explicacion = get_explicador().explicar_analisis(analisis, codigo_original=codigo)
 
     return {
-        'exitoso':         analisis.es_valido_ast,  # exitoso si el código es Python válido
+        'exitoso':         analisis.es_valido_ast,
         'respuesta_texto': explicacion.texto_completo,
         'analisis':        _serializar_analisis(analisis),
         'sugerencias':     explicacion.sugerencias,
@@ -180,7 +181,7 @@ def _modo_explicacion(codigo: str, texto: str, nombre: str) -> dict:
         }
 
     analisis = get_analizador().analizar(codigo)
-    explicacion = get_explicador().explicar_analisis(analisis)
+    explicacion = get_explicador().explicar_analisis(analisis, codigo_original=codigo)
 
     partes = [explicacion.texto_completo]
 

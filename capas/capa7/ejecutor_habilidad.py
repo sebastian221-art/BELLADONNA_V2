@@ -53,10 +53,40 @@ class EjecutorHabilidad:
                         )
         except Exception as _e:
             pass
+        # BUSQUEDA override: si C3 marcó PYTHON pero el mensaje pide info del mundo real
+        _tl = texto.lower()
+        _PAT_BUSQUEDA = [
+            'qué es ', 'que es ', 'quién es ', 'quien es ',
+            'qué son ', 'que son ', 'cómo funciona', 'como funciona',
+            'diferencia entre', 'compara ', 'mejor que',
+            'precio del', 'precio de ', 'cuánto cuesta', 'cuanto cuesta',
+            'noticias de', 'noticias sobre',
+            'fyi:', 'fyi ', 'dato:', 'sabías que', 'sabias que',
+            'capital de', 'cuándo fue', 'cuando fue', 'dónde queda', 'donde queda',
+            'cuándo nació', 'cuando nacio', 'historia de', 'biograf',
+            'hoy ', 'este año', 'este mes', 'versión actual', 'version actual',
+        ]
+        # Solo aplica si NO hay bloque de código en el mensaje
+        _tiene_codigo = '```' in texto or bool(__import__('re').search(r'def\s+\w+\(', texto))
+        if habilidad_id == 'PYTHON_COMPLETO' and not _tiene_codigo and any(p in _tl for p in _PAT_BUSQUEDA):
+            return self._ejecutar_busqueda(texto)
+
+        # MEMORIA override: si C3 marcó PYTHON pero el mensaje pregunta por memoria
+        _PAT_MEM = [
+            'hablamos de ', 'recuerdas', 'me dijiste',
+            'archivos que has', 'cuántas conversaciones', 'cuantas conversaciones',
+            'sabes de mí', 'sabes de mi',
+        ]
+        if habilidad_id == 'PYTHON_COMPLETO' and any(p in _tl for p in _PAT_MEM):
+            return self._ejecutar_memoria(texto)
+
         if habilidad_id == 'PYTHON_COMPLETO':
             return self._ejecutar_python(texto, modo, verbosidad)
         if habilidad_id == 'BUSQUEDA_INTERNET':
             return self._ejecutar_busqueda(texto)
+
+        if habilidad_id == 'MEMORIA':
+            return self._ejecutar_memoria(texto)
 
         if habilidad_id == 'AUTO_ANALISIS_TOTAL':
             return self._ejecutar_auto_analisis(texto)
@@ -109,6 +139,23 @@ class EjecutorHabilidad:
                 ejecuto=False, habilidad_id='AUTO_ANALISIS_TOTAL',
                 error=str(e)[:100],
                 resultado='No pude leerme a mí misma en este momento.',
+            )
+
+    def _ejecutar_memoria(self, texto: str) -> 'ResultadoEjecucion':
+        """Bell consulta su memoria SQLite y responde con datos reales."""
+        try:
+            from biblioteca.habilidades.memoria.motor_memoria import procesar as _mem_proc
+            res_mem = _mem_proc(texto)
+            return ResultadoEjecucion(
+                ejecuto      = True,
+                habilidad_id = 'MEMORIA',
+                resultado    = res_mem.get('respuesta', ''),
+            )
+        except Exception as e:
+            return ResultadoEjecucion(
+                ejecuto      = False,
+                habilidad_id = 'MEMORIA',
+                error        = str(e),
             )
 
     def _ejecutar_python(self, texto: str, modo: str, verbosidad: str) -> ResultadoEjecucion:
