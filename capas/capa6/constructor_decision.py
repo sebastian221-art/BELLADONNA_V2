@@ -243,6 +243,12 @@ class ConstructorDecision:
             accion_principal=accion_principal, texto_original=texto_original,
             es_correccion=contextual.get('es_correccion', False),
             es_continuacion=contextual.get('es_continuacion', False),
+            # Campos extra ahora propagados
+            modo_mental=profunda.get('modo_mental', 'receptivo'),
+            tono_base=profunda.get('tono_base', 'neutral'),
+            tiene_humor=profunda.get('tiene_humor', False),
+            tiene_ironia=profunda.get('tiene_ironia', False),
+            ids_activos=ids_activos,
         )
 
         if not respuesta_base:
@@ -340,7 +346,10 @@ class ConstructorDecision:
     def _construir_con_puente(self, tipo_mensaje, nombre, emocion, intensidad,
                                intencion, necesidad_real, estado_subyacente,
                                nivel_energia, habilidad_req, accion_principal,
-                               texto_original, es_correccion, es_continuacion) -> str:
+                               texto_original, es_correccion, es_continuacion,
+                               modo_mental='receptivo', tono_base='neutral',
+                               tiene_humor=False, tiene_ironia=False,
+                               ids_activos=None) -> str:
         puente = self._obtener_puente()
         if not puente:
             return ''
@@ -360,6 +369,12 @@ class ConstructorDecision:
             r.accion_principal    = accion_principal
             r.es_correccion       = es_correccion
             r.es_continuacion     = es_continuacion
+            # Campos extra que antes se perdían
+            r.modo_mental         = modo_mental or 'receptivo'
+            r.tono_base           = tono_base or 'neutral'
+            r.tiene_humor         = tiene_humor
+            r.tiene_ironia        = tiene_ironia
+            r.ids_activos         = list(ids_activos or [])
             return puente.construir_respuesta_base(r) or ''
         except Exception:
             return ''

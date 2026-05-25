@@ -130,7 +130,8 @@ _EMOCIONES_DIRECTAS = {
     'entusiasmo':    ['emocionado','emocionada','entusiasmado','qué bueno','genial',
                       'increíble','increible','excelente','me encanta','me gusta mucho',
                       'buenísimo','perfecto','fantástico','qué bien','por fin','funcionó',
-                      'funciono','épico','bacano','chévere','de una'],
+                      'funciono','épico','bacano','chévere','de una',
+                      'estoy bien','bien hoy','me siento bien'],
     'orgullo':       ['orgulloso','orgullosa','lo logré','lo logramos','lo logre',
                       'lo hice','terminé','termine','por fin lo','conseguí','consegui'],
     'gratitud':      ['gracias','muchas gracias','te lo agradezco','qué buen','muy amable',
@@ -275,7 +276,22 @@ class MotorComprension:
             negativas = {'frustracion','cansancio','ansiedad','tristeza','rabia','soledad','culpa','verguenza'}
             positivas = {'entusiasmo','orgullo','gratitud','esperanza','determinacion','alivio'}
 
-            if mejor_emocion in negativas:
+            # Detectar estado MIXTO: positivo+negativo en el mismo mensaje
+            # Ej: "estoy bien pero cansado", "contento aunque agotado"
+            emociones_encontradas = set()
+            for em, palabras in _EMOCIONES_DIRECTAS.items():
+                for pal in palabras:
+                    if pal in tl:
+                        emociones_encontradas.add(em)
+                        break
+            tiene_positiva = bool(emociones_encontradas & positivas)
+            tiene_negativa = bool(emociones_encontradas & negativas)
+            if tiene_positiva and tiene_negativa:
+                r.tono_base = 'estado_mixto'
+                # La emoción dominante es la negativa (más info para Bell)
+                emoc_neg = next(iter(emociones_encontradas & negativas), mejor_emocion)
+                r.emocion_detectada = emoc_neg
+            elif mejor_emocion in negativas:
                 r.tono_base = 'emocional_negativo'
                 if r.tipo_mensaje == 'conversacional':
                     r.tipo_mensaje = 'expresion_emocional_negativa'
@@ -316,7 +332,13 @@ class MotorComprension:
             r.habilidad_requerida = h.get('habilidad_requerida', '')
             r.nivel_tecnicismo    = h.get('nivel_tecnicismo', 'coloquial')
             r.parametros_tecnicos = h.get('parametros_extraidos', {})
-            if r.dominio_tecnico:
+            # Fix: NO sobreescribir si ya hay tipo emocional de alta prioridad
+            _tipos_emocionales_protegidos = {
+                'logro_compartido', 'expresion_emocional_negativa',
+                'expresion_emocional_positiva', 'queja', 'reflexion_compartida',
+                'peticion_consejo', 'gratitud', 'saludo', 'despedida',
+            }
+            if r.dominio_tecnico and r.tipo_mensaje not in _tipos_emocionales_protegidos:
                 r.tipo_mensaje = 'solicitud_tecnica'
 
         inf = mapa.get('inferencial')

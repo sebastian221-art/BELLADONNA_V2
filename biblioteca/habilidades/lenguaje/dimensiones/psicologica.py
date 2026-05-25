@@ -239,6 +239,29 @@ class DimensionPsicologica(DimensionLenguaje):
         if any(c in tl for c in self._ALTA_CARGA):
             hallazgos['alta_carga_cognitiva'] = True
             hallazgos['recomendacion_bell']   = 'simplificar_y_guiar_paso_a_paso'
+
+        # ── Propagar necesidad_emocional a necesidad_real si está vacía ──
+        # La necesidad_emocional viene de la emoción detectada (más rico)
+        # La necesidad_real viene de patrones de texto (más escasa)
+        if not hallazgos.get('necesidad_real') and hallazgos.get('necesidad_emocional'):
+            hallazgos['necesidad_real'] = hallazgos['necesidad_emocional']
+
+        # Mapa de emoción → necesidad cuando todo lo demás falla
+        if not hallazgos.get('necesidad_real'):
+            _emoc = hallazgos.get('emocion_detectada', '')
+            _mapa_emoc_nec = {
+                'cansancio':    'apoyo_y_simplificacion',
+                'frustracion':  'validacion_y_solucion',
+                'ansiedad':     'certeza_y_calma',
+                'tristeza':     'apoyo_emocional',
+                'soledad':      'conexion',
+                'confusion':    'clarificacion',
+                'orgullo':      'reconocimiento',
+                'entusiasmo':   'compartir_y_avanzar',
+                'gratitud':     'conexion_reciproca',
+            }
+            if _emoc in _mapa_emoc_nec:
+                hallazgos['necesidad_real'] = _mapa_emoc_nec[_emoc]
             senales.append('alta_carga_cognitiva')
 
         # ── Confianza en Bell ──

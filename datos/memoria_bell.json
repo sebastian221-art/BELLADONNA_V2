@@ -1,29 +1,66 @@
 {
   "version": 2,
   "creada": "2026-05-14T21:22:33.069187",
-  "ultima_sesion": "2026-05-18T13:09:16.396475",
+  "ultima_sesion": "2026-05-18T15:55:28.626204",
   "datos_sebastian": {},
-  "momentos": [],
+  "momentos": [
+    {
+      "fecha": "2026-05-18T15:55:50.057098",
+      "usuario": "uff que cansado, otro bug",
+      "bell": "Un error en el código que hace que no funcione como se espera.",
+      "tipo": "expresion_emocional_negativa"
+    },
+    {
+      "fecha": "2026-05-18T15:55:50.064819",
+      "usuario": "uff que cansado, otro bug",
+      "bell": "Un error en el código que hace que no funcione como se espera.",
+      "tipo": "expresion_emocional_negativa"
+    },
+    {
+      "fecha": "2026-05-18T15:56:11.692778",
+      "usuario": "no entiendo para qué sirve esto",
+      "bell": "Entiendo que está complicado. Cuéntame qué no funciona.",
+      "tipo": "expresion_emocional_negativa"
+    },
+    {
+      "fecha": "2026-05-18T15:56:11.699625",
+      "usuario": "no entiendo para qué sirve esto",
+      "bell": "Entiendo que está complicado. Cuéntame qué no funciona.",
+      "tipo": "expresion_emocional_negativa"
+    },
+    {
+      "fecha": "2026-05-18T15:56:31.556400",
+      "usuario": "estoy bien pero cansado",
+      "bell": "Entiendo. Por dónde empezamos.",
+      "tipo": "expresion_emocional_negativa"
+    },
+    {
+      "fecha": "2026-05-18T15:56:31.573382",
+      "usuario": "estoy bien pero cansado",
+      "bell": "Entiendo. Por dónde empezamos.",
+      "tipo": "expresion_emocional_negativa"
+    }
+  ],
   "temas": {
     "programacion": {
-      "count": 293,
+      "count": 297,
       "primera_vez": "2026-05-17T16:43:05.890053",
-      "ultima_vez": "2026-05-18T13:11:23.920348"
+      "ultima_vez": "2026-05-18T15:55:50.064757"
     },
     "belladonna": {
-      "count": 32,
+      "count": 34,
       "primera_vez": "2026-05-17T16:44:46.628772",
-      "ultima_vez": "2026-05-18T00:16:27.491802"
+      "ultima_vez": "2026-05-18T15:56:46.509911"
     },
     "salud": {
-      "count": 6,
+      "count": 10,
       "primera_vez": "2026-05-17T17:13:39.575177",
-      "ultima_vez": "2026-05-18T02:57:17.669313"
+      "ultima_vez": "2026-05-18T15:56:31.573325"
     },
     "emociones": {
-      "count": 24,
+      "count": 28,
       "primera_vez": "2026-05-17T17:13:39.575177",
-      "ultima_vez": "2026-05-18T02:57:42.031585"
+      "ultima_vez": "2026-05-18T15:57:16.245865"
     },
     "tecnologia": {
       "count": 46,
@@ -42,56 +79,6 @@
     }
   },
   "estados": [
-    {
-      "fecha": "2026-05-17T17:13:56.229560",
-      "estado": "orgullo",
-      "texto": "por fin terminé el módulo que llevaba días arreglando"
-    },
-    {
-      "fecha": "2026-05-17T17:13:56.231958",
-      "estado": "orgullo",
-      "texto": "por fin terminé el módulo que llevaba días arreglando"
-    },
-    {
-      "fecha": "2026-05-17T20:11:22.241366",
-      "estado": "positivo",
-      "texto": "tambien estoy bien y tu q haces"
-    },
-    {
-      "fecha": "2026-05-17T20:11:22.244676",
-      "estado": "positivo",
-      "texto": "tambien estoy bien y tu q haces"
-    },
-    {
-      "fecha": "2026-05-17T20:15:30.152572",
-      "estado": "positivo",
-      "texto": "también estoy bien y tú qué haces"
-    },
-    {
-      "fecha": "2026-05-17T20:15:30.159153",
-      "estado": "positivo",
-      "texto": "también estoy bien y tú qué haces"
-    },
-    {
-      "fecha": "2026-05-17T20:16:02.667807",
-      "estado": "cansancio",
-      "texto": "estoy muy cansado"
-    },
-    {
-      "fecha": "2026-05-17T20:16:02.673599",
-      "estado": "cansancio",
-      "texto": "estoy muy cansado"
-    },
-    {
-      "fecha": "2026-05-17T20:17:45.653332",
-      "estado": "determinacion",
-      "texto": "te quiero bell"
-    },
-    {
-      "fecha": "2026-05-17T20:17:45.659739",
-      "estado": "determinacion",
-      "texto": "te quiero bell"
-    },
     {
       "fecha": "2026-05-18T02:52:05.633020",
       "estado": "negativo",
@@ -191,14 +178,64 @@
       "fecha": "2026-05-18T04:33:05.839920",
       "estado": "negativo",
       "texto": "```python\ntengo este error, qué tiene de malo:\n\nestados = {\"activo\": True, \"ener"
+    },
+    {
+      "fecha": "2026-05-18T15:55:28.679618",
+      "estado": "orgullo",
+      "texto": "lo logré! por fin funciona el pipeline"
+    },
+    {
+      "fecha": "2026-05-18T15:55:28.723857",
+      "estado": "orgullo",
+      "texto": "lo logré! por fin funciona el pipeline"
+    },
+    {
+      "fecha": "2026-05-18T15:55:50.057073",
+      "estado": "cansancio",
+      "texto": "uff que cansado, otro bug"
+    },
+    {
+      "fecha": "2026-05-18T15:55:50.064797",
+      "estado": "cansancio",
+      "texto": "uff que cansado, otro bug"
+    },
+    {
+      "fecha": "2026-05-18T15:56:11.692757",
+      "estado": "frustracion",
+      "texto": "no entiendo para qué sirve esto"
+    },
+    {
+      "fecha": "2026-05-18T15:56:11.699605",
+      "estado": "frustracion",
+      "texto": "no entiendo para qué sirve esto"
+    },
+    {
+      "fecha": "2026-05-18T15:56:31.556371",
+      "estado": "cansancio",
+      "texto": "estoy bien pero cansado"
+    },
+    {
+      "fecha": "2026-05-18T15:56:31.573362",
+      "estado": "cansancio",
+      "texto": "estoy bien pero cansado"
+    },
+    {
+      "fecha": "2026-05-18T15:56:46.502503",
+      "estado": "positiva",
+      "texto": "gracias bell me ayudaste mucho"
+    },
+    {
+      "fecha": "2026-05-18T15:56:46.509944",
+      "estado": "positiva",
+      "texto": "gracias bell me ayudaste mucho"
     }
   ],
   "pendientes": [],
   "proyectos": {
     "BELLADONNA": {
-      "menciones": 32,
+      "menciones": 34,
       "primera": "2026-05-17T16:44:46.628813",
-      "ultima": "2026-05-18T00:16:27.491852"
+      "ultima": "2026-05-18T15:56:46.509952"
     },
     "se llama BELLADONNA y lo hago ": {
       "menciones": 2,
@@ -210,6 +247,6 @@
     }
   },
   "preferencias": {},
-  "total_sesiones": 50,
-  "total_turnos": 492
+  "total_sesiones": 51,
+  "total_turnos": 506
 }

@@ -44,7 +44,13 @@ class PuenteTecnicoConversacional:
             return self._ejecucion_fallida(c, ejec)
 
         # ── HABILIDAD TÉCNICA PENDIENTE ───────────────────────
-        if c.habilidad_requerida and not ejec:
+        # Solo si el mensaje ES técnico (no emocional con técnica de fondo)
+        _tipos_emocionales = {
+            'expresion_emocional_negativa', 'expresion_emocional_positiva',
+            'logro_compartido', 'queja', 'reflexion_compartida',
+            'peticion_consejo', 'gratitud', 'saludo', 'despedida',
+        }
+        if c.habilidad_requerida and not ejec and tipo not in _tipos_emocionales:
             return self._tecnica_sin_habilidad(c)
 
         tipo = c.tipo_mensaje
@@ -57,6 +63,14 @@ class PuenteTecnicoConversacional:
             'dato_personal', 'presentacion_sebastian',
         ):
             return ''
+
+        # ── HUMOR/IRONÍA ──────────────────────────────────────
+        if getattr(c, 'tiene_ironia', False):
+            return self._ironia(c)
+
+        # ── ESTADO MIXTO (positivo + negativo simultáneo) ────
+        if getattr(c, 'tono_base', '') == 'estado_mixto':
+            return self._estado_mixto(c)
 
         # ── EMOCIÓN DE ALTA INTENSIDAD ────────────────────────
         if c.intensidad >= 0.72:
@@ -358,15 +372,27 @@ class PuenteTecnicoConversacional:
 
     def _pregunta_general(self, c: ResultadoMotor) -> str:
         texto = c.texto_original.lower()
+        nombre = c.nombre_usuario
         indicadores = [
             'qué es', 'cómo funciona', 'cuál es', 'por qué',
             'qué significa', 'cuánto', 'cuándo', 'dónde',
             'quién', 'para qué sirve', 'cómo se',
         ]
         if any(ind in texto for ind in indicadores):
-            return ''  # Groq responde con conocimiento real
+            # Groq responde — pero si hay frustración añadir nota de presencia
+            if c.emocion_detectada == 'frustracion' and c.intensidad >= 0.7:
+                return ''  # Groq responde con contexto de frustración en el prompt
+            return ''
 
-        nombre = c.nombre_usuario
+        # Pregunta vaga con referencia anafórica ("eso", "esto", "aquello")
+        referencias_vagas = ['eso', 'esto', 'aquello', 'ese', 'esta cosa']
+        if any(r in texto for r in referencias_vagas):
+            return random.choice([
+                "¿A qué te refieres exactamente?",
+                "¿Sobre cuál parte?",
+                f"Dime más específico, {nombre}.",
+            ])
+
         return random.choice([
             "¿Sobre qué exactamente?",
             f"Cuéntame un poco más, {nombre}.",
@@ -400,6 +426,13 @@ class PuenteTecnicoConversacional:
             'MATEMATICA_AVANZADA': 'matemática avanzada',
         }
         desc = mapa.get(c.habilidad_requerida or '', 'esa capacidad')
+        nombre = c.nombre_usuario
+        # Respuesta más cálida si hay emoción detrás del pedido técnico
+        if c.emocion_detectada in ('frustracion', 'ansiedad', 'tristeza'):
+            return random.choice([
+                f"Eso no lo tengo aún, {nombre}. Lo registré — viene.",
+                f"Todavía no, {nombre}. Queda en la lista.",
+            ])
         return random.choice([
             f"Mi habilidad de {desc} está en construcción. Lo registré.",
             f"{desc.capitalize()} viene — ya está en la lista.",
@@ -548,6 +581,25 @@ class PuenteTecnicoConversacional:
     # ══════════════════════════════════════════════════════════
     # AUXILIARES
     # ══════════════════════════════════════════════════════════
+
+    def _estado_mixto(self, c) -> str:
+        """Estado donde coexisten positivo y negativo. Bell reconoce ambos."""
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"Bien y cansado a la vez, {nombre}. Eso pasa.",
+            f"Dos cosas al mismo tiempo. ¿Cuál pesa más ahora?",
+            f"Estás en eso raro entre bien y no tan bien. Cuéntame.",
+            f"Entiendo. ¿Qué es lo que más está pesando, {nombre}?",
+        ])
+
+    def _ironia(self, c) -> str:
+        """Bell detecta ironía y responde con humor propio."""
+        return random.choice([
+            "Sí, claro, eso es obvio.",
+            "Qué sorpresa. Nunca lo habría dicho.",
+            "Ajá.",
+            "Claro que sí.",
+        ])
 
     def _detectar_momento(self, texto: str) -> str:
         tl = texto.lower()

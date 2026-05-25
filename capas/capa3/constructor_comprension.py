@@ -99,15 +99,21 @@ class ConstructorComprension:
         ids_primarios = {n.get('nodo_id', '') for n in primarios}
 
         # ── PRIORIDAD 1: clasificación de Groq ────────────
-        if clasificacion_groq:
-            return self._comprension_desde_groq(
-                clasificacion_groq, primarios, texto_original, contexto
-            )
-
-        # ── PRIORIDAD 2: motor de lenguaje (spaCy) ────────
+        # Correr motor de lenguaje SIEMPRE (en paralelo con Groq, no solo fallback)
+        # Sus datos enriquecen la comprensión aunque Groq haya clasificado el tipo
         resultado_motor = self._usar_motor_lenguaje(
             texto_original, ids_activos, ids_primarios, contexto
         )
+
+        if clasificacion_groq:
+            base = self._comprension_desde_groq(
+                clasificacion_groq, primarios, texto_original, contexto
+            )
+            # Enriquecer con datos del motor que Groq no da
+            if resultado_motor:
+                base = self._enriquecer_con_motor(base, resultado_motor)
+            return base
+
         if resultado_motor:
             return self._comprension_desde_motor(resultado_motor, primarios, texto_original)
 
@@ -192,6 +198,57 @@ class ConstructorComprension:
             'pregunta_accion_bell':    'AUTO_ANALISIS',
         }
         return mapa.get(tipo)
+
+    # ── Enriquecer resultado de Groq con datos del motor ──
+
+    def _enriquecer_con_motor(self, base: dict, motor) -> dict:
+        """
+        Groq clasifica bien el tipo de mensaje.
+        El motor de 6 dimensiones aporta lo que Groq no da:
+        emoción exacta, necesidad_real, nivel_energía, modo_mental,
+        estado_subyacente, humor, ironía.
+        Combinamos lo mejor de ambos.
+        """
+        profunda = base.get('profunda', {})
+
+        # Solo enriquecer si el motor detectó algo relevante
+        if motor.emocion_detectada and motor.emocion_detectada != 'neutra':
+            # Si Groq no detectó emoción, usar la del motor
+            if not profunda.get('emocion_detectada') or profunda.get('emocion_detectada') == 'neutra':
+                profunda['emocion_detectada'] = motor.emocion_detectada
+                profunda['intensidad']        = motor.intensidad
+                profunda['tono_base']         = motor.tono_base
+
+        # Campos que el motor conoce y Groq no devuelve
+        if motor.necesidad_real:
+            profunda['necesidad_real'] = motor.necesidad_real
+        if motor.nivel_energia and motor.nivel_energia != 'normal':
+            profunda['nivel_energia'] = motor.nivel_energia
+        if motor.modo_mental and motor.modo_mental != 'receptivo':
+            profunda['modo_mental'] = motor.modo_mental
+        if motor.estado_subyacente:
+            profunda['estado_subyacente'] = motor.estado_subyacente
+        if motor.tiene_humor:
+            profunda['tiene_humor'] = True
+        if motor.tiene_ironia:
+            profunda['tiene_ironia'] = True
+
+        # Si el motor detectó logro_compartido y Groq no, corregir tipo
+        # (el motor es mejor en detectar emociones que tipos)
+        tipo_groq  = base.get('contextual', {}).get('tipo_mensaje', '')
+        tipo_motor = motor.tipo_mensaje
+        _tipos_emocionales = {
+            'logro_compartido', 'queja', 'reflexion_compartida',
+            'peticion_consejo', 'expresion_emocional_negativa',
+            'expresion_emocional_positiva',
+        }
+        if tipo_motor in _tipos_emocionales and tipo_groq == 'conversacional':
+            ctx = base.get('contextual', {})
+            ctx['tipo_mensaje'] = tipo_motor
+            base['contextual'] = ctx
+
+        base['profunda'] = profunda
+        return base
 
     # ── Comprensión desde MotorComprension (spaCy) ─────────
 

@@ -20,6 +20,13 @@ import unicodedata
 from collections import Counter
 from typing import Optional
 
+# rapidfuzz para matching fuzzy — mejora retrieval con variaciones morfológicas
+try:
+    from rapidfuzz import fuzz as _fuzz
+    _RAPIDFUZZ_OK = True
+except ImportError:
+    _RAPIDFUZZ_OK = False
+
 
 # ── Rutas por defecto ─────────────────────────────────────────────────────────
 _DIR_BASE    = os.path.dirname(os.path.abspath(__file__))
@@ -278,6 +285,28 @@ class RetrievelBell:
             resp = top[0][1]['respuesta']
             self._registrar(resp)
             return {'respuesta': resp, 'score': round(top[0][0], 3), 'fuente': 'retrieval_bell'}
+
+        # Segunda pasada: rapidfuzz para variaciones morfológicas
+        # "cansadísimo" matchea "cansado", "chévere parcero" matchea "bacano"
+        if _RAPIDFUZZ_OK and texto_usuario:
+            mejor_score_fuzz = 0
+            mejor_resp_fuzz  = None
+            texto_norm = _normalizar(texto_usuario)
+            for ej in self._ejemplos:
+                pregunta_norm = _normalizar(ej.get('pregunta', ''))
+                if not pregunta_norm:
+                    continue
+                ratio = _fuzz.token_set_ratio(texto_norm, pregunta_norm) / 100.0
+                if ratio > mejor_score_fuzz and ej['respuesta'] not in self._recientes:
+                    mejor_score_fuzz = ratio
+                    mejor_resp_fuzz  = ej['respuesta']
+            if mejor_score_fuzz >= 0.60 and mejor_resp_fuzz:
+                self._registrar(mejor_resp_fuzz)
+                return {
+                    'respuesta': mejor_resp_fuzz,
+                    'score':     round(mejor_score_fuzz, 3),
+                    'fuente':    'retrieval_fuzzy',
+                }
 
         # Fallback a cluster
         return self._cluster_fallback(texto_usuario, tipo, emocion)
