@@ -43,7 +43,17 @@ def _log(tag: str, msg: str):
     print(f'  [{tag}] {msg}')
 
 
-def _obtener_memoria_ctx(texto_actual: str = '') -> str:
+def _obtener_memoria_ctx(texto_actual: str = '', tipo_mensaje: str = '',
+                         emocion: str = '') -> str:
+    # Usar motor_recuperacion para contexto inteligente y relevante
+    try:
+        from biblioteca.habilidades.memoria.motor_recuperacion import recuperar_contexto
+        ctx = recuperar_contexto(texto_actual, tipo_mensaje, emocion)
+        if ctx:
+            return ctx
+    except Exception:
+        pass
+    # Fallback al contexto completo original
     try:
         from biblioteca.memoria import obtener_memoria
         ctx = obtener_memoria().contexto_completo_para_groq(texto_actual)
@@ -119,10 +129,10 @@ class GeneradorMotorLocal:
         _log('🔧 MOTOR', f'Recibido: "{texto[:60]}" | tono={tono}')
 
         try:
-            ctx = _obtener_memoria_ctx(texto)
+            ctx = _obtener_memoria_ctx(texto, tipo, emocion)
             system = _SYSTEM_CONVERSACIONAL
             if ctx:
-                system += f'\n\nCONTEXTO: {ctx[:200]}'
+                system += f'\n\nCONTEXTO:\n{ctx[:400]}'
 
             tok_s = len(system.split())
             tok_t = len(texto.split())

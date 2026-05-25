@@ -332,6 +332,14 @@ class GeneradorCodigo:
             return '', str(e)
 
     def _construir_prompt(self, req: str, ctx: str, patrones: str) -> str:
+        # Enriquecer con contexto máximo (estilo, librerías, convenciones)
+        try:
+            from biblioteca.habilidades.python.contexto_maximo import construir_contexto
+            ctx_max = construir_contexto(req)
+            if ctx_max:
+                ctx = ctx_max + ('\n' + ctx if ctx else '')
+        except Exception:
+            pass
         partes = [f'<requerimiento>{req}</requerimiento>']
         if ctx:
             partes.append(f'<contexto_analisis>{ctx[:400]}</contexto_analisis>')

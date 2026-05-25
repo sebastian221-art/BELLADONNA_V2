@@ -166,6 +166,17 @@ def _guardar_en_memoria(paquete_capa8: dict, resultado: dict):
 
         mem.actualizar_self_post_sesion()
 
+        # Auto-cierre: sintetizar episodio cada 15 turnos (sesión larga)
+        # o si el mensaje es una despedida
+        turno_n = len(mem.obtener_contexto_sesion(100))
+        tipo_actual = datos.get('tipo', '')
+        if tipo_actual == 'despedida' or turno_n >= 15:
+            try:
+                mem.cerrar_sesion()
+                print('  [C9] 📖 Sesión sintetizada y guardada')
+            except Exception:
+                pass
+
     except Exception as e:
         print(f'  C9 ⚠️  Memoria error: {e}')
 

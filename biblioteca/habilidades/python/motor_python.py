@@ -295,10 +295,24 @@ def _modo_generacion(texto: str, nombre: str) -> dict:
     )
 
     if resultado.exitoso:
+        # ── Verificación post-creación ──────────────────────
+        codigo_final = resultado.codigo
+        try:
+            from biblioteca.habilidades.python.verificador_postcreacion import verificar_y_corregir
+            vr = verificar_y_corregir(codigo_final, texto)
+            if vr.codigo_final and vr.codigo_final != codigo_final:
+                codigo_final = vr.codigo_final
+                print(f'  [Verificador] ✅ {vr.reporte}')
+            elif vr.aprobado:
+                print(f'  [Verificador] ✅ Sin problemas')
+        except Exception:
+            pass
+        # ────────────────────────────────────────────────────
+
         return {
             'exitoso':        True,
             'respuesta_texto': resultado.resumen_bell,
-            'codigo_generado': resultado.codigo,
+            'codigo_generado': codigo_final,
             'soluciones':     resultado.soluciones,   # ← TODAS las soluciones
             'habilidad':      'PYTHON_COMPLETO',
             'modo':           'generacion',

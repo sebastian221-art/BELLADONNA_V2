@@ -214,6 +214,16 @@ class ExplicadorTecnico:
         except Exception as e:
             print(f'  [Explicador] recursion_perfil: {e}')
 
+        # Análisis Big-O real — mide complejidad ejecutando con n creciente
+        try:
+            from biblioteca.habilidades.python.analizador_complejidad_algoritmica import analizar_complejidad
+            resultados_bigo = analizar_complejidad(codigo)
+            if resultados_bigo:
+                datos['bigo_real'] = '\n\n'.join(r.reporte for r in resultados_bigo)
+                print(f'  [Explicador] Big-O medido: {[r.complejidad for r in resultados_bigo]}')
+        except Exception as e:
+            pass
+
         return datos
 
     def _generar_version_mejorada(self, codigo: str, analisis, datos_extra: dict) -> str:
@@ -465,6 +475,9 @@ class ExplicadorTecnico:
 
         if datos_extra.get('recursion_perfil'):
             partes.append(f'\n{datos_extra["recursion_perfil"]}')
+
+        if datos_extra.get('bigo_real'):
+            partes.append(f'\n{datos_extra["bigo_real"]}')
 
         return '\n'.join(partes)
 

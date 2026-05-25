@@ -441,6 +441,19 @@ class GestorMemoria:
         )
 
     def extraer_datos_sebastian(self, mensaje: str, respuesta: str):
+        # Usar el extractor NLP extendido (detecta mucho más que regex)
+        try:
+            from biblioteca.habilidades.memoria.extractor_perfil import extraer, detectar_estado_del_dia
+            datos = extraer(mensaje, respuesta)
+            for d in datos:
+                self.actualizar_perfil(d.clave, d.valor, d.tipo, d.fuente, d.confianza)
+            # Estado del día
+            estado = detectar_estado_del_dia(mensaje)
+            if estado:
+                self.actualizar_perfil('estado_hoy', estado, 'patron', 'inferido', 0.7)
+        except Exception:
+            pass
+        # Fallback a patrones básicos originales
         tl = mensaje.lower()
         _PATRONES = [
             (r'tengo\s+(\d+)\s+a[ñn]os',              'edad',     'dato'),
@@ -567,14 +580,24 @@ class GestorMemoria:
             ex.get('habilidad', '') for ex in self._sesion_cache
             if ex.get('habilidad')
         ))
-        n = len(self._sesion_cache)
-        primero = self._sesion_cache[0].get('user', '')[:60]
-        ultimo  = self._sesion_cache[-1].get('user', '')[:60]
-        resumen = (f"Sesión de {n} intercambios. "
-                   f"Comenzó: '{primero}'. Terminó: '{ultimo}'.")
-        self.guardar_episodio(resumen, temas, habilidades,
+        # Intentar sintetizar con Groq para un resumen inteligente
+        resumen = None
+        try:
+            from biblioteca.habilidades.memoria.sintetizador_episodios import sintetizar_y_guardar
+            resumen = sintetizar_y_guardar(self._sesion_cache, self)
+        except Exception:
+            pass
+
+        # Fallback local si Groq no está disponible
+        if not resumen:
+            n = len(self._sesion_cache)
+            primero = self._sesion_cache[0].get('user', '')[:60]
+            ultimo  = self._sesion_cache[-1].get('user', '')[:60]
+            resumen = (f"Sesión de {n} intercambios. "
+                       f"Comenzó: '{primero}'. Terminó: '{ultimo}'.")
+            self.guardar_episodio(resumen, temas, habilidades,
                               f"Habilidades: {', '.join(habilidades) or 'ninguna'}.")
-        print(f"  [Memoria] 📖 Episodio guardado: {n} intercambios")
+            print(f"  [Memoria] 📖 Episodio (fallback) guardado: {len(self._sesion_cache)} intercambios")
 
     # ══════════════════════════════════════════════════════
     # APRENDER DE MENSAJES

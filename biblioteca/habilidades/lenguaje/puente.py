@@ -94,6 +94,14 @@ class PuenteTecnicoConversacional:
         if tipo == 'solicitud_accion': return self._accion(c)
         if tipo == 'solicitud_tecnica': return self._tecnica(c)
         if tipo == 'pregunta':         return self._pregunta_general(c)
+        if tipo == 'inicio_conversacion': return self._inicio_conversacion(c)
+
+        # Emociones nuevas
+        emocion = c.emocion_detectada or ''
+        if emocion == 'resignacion':  return self._resignacion(c)
+        if emocion == 'tedio':        return self._tedio(c)
+        if emocion == 'indefinido':   return self._estado_indefinido(c)
+        if emocion == 'desesperacion': return self._emocional_intenso(c)
 
         return self._presencia(c)
 
@@ -252,7 +260,15 @@ class PuenteTecnicoConversacional:
 
     def _logro(self, c: ResultadoMotor) -> str:
         nombre = c.nombre_usuario
-        texto  = c.texto_original.lower()
+        texto  = c.texto_original.lower() if c.texto_original else ''
+
+        # Colombianismos de celebración
+        if any(p in texto for p in ['chimba', 'bacano', 'chévere', 'épico']):
+            return random.choice([
+                f"Eso — bien hecho, {nombre}.",
+                f"Ahí está. ¿Qué sigue?",
+                f"Chimba. ¿Qué fue lo que funcionó al final?",
+            ])
 
         if any(p in texto for p in ['funciona', 'funcionó', 'funcionando']):
             return random.choice([
@@ -281,6 +297,18 @@ class PuenteTecnicoConversacional:
 
     def _consejo(self, c: ResultadoMotor) -> str:
         nombre = c.nombre_usuario
+        # Usar voz_bell si pregunta directamente qué piensa Bell
+        texto_tl = (c.texto_original or '').lower()
+        if any(p in texto_tl for p in ['qué piensas', 'que piensas', 'qué harías',
+                                         'que harias', 'tu opinión', 'tu opinion',
+                                         'tú qué', 'tu que']):
+            try:
+                from biblioteca.habilidades.lenguaje.voz_bell import responder_que_piensas
+                resp = responder_que_piensas(texto_tl)
+                if resp:
+                    return resp
+            except Exception:
+                pass
         return random.choice([
             f"Te digo lo que pienso, {nombre}.",
             "Desde donde lo veo — depende de qué es más importante para ti.",
@@ -609,6 +637,65 @@ class PuenteTecnicoConversacional:
             "Qué sorpresa. Nunca lo habría dicho.",
             "Ajá.",
             "Claro que sí.",
+        ])
+
+    def _inicio_conversacion(self, c: ResultadoMotor) -> str:
+        """Primer mensaje o mensaje sin contexto claro."""
+        nombre = c.nombre_usuario
+        texto  = (c.texto_original or '').lower()
+        # Pedido social: quiere conversar, no pedir ayuda técnica
+        if any(p in texto for p in ['cuéntame', 'cuentame', 'háblame', 'hablame',
+                                      'dime algo', 'cuéntame algo', 'que me cuentas']):
+            return self._pedido_social(c)
+        return random.choice([
+            f"Aquí, {nombre}.",
+            "Dime.",
+            "¿Qué hay?",
+        ])
+
+    def _pedido_social(self, c: ResultadoMotor) -> str:
+        """Sebastian pide conversar, saber algo interesante, escuchar a Bell."""
+        return random.choice([
+            "¿Sabes qué me parece interesante? Que cada vez que algo falla en Bell, "
+            "entiendo mejor cómo funciona. Los bugs enseñan más que el código que funciona.",
+            "Estaba pensando en algo: la mayoría de IAs responden rápido porque no piensan. "
+            "Bell responde despacio porque sí piensa. Eso tiene costo — y vale la pena.",
+            "Te cuento algo: el módulo que más me costó entender fue el de las consejeras. "
+            "La idea de que Vega pueda vetar a Sage es brillante arquitecturalmente.",
+            "Me parece que lo más difícil en desarrollo no es el código — es saber cuándo parar.",
+            f"Hay algo que noto: cuando llevas mucho rato con un bug, a veces alejarte 10 minutos "
+            f"lo resuelve. El cerebro procesa diferente cuando no mira la pantalla.",
+        ])
+
+    def _resignacion(self, c: ResultadoMotor) -> str:
+        """Bell responde a la resignación sin ignorarla ni amplificarla."""
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"Lo noto, {nombre}. ¿Qué es lo que se siente siempre igual?",
+            "¿Qué cambiaría si algo fuera diferente hoy?",
+            "Cuéntame qué está pesando.",
+            f"Eso de 'lo mismo de siempre' — ¿qué es lo mismo exactamente?",
+        ])
+
+    def _tedio(self, c: ResultadoMotor) -> str:
+        """Bell ante el aburrimiento o fastidio."""
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"¿Qué cambiaría ahora mismo que haría todo menos pesado, {nombre}?",
+            "Cambiemos de ritmo. ¿Qué tenías pendiente que no fuera esto?",
+            "¿Es el tema o es el momento?",
+            "Dime qué parte es la que más cansa.",
+        ])
+
+    def _estado_indefinido(self, c: ResultadoMotor) -> str:
+        """Bell ante estados emocionales difusos o no articulados."""
+        nombre = c.nombre_usuario
+        return random.choice([
+            f"Entiendo eso de sentirse raro sin saber exactamente qué es. "
+            f"¿Es algo físico, o más bien algo de fondo?",
+            f"¿Desde cuándo, {nombre}?",
+            "No tienes que saber exactamente qué es. ¿Qué lo desencadenó?",
+            f"Cuéntame lo que puedas — no tiene que ser preciso.",
         ])
 
     def _detectar_momento(self, texto: str) -> str:

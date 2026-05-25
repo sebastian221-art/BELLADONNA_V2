@@ -141,6 +141,16 @@ _EMOCIONES_DIRECTAS = {
     'determinacion': ['quiero','necesito','voy a','tengo que','hay que','debo',
                       'es urgente','sin falta','obligatorio','lo voy a hacer',
                       'vamos','hagamos','de una vez'],
+    'resignacion':   ['lo mismo de siempre', 'siempre igual', 'como siempre',
+                      'igual que antes', 'nunca cambia', 'para qué',
+                      'ya qué', 'da igual', 'me da igual', 'no importa ya'],
+    'tedio':         ['qué aburrido', 'qué pereza', 'aburrimiento', 'tan aburrido',
+                      'qué jartera', 'qué fastidio'],
+    'indefinido':    ['me siento raro', 'algo está mal', 'no sé qué tengo',
+                      'me siento extraño', 'no sé cómo explicarlo',
+                      'no sé qué siento', 'me siento weird'],
+    'desesperacion': ['ya me desesperé', 'estoy desesperado', 'no aguanto más',
+                      'hasta aquí llegué', 'no puedo más', 'me tiene loco'],
     'alivio':        ['por fin','qué alivio','ya terminó','ya termino','se resolvió',
                       'funcionó al fin','menos mal','uff que bien'],
     # Sin parcero aquí — es colombianismo neutro, no emoción
@@ -230,7 +240,27 @@ class MotorComprension:
         self._detectar_humor_ironia(resultado, texto)
 
         self._sintetizar(resultado, resultados_dim, ctx)
+
+        # Post-síntesis: si tipo es neutro pero hay emoción negativa → convertir
+        _emoc_neg = {'frustracion','cansancio','ansiedad','tristeza','rabia','soledad',
+                     'culpa','verguenza','resignacion','tedio','desesperacion',
+                     'indefinido','impaciencia','confusion'}
+        if (resultado.tipo_mensaje in ('inicio_conversacion', 'conversacional')
+                and resultado.emocion_detectada in _emoc_neg):
+            resultado.tipo_mensaje = 'expresion_emocional_negativa'
         resultado.confianza_global = self._calcular_confianza(resultados_dim)
+
+        # Registrar en memoria de sesión para continuidad emocional
+        try:
+            from biblioteca.habilidades.lenguaje.memoria_sesion import MemoriaSesion
+            MemoriaSesion.obtener().registrar_turno(
+                texto=resultado.texto_original or '',
+                emocion=resultado.emocion_detectada or 'neutra',
+                tipo=resultado.tipo_mensaje,
+                intensidad=resultado.intensidad,
+            )
+        except Exception:
+            pass
 
         return resultado
 
@@ -248,6 +278,15 @@ class MotorComprension:
         tl = texto.lower()
         mejor_emocion  = None
         mejor_intensidad = 0.0
+
+        # Fix 7: ironía textual explícita (no), (jaja), "claro que sí"
+        import re as _re7
+        _pats_str = ['claro que sí', 'todo funciona (no)', 'perfecto todo']
+        _pats_re  = [r'\\(no\\)', r'\\(obvio\\)', r'\\(claro\\)']
+        if not r.tiene_ironia:
+            if any(p in tl for p in _pats_str) or any(_re7.search(p, tl) for p in _pats_re):
+                r.tiene_ironia = True
+                r.tono_base    = 'ironico'
 
         intensidades = {
             'frustracion':   0.82,
@@ -279,7 +318,8 @@ class MotorComprension:
             r.emocion_detectada = mejor_emocion
             r.intensidad        = mejor_intensidad
 
-            negativas = {'frustracion','cansancio','ansiedad','tristeza','rabia','soledad','culpa','verguenza'}
+            negativas = {'frustracion','cansancio','ansiedad','tristeza','rabia','soledad','culpa','verguenza',
+                         'resignacion','tedio','desesperacion','indefinido','impaciencia'}
             positivas = {'entusiasmo','orgullo','gratitud','esperanza','determinacion','alivio'}
 
             # Detectar estado MIXTO: positivo+negativo en el mismo mensaje
@@ -344,7 +384,13 @@ class MotorComprension:
                 'expresion_emocional_positiva', 'queja', 'reflexion_compartida',
                 'peticion_consejo', 'gratitud', 'saludo', 'despedida',
             }
-            if r.dominio_tecnico and r.tipo_mensaje not in _tipos_emocionales_protegidos:
+            _emociones_protegidas = {
+                'impaciencia', 'desesperacion', 'confusion', 'agotamiento',
+                'frustracion', 'ansiedad', 'tristeza', 'cansancio', 'soledad',
+                'resignacion', 'indefinido',
+            }
+            if r.dominio_tecnico and (r.tipo_mensaje not in _tipos_emocionales_protegidos
+                                      and r.emocion_detectada not in _emociones_protegidas):
                 r.tipo_mensaje = 'solicitud_tecnica'
 
         inf = mapa.get('inferencial')

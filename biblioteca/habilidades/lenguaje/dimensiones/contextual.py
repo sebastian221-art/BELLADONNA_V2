@@ -195,6 +195,40 @@ class DimensionContextual(DimensionLenguaje):
         return 'mixto'
 
 
+def _analizar_patron_emocional(historial: list) -> str:
+    """
+    Analiza el patrón emocional acumulado de la sesión.
+    Si Sebastian lleva varios turnos negativos Bell debe notarlo.
+    """
+    if not historial or len(historial) < 2:
+        return ''
+
+    emociones = []
+    for h in historial[-6:]:
+        tipo = h.get('tipo', h.get('tipo_mensaje', ''))
+        if 'negativa' in tipo or 'frustracion' in tipo:
+            emociones.append('negativo')
+        elif 'positiva' in tipo or 'logro' in tipo or 'gratitud' in tipo:
+            emociones.append('positivo')
+        else:
+            emociones.append('neutro')
+
+    negativos  = emociones.count('negativo')
+    positivos  = emociones.count('positivo')
+    total      = len(emociones)
+
+    if total == 0:
+        return ''
+
+    if negativos >= total * 0.65:
+        return 'sesion_negativa_acumulada'
+    if positivos >= total * 0.65:
+        return 'sesion_positiva'
+    if negativos >= 2 and positivos >= 2:
+        return 'sesion_mixta'
+    return ''
+
+
 # ════════════════════════════════════════════════
 # DIMENSIÓN INTRÍNSECA — en el mismo módulo
 # ════════════════════════════════════════════════
