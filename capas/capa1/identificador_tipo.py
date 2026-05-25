@@ -111,7 +111,13 @@ class IdentificadorTipo:
             return 'texto'
         return 'texto'
 
+    def _normalizar_superlativos(self, texto: str) -> str:
+        """Normaliza superlativos: cansadísimo → cansado."""
+        import re as _re
+        return _re.sub(r'(\w+?)' + 'ísim[oa]s?', r'\g<1>o', texto)
+
     def _identificar_string(self, estimulo: str) -> str:
+        estimulo = self._normalizar_superlativos(estimulo)
         # Verificar si es ruta de archivo existente
         ruta = Path(estimulo.strip())
         # Fix macOS OSError 63: límite 255 bytes por nombre de archivo

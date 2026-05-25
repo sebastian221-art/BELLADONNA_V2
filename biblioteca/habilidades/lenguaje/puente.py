@@ -359,6 +359,16 @@ class PuenteTecnicoConversacional:
         accion  = c.accion_principal
         objetos = c.objetos
         nombre  = c.nombre_usuario
+        tl      = c.texto_original.lower() if c.texto_original else ''
+
+        # Solicitud con referencia vaga → pedir clarificación
+        _refs_vagas = ['eso del', 'esto del', 'eso que', 'aquello', 'ese archivo']
+        if any(ref in tl for ref in _refs_vagas):
+            return random.choice([
+                "¿A qué te refieres exactamente?",
+                f"¿Sobre cuál parte, {nombre}?",
+                "Dime más específico.",
+            ])
 
         if accion and objetos:
             obj_str = objetos[0] if len(objetos) == 1 else ', '.join(objetos[:2])

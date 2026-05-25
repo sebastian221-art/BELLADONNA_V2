@@ -139,11 +139,31 @@ class BellVoiceEngine:
         if not respuesta:
             return self._base_fallback(tipo, emocion), 'base_bell'
 
+        # Validar coherencia: mensaje emocional no recibe respuesta técnica
+        _tipos_emocionales = {
+            'expresion_emocional_negativa', 'expresion_emocional_positiva',
+            'logro_compartido', 'queja', 'gratitud', 'saludo', 'despedida',
+        }
+        if tipo in _tipos_emocionales and self._es_respuesta_tecnica(respuesta):
+            print(f'  [BellVoiceEngine] coherencia: rechazando resp técnica para tipo emocional')
+            return self._base_fallback(tipo, emocion), 'base_bell'
+
         respuesta = _limpiar_respuesta(respuesta)
         respuesta = _personalizar(respuesta, nombre)
 
         print(f'  [BellVoiceEngine] score={resultado["score"]:.3f} | {fuente_id}')
         return respuesta, fuente_id
+
+    def _es_respuesta_tecnica(self, respuesta: str) -> bool:
+        """Detecta si una respuesta es una definición técnica (no emocional)."""
+        tl = respuesta.lower()
+        indicadores = [
+            'es un ', 'es una ', 'son un ', 'se define como',
+            'hace que no funcione', 'hace que el',
+            'es cuando el', 'ocurre cuando',
+            'es el proceso de', 'permite que',
+        ]
+        return any(ind in tl for ind in indicadores)
 
     def _base_fallback(self, tipo: str = '', emocion: str = '') -> str:
         """Respuestas de base cuando retrieval no está disponible."""

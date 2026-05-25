@@ -234,11 +234,17 @@ class MotorComprension:
 
         return resultado
 
+    def _normalizar_superlativos(self, texto: str) -> str:
+        """Normaliza superlativos: cansadísimo → cansado, frustradísima → frustrada"""
+        import re
+        return re.sub(r'(\w+?)ísim[oa]s?\b', r'\1o', texto)
+
     def _detectar_emociones_directas(self, r: ResultadoMotor, texto: str):
         """
         Detección directa de emociones desde texto completo.
         Independiente de las dimensiones — es una capa extra de seguridad.
         """
+        texto = self._normalizar_superlativos(texto)
         tl = texto.lower()
         mejor_emocion  = None
         mejor_intensidad = 0.0
@@ -375,9 +381,11 @@ class MotorComprension:
                 if r.tipo_mensaje == 'conversacional':
                     r.tipo_mensaje = 'expresion_emocional_negativa'
             elif emocion in ('entusiasmo', 'gratitud', 'orgullo', 'alivio'):
-                if r.tipo_mensaje == 'conversacional':
+                if r.tipo_mensaje in ('conversacional', 'expresion_emocional_positiva'):
                     if emocion == 'orgullo':
                         r.tipo_mensaje = 'logro_compartido'
+                    elif emocion == 'gratitud':
+                        r.tipo_mensaje = 'gratitud'
                     else:
                         r.tipo_mensaje = 'expresion_emocional_positiva'
 

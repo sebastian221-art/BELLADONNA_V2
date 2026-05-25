@@ -243,6 +243,11 @@ class DimensionTecnica(DimensionLenguaje):
     def _analizar_interno(self, texto: str, contexto: dict) -> ResultadoDimension:
         tl = texto.lower().strip()
 
+        # Guard: referencias vagas → no activar aunque haya keyword técnico
+        _refs_vagas = ['eso del', 'esto del', 'eso que', 'puedes hacer eso', 'puedes hacer esto']
+        if any(r in tl for r in _refs_vagas):
+            return ResultadoDimension(activa=False, hallazgos={}, senales=[])
+
         vocab_match   = contexto.get('vocab_match', [])
         ids_conocidos = contexto.get('ids_conocidos', [])
 
