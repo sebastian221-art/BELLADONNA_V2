@@ -129,10 +129,29 @@ class GeneradorMotorLocal:
         _log('🔧 MOTOR', f'Recibido: "{texto[:60]}" | tono={tono}')
 
         try:
-            ctx = _obtener_memoria_ctx(texto, tipo, emocion)
+            ctx = _obtener_memoria_ctx(texto, tono, '')
             system = _SYSTEM_CONVERSACIONAL
+
+            # Historial de conversación — lo más importante para respuestas contextuales
+            historial_str = ''
+            try:
+                from capas.capa6.buffer_sesion import BufferSesion
+                buf = BufferSesion.obtener()
+                pares = buf.obtener_ultimas_respuestas_bell(3)
+                textos_prev = buf.obtener_ultimos_textos_sebastian(3) if hasattr(buf, 'obtener_ultimos_textos_sebastian') else []
+                if pares:
+                    historial_str = '\n'.join(
+                        f'Sebastian: {t}\nBell: {r}'
+                        for t, r in zip(textos_prev[-3:], pares[-3:])
+                        if t and r
+                    ) if textos_prev else '\n'.join(f'Bell: {r}' for r in pares)
+            except Exception:
+                pass
+
+            if historial_str:
+                system += f'\n\nCONVERSACIÓN RECIENTE:\n{historial_str}'
             if ctx:
-                system += f'\n\nCONTEXTO:\n{ctx[:400]}'
+                system += f'\n\nPERFIL:\n{ctx[:300]}'
 
             tok_s = len(system.split())
             tok_t = len(texto.split())
@@ -151,7 +170,7 @@ class GeneradorMotorLocal:
                         {'role': 'user',   'content': texto},
                     ],
                     'temperature': 0.6,
-                    'max_tokens':  120,   # corto — conversacional
+                    'max_tokens':  220,
                 },
                 timeout=_CLOUD_TIMEOUT,
             )

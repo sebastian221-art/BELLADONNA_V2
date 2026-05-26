@@ -1,8 +1,10 @@
 {
   "version": 2,
   "creada": "2026-05-14T21:22:33.069187",
-  "ultima_sesion": "2026-05-18T15:55:28.626204",
-  "datos_sebastian": {},
+  "ultima_sesion": "2026-05-25T23:23:32.563706",
+  "datos_sebastian": {
+    "empresa": "jelcon desarrollando un sistema para el hospital r"
+  },
   "momentos": [
     {
       "fecha": "2026-05-18T15:55:50.057098",
@@ -43,14 +45,14 @@
   ],
   "temas": {
     "programacion": {
-      "count": 297,
+      "count": 319,
       "primera_vez": "2026-05-17T16:43:05.890053",
-      "ultima_vez": "2026-05-18T15:55:50.064757"
+      "ultima_vez": "2026-05-25T23:23:41.864007"
     },
     "belladonna": {
-      "count": 34,
+      "count": 44,
       "primera_vez": "2026-05-17T16:44:46.628772",
-      "ultima_vez": "2026-05-18T15:56:46.509911"
+      "ultima_vez": "2026-05-25T23:24:22.043050"
     },
     "salud": {
       "count": 10,
@@ -58,117 +60,32 @@
       "ultima_vez": "2026-05-18T15:56:31.573325"
     },
     "emociones": {
-      "count": 28,
+      "count": 30,
       "primera_vez": "2026-05-17T17:13:39.575177",
-      "ultima_vez": "2026-05-18T15:57:16.245865"
+      "ultima_vez": "2026-05-25T20:39:38.669560"
     },
     "tecnologia": {
-      "count": 46,
+      "count": 48,
       "primera_vez": "2026-05-17T21:47:14.258503",
-      "ultima_vez": "2026-05-18T13:09:58.210671"
+      "ultima_vez": "2026-05-25T20:38:47.209951"
     },
     "trabajo": {
-      "count": 4,
+      "count": 6,
       "primera_vez": "2026-05-18T02:53:53.570405",
-      "ultima_vez": "2026-05-18T02:57:08.486650"
+      "ultima_vez": "2026-05-25T20:41:43.971341"
     },
     "estudio": {
       "count": 28,
       "primera_vez": "2026-05-18T04:02:24.350310",
       "ultima_vez": "2026-05-18T13:09:22.273730"
+    },
+    "amistad": {
+      "count": 4,
+      "primera_vez": "2026-05-25T23:16:42.481741",
+      "ultima_vez": "2026-05-25T23:24:52.264478"
     }
   },
   "estados": [
-    {
-      "fecha": "2026-05-18T02:52:05.633020",
-      "estado": "negativo",
-      "texto": "```python\ntengo este error, qué tiene de malo:\n\ndef saludar(nombre):\n    print(\""
-    },
-    {
-      "fecha": "2026-05-18T02:52:06.872696",
-      "estado": "negativo",
-      "texto": "```python\ntengo este error, qué tiene de malo:\n\ndef saludar(nombre):\n    print(\""
-    },
-    {
-      "fecha": "2026-05-18T02:54:40.625308",
-      "estado": "positivo",
-      "texto": "estoy muy bien y tu que haces"
-    },
-    {
-      "fecha": "2026-05-18T02:54:40.631336",
-      "estado": "positivo",
-      "texto": "estoy muy bien y tu que haces"
-    },
-    {
-      "fecha": "2026-05-18T02:55:46.652129",
-      "estado": "negativo",
-      "texto": "me siento triste"
-    },
-    {
-      "fecha": "2026-05-18T02:55:46.659795",
-      "estado": "negativo",
-      "texto": "me siento triste"
-    },
-    {
-      "fecha": "2026-05-18T02:56:08.143404",
-      "estado": "negativo",
-      "texto": "tengo muchos errores de codigo y estoy estresado"
-    },
-    {
-      "fecha": "2026-05-18T02:56:08.150382",
-      "estado": "negativo",
-      "texto": "tengo muchos errores de codigo y estoy estresado"
-    },
-    {
-      "fecha": "2026-05-18T02:57:17.664452",
-      "estado": "negativo",
-      "texto": "si me tiene cansado"
-    },
-    {
-      "fecha": "2026-05-18T02:57:17.669349",
-      "estado": "negativo",
-      "texto": "si me tiene cansado"
-    },
-    {
-      "fecha": "2026-05-18T02:57:42.023419",
-      "estado": "negativo",
-      "texto": "muchos proyectos juntos me tienen asi estresado"
-    },
-    {
-      "fecha": "2026-05-18T02:57:42.031626",
-      "estado": "negativo",
-      "texto": "muchos proyectos juntos me tienen asi estresado"
-    },
-    {
-      "fecha": "2026-05-18T03:08:36.680393",
-      "estado": "negativo",
-      "texto": "```python\ntengo este error, qué tiene de malo:\n\ndef saludar(nombre):\n    print(\""
-    },
-    {
-      "fecha": "2026-05-18T03:08:38.537302",
-      "estado": "negativo",
-      "texto": "```python\ntengo este error, qué tiene de malo:\n\ndef saludar(nombre):\n    print(\""
-    },
-    {
-      "fecha": "2026-05-18T04:02:38.633623",
-      "estado": "negativo",
-      "texto": "```python\ntengo este error, qué tiene de malo:\n\nestados = {\"activo\": True, \"ener"
-    },
-    {
-      "fecha": "2026-05-18T04:02:40.394546",
-      "estado": "negativo",
-      "texto": "```python\ntengo este error, qué tiene de malo:\n\nestados = {\"activo\": True, \"ener"
-    },
-    {
-      "fecha": "2026-05-18T04:13:05.634003",
-      "estado": "negativo",
-      "texto": "```python\ntengo este error, qué tiene de malo:\n\nestados = {\"activo\": True, \"ener"
-    },
-    {
-      "fecha": "2026-05-18T04:13:11.171901",
-      "estado": "negativo",
-      "texto": "```python\ntengo este error, qué tiene de malo:\n\nestados = {\"activo\": True, \"ener"
-    },
     {
       "fecha": "2026-05-18T04:33:00.667565",
       "estado": "negativo",
@@ -228,14 +145,104 @@
       "fecha": "2026-05-18T15:56:46.509944",
       "estado": "positiva",
       "texto": "gracias bell me ayudaste mucho"
+    },
+    {
+      "fecha": "2026-05-25T20:38:06.667923",
+      "estado": "entusiasmo",
+      "texto": "crea una función que calcule la entropía de Shannon de una lista de strings"
+    },
+    {
+      "fecha": "2026-05-25T20:38:12.300736",
+      "estado": "entusiasmo",
+      "texto": "crea una función que calcule la entropía de Shannon de una lista de strings"
+    },
+    {
+      "fecha": "2026-05-25T20:39:27.915222",
+      "estado": "orgullo",
+      "texto": "lo logré! por fin funciona el pipeline de Bell"
+    },
+    {
+      "fecha": "2026-05-25T20:39:27.919312",
+      "estado": "orgullo",
+      "texto": "lo logré! por fin funciona el pipeline de Bell"
+    },
+    {
+      "fecha": "2026-05-25T20:39:38.662857",
+      "estado": "tristeza",
+      "texto": "no sé, me siento raro hoy. como que algo está mal pero no sé qué es"
+    },
+    {
+      "fecha": "2026-05-25T20:39:38.669613",
+      "estado": "tristeza",
+      "texto": "no sé, me siento raro hoy. como que algo está mal pero no sé qué es"
+    },
+    {
+      "fecha": "2026-05-25T20:39:57.594624",
+      "estado": "positiva",
+      "texto": "qué chimba , terminé el módulo de memoria"
+    },
+    {
+      "fecha": "2026-05-25T20:39:57.600681",
+      "estado": "positiva",
+      "texto": "qué chimba , terminé el módulo de memoria"
+    },
+    {
+      "fecha": "2026-05-25T20:40:36.557322",
+      "estado": "frustración",
+      "texto": "uff qué cansancio, llevo horas con este bug"
+    },
+    {
+      "fecha": "2026-05-25T20:40:36.563766",
+      "estado": "frustración",
+      "texto": "uff qué cansancio, llevo horas con este bug"
+    },
+    {
+      "fecha": "2026-05-25T20:40:51.316273",
+      "estado": "impaciencia",
+      "texto": "sigue sin funcionar, ya me estresé"
+    },
+    {
+      "fecha": "2026-05-25T20:40:51.325583",
+      "estado": "impaciencia",
+      "texto": "sigue sin funcionar, ya me estresé"
+    },
+    {
+      "fecha": "2026-05-25T20:41:04.017975",
+      "estado": "tristeza",
+      "texto": "no entiendo nada, todo está mal"
+    },
+    {
+      "fecha": "2026-05-25T20:41:04.025243",
+      "estado": "tristeza",
+      "texto": "no entiendo nada, todo está mal"
+    },
+    {
+      "fecha": "2026-05-25T20:41:21.437528",
+      "estado": "entusiasmo",
+      "texto": "claro, perfecto, todo funciona (no)"
+    },
+    {
+      "fecha": "2026-05-25T20:41:21.444083",
+      "estado": "entusiasmo",
+      "texto": "claro, perfecto, todo funciona (no)"
+    },
+    {
+      "fecha": "2026-05-25T20:42:42.493392",
+      "estado": "positiva",
+      "texto": "hoy terminé el módulo de sintetizador de episodio"
+    },
+    {
+      "fecha": "2026-05-25T20:42:42.524677",
+      "estado": "positiva",
+      "texto": "hoy terminé el módulo de sintetizador de episodio"
     }
   ],
   "pendientes": [],
   "proyectos": {
     "BELLADONNA": {
-      "menciones": 34,
+      "menciones": 44,
       "primera": "2026-05-17T16:44:46.628813",
-      "ultima": "2026-05-18T15:56:46.509952"
+      "ultima": "2026-05-25T23:24:22.043095"
     },
     "se llama BELLADONNA y lo hago ": {
       "menciones": 2,
@@ -247,6 +254,6 @@
     }
   },
   "preferencias": {},
-  "total_sesiones": 51,
-  "total_turnos": 506
+  "total_sesiones": 54,
+  "total_turnos": 556
 }

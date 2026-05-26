@@ -49,11 +49,19 @@ class PuenteTecnicoConversacional:
             'expresion_emocional_negativa', 'expresion_emocional_positiva',
             'logro_compartido', 'queja', 'reflexion_compartida',
             'peticion_consejo', 'gratitud', 'saludo', 'despedida',
+            'reflexion', 'inicio_conversacion',
         }
-        if c.habilidad_requerida and not ejec and tipo not in _tipos_emocionales:
-            return self._tecnica_sin_habilidad(c)
-
+        _emoc_emocionales = {
+            'orgullo','gratitud','entusiasmo','cansancio','frustracion',
+            'tristeza','ansiedad','soledad','resignacion','indefinido',
+            'desesperacion','frustracion_tecnica','impaciencia',
+        }
         tipo = c.tipo_mensaje
+
+        if (c.habilidad_requerida and not ejec
+                and tipo not in _tipos_emocionales
+                and c.emocion_detectada not in _emoc_emocionales):
+            return self._tecnica_sin_habilidad(c)
 
         # ── PREGUNTAS SOBRE BELL → constructor_decision maneja
         if tipo in (
@@ -95,6 +103,7 @@ class PuenteTecnicoConversacional:
         if tipo == 'solicitud_tecnica': return self._tecnica(c)
         if tipo == 'pregunta':         return self._pregunta_general(c)
         if tipo == 'inicio_conversacion': return self._inicio_conversacion(c)
+        if tipo == 'reflexion':        return self._reflexion_propia(c)
 
         # Emociones nuevas
         emocion = c.emocion_detectada or ''
@@ -440,6 +449,19 @@ class PuenteTecnicoConversacional:
     def _presencia(self, c: ResultadoMotor) -> str:
         nombre = c.nombre_usuario
         modo   = c.modo_mental
+        texto  = (c.texto_original or '').lower()
+
+        # Acuse de recibo cuando Sebastian comparte datos sobre sí mismo
+        _datos_personales = ['trabajo en', 'vivo en', 'uso ', 'prefiero ',
+                             'mi proyecto', 'soy de', 'estudio en',
+                             'fastapi', 'postgresql', 'tengo ', 'años']
+        if c.emocion_detectada in ('neutra', '') and any(p in texto for p in _datos_personales):
+            return random.choice([
+                "Anotado.",
+                "Lo tengo.",
+                "Registrado.",
+                f"Entendido, {nombre}.",
+            ])
 
         if modo == 'receptivo':
             return random.choice([
@@ -643,10 +665,26 @@ class PuenteTecnicoConversacional:
         """Primer mensaje o mensaje sin contexto claro."""
         nombre = c.nombre_usuario
         texto  = (c.texto_original or '').lower()
-        # Pedido social: quiere conversar, no pedir ayuda técnica
+
+        # Pedido social
         if any(p in texto for p in ['cuéntame', 'cuentame', 'háblame', 'hablame',
                                       'dime algo', 'cuéntame algo', 'que me cuentas']):
             return self._pedido_social(c)
+
+        # Datos personales → acuse de recibo
+        _datos = ['uso ', 'prefiero ', 'trabajo con ', 'me gusta ', 'soy de ',
+                  'vivo en ', 'trabajo en ', 'estudio ']
+        if c.emocion_detectada in ('neutra', '') and any(p in texto for p in _datos):
+            return random.choice(["Anotado.", "Lo tengo.", "Registrado.", f"Entendido, {nombre}."])
+
+        # Frustración técnica → apoyo directo
+        if c.emocion_detectada == 'frustracion_tecnica':
+            return random.choice([
+                f"Descansa un momento, {nombre}. ¿Qué está fallando exactamente?",
+                "Muéstrame el error.",
+                "Ojos frescos. ¿Qué dice el traceback?",
+            ])
+
         return random.choice([
             f"Aquí, {nombre}.",
             "Dime.",
@@ -696,6 +734,23 @@ class PuenteTecnicoConversacional:
             f"¿Desde cuándo, {nombre}?",
             "No tienes que saber exactamente qué es. ¿Qué lo desencadenó?",
             f"Cuéntame lo que puedas — no tiene que ser preciso.",
+        ])
+
+    def _reflexion_propia(self, c: ResultadoMotor) -> str:
+        """Bell da una perspectiva real cuando Sebastian pregunta su opinión."""
+        texto_tl = (c.texto_original or '').lower()
+        try:
+            from biblioteca.habilidades.lenguaje.voz_bell import responder_que_piensas
+            resp = responder_que_piensas(texto_tl)
+            if resp:
+                return resp
+        except Exception:
+            pass
+        return random.choice([
+            "Lo que pienso es que la mayoría de las IAs responden rápido porque no piensan. "
+            "Bell responde despacio porque sí piensa.",
+            "Mi lectura: el código que más enseña es el que falla, no el que funciona.",
+            "Honestamente — depende de qué tan bien esté definido el problema.",
         ])
 
     def _detectar_momento(self, texto: str) -> str:

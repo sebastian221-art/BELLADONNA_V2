@@ -248,6 +248,19 @@ class DimensionTecnica(DimensionLenguaje):
         if any(r in tl for r in _refs_vagas):
             return ResultadoDimension(activa=False, hallazgos={}, senales=[])
 
+        # Guard: verbos de preferencia/información personal → no es solicitud técnica
+        _verbos_personales = ['prefiero ', 'me gusta más', 'trabajo con ', 'uso ',
+                              'usamos ', 'trabajo en ', 'soy de ', 'vivo en ']
+        if any(v in tl for v in _verbos_personales):
+            return ResultadoDimension(activa=False, hallazgos={}, senales=[])
+
+        # Guard: frases de celebración/logro — no son solicitudes técnicas
+        _frases_logro = ['lo logré', 'por fin funciona', 'ya funciona', 'qué chimba',
+                         'funcionó', 'funcionando bien', 'sigue sin funcionar',
+                         'ya me estresé', 'estoy que exploto', 'no aguanto']
+        if any(f in tl for f in _frases_logro):
+            return ResultadoDimension(activa=False, hallazgos={}, senales=[])
+
         vocab_match   = contexto.get('vocab_match', [])
         ids_conocidos = contexto.get('ids_conocidos', [])
 

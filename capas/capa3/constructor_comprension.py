@@ -253,55 +253,69 @@ class ConstructorComprension:
     # ── Comprensión desde MotorComprension (spaCy) ─────────
 
     def _usar_motor_lenguaje(self, texto, ids_activos, ids_primarios, contexto):
+        # Motor v2: spaCy + Groq razona con contexto real
+        # Fallback al motor v1 si algo falla
         try:
-            from biblioteca.habilidades.lenguaje.motor import MotorComprension
+            from biblioteca.habilidades.lenguaje.motor_v2 import MotorComprensionV2
             from capas.capa6.buffer_sesion import BufferSesion
-
-            vocab_context = contexto.get('vocab_match', [])
-            if not vocab_context:
-                try:
-                    from biblioteca.vocabulario.gestor_vocabulario import GestorVocabulario
-                    vocab_context = GestorVocabulario.obtener().buscar_frase(texto)
-                except Exception:
-                    vocab_context = []
-
-            ids_vocab = [
-                m['concepto'].get('id', '')
-                for m in vocab_context
-                if m.get('concepto', {}).get('id')
-                and m['concepto']['id'] not in _IDS_SIEMPRE_ACTIVOS
-            ]
-            vocab_tipos = {
-                m['concepto'].get('id', ''): m['concepto'].get('tipo', '')
-                for m in vocab_context
-                if m.get('concepto', {}).get('id')
-            }
-            ids_activos_limpios = ids_activos - _IDS_SIEMPRE_ACTIVOS
-            todos_ids = list(ids_activos_limpios | set(ids_vocab))
 
             historial = []
             try:
                 buffer = BufferSesion.obtener()
-                historial = [
-                    {'respuesta_bell': r}
-                    for r in buffer.obtener_ultimas_respuestas_bell(4)
-                ]
+                ultimas = buffer.obtener_ultimas_respuestas_bell(4)
+                historial = [{'respuesta_bell': r} for r in ultimas]
             except Exception:
                 pass
 
             nombre = contexto.get('sebastian', {}).get('nombre', 'Sebastian')
-            ctx_motor = {
+
+            ctx_v2 = {
                 'nombre_usuario': nombre,
                 'historial':      historial,
-                'vocab_match':    vocab_context,
-                'ids_activos':    todos_ids,
-                'ids_conocidos':  todos_ids,
-                'vocab_tipos':    vocab_tipos,
+                'vocab_match':    contexto.get('vocab_match', []),
+                'ids_activos':    list(ids_activos - _IDS_SIEMPRE_ACTIVOS),
+                'ids_conocidos':  list(ids_activos),
+                'vocab_tipos':    {},
                 'conceptos_red':  [],
             }
-            return MotorComprension.obtener().comprender(texto, ctx_motor)
-        except Exception:
-            return None
+            resultado = MotorComprensionV2.obtener().comprender(texto, ctx_v2)
+            # Guardar respuesta_groq en el contexto para que C6 la use
+            contexto['_respuesta_groq_v2'] = resultado.respuesta_groq
+            return resultado
+
+        except Exception as e:
+            print(f"  [C3] ⚠️ motor_v2 falló ({e}), usando motor v1")
+            # Fallback al motor original
+            try:
+                from biblioteca.habilidades.lenguaje.motor import MotorComprension
+                from biblioteca.vocabulario.gestor_vocabulario import GestorVocabulario
+                vocab_context = contexto.get('vocab_match', [])
+                if not vocab_context:
+                    try:
+                        vocab_context = GestorVocabulario.obtener().buscar_frase(texto)
+                    except Exception:
+                        vocab_context = []
+                ids_vocab = [
+                    m['concepto'].get('id', '')
+                    for m in vocab_context
+                    if m.get('concepto', {}).get('id')
+                    and m['concepto']['id'] not in _IDS_SIEMPRE_ACTIVOS
+                ]
+                ids_activos_limpios = ids_activos - _IDS_SIEMPRE_ACTIVOS
+                todos_ids = list(ids_activos_limpios | set(ids_vocab))
+                nombre = contexto.get('sebastian', {}).get('nombre', 'Sebastian')
+                ctx_motor = {
+                    'nombre_usuario': nombre,
+                    'historial':      [],
+                    'vocab_match':    vocab_context,
+                    'ids_activos':    todos_ids,
+                    'ids_conocidos':  todos_ids,
+                    'vocab_tipos':    {},
+                    'conceptos_red':  [],
+                }
+                return MotorComprension.obtener().comprender(texto, ctx_motor)
+            except Exception:
+                return None
 
     def _comprension_desde_motor(self, motor, primarios, texto_original):
         certeza_lit = motor.confianza_global if motor.confianza_global > 0 else 0.7
@@ -337,6 +351,8 @@ class ConstructorComprension:
             'es_continuacion':       motor.es_continuacion,
             'es_correccion':         motor.es_correccion,
             'resultado_matematico':  resultado_math,
+            # motor_v2: respuesta que Groq ya razonó — C6 la usa directamente
+            'respuesta_groq_v2':     getattr(motor, 'respuesta_groq', ''),
         }
 
         profunda = {

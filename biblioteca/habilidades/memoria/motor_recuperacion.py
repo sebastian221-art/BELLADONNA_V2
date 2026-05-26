@@ -39,18 +39,24 @@ def recuperar_contexto(texto: str, tipo_mensaje: str = '',
     if perfil:
         partes.append(f'[Sebastian] {perfil}')
 
-    # 2. Sesión actual (últimos 3 turnos)
-    ctx_sesion = mem.contexto_para_groq(3)
+    # 2. Sesión actual (últimos 5 turnos — siempre)
+    ctx_sesion = mem.contexto_para_groq(5)
     if ctx_sesion:
         partes.append(ctx_sesion)
 
-    # 3. Episodios recientes si hay referencia temporal
+    # 3. Referencias temporales → también incluir historial de sesión actual
     _refs_tiempo = ['ayer', 'antes', 'la semana', 'el otro día', 'me acordás',
-                    'acordás', 'recordás', 'la última vez', 'aquella vez']
+                    'acordás', 'recordás', 'la última vez', 'aquella vez',
+                    'qué estaba', 'qué estábamos', 'qué hicimos']
     if any(r in tl for r in _refs_tiempo):
+        # Episodios históricos (sesiones anteriores)
         episodios = _obtener_episodios_relevantes(mem, n=2)
         if episodios:
             partes.append(episodios)
+        # Sesión actual extendida (últimos 8 turnos)
+        ctx_actual = mem.contexto_para_groq(8)
+        if ctx_actual and ctx_actual != ctx_sesion:
+            partes.append('[Esta sesión — más contexto]\n' + ctx_actual)
 
     # 4. Conocimiento relacionado si es pregunta informativa
     if tipo_mensaje in ('pregunta', 'solicitud_informacion'):

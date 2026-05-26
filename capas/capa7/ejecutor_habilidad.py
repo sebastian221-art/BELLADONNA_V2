@@ -82,6 +82,8 @@ class EjecutorHabilidad:
 
         if habilidad_id == 'PYTHON_COMPLETO':
             return self._ejecutar_python(texto, modo, verbosidad)
+        if habilidad_id == 'NAVEGADOR_WEB':
+            return self._ejecutar_navegador(texto)
         if habilidad_id == 'BUSQUEDA_INTERNET':
             return self._ejecutar_busqueda(texto)
 
@@ -93,6 +95,42 @@ class EjecutorHabilidad:
         if habilidad_id in ('CALCULO', 'SHELL', 'SQLITE'):
             return ResultadoEjecucion(ejecuto=False, habilidad_id=habilidad_id, error='Pendiente')
         return ResultadoEjecucion(ejecuto=False, habilidad_id=habilidad_id, error='Sin implementación')
+
+    def _ejecutar_navegador(self, texto: str) -> 'ResultadoEjecucion':
+        """Bell controla el browser — YouTube, Instagram, GitHub, cualquier web."""
+        try:
+            from biblioteca.habilidades.navegador.motor_navegador import ejecutar
+            from biblioteca.habilidades.navegador.planificador import EstadoPausa
+
+            # Verificar si hay pausa activa — Sebastian está respondiendo
+            if EstadoPausa.esta_activo():
+                resultado = ejecutar(texto)  # reanudar con la respuesta
+                return ResultadoEjecucion(
+                    ejecuto=True,
+                    habilidad_id='NAVEGADOR_WEB',
+                    resultado=resultado.get('respuesta', ''),
+                )
+
+            visible = any(p in texto.lower() for p in
+                         ['visible', 'muéstrame', 'quiero ver', 'modo visible'])
+            resultado = ejecutar(texto, visible=visible)
+
+            # Si está pausado, la respuesta ES la pregunta que Bell hace
+            respuesta = resultado.get('respuesta', resultado.get('resumen', ''))
+            return ResultadoEjecucion(
+                ejecuto=True,
+                habilidad_id='NAVEGADOR_WEB',
+                resultado=respuesta or 'Listo.',
+            )
+        except Exception as e:
+            import traceback
+            print(f"[Navegador ERROR] {type(e).__name__}: {e}")
+            print(traceback.format_exc()[-300:])
+            return ResultadoEjecucion(
+                ejecuto=True,
+                habilidad_id='NAVEGADOR_WEB',
+                resultado=f'Error en el navegador: {str(e)[:100]}',
+            )
 
     def _ejecutar_busqueda(self, texto: str) -> 'ResultadoEjecucion':
         """Bell busca en internet y responde con información real."""

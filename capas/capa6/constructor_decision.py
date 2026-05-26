@@ -234,7 +234,22 @@ class ConstructorDecision:
             # Pasar verbosidad al contexto para que el ejecutor la use
             profunda['verbosidad_pedida'] = verbosidad
 
-        # ── PUENTE ────────────────────────────────────────────
+        # ── RESPUESTA DE MOTOR_V2 ──────────────────────────────
+        # motor_v2 le pidió a Groq que razonara con contexto completo
+        # y guardó la respuesta en contextual['respuesta_groq_v2']
+        respuesta_v2 = contextual.get('respuesta_groq_v2', '')
+
+        if respuesta_v2 and tipo_mensaje not in (
+            'solicitud_tecnica', 'operacion_matematica',
+            'pregunta_arquitectura_bell', 'pregunta_sebastian',
+        ):
+            return DecisionFinal(
+                tipo=tipo_mensaje, tono=tono, puede_responder=True,
+                certeza=min(0.97, certeza + 0.05),
+                respuesta_base=respuesta_v2,
+            )
+
+        # ── PUENTE (fallback) ──────────────────────────────────
         respuesta_base = self._construir_con_puente(
             tipo_mensaje=tipo_mensaje, nombre=nombre, emocion=emocion,
             intensidad=profunda.get('intensidad', 0.0), intencion=intencion,
@@ -243,7 +258,6 @@ class ConstructorDecision:
             accion_principal=accion_principal, texto_original=texto_original,
             es_correccion=contextual.get('es_correccion', False),
             es_continuacion=contextual.get('es_continuacion', False),
-            # Campos extra ahora propagados
             modo_mental=profunda.get('modo_mental', 'receptivo'),
             tono_base=profunda.get('tono_base', 'neutral'),
             tiene_humor=profunda.get('tiene_humor', False),

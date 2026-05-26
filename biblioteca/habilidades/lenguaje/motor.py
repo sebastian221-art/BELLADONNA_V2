@@ -151,6 +151,9 @@ _EMOCIONES_DIRECTAS = {
                       'no sé qué siento', 'me siento weird'],
     'desesperacion': ['ya me desesperé', 'estoy desesperado', 'no aguanto más',
                       'hasta aquí llegué', 'no puedo más', 'me tiene loco'],
+    'frustracion_tecnica': ['sigue sin funcionar', 'sigue fallando', 'no funciona nada',
+                            'sigo con el error', 'aún falla', 'todavía no funciona',
+                            'ya me estresé', 'me tiene estresado'],
     'alivio':        ['por fin','qué alivio','ya terminó','ya termino','se resolvió',
                       'funcionó al fin','menos mal','uff que bien'],
     # Sin parcero aquí — es colombianismo neutro, no emoción
@@ -245,8 +248,23 @@ class MotorComprension:
         _emoc_neg = {'frustracion','cansancio','ansiedad','tristeza','rabia','soledad',
                      'culpa','verguenza','resignacion','tedio','desesperacion',
                      'indefinido','impaciencia','confusion'}
-        if (resultado.tipo_mensaje in ('inicio_conversacion', 'conversacional')
-                and resultado.emocion_detectada in _emoc_neg):
+        if resultado.emocion_detectada in _emoc_neg:
+            # Cualquier tipo neutro con emoción negativa → emocional_negativa
+            if resultado.tipo_mensaje in ('inicio_conversacion', 'conversacional',
+                                          'solicitud_informacion', 'pregunta'):
+                resultado.tipo_mensaje = 'expresion_emocional_negativa'
+
+        # Fix L2: ironía override — si se detectó ironía, tipo = negativo
+        import re as _re_l2
+        _tl_l2 = (resultado.texto_original or '').lower()
+        _pats_ironia = [r'\(no\)', 'claro que sí', 'perfecto todo']
+        _ironia_detectada = resultado.tiene_ironia or any(
+            p in _tl_l2 if isinstance(p, str) else _re_l2.search(p, _tl_l2)
+            for p in _pats_ironia
+        )
+        if _ironia_detectada:
+            resultado.tiene_ironia = True
+            resultado.tono_base    = 'ironico'
             resultado.tipo_mensaje = 'expresion_emocional_negativa'
         resultado.confianza_global = self._calcular_confianza(resultados_dim)
 
@@ -387,7 +405,7 @@ class MotorComprension:
             _emociones_protegidas = {
                 'impaciencia', 'desesperacion', 'confusion', 'agotamiento',
                 'frustracion', 'ansiedad', 'tristeza', 'cansancio', 'soledad',
-                'resignacion', 'indefinido',
+                'resignacion', 'indefinido', 'frustracion_tecnica',
             }
             if r.dominio_tecnico and (r.tipo_mensaje not in _tipos_emocionales_protegidos
                                       and r.emocion_detectada not in _emociones_protegidas):

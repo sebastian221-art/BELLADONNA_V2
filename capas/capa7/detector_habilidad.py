@@ -95,6 +95,37 @@ HABILIDADES = {
             r'\bqu[eé]\s+archivos?\s+est[aá]n?\s+creciendo\b',
         ],
     },
+    # ── NAVEGADOR WEB — Bell controla el browser ───────────────────
+    'NAVEGADOR_WEB': {
+        'disponible': True,
+        'descripcion': 'Bell controla el browser: YouTube, Instagram, GitHub, Gmail, cualquier web',
+        'patrones': [
+            # ── Videos / YouTube ─────────────────────────
+            r'\bponme\b', r'\bpon\s+el\s+video\b', r'\breproduce\b',
+            r'\babre\s+youtube\b', r'\bbusca\s+en\s+youtube\b',
+            r'\bvideo\s+de\b', r'\bcanal\s+de\b',
+            # ── Instagram ────────────────────────────────
+            r'\binstagram\b', r'\binsta\b',
+            r'\bescr[ií]bele\b', r'\bmanda\s+(?:un\s+)?mensaje\b',
+            r'\bmensaje\s+a\b', r'\benvía?\s+(?:un\s+)?mensaje\b',
+            # ── GitHub ───────────────────────────────────
+            r'\bgithub\b', r'\brepositorio\b', r'\brepositoios\b',
+            r'\bmis\s+repos\b', r'\burl\s+del\s+repo\b',
+            # ── Gmail ────────────────────────────────────
+            r'\bgmail\b', r'\bcorreos\s+de\b', r'\bemails\s+de\b',
+            # ── Acciones generales de browser ────────────
+            r'\babre\s+(?:el\s+)?(?:navegador|browser|chrome)\b',
+            r'\bnavega\s+a\b', r'\bve\s+a\s+(?:la\s+)?p[aá]gina\b',
+            r'\blee\s+(?:esta\s+)?p[aá]gina\b',
+            r'\bleer\s+(?:la\s+)?web\b', r'\bextr[aá]e\s+(?:de\s+)?(?:la\s+)?web\b',
+            r'\binicia\s+sesi[oó]n\b', r'\blog(?:ue)?a(?:te)?\b',
+            r'\bdescarga\b', r'\bdescargar\b',
+            r'\bllena\s+(?:el\s+)?formulario\b',
+            # ── URL directa ──────────────────────────────
+            r'https?://',
+        ],
+    },
+
     # ── BÚSQUEDA EN INTERNET ─────────────────────────────────────────
     'BUSQUEDA_INTERNET': {
         'disponible': False,  # DESACTIVADA — rediseño pendiente
@@ -452,6 +483,19 @@ class DetectorHabilidad:
             'cuándo nació', 'cuando nacio', 'quién inventó', 'quien invento',
             'cómo instalar', 'como instalar', 'tutorial', 'guía', 'guia',
             'sabías que', 'sabias que', 'dato:', 'tip:',
+            # ── Navegador Web ────────────────────────────────────
+            'ponme', 'pon el video', 'reproduce', 'abre youtube', 'abre el video',
+            'youtube', 'instagram', 'github', 'gmail', 'twitter',
+            'lee http', 'lee https', 'navega a', 'abre la pagina', 'abre la página',
+            'escríbele', 'escribele', 'manda un mensaje', 'envíale', 'enviame',
+            'dame la url', 'url del repo', 'url del repositorio',
+            'repositorio de', 'mis repos', 'mis repositorios',
+            'inicia sesion', 'inicia sesión', 'loguéate', 'logueate',
+            'descarga el', 'descargar el', 'llena el formulario',
+            'video de ', 'último video', 'ultimo video', 'canal de ',
+            'busca en youtube', 'busca en instagram', 'busca en github',
+            've a la pagina', 've a la página', 'abre chrome',
+            'spotify', 'crunchyroll', 'netflix', 'twitch',
         ]
         # Palabra sola desconocida que podría ser búsqueda (rust, vue, kotlin...)
         # Si es una sola palabra sin puntuación y no está en vocab Bell → buscar
@@ -579,15 +623,22 @@ class DetectorHabilidad:
                 modo_python = decision_final.get('modo_python', 'explicacion')
 
         if modo_python:
-            return {
-                'necesita_habilidad': True,
-                'habilidad_id':       'PYTHON_COMPLETO',
-                'modo':               modo_python,
-                'disponible':         cfg_py['disponible'],
-                'descripcion':        cfg_py['descripcion'],
-                'texto_original':     texto,
-                'verbosidad':         verbosidad,
-            }
+            # Guard: si hay URL externa en el texto → es NAVEGADOR, no Python
+            import re as _re_nav
+            _tiene_url_externa = bool(_re_nav.search(r'https?://', texto))
+            _verbos_navegacion = ['lee ', 'leer ', 'abre ', 'navega', 've a']
+            _es_peticion_web = _tiene_url_externa and any(v in texto_lower for v in _verbos_navegacion)
+            if not _es_peticion_web:
+                return {
+                    'necesita_habilidad': True,
+                    'habilidad_id':       'PYTHON_COMPLETO',
+                    'modo':               modo_python,
+                    'disponible':         cfg_py['disponible'],
+                    'descripcion':        cfg_py['descripcion'],
+                    'texto_original':     texto,
+                    'verbosidad':         verbosidad,
+                }
+            # Si es petición web con URL → dejar que NAVEGADOR_WEB lo tome en el loop
 
         # ── Resto de habilidades ───────────────────────────────────
         for habilidad_id, config in HABILIDADES.items():
