@@ -36,6 +36,10 @@ def _registrar_rutas_principales(app):
     def index():
         return send_from_directory(FRONTEND, 'index.html')
 
+    @app.route('/chat')
+    def chat():
+        return send_from_directory(FRONTEND, 'chat.html')
+
     @app.route('/estilos/<path:filename>')
     def estilos(filename):
         return send_from_directory(FRONTEND / 'estilos', filename)
@@ -112,6 +116,13 @@ def _iniciar_servicios(socketio):
 
         detector = DetectorArchivos(registro, raiz)
         detector.iniciar()
+
+        # Auto-reload de código en caliente (no mata el proceso)
+        try:
+            from interfaz.auto_reload import iniciar_auto_reload
+            iniciar_auto_reload(raiz)
+        except Exception as e:
+            print(f'  ♻  Auto-reload no disponible: {e}')
 
         EstadoNodos.obtener().configurar_socket(socketio)
         print('Servicios de Bell iniciados')

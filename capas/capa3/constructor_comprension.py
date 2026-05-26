@@ -247,6 +247,12 @@ class ConstructorComprension:
             ctx['tipo_mensaje'] = tipo_motor
             base['contextual'] = ctx
 
+        # motor_v2 razonó una respuesta conversacional completa con contexto.
+        # Propagarla a contextual para que C6 la use directamente — este es el
+        # único punto del camino con clasificación donde la respuesta sobrevive.
+        if getattr(motor, 'respuesta_groq', ''):
+            base.setdefault('contextual', {})['respuesta_groq_v2'] = motor.respuesta_groq
+
         base['profunda'] = profunda
         return base
 
