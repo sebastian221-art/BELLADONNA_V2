@@ -121,5 +121,12 @@ class ActualizadorBellCore:
 
             neurona.nucleo.datos_extra = datos_ext
 
+            # Persistir a disco — la vida de Bell sobrevive reinicios
+            try:
+                from biblioteca.persistencia_core import guardar_estado_core
+                guardar_estado_core(datos_ext)
+            except Exception:
+                pass
+
         except Exception as e:
             print(f'  C9 BELL_CORE error: {e}')

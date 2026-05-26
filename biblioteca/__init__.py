@@ -36,6 +36,7 @@ class Biblioteca:
 
             if exito:
                 self._aplicar_vida_a_red()
+                self._rehidratar_bell_core()
                 self._iniciar_consejeras()
                 stats = self.red.obtener_estadisticas()
                 print(
@@ -63,6 +64,34 @@ class Biblioteca:
         except Exception as e:
             print(f'  Grounding de vida no aplicado: {e}')
 
+    def _rehidratar_bell_core(self):
+        """Restaura la vida acumulada de BELL_CORE desde disco.
+        Los valores persistidos ganan sobre la línea base del grounding."""
+        try:
+            from biblioteca.persistencia_core import cargar_estado_core
+            estado = cargar_estado_core()
+            if not estado:
+                return
+            neurona = self.red.obtener_neurona('BELL_CORE')
+            if not neurona:
+                return
+            datos_ext = getattr(neurona.nucleo, 'datos_extra', {}) or {}
+            perfil    = datos_ext.get('perfil_vida', {}) or {}
+            tipos     = perfil.get('tipos', {}) or {}
+            tipos.update(estado.get('tipos', {}) or {})
+            perfil['tipos']          = tipos
+            datos_ext['perfil_vida'] = perfil
+            if estado.get('vitalidad') is not None:
+                datos_ext['vitalidad'] = estado['vitalidad']
+            if estado.get('nivel_vida'):
+                datos_ext['nivel_vida'] = estado['nivel_vida']
+            neurona.nucleo.datos_extra = datos_ext
+            print(f"  ✓ BELL_CORE rehidratado: "
+                  f"vitalidad {datos_ext.get('vitalidad')} "
+                  f"({datos_ext.get('nivel_vida')})")
+        except Exception as e:
+            print(f'  BELL_CORE rehidratación: {e}')
+
     def _iniciar_consejeras(self):
         try:
             from biblioteca.consejeras.gestor_consejeras import GestorConsejeras
@@ -73,6 +102,9 @@ class Biblioteca:
 
     def aplicar_vida_a_nuevos_nodos(self):
         self._aplicar_vida_a_red()
+        # Re-aplicar el grounding pisa la vida acumulada de BELL_CORE
+        # con la línea base — rehidratar de nuevo para que lo persistido gane.
+        self._rehidratar_bell_core()
 
     # ==========================================
     # API PÚBLICA

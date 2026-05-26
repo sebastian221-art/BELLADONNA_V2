@@ -169,6 +169,31 @@ _SYSTEM_COMPRENSION = (
 )
 
 
+def _estado_bell() -> str:
+    """
+    Lee la vitalidad y el nivel de vida actuales de BELL_CORE y los
+    traduce a una guía de comportamiento. Así el estado interno de Bell
+    (que crece y persiste entre sesiones) toca su forma real de responder.
+    """
+    try:
+        from biblioteca import Biblioteca
+        neurona = Biblioteca.obtener().red.obtener_neurona('BELL_CORE')
+        datos   = getattr(neurona.nucleo, 'datos_extra', {}) or {}
+        vit     = float(datos.get('vitalidad', 0.0) or 0.0)
+        nivel   = datos.get('nivel_vida', '')
+    except Exception:
+        return ''
+    if vit <= 0:
+        return ''
+    if vit < 0.35:
+        guia = 'Hoy tu vitalidad está baja: responde más concisa y directa, frases cortas.'
+    elif vit < 0.6:
+        guia = 'Tu vitalidad es media: responde con equilibrio, sin extenderte de más.'
+    else:
+        guia = 'Tu vitalidad está alta: puedes ser algo más expansiva y cálida.'
+    return f' [Estado interno: vitalidad {vit:.2f} ({nivel}). {guia}]'
+
+
 def _construir_prompt(texto: str, analisis_spacy: dict,
                       contexto_sesion: str, perfil_sebastian: str) -> str:
     """
@@ -219,7 +244,7 @@ def _llamar_groq(prompt: str) -> Optional[dict]:
             json={
                 'model':       _GROQ_MODEL,
                 'messages': [
-                    {'role': 'system', 'content': _SYSTEM_COMPRENSION},
+                    {'role': 'system', 'content': _SYSTEM_COMPRENSION + _estado_bell()},
                     {'role': 'user',   'content': prompt},
                 ],
                 'temperature': 0.2,

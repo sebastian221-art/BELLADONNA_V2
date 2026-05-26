@@ -3,6 +3,7 @@
 # llaman a Groq directamente con prompts expertos.
 # El humanizador anterior recortaba las respuestas a 900 tokens.
 # AHORA: la respuesta del skill llega DIRECTA al usuario — sin re-procesar.
+import importlib.util
 import random
 from capas.capa7.paquete_capa7 import ResultadoEjecucion
 
@@ -12,6 +13,15 @@ _RESPUESTAS_SIN_HABILIDAD = {
     'SQLITE':  ['Base de datos viene. Lo registré como pendiente.'],
     'DEFAULT': ['Esa habilidad todavía no la tengo. Lo registré — viene.'],
 }
+
+
+def _hay_modulo(nombre: str) -> bool:
+    """True si el módulo existe e importable, sin importarlo de verdad.
+    Evita los ImportError latentes de habilidades sin código detrás."""
+    try:
+        return importlib.util.find_spec(nombre) is not None
+    except (ImportError, ModuleNotFoundError, ValueError, AttributeError):
+        return False
 
 
 class EjecutorHabilidad:
@@ -27,32 +37,29 @@ class EjecutorHabilidad:
         return self._sin_habilidad(habilidad_id, texto)
 
     def _ejecutar_habilidad(self, habilidad_id, texto, modo, verbosidad):
-        # Fix clarificación: usar memoria de sesión para retomar búsqueda pendiente
-        try:
-            from biblioteca.habilidades.busqueda.motor_busqueda import _PENDIENTE, _es_respuesta_clarificacion
-            # Check _PENDIENTE state first
-            if _PENDIENTE.get('activo'):
-                if _es_respuesta_clarificacion(texto):
-                    print(f"  [DEBUG C7] Retomando búsqueda pendiente: {_PENDIENTE.get('pregunta')}")
-                    return self._ejecutar_busqueda(texto)
-            # Check session memory for context (resuelve "me refiero al lenguaje")
-            elif not habilidad_id:
-                from biblioteca.memoria import obtener_memoria
-                mem = obtener_memoria()
-                pregunta_previa = mem.resolver_clarificacion(texto)
-                if pregunta_previa:
-                    # Retomar la búsqueda original con la clarificación
-                    from biblioteca.habilidades.busqueda.motor_busqueda import ejecutar_busqueda
-                    resultado = ejecutar_busqueda(pregunta_previa, clarificacion_previa=texto)
-                    if resultado.get('exitoso'):
-                        from capas.capa7.ejecutor_habilidad import ResultadoEjecucion
-                        return ResultadoEjecucion(
-                            ejecuto=True,
-                            habilidad_id='BUSQUEDA_INTERNET',
-                            resultado=resultado['respuesta'],
-                        )
-        except Exception as _e:
-            pass
+        # Clarificación de búsqueda pendiente — solo si la habilidad existe
+        if _hay_modulo('biblioteca.habilidades.busqueda.motor_busqueda'):
+            try:
+                from biblioteca.habilidades.busqueda.motor_busqueda import _PENDIENTE, _es_respuesta_clarificacion
+                if _PENDIENTE.get('activo'):
+                    if _es_respuesta_clarificacion(texto):
+                        print(f"  [DEBUG C7] Retomando búsqueda pendiente: {_PENDIENTE.get('pregunta')}")
+                        return self._ejecutar_busqueda(texto)
+                elif not habilidad_id:
+                    from biblioteca.memoria import obtener_memoria
+                    mem = obtener_memoria()
+                    pregunta_previa = mem.resolver_clarificacion(texto)
+                    if pregunta_previa:
+                        from biblioteca.habilidades.busqueda.motor_busqueda import ejecutar_busqueda
+                        resultado = ejecutar_busqueda(pregunta_previa, clarificacion_previa=texto)
+                        if resultado.get('exitoso'):
+                            return ResultadoEjecucion(
+                                ejecuto=True,
+                                habilidad_id='BUSQUEDA_INTERNET',
+                                resultado=resultado['respuesta'],
+                            )
+            except Exception:
+                pass
         # BUSQUEDA override: si C3 marcó PYTHON pero el mensaje pide info del mundo real
         _tl = texto.lower()
         _PAT_BUSQUEDA = [
@@ -67,8 +74,11 @@ class EjecutorHabilidad:
             'hoy ', 'este año', 'este mes', 'versión actual', 'version actual',
         ]
         # Solo aplica si NO hay bloque de código en el mensaje
+        # y solo si la habilidad de búsqueda existe (si no, lo maneja Python)
         _tiene_codigo = '```' in texto or bool(__import__('re').search(r'def\s+\w+\(', texto))
-        if habilidad_id == 'PYTHON_COMPLETO' and not _tiene_codigo and any(p in _tl for p in _PAT_BUSQUEDA):
+        if (habilidad_id == 'PYTHON_COMPLETO' and not _tiene_codigo
+                and any(p in _tl for p in _PAT_BUSQUEDA)
+                and _hay_modulo('biblioteca.habilidades.busqueda.motor_busqueda')):
             return self._ejecutar_busqueda(texto)
 
         # MEMORIA override: si C3 marcó PYTHON pero el mensaje pregunta por memoria
@@ -77,7 +87,8 @@ class EjecutorHabilidad:
             'archivos que has', 'cuántas conversaciones', 'cuantas conversaciones',
             'sabes de mí', 'sabes de mi',
         ]
-        if habilidad_id == 'PYTHON_COMPLETO' and any(p in _tl for p in _PAT_MEM):
+        if (habilidad_id == 'PYTHON_COMPLETO' and any(p in _tl for p in _PAT_MEM)
+                and _hay_modulo('biblioteca.habilidades.memoria.motor_memoria')):
             return self._ejecutar_memoria(texto)
 
         if habilidad_id == 'PYTHON_COMPLETO':
@@ -134,6 +145,8 @@ class EjecutorHabilidad:
 
     def _ejecutar_busqueda(self, texto: str) -> 'ResultadoEjecucion':
         """Bell busca en internet y responde con información real."""
+        if not _hay_modulo('biblioteca.habilidades.busqueda.motor_busqueda'):
+            return self._sin_habilidad('BUSQUEDA_INTERNET', texto)
         try:
             from biblioteca.habilidades.busqueda.motor_busqueda import ejecutar_busqueda
             resultado = ejecutar_busqueda(texto)
@@ -159,6 +172,8 @@ class EjecutorHabilidad:
             )
 
     def _ejecutar_auto_analisis(self, texto: str) -> 'ResultadoEjecucion':
+        if not _hay_modulo('biblioteca.habilidades.auto_analisis'):
+            return self._sin_habilidad('AUTO_ANALISIS_TOTAL', texto)
         try:
             from biblioteca.habilidades.auto_analisis import ejecutar_auto_analisis
             resultado = ejecutar_auto_analisis(texto)
@@ -181,6 +196,8 @@ class EjecutorHabilidad:
 
     def _ejecutar_memoria(self, texto: str) -> 'ResultadoEjecucion':
         """Bell consulta su memoria SQLite y responde con datos reales."""
+        if not _hay_modulo('biblioteca.habilidades.memoria.motor_memoria'):
+            return self._sin_habilidad('MEMORIA', texto)
         try:
             from biblioteca.habilidades.memoria.motor_memoria import procesar as _mem_proc
             res_mem = _mem_proc(texto)
