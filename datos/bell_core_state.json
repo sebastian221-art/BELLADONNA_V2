@@ -1,0 +1,29 @@
+{
+  "tipos": {
+    "existencia": 0.8975,
+    "proposito": 0.8625,
+    "emocional": 0.5135,
+    "autopreservacion": 0.0,
+    "relaciones": 0.025,
+    "integridad": 0.0,
+    "psicologico": 0.8347,
+    "autoconocimiento": 0.0,
+    "accion": 0.04,
+    "mundo": 0.0,
+    "crecimiento": 0.02,
+    "temporal": 0.0,
+    "narrativo": 0.0,
+    "trascendencia": 0.9083,
+    "intersubjetividad": 0.0,
+    "finitud": 0.0,
+    "imaginacion": 0.0,
+    "metas": 0.0,
+    "estetico": 0.0,
+    "espacial": 0.0,
+    "existencial_profundo": 0.8714,
+    "lenguaje": 0.0,
+    "valores": {}
+  },
+  "vitalidad": 0.2162,
+  "nivel_vida": "emergente"
+}
