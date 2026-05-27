@@ -224,7 +224,14 @@ class GestorMemoria:
         tema = re.sub(r'\b(wikipedia|definicion|definición|explicacion|que es|quien es)\b',
                       '', query_norm).strip()
         if tema:
-            self.guardar_conocimiento(tema, respuesta, tipo, 'internet', query, url, calidad)
+            # Destilar a principio (≤30 palabras) antes de guardar — no blobs.
+            # Preserva procedencia (query, url); si Groq falla, destilar() recorta.
+            try:
+                from biblioteca.habilidades.memoria.destilador_conocimiento import destilar
+                principio = destilar(tema, respuesta) or respuesta
+            except Exception:
+                principio = respuesta
+            self.guardar_conocimiento(tema, principio, tipo, 'internet', query, url, calidad)
 
     # ══════════════════════════════════════════════════════
     # ARCHIVOS BELL
@@ -514,6 +521,29 @@ class GestorMemoria:
                 "ORDER BY fecha DESC LIMIT ?", (n,)
             ).fetchall()
         return [dict(r) for r in rows]
+
+    def obtener_episodio_estructurado(self, n: int = 5) -> list:
+        """
+        Devuelve los episodios deserializando el resumen JSON estructurado.
+        Si un resumen no es JSON (episodio narrativo viejo) → lo deja como
+        {'resumen': texto, 'fecha': ...}. Siempre retorna lista de dicts.
+        """
+        episodios = self.obtener_episodios_recientes(n)
+        salida = []
+        for ep in episodios:
+            resumen = ep.get('resumen', '')
+            estructura = None
+            if isinstance(resumen, str) and resumen.strip().startswith('{'):
+                try:
+                    estructura = json.loads(resumen)
+                except Exception:
+                    estructura = None
+            if isinstance(estructura, dict):
+                estructura['fecha'] = ep.get('fecha', '')
+                salida.append(estructura)
+            else:
+                salida.append({'resumen': resumen, 'fecha': ep.get('fecha', '')})
+        return salida
 
     # ══════════════════════════════════════════════════════
     # CLARIFICACIONES

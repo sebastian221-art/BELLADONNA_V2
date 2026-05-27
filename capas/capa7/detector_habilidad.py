@@ -401,7 +401,7 @@ HABILIDADES = {
         ],
     },
     'MEMORIA': {
-        'disponible': False,  # DESACTIVADA — rediseño pendiente
+        'disponible': True,
         'descripcion': 'Bell recuerda conversaciones previas, perfil de Sebastian y su propia historia',
         'patrones': [
             r'\brecuerdas\b', r'\brecuerda\b',
@@ -502,7 +502,12 @@ class DetectorHabilidad:
         _es_palabra_sola = (len(texto_lower.split()) <= 3 and
                             '```' not in texto and
                             not any(c in texto_lower for c in ['def ', 'class ', 'import ']))
-        _KW_MEM_C7 = ['recuerdas', 'hablamos de', 'me dijiste', 'sabes de mí']
+        _KW_MEM_C7 = [
+            'recuerdas', 'hablamos de', 'me dijiste', 'sabes de mí', 'sabes de mi',
+            'mi perfil', 'qué sabes', 'que sabes', 'en qué quedamos', 'en que quedamos',
+            'la última vez', 'la ultima vez', 'quedamos en', 'me contaste',
+            'cuánto llevamos', 'cuanto llevamos', 'cuántas conversaciones',
+        ]
         es_info = any(k in texto_lower for k in _KW_BUSQUEDA_C7) or _es_palabra_sola
         es_mem  = any(k in texto_lower for k in _KW_MEM_C7)
 
@@ -516,6 +521,22 @@ class DetectorHabilidad:
                 'texto_original': texto,
                 'verbosidad': 'normal',
             }
+
+        # ── MEMORIA: consultas de memoria van a la habilidad ───────
+        # Antes del guard conversacional y de _NO_BUSCAR_TIPOS, para que
+        # "¿qué sabes de mí?" no lo intercepte el path pregunta_sebastian.
+        if es_mem and HABILIDADES.get('MEMORIA', {}).get('disponible'):
+            return {
+                'necesita_habilidad': True,
+                'habilidad_id':       'MEMORIA',
+                'modo':               None,
+                'disponible':         True,
+                'descripcion':        HABILIDADES['MEMORIA']['descripcion'],
+                'texto_original':     texto,
+                'verbosidad':         'normal',
+                'fuente_deteccion':   'kw_memoria',
+            }
+
         if tipo_respuesta == 'conversacional' and not es_info and not es_mem:
             # GUARD: no salir si el texto pide código Python aunque no tenga bloque
             _KW_CREACION_PY = [

@@ -160,6 +160,12 @@ def _guardar_en_memoria(paquete_capa8: dict, resultado: dict):
         # Extraer datos de Sebastian y aprender
         if mensaje_user:
             mem.extraer_datos_sebastian(mensaje_user, respuesta_bell)
+            # Modelo cognitivo de Sebastian (Groq observa, Python decide)
+            try:
+                from biblioteca.habilidades.memoria.modelo_sebastian import ModeloSebastian
+                ModeloSebastian.obtener().actualizar(mensaje_user)
+            except Exception:
+                pass
             # FYI learning desactivado — habilidad búsqueda en rediseño
 
         # Cache de búsqueda web — DESACTIVADO (habilidad en rediseño)

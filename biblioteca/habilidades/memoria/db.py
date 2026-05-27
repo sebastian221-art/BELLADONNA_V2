@@ -16,7 +16,10 @@ _conn: sqlite3.Connection | None = None
 
 
 def _ruta_db() -> Path:
-    raiz = os.environ.get('BELL_ROOT', '')
+    raiz = (os.environ.get('BELL_ROOT')
+            or os.environ.get('BELLADONNA_ROOT')
+            or os.environ.get('BELL_RAIZ')
+            or '')
     if not raiz:
         raiz = str(Path(__file__).resolve().parents[3])
     datos = Path(raiz) / 'datos'
@@ -197,7 +200,7 @@ def _crear_tablas(c: sqlite3.Connection) -> None:
     c.execute("""
         INSERT OR IGNORE INTO perfil_sebastian (clave, valor, tipo, fuente)
         VALUES
-        ('nombre', 'Sebastian Gómez', 'dato', 'sistema'),
+        ('nombre', 'Sebastian', 'dato', 'sistema'),
         ('edad', '19', 'dato', 'sistema'),
         ('ciudad', 'Bucaramanga', 'dato', 'sistema'),
         ('pais', 'Colombia', 'dato', 'sistema'),
@@ -210,7 +213,7 @@ def _crear_tablas(c: sqlite3.Connection) -> None:
         INSERT OR IGNORE INTO bell_self (clave, valor, categoria)
         VALUES
         ('nombre', 'Bell (BELLADONNA)', 'identidad'),
-        ('creadora', 'Sebastian Gómez', 'identidad'),
+        ('creadora', 'Sebastian', 'identidad'),
         ('version', '1.0', 'identidad'),
         ('motor_lenguaje', 'openai/gpt-oss-120b via Groq', 'habilidad'),
         ('arquitectura', '9 capas, 8 consejeras', 'identidad')

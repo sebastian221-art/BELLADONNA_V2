@@ -13,6 +13,7 @@
 # Al inicio de la siguiente sesión Bell lo tiene disponible.
 # ============================================================
 
+import json
 import os
 from datetime import datetime
 from typing import Optional
@@ -36,27 +37,31 @@ def sintetizar_y_guardar(intercambios: list, gestor) -> Optional[str]:
     if not intercambios or len(intercambios) < 2:
         return None
 
-    resumen = _generar_resumen_groq(intercambios)
-    if not resumen:
-        resumen = _generar_resumen_local(intercambios)
+    # Episodio como CONOCIMIENTO estructurado (Groq devuelve JSON)
+    estructura = _generar_estructura_groq(intercambios)
 
-    if not resumen:
-        return None
+    if estructura:
+        resumen_guardar = json.dumps(estructura, ensure_ascii=False)
+        temas           = estructura.get('habilidades_usadas') or _extraer_temas(intercambios)
+        habilidades     = estructura.get('habilidades_usadas') or list(
+            {i.get('habilidad', '') for i in intercambios if i.get('habilidad')})
+        aprendizajes    = estructura.get('aprendio_bell', '') or _detectar_aprendizajes(intercambios)
+        resumen_legible = estructura.get('tema_principal', '') or 'Sesión registrada.'
+    else:
+        # Fallback narrativo (comportamiento anterior, no rompe)
+        narrativa = _generar_resumen_groq(intercambios) or _generar_resumen_local(intercambios)
+        if not narrativa:
+            return None
+        resumen_guardar = narrativa
+        temas           = _extraer_temas(intercambios)
+        habilidades     = list({i.get('habilidad', '') for i in intercambios if i.get('habilidad')})
+        aprendizajes    = _detectar_aprendizajes(intercambios)
+        resumen_legible = narrativa
 
-    # Extraer temas del intercambio
-    temas = _extraer_temas(intercambios)
-
-    # Habilidades usadas
-    habilidades = list({i.get('habilidad', '') for i in intercambios
-                        if i.get('habilidad')})
-
-    # Aprendizajes — qué cosas nuevas aparecieron
-    aprendizajes = _detectar_aprendizajes(intercambios)
-
-    # Guardar en SQLite via gestor
+    # Guardar en SQLite via gestor (resumen = JSON estructurado o narrativa)
     try:
         gestor.guardar_episodio(
-            resumen=resumen,
+            resumen=resumen_guardar,
             temas=temas,
             habilidades=habilidades,
             aprendizajes=aprendizajes,
@@ -64,24 +69,89 @@ def sintetizar_y_guardar(intercambios: list, gestor) -> Optional[str]:
     except Exception as e:
         print(f'  [Sintetizador] ⚠ SQLite: {e}')
 
-    # Guardar en MemoriaPersistente JSON
+    # Guardar en MemoriaPersistente JSON (texto legible, no el JSON crudo)
     try:
         from biblioteca.memoria.memoria_persistente import MemoriaPersistente
         mp = MemoriaPersistente.obtener()
         mp.registrar_momento(
             mensaje_usuario=f'[Episodio {datetime.now().strftime("%d/%m")}]',
-            respuesta_bell=resumen,
+            respuesta_bell=resumen_legible,
             es_importante=True,
         )
         if temas:
             for tema in temas[:3]:
                 mp.registrar_tema(tema)
         mp.guardar()
-        print(f'  [Sintetizador] ✅ Episodio guardado — {len(resumen)} chars')
+        print(f'  [Sintetizador] ✅ Episodio guardado ({"estructurado" if estructura else "narrativo"})')
     except Exception as e:
         print(f'  [Sintetizador] ⚠ JSON: {e}')
 
-    return resumen
+    return resumen_guardar
+
+
+def _generar_estructura_groq(intercambios: list) -> Optional[dict]:
+    """Groq devuelve el episodio como conocimiento estructurado (JSON)."""
+    api_key = os.getenv('GROQ_API_KEY', '')
+    if not api_key:
+        return None
+
+    lineas = []
+    for ix in intercambios[-10:]:
+        u = ix.get('user', '')[:80]
+        b = ix.get('bell', '')[:80]
+        if u:
+            lineas.append(f'Sebastian: {u}')
+        if b:
+            lineas.append(f'Bell: {b}')
+    transcripcion = '\n'.join(lineas)
+
+    prompt = (
+        f'<transcripcion_sesion>\n{transcripcion}\n</transcripcion_sesion>\n\n'
+        'Devuelve SOLO este JSON, sin texto adicional:\n'
+        '{"tema_principal":"string corto",'
+        '"proyecto_activo":"nombre o null",'
+        '"estado_proyecto":"en_progreso|resuelto|bloqueado|null",'
+        '"que_paso":["hecho 1","hecho 2"],'
+        '"pendientes":["pendiente 1"],'
+        '"decisiones":["decision 1"],'
+        '"emocion_sebastian":"enfocado|frustrado|contento|cansado|neutral",'
+        '"aprendio_bell":"máximo 20 palabras",'
+        '"habilidades_usadas":["Python","Lenguaje"]}'
+    )
+
+    try:
+        import httpx
+        r = httpx.post(
+            _GROQ_URL,
+            headers={'Authorization': f'Bearer {api_key}',
+                     'Content-Type': 'application/json'},
+            json={
+                'model': _GROQ_MODEL,
+                'messages': [
+                    {'role': 'system',
+                     'content': 'Resumes sesiones como JSON estructurado. Solo JSON válido.'},
+                    {'role': 'user', 'content': prompt},
+                ],
+                'temperature': 0.2,
+                'max_tokens': 400,
+            },
+            timeout=20,
+        )
+        if r.status_code != 200:
+            return None
+        cont = (r.json().get('choices', [{}])[0]
+                .get('message', {}).get('content', '').strip())
+        import re as _re
+        m = _re.search(r'\{.*\}', cont, _re.DOTALL)
+        if not m:
+            return None
+        data = json.loads(m.group(0))
+        # Validación mínima: debe tener al menos tema_principal
+        if isinstance(data, dict) and data.get('tema_principal'):
+            return data
+        return None
+    except Exception:
+        return None
 
 
 def _generar_resumen_groq(intercambios: list) -> Optional[str]:

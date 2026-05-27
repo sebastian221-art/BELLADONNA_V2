@@ -119,6 +119,10 @@ def extraer(mensaje: str, respuesta: str = '') -> List[DatoExtraido]:
 def _limpiar_valor(valor: str) -> str:
     """Limpia el valor extraído de stopwords y puntuación."""
     valor = re.sub(r'[.,;:!?]', '', valor).strip()
+    # Cortar en conjunción: evita "bucaramanga y trabajo jelcon" → "bucaramanga"
+    for conj in (' y ', ' e ', ' pero ', ' porque ', ' aunque ', ' además '):
+        if conj in valor:
+            valor = valor.split(conj)[0].strip()
     _STOP = {'el', 'la', 'los', 'las', 'un', 'una', 'de', 'del', 'al',
              'en', 'con', 'por', 'para', 'que', 'se', 'mi', 'tu', 'su'}
     palabras = [p for p in valor.split() if p not in _STOP]
