@@ -465,6 +465,43 @@ class DetectorHabilidad:
                  tipo_respuesta: str = 'conversacional') -> dict:
         texto_lower = texto.lower().strip()
 
+        # ── NAVEGADOR: contexto de navegación gana sobre Python/emocional ──
+        # (FIX 1 + 2) Si hay sitio web + verbo de navegación (o C3 ya lo marcó),
+        # va a NAVEGADOR_WEB antes de la detección de Python.
+        _SITIOS_NAV = [
+            'youtube', 'instagram', 'github', 'gmail', 'twitter', 'x.com',
+            'spotify', 'crunchyroll', 'netflix', 'twitch', 'linkedin',
+            'facebook', 'tiktok', 'reddit', 'wikipedia', 'stackoverflow',
+            'amazon', 'mercadolibre',
+        ]
+        _VERBOS_NAV = [
+            'busca en', 'abre ', 'navega a', 've a', 'ponme', 'reproduce',
+            'inicia sesion', 'inicia sesión', 'escríbele', 'escribele',
+            'manda un mensaje', 'envíale', 'dame la url',
+            'mis repos', 'mis repositorios', 'lee http', 'descarga el',
+        ]
+        _hab_c3_nav      = decision_final.get('habilidad_req', '') == 'NAVEGADOR_WEB'
+        _tiene_sitio_nav = any(s in texto_lower for s in _SITIOS_NAV)
+        _tiene_verbo_nav = any(v in texto_lower for v in _VERBOS_NAV)
+        # Investigación profunda → también navegador (busca y sintetiza en la web)
+        _es_investigacion = any(k in texto_lower for k in
+                                ['investiga ', 'investigar ', 'dame todo sobre',
+                                 'explícame a fondo', 'explicame a fondo'])
+        if ((_hab_c3_nav or _es_investigacion
+             or (_tiene_sitio_nav and (_tiene_verbo_nav or 'http' in texto_lower)))
+                and HABILIDADES.get('NAVEGADOR_WEB', {}).get('disponible')
+                and '```' not in texto):
+            return {
+                'necesita_habilidad': True,
+                'habilidad_id':       'NAVEGADOR_WEB',
+                'modo':               None,
+                'disponible':         True,
+                'descripcion':        HABILIDADES['NAVEGADOR_WEB'].get('descripcion', ''),
+                'texto_original':     texto,
+                'verbosidad':         'normal',
+                'fuente_deteccion':   'nav_contexto',
+            }
+
         # Tipos emocionales puros → nunca necesitan habilidad
         _BYPASS = {
             'emocional', 'matematica_python',
@@ -507,6 +544,8 @@ class DetectorHabilidad:
             'mi perfil', 'qué sabes', 'que sabes', 'en qué quedamos', 'en que quedamos',
             'la última vez', 'la ultima vez', 'quedamos en', 'me contaste',
             'cuánto llevamos', 'cuanto llevamos', 'cuántas conversaciones',
+            'qué aprendiste', 'que aprendiste', 'qué conoces', 'que conoces',
+            'qué recuerdas de', 'que recuerdas de',
         ]
         es_info = any(k in texto_lower for k in _KW_BUSQUEDA_C7) or _es_palabra_sola
         es_mem  = any(k in texto_lower for k in _KW_MEM_C7)
@@ -739,7 +778,7 @@ class DetectorHabilidad:
         # C3 ya entregó habilidad_req en decision_final.
         # Si llegamos aquí, lo leemos directamente sin API.
         hab_c3 = decision_final.get('habilidad_req', '')
-        if hab_c3 in ('BUSQUEDA_INTERNET', 'PYTHON_COMPLETO', 'AUTO_ANALISIS_TOTAL', 'MEMORIA'):
+        if hab_c3 in ('BUSQUEDA_INTERNET', 'PYTHON_COMPLETO', 'AUTO_ANALISIS_TOTAL', 'MEMORIA', 'NAVEGADOR_WEB'):
             cfg_b = HABILIDADES.get(hab_c3, {})
             print(f'  [C7 Bell] {hab_c3} ← habilidad_req de C3')
             return {

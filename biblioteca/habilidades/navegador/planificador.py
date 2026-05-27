@@ -123,8 +123,11 @@ def plan_github_repos(usuario: str) -> Plan:
         sitio='github',
         pasos=[
             Paso(1, 'navegar', {'url': f'https://github.com/{usuario}?tab=repositories'}, 'Ir a repos'),
-            Paso(2, 'esperar', {'tiempo': 2000}, 'Esperar carga'),
-            Paso(3, 'leer',    {'tipo': 'github_repos'}, 'Extraer lista de repositorios'),
+            Paso(2, 'esperar', {'tiempo': 4000}, 'Esperar carga JS'),
+            # FIX 3: esperar a que el listado renderice (opcional — si no aparece, seguir)
+            Paso(3, 'esperar', {'selector': '[data-tab-item="repositories"] li, li.source, [itemprop="owns"]',
+                                'timeout': 8000}, 'Esperar render del listado', opcional=True),
+            Paso(4, 'leer',    {'tipo': 'github_repos'}, 'Extraer lista de repositorios'),
         ]
     )
 
@@ -344,12 +347,18 @@ def crear_plan(objetivo: str, url_actual: str = '', html_pagina: str = '') -> Pl
     if url_match:
         return plan_leer_url(url_match.group())
 
-    # Último fallback: buscar en Google
+    # Último fallback: buscador inteligente elige el mejor motor (no siempre Google)
+    try:
+        from biblioteca.habilidades.navegador.buscador_inteligente import elegir_motor
+        motor, url_busqueda = elegir_motor(objetivo)
+    except Exception:
+        from urllib.parse import quote
+        motor, url_busqueda = 'google', f'https://google.com/search?q={quote(objetivo)}'
     return Plan(
         objetivo=objetivo,
-        sitio='google',
+        sitio=motor,
         pasos=[
-            Paso(1, 'navegar', {'url': f'https://google.com/search?q={objetivo}'}, 'Buscar en Google'),
+            Paso(1, 'navegar', {'url': url_busqueda}, f'Buscar ({motor})'),
             Paso(2, 'esperar', {'tiempo': 2000}, 'Esperar resultados'),
             Paso(3, 'leer',    {'tipo': 'pagina_completa'}, 'Leer resultados'),
         ]

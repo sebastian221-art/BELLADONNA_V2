@@ -196,6 +196,7 @@ class ConstructorComprension:
             'operacion_matematica':    'MATEMATICA',
             'pregunta_arquitectura_bell': 'AUTO_ANALISIS',
             'pregunta_accion_bell':    'AUTO_ANALISIS',
+            'solicitud_navegacion':    'NAVEGADOR_WEB',
         }
         return mapa.get(tipo)
 

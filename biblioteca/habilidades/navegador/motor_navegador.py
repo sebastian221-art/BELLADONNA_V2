@@ -333,7 +333,7 @@ def _construir_contexto_groq(objetivo: str, plan, resultado, datos: dict) -> str
         lineas.append(f'<contenido_pagina>{datos["texto_pagina"][:1200]}</contenido_pagina>')
 
     if datos.get('links'):
-        links_str = ' | '.join(f"{l.get("texto","")[:30]}" for l in datos['links'][:6] if l.get('texto'))
+        links_str = ' | '.join(f"{l.get('texto','')[:30]}" for l in datos['links'][:6] if l.get('texto'))
         if links_str:
             lineas.append(f'<links_principales>{links_str}</links_principales>')
 

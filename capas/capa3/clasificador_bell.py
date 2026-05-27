@@ -136,6 +136,10 @@ _KW_MEMORIA = [
     'cuántas conversaciones', 'cuantas conversaciones',
     'cuánto llevamos', 'cuanto llevamos', 'nuestra historia',
     'qué sabes de ti', 'que sabes de ti',
+    # FIX 4: preguntas por EL CONOCIMIENTO DE BELL → MEMORIA, no Python
+    'qué aprendiste', 'que aprendiste', 'qué aprendiste sobre', 'que aprendiste sobre',
+    'qué sabes de', 'que sabes de', 'qué conoces', 'que conoces',
+    'qué recuerdas de', 'que recuerdas de',
 ]
 
 _KW_AUTO_ANALISIS = [
@@ -180,6 +184,36 @@ _KW_REFLEXION = [
 ]
 _KW_FYI = ['fyi:', 'dato:', 'te cuento que', 'sabias que', 'sabías que']
 
+# ── Contexto de navegación web (FIX 1 + 2) ───────────────────────────────────
+_SITIOS_WEB = [
+    'youtube', 'instagram', 'github', 'gmail', 'twitter', 'x.com',
+    'spotify', 'crunchyroll', 'netflix', 'twitch', 'linkedin',
+    'facebook', 'tiktok', 'reddit', 'wikipedia', 'stackoverflow',
+    'google', 'amazon', 'mercadolibre',
+]
+_VERBOS_NAVEGACION = [
+    'busca en', 'abre ', 'navega a', 've a', 'ponme', 'reproduce',
+    'inicia sesion', 'inicia sesión', 'loguéate', 'logueate',
+    'escríbele', 'escribele', 'manda un mensaje', 'envíale',
+    'dame la url', 'mis repos', 'mis repositorios', 'lee http',
+    'descarga el', 'descargar', 'llena el formulario',
+]
+
+
+def _resultado_navegacion() -> dict:
+    """Dict de clasificación cuando hay contexto de navegación explícito."""
+    return {
+        'tipo_mensaje':      'solicitud_navegacion',
+        'emocion':           'neutra',
+        'intencion':         'navegar',
+        'necesidad':         'navegacion_web',
+        'estado_subyacente': 'neutro',
+        'certeza':           0.92,
+        'modo_mental':       'tecnico',
+        'habilidad_req':     'NAVEGADOR_WEB',
+        'fuente':            'clasificador_bell_nav',
+    }
+
 
 # ── Clasificador principal ────────────────────────────────────────────────────
 
@@ -199,9 +233,19 @@ def clasificar(
     ids    = ids_activados or set()
     prim   = ids_primarios or set()
 
+    # ── FIX 1+2: contexto de navegación ANTES de toda clasificación ───────────
+    # Si hay un sitio web + verbo de navegación (o una URL), es navegación
+    # sin importar que el texto contenga "Python" o suene emocional.
+    _tiene_sitio     = any(s in t for s in _SITIOS_WEB)
+    _tiene_verbo_nav = any(v in t for v in _VERBOS_NAVEGACION)
+    if _tiene_sitio and (_tiene_verbo_nav or 'http://' in t or 'https://' in t):
+        return _resultado_navegacion()
+
     # ── PASO 1: Detectar tipo_mensaje ─────────────────────────────────────────
 
     tipo = _detectar_tipo(t, ids, prim, contiene_codigo, es_pregunta)
+    if tipo == 'solicitud_navegacion':
+        return _resultado_navegacion()
 
     # ── PASO 2: Detectar emoción ──────────────────────────────────────────────
 
@@ -236,6 +280,11 @@ def clasificar(
 
 def _detectar_tipo(t, ids, prim, contiene_codigo, es_pregunta):
     # Orden de prioridad: más específico primero
+
+    # FIX 2: sitio web mencionado → navegación (override emocional/streaming),
+    # salvo que el mensaje traiga un bloque de código real.
+    if not contiene_codigo and any(s in t for s in _SITIOS_WEB):
+        return 'solicitud_navegacion'
 
     # Código detectado en C2 → siempre técnico
     if contiene_codigo:

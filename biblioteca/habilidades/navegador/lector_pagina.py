@@ -70,7 +70,7 @@ def leer_pagina(page) -> ContenidoPagina:
     elif 'instagram.com' in url:
         especial = _leer_instagram(soup, page)
     elif 'github.com' in url:
-        especial = _leer_github(soup, url)
+        especial = _leer_github(soup, url, page)
     elif 'mail.google.com' in url or 'gmail.com' in url:
         especial = _leer_gmail(soup, page)
     elif 'twitter.com' in url or 'x.com' in url:
@@ -275,7 +275,7 @@ def _leer_instagram(soup: BeautifulSoup, page) -> dict:
 
 # ── Lectura de GitHub ────────────────────────────────────
 
-def _leer_github(soup: BeautifulSoup, url: str) -> dict:
+def _leer_github(soup: BeautifulSoup, url: str, page=None) -> dict:
     """Extrae información de GitHub: repos, archivos, código, issues."""
     datos = {'tipo': 'github', 'pagina': ''}
 
@@ -295,6 +295,21 @@ def _leer_github(soup: BeautifulSoup, url: str) -> dict:
                     'descripcion': desc.get_text(strip=True) if desc else '',
                     'url': repo_url,
                 })
+        # FIX 3: si BeautifulSoup no vio repos (render JS tardío), extraer vía JS
+        if not repos and page is not None:
+            try:
+                repos_js = page.evaluate("""() => {
+                    const items = document.querySelectorAll('li.source, [itemprop="owns"]');
+                    return Array.from(items).slice(0, 20).map(el => ({
+                        nombre: el.querySelector('a[itemprop="name codeRepository"]')?.textContent?.trim() || '',
+                        url: el.querySelector('a[itemprop="name codeRepository"]')?.href || '',
+                        descripcion: el.querySelector('p')?.textContent?.trim() || '',
+                    })).filter(r => r.nombre);
+                }""")
+                if repos_js:
+                    repos = repos_js
+            except Exception:
+                pass
         datos['repos'] = repos
 
     # Repositorio específico
