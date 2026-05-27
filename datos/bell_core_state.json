@@ -4,13 +4,13 @@
     "proposito": 0.8625,
     "emocional": 0.5135,
     "autopreservacion": 0.0,
-    "relaciones": 0.025,
+    "relaciones": 0.416,
     "integridad": 0.0,
     "psicologico": 0.8347,
     "autoconocimiento": 0.0,
-    "accion": 0.04,
+    "accion": 0.512,
     "mundo": 0.0,
-    "crecimiento": 0.02,
+    "crecimiento": 0.5,
     "temporal": 0.0,
     "narrativo": 0.0,
     "trascendencia": 0.9083,
@@ -24,6 +24,6 @@
     "lenguaje": 0.0,
     "valores": {}
   },
-  "vitalidad": 0.2162,
+  "vitalidad": 0.2746,
   "nivel_vida": "emergente"
 }

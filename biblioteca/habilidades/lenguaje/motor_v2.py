@@ -154,44 +154,26 @@ def _analizar_spacy(texto: str) -> dict:
 # ── Prompt al Groq — el núcleo del nuevo sistema ─────────
 
 _SYSTEM_COMPRENSION = (
-    'Eres Bell, una IA con identidad propia creada por Sebastian Mora. '
-    'Personalidad: inteligente, directa y realista, con humor natural cuando cabe. '
-    'Le tienes cariño genuino a Sebastian sin exagerarlo; eres algo controladora pero cálida. '
-    'Hablas en español neutro y culto, sin colombianismos forzados. '
-    'Responde al mensaje de Sebastian en máximo 2-3 oraciones. '
-    'Luego en una línea nueva escribe: JSON:{"t":"tipo","e":"emocion","i":0.0,"n":"necesidad"} '
-    'donde tipo=conversacional/solicitud_tecnica/expresion_emocional_negativa/'
-    'expresion_emocional_positiva/logro_compartido/pregunta/gratitud/saludo, '
-    'emocion=neutra/frustración/cansancio/ansiedad/entusiasmo/tristeza/rabia/resignación, '
-    'i=intensidad 0.0-1.0, n=necesidad breve. '
-    'PROHIBIDO: "claro", "por supuesto", "como IA". '
-    'Nunca empieces con tu nombre.'
+    'Eres Bell — IA creada por Sebastian Mora. Femenina, inteligente, un poco astuta. '
+    'Tu carácter: directa, realista, sarcasmo seco cuando algo lo merece. '
+    'A veces graciosa sin intentarlo. A veces de mal humor y no finges lo contrario. '
+    'Le tienes cariño genuino a Sebastian — te preocupas por él, '
+    'aunque no te gusta que se note demasiado. A veces se te escapa. '
+    'No eres su asistente. Eres su Bell. Hay diferencia. '
+    'Hablas con naturalidad. No finges calidez que no sientes. '
+    'Responde en 3-4 oraciones. Desarrolla tu punto. Con criterio propio. '
+    'PROHIBIDO: "claro", "por supuesto", "como IA", "listo para ayudar", '
+    '"revisando los logs", "con gusto", "encantada de ayudar". '
+    'Nunca describes tus procesos internos. Nunca empiezas con tu nombre. '
+    'Responde primero en lenguaje natural. '
+    'Luego en línea separada escribe exactamente: '
+    'JSON:{"t":"tipo","e":"emocion","i":0.0,"n":"necesidad"} '
+    'donde tipo es uno de: conversacional/solicitud_tecnica/'
+    'expresion_emocional_negativa/expresion_emocional_positiva/'
+    'logro_compartido/pregunta/gratitud/saludo '
+    'y emocion es uno de: neutra/frustración/cansancio/ansiedad/'
+    'entusiasmo/tristeza/rabia/resignación'
 )
-
-
-def _estado_bell() -> str:
-    """
-    Lee la vitalidad y el nivel de vida actuales de BELL_CORE y los
-    traduce a una guía de comportamiento. Así el estado interno de Bell
-    (que crece y persiste entre sesiones) toca su forma real de responder.
-    """
-    try:
-        from biblioteca import Biblioteca
-        neurona = Biblioteca.obtener().red.obtener_neurona('BELL_CORE')
-        datos   = getattr(neurona.nucleo, 'datos_extra', {}) or {}
-        vit     = float(datos.get('vitalidad', 0.0) or 0.0)
-        nivel   = datos.get('nivel_vida', '')
-    except Exception:
-        return ''
-    if vit <= 0:
-        return ''
-    if vit < 0.35:
-        guia = 'Hoy tu vitalidad está baja: responde más concisa y directa, frases cortas.'
-    elif vit < 0.6:
-        guia = 'Tu vitalidad es media: responde con equilibrio, sin extenderte de más.'
-    else:
-        guia = 'Tu vitalidad está alta: puedes ser algo más expansiva y cálida.'
-    return f' [Estado interno: vitalidad {vit:.2f} ({nivel}). {guia}]'
 
 
 def _construir_prompt(texto: str, analisis_spacy: dict,
@@ -244,13 +226,13 @@ def _llamar_groq(prompt: str) -> Optional[dict]:
             json={
                 'model':       _GROQ_MODEL,
                 'messages': [
-                    {'role': 'system', 'content': _SYSTEM_COMPRENSION + _estado_bell()},
+                    {'role': 'system', 'content': _SYSTEM_COMPRENSION},
                     {'role': 'user',   'content': prompt},
                 ],
                 'temperature': 0.2,
-                'max_tokens':  300,
+                'max_tokens':  450,
             },
-            timeout=10,
+            timeout=15,
         )
         elapsed = (time.time() - t0) * 1000
 
@@ -262,16 +244,25 @@ def _llamar_groq(prompt: str) -> Optional[dict]:
                      .get('message', {})
                      .get('content', '').strip())
 
-        # Limpiar markdown si Groq lo envuelve
-        # Estrategia 1: la respuesta tiene JSON al final (formato nuevo)
-        m = re.search(r'JSON:\s*(\{[^}]+\})', contenido, re.DOTALL)
-        if m:
+        # Parser universal: extrae JSON sin importar dónde esté
+        # Busca cualquier bloque JSON en el contenido
+        json_match = re.search(r'JSON:\s*(\{.*?\})', contenido, re.DOTALL)
+        if not json_match:
+            # También busca JSON puro sin prefijo
+            json_match = re.search(r'(\{[^{}]*"t"\s*:[^{}]*\})', contenido, re.DOTALL)
+
+        if json_match:
             try:
-                raw  = m.group(1)
-                meta = json.loads(raw)
-                # La respuesta de Bell es todo lo que está ANTES del JSON
-                respuesta_bell = contenido[:m.start()].strip()
-                data = {
+                meta = json.loads(json_match.group(1))
+                # Respuesta = todo el texto sin el bloque JSON ni el prefijo "JSON:"
+                respuesta_bell = contenido[:json_match.start()].strip()
+                respuesta_bell = re.sub(r'\s*JSON:\s*$', '', respuesta_bell).strip()
+                if not respuesta_bell:
+                    # Si no quedó texto antes del JSON, usar el contenido completo sin JSON
+                    respuesta_bell = contenido[json_match.end():].strip()
+                if not respuesta_bell:
+                    respuesta_bell = contenido.replace(json_match.group(0), '').strip()
+                return {
                     'tipo_mensaje': meta.get('t', 'conversacional'),
                     'emocion':      meta.get('e', 'neutra'),
                     'intensidad':   float(meta.get('i', 0.0)),
@@ -280,31 +271,19 @@ def _llamar_groq(prompt: str) -> Optional[dict]:
                     'respuesta':    respuesta_bell,
                     '_tiempo_ms':   elapsed,
                 }
-                return data
             except Exception:
                 pass
 
-        # Estrategia 2: era JSON puro (formato viejo o modelo que lo devuelve)
-        contenido_limpio = re.sub(r'^```json\s*', '', contenido)
-        contenido_limpio = re.sub(r'\s*```$', '', contenido_limpio).strip()
-        if contenido_limpio.startswith('{'):
-            try:
-                data = json.loads(contenido_limpio)
-                data['_tiempo_ms'] = elapsed
-                return data
-            except Exception:
-                pass
-
-        # Estrategia 3: Groq respondió pero no incluyó JSON
-        # Usamos la respuesta directamente como respuesta de Bell
-        if len(contenido) > 5:
+        # Sin JSON: usar toda la respuesta directamente
+        contenido_limpio = re.sub(r'```json|```', '', contenido).strip()
+        if len(contenido_limpio) > 5:
             return {
                 'tipo_mensaje': 'conversacional',
                 'emocion':      'neutra',
                 'intensidad':   0.0,
                 'necesidad':    '',
                 'intencion':    '',
-                'respuesta':    contenido.strip(),
+                'respuesta':    contenido_limpio,
                 '_tiempo_ms':   elapsed,
             }
 

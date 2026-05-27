@@ -121,10 +121,53 @@ class GeneradorMotorLocal:
             )
             if resp and len(resp) > 2:
                 _log('🔔 BELL', f'{fuente} → "{resp[:70]}"')
+                # Si el retrieval encontró algo, reescribirlo con la voz actual de Bell
+                if self._activo and fuente in ('retrieval_bell', 'cluster_default'):
+                    reescrita, _ = self._reescribir_con_voz_bell(resp, texto)
+                    if reescrita:
+                        return reescrita, 'bell_voice'
                 return resp, fuente
 
         # Fallback a Groq solo si BellVoiceEngine no pudo
         return self._groq_conversacional(texto, tono)
+
+    def _reescribir_con_voz_bell(self, respuesta_base: str, texto_original: str) -> tuple:
+        """Toma una respuesta del retrieval y la reescribe con la voz actual de Bell."""
+        if not self._activo:
+            return '', 'fallback'
+        try:
+            prompt = (
+                'El usuario dijo: ' + texto_original + '\n'
+                'Una versión previa de Bell habría respondido: ' + respuesta_base + '\n'
+                'Reescribe esa respuesta con tu voz actual. '
+                'Mantén la idea central pero con tu carácter real. '
+                'Máximo 2 oraciones.'
+            )
+            r = httpx.post(
+                _CLOUD_URL,
+                headers={
+                    'Authorization': f'Bearer {self._api_key}',
+                    'Content-Type': 'application/json',
+                },
+                json={
+                    'model': _CLOUD_MODEL,
+                    'messages': [
+                        {'role': 'system', 'content': _SYSTEM_CONVERSACIONAL},
+                        {'role': 'user', 'content': prompt},
+                    ],
+                    'temperature': 0.7,
+                    'max_tokens': 80,
+                },
+                timeout=8,
+            )
+            if r.status_code == 200:
+                resp = (r.json().get('choices', [{}])[0]
+                        .get('message', {}).get('content', '').strip())
+                if resp and len(resp) > 5:
+                    return resp, 'bell_voice'
+        except Exception:
+            pass
+        return '', 'fallback'
 
     def _groq_conversacional(self, texto: str, tono: str) -> tuple:
         if not self._activo:
