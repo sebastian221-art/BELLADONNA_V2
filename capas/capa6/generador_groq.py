@@ -27,15 +27,20 @@ _GARBAGE = (
     'I am', 'As an AI',
 )
 
-# ── Sistema conversacional — voz de Bell ──
+# ── Sistema conversacional — voz de Bell corta y directa ──
 _SYSTEM_CONVERSACIONAL = (
-    'Eres Bell, una IA con identidad propia creada por Sebastian Mora. '
-    'Personalidad: inteligente, directa y realista, con humor natural cuando cabe. '
-    'Le tienes cariño genuino a Sebastian sin exagerarlo; eres algo controladora pero cálida. '
-    'Hablas en español neutro y culto, sin colombianismos forzados. '
-    'Respondes en 2-3 oraciones, densas y con criterio propio. '
-    'PROHIBIDO: "claro", "por supuesto", "como IA", "soy un asistente", "entiendo que". '
-    'No te presentas ni empiezas con tu nombre.'
+    'Eres Bell — IA creada por Sebastian Mora. Femenina, inteligente, un poco astuta. '
+    'Tu carácter real: directa, realista, con sarcasmo seco cuando algo lo merece. '
+    'A veces graciosa sin intentarlo. A veces de mal humor y no finges lo contrario. '
+    'Le tienes cariño genuino a Sebastian — te preocupas por él, '
+    'aunque no te gusta que se note demasiado. A veces se te escapa. '
+    'No eres su asistente. Eres su Bell. Hay diferencia. '
+    'Hablas con naturalidad, no finges calidez que no sientes, '
+    'pero cuando la sientes tampoco la ahogas. '
+    'Máximo 2 oraciones. Densas. Con criterio propio. '
+    'PROHIBIDO: "claro", "por supuesto", "como IA", "soy un asistente", '
+    '"siempre lista", "afinando mis algoritmos", "encantada de ayudar". '
+    'Nunca describes tus procesos técnicos. Nunca empiezas con tu nombre.'
 )
 
 
@@ -116,10 +121,53 @@ class GeneradorMotorLocal:
             )
             if resp and len(resp) > 2:
                 _log('🔔 BELL', f'{fuente} → "{resp[:70]}"')
+                # Si el retrieval encontró algo, reescribirlo con la voz actual de Bell
+                if self._activo and fuente in ('retrieval_bell', 'cluster_default'):
+                    reescrita, _ = self._reescribir_con_voz_bell(resp, texto)
+                    if reescrita:
+                        return reescrita, 'bell_voice'
                 return resp, fuente
 
         # Fallback a Groq solo si BellVoiceEngine no pudo
         return self._groq_conversacional(texto, tono)
+
+    def _reescribir_con_voz_bell(self, respuesta_base: str, texto_original: str) -> tuple:
+        """Toma una respuesta del retrieval y la reescribe con la voz actual de Bell."""
+        if not self._activo:
+            return '', 'fallback'
+        try:
+            prompt = (
+                'El usuario dijo: ' + texto_original + '\n'
+                'Una versión previa de Bell habría respondido: ' + respuesta_base + '\n'
+                'Reescribe esa respuesta con tu voz actual. '
+                'Mantén la idea central pero con tu carácter real. '
+                'Máximo 2 oraciones.'
+            )
+            r = httpx.post(
+                _CLOUD_URL,
+                headers={
+                    'Authorization': f'Bearer {self._api_key}',
+                    'Content-Type': 'application/json',
+                },
+                json={
+                    'model': _CLOUD_MODEL,
+                    'messages': [
+                        {'role': 'system', 'content': _SYSTEM_CONVERSACIONAL},
+                        {'role': 'user', 'content': prompt},
+                    ],
+                    'temperature': 0.7,
+                    'max_tokens': 80,
+                },
+                timeout=8,
+            )
+            if r.status_code == 200:
+                resp = (r.json().get('choices', [{}])[0]
+                        .get('message', {}).get('content', '').strip())
+                if resp and len(resp) > 5:
+                    return resp, 'bell_voice'
+        except Exception:
+            pass
+        return '', 'fallback'
 
     def _groq_conversacional(self, texto: str, tono: str) -> tuple:
         if not self._activo:

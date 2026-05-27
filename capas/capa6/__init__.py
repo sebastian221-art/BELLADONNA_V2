@@ -183,13 +183,6 @@ def _routing_trihibrido(
         # Fallback a base_python si Groq cloud falla
         return respuesta_base, 'base_python'
 
-    # ── motor_v2 ya razonó la respuesta conversacional con contexto ──
-    # Si esa respuesta es la base elegida, úsala directo y evita una
-    # segunda llamada redundante a Groq en el TRACK 3.
-    respuesta_v2 = comprension.get('contextual', {}).get('respuesta_groq_v2', '')
-    if respuesta_v2 and respuesta_base.strip() == respuesta_v2.strip():
-        return respuesta_base, 'motor_v2'
-
     # ── TRACK 3: Bell Voice Engine — conversación pura ──
     tipo_msg = comprension.get('profunda', {}).get('tipo_mensaje', tipo_respuesta)
     emocion  = comprension.get('profunda', {}).get('emocion', '')
@@ -201,10 +194,24 @@ def _routing_trihibrido(
         contexto= {'nombre': nombre},
     )
 
+    # Si motor_v2 ya razonó la respuesta, usarla aunque el motor local falle
+    respuesta_v2 = comprension.get('contextual', {}).get('respuesta_groq_v2', '')
+    if respuesta_v2:
+        return respuesta_v2, 'motor_v2'
+
     if fuente_motor in ('fallback', 'error'):
+        # En lugar de base_python genérico, forzar llamada a Groq con la voz de Bell
+        if _motor_local._activo:
+            resp_groq, _ = _motor_local._groq_conversacional(texto_original, decision.tono)
+            if resp_groq:
+                return resp_groq, 'groq_fallback'
         return respuesta_base, 'base_python'
 
     if _tiene_robotico(respuesta_motor):
+        if _motor_local._activo:
+            resp_groq, _ = _motor_local._groq_conversacional(texto_original, decision.tono)
+            if resp_groq:
+                return resp_groq, 'groq_fallback'
         return respuesta_base, 'base_python'
 
     if _es_mejor_que_base(respuesta_motor, respuesta_base):
@@ -216,6 +223,12 @@ def _routing_trihibrido(
         )
         if verificada and not _tiene_robotico(verificada):
             return verificada, fuente_motor
+
+    # Último recurso: llamar a Groq directamente antes que base_python
+    if _motor_local._activo:
+        resp_groq, _ = _motor_local._groq_conversacional(texto_original, decision.tono)
+        if resp_groq:
+            return resp_groq, 'groq_fallback'
 
     return respuesta_base, 'base_python'
 
