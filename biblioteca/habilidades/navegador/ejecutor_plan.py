@@ -358,26 +358,89 @@ class EjecutorPlan:
     # ── Alternativas cuando falla un paso ────────────────
 
     def _intentar_alternativa(self, paso: Paso, error: str) -> Optional[ResultadoPaso]:
-        """Intenta una estrategia alternativa cuando un paso falla."""
-
-        if paso.accion == 'click':
-            # Alternativa: tomar screenshot y buscar elemento por OCR
-            ss = self._ctrl.screenshot()
-            if ss:
-                texto_ocr = leer_screenshot_ocr(ss)
-                if texto_ocr:
-                    self._datos['ultima_ocr'] = texto_ocr
-                    print(f"  [Ejecutor] 🔍 OCR alternativo: {texto_ocr[:60]}")
+        """
+        CUA Loop: cuando un paso falla, Bell mira la página (árbol de
+        accesibilidad) y reintenta con patrones universales + texto visible.
+        Lo que funciona se guarda en memoria_planes. Sólo se rinde al final.
+        """
+        page = self._ctrl._page
+        if not page:
             return None
 
-        if paso.accion == 'escribir':
-            # Alternativa: hacer click en el centro y escribir
+        if paso.accion in ('click', 'escribir'):
+            # 1. Árbol de accesibilidad: qué hay en la página AHORA
             try:
-                page = self._ctrl._page
-                if page:
-                    page.keyboard.type(paso.parametros.get('texto', ''), delay=80)
-                    return ResultadoPaso(paso.numero, 'escribir', True,
-                                         detalle='escritura directa (sin selector)')
+                elementos = page.evaluate("""() => {
+                    const els = document.querySelectorAll(
+                        'button, input, a, textarea, select, [role="button"]'
+                    );
+                    return Array.from(els).slice(0, 40).map(el => ({
+                        tipo: el.tagName.toLowerCase(),
+                        texto: (el.textContent || el.value || el.placeholder ||
+                                el.getAttribute('aria-label') || '').trim().slice(0, 50),
+                        selector: el.id ? '#' + el.id :
+                                  (el.getAttribute('name') ? '[name="' + el.getAttribute('name') + '"]' :
+                                   el.tagName.toLowerCase()),
+                    })).filter(e => e.texto);
+                }""")
+            except Exception:
+                elementos = []
+
+            # 2. Patrones universales según la descripción del paso
+            try:
+                from biblioteca.habilidades.navegador.patrones_universales import obtener_selectores_para
+                desc = (paso.descripcion or '').lower()
+                tipo_patron = None
+                if any(p in desc for p in ['búsqueda', 'busqueda', 'buscar', 'search']):
+                    tipo_patron = 'buscador'
+                elif any(p in desc for p in ['login', 'usuario', 'contraseña', 'password', 'entrar']):
+                    tipo_patron = 'login'
+                elif any(p in desc for p in ['mensaje', 'chat', 'escribir']):
+                    tipo_patron = 'chat_mensaje'
+                elif any(p in desc for p in ['popup', 'cerrar', 'close']):
+                    tipo_patron = 'popup_cerrar'
+
+                if tipo_patron:
+                    for selector in obtener_selectores_para(tipo_patron):
+                        try:
+                            res = self._ctrl.click(selector=selector)
+                            if res.exitoso and paso.accion == 'escribir':
+                                page.keyboard.type(paso.parametros.get('texto', ''), delay=50)
+                            if res.exitoso:
+                                print(f"  [Ejecutor] ✅ Alternativa por patrón universal: {selector}")
+                                try:
+                                    from biblioteca.habilidades.navegador.memoria_planes import MemoriaPlanes
+                                    MemoriaPlanes.obtener().guardar_exito(tipo_patron, {desc[:30]: selector}, 0)
+                                except Exception:
+                                    pass
+                                return ResultadoPaso(paso.numero, paso.accion, True,
+                                                     detalle=f'patrón universal: {selector}')
+                        except Exception:
+                            continue
+            except Exception:
+                pass
+
+            # 3. Buscar por texto visible entre los elementos hallados
+            if elementos and paso.accion == 'click':
+                texto_buscado = (paso.parametros.get('texto', '') or paso.descripcion)[:20].lower()
+                for el in elementos:
+                    if texto_buscado and texto_buscado in el.get('texto', '').lower():
+                        sel = el.get('selector', '')
+                        if sel:
+                            try:
+                                res = self._ctrl.click(selector=sel)
+                                if res.exitoso:
+                                    print(f"  [Ejecutor] ✅ Alternativa por texto: {sel}")
+                                    return ResultadoPaso(paso.numero, 'click', True,
+                                                         detalle=f'texto visible: {sel}')
+                            except Exception:
+                                continue
+
+        # 4. Escribir sin selector: teclado directo
+        if paso.accion == 'escribir':
+            try:
+                page.keyboard.type(paso.parametros.get('texto', ''), delay=80)
+                return ResultadoPaso(paso.numero, 'escribir', True, detalle='teclado directo')
             except Exception:
                 pass
 

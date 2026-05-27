@@ -500,11 +500,24 @@ class DetectorHabilidad:
         _hab_c3_nav      = decision_final.get('habilidad_req', '') == 'NAVEGADOR_WEB'
         _tiene_sitio_nav = any(s in texto_lower for s in _SITIOS_NAV)
         _tiene_verbo_nav = any(v in texto_lower for v in _VERBOS_NAV)
-        # Investigación profunda → también navegador (busca y sintetiza en la web)
-        _es_investigacion = any(k in texto_lower for k in
-                                ['investiga ', 'investigar ', 'dame todo sobre',
-                                 'explícame a fondo', 'explicame a fondo'])
-        if ((_hab_c3_nav or _es_investigacion
+        # FIX/CAMBIO 5: investigación NO va al navegador (no abrir Chrome) →
+        # va a BUSQUEDA_INTERNET con respuesta detallada.
+        _KW_INVESTIGACION = ['investiga ', 'investigar ', 'dame todo sobre',
+                             'explícame a fondo', 'explicame a fondo', 'explícame todo']
+        _es_investigacion = any(k in texto_lower for k in _KW_INVESTIGACION)
+        if _es_investigacion:
+            cfg_b = HABILIDADES.get('BUSQUEDA_INTERNET', {})
+            return {
+                'necesita_habilidad': True,
+                'habilidad_id':       'BUSQUEDA_INTERNET',
+                'modo':               None,
+                'disponible':         cfg_b.get('disponible', False),
+                'descripcion':        cfg_b.get('descripcion', ''),
+                'texto_original':     texto,
+                'verbosidad':         'detallado',
+                'fuente_deteccion':   'investigacion',
+            }
+        if ((_hab_c3_nav
              or (_tiene_sitio_nav and (_tiene_verbo_nav or 'http' in texto_lower)))
                 and HABILIDADES.get('NAVEGADOR_WEB', {}).get('disponible')
                 and '```' not in texto):

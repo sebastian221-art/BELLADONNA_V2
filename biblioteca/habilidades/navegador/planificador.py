@@ -71,6 +71,74 @@ def detectar_sitio(texto: str) -> str:
     return 'general'
 
 
+# ── Detección de INTENCIÓN (núcleo filosófico) ───────────
+# Bell entiende QUÉ quiere hacer, no QUÉ sitio. Así navega
+# servicios que nunca vio: infiere la URL en vez de buscarla en una lista.
+
+INTENCIONES = {
+    'reproducir_media': ['ponme', 'pon ', 'reproduce', 'abre ', 'quiero ver',
+                         'poner ', 'muéstrame', 'muestrame', 'abre la app'],
+    'buscar_video':     ['busca en youtube', 'busca un video', 'video de ',
+                         'tutorial de ', 'canal de '],
+    'buscar_info':      ['busca en google', 'busca en internet', 'investiga',
+                         'qué es ', 'que es ', 'cómo funciona', 'como funciona'],
+    'mis_datos':        ['mis repos', 'mi perfil', 'mis mensajes', 'mi correo',
+                         'mis emails', 'mis archivos'],
+    'enviar_mensaje':   ['escríbele', 'escribele', 'manda un mensaje', 'envíale', 'dile'],
+    'abrir_url':        ['lee ', 'abre la página', 'abre la pagina', 'navega a ', 've a '],
+    'login':            ['inicia sesión', 'inicia sesion', 'loguéate', 'logueate', 'entra a'],
+}
+
+
+def detectar_intencion(texto: str) -> str:
+    tl = texto.lower()
+    for intencion, patrones in INTENCIONES.items():
+        if any(p in tl for p in patrones):
+            return intencion
+    return 'general'
+
+
+def inferir_url_sitio(nombre: str) -> str:
+    """
+    Bell infiere la URL de cualquier servicio sin necesitar una lista.
+    Principio: la mayoría de servicios son https://www.{nombre}.com
+    """
+    nombre_limpio = (nombre or '').lower().strip()
+    if not nombre_limpio:
+        return ''
+    # Conocimiento de visitas anteriores
+    try:
+        from biblioteca.habilidades.navegador.conocimiento_web import ConocimientoWeb
+        url_conocida = ConocimientoWeb.obtener().obtener_sitio(nombre_limpio + '.com')
+        if url_conocida.get('url_base'):
+            return url_conocida['url_base']
+    except Exception:
+        pass
+    # Excepciones por TLD diferente
+    _EXCEPCIONES_TLD = {
+        'youtube': 'https://www.youtube.com',
+        'gmail':   'https://mail.google.com',
+        'twitter': 'https://x.com',
+        'x':       'https://x.com',
+    }
+    if nombre_limpio in _EXCEPCIONES_TLD:
+        return _EXCEPCIONES_TLD[nombre_limpio]
+    # Regla universal: https://www.{nombre}.com
+    return f'https://www.{nombre_limpio}.com'
+
+
+def _obtener_usuario_github() -> str:
+    try:
+        from biblioteca.habilidades.memoria.modelo_sebastian import ModeloSebastian
+        modelo = ModeloSebastian.obtener().obtener_modelo()
+        u = modelo.get('identidad', {}).get('github_usuario', '')
+        if u:
+            return u
+    except Exception:
+        pass
+    return 'sebastian221-art'  # fallback conocido (dueño del repo)
+
+
 # ── Planes predefinidos (rápidos, sin Groq) ──────────────
 
 def plan_youtube_video(query: str) -> Plan:
@@ -252,9 +320,27 @@ Responde SOLO con JSON válido, sin markdown:
             return None
 
         contenido = r.json()['choices'][0]['message']['content'].strip()
-        contenido = re.sub(r'^```json\s*', '', contenido)
+        # Limpiar markdown
+        contenido = re.sub(r'^```(?:json)?\s*', '', contenido)
         contenido = re.sub(r'\s*```$', '', contenido)
-        data = json.loads(contenido)
+        # Extraer solo el JSON entre { y } (ignorar texto antes/después)
+        m_json = re.search(r'\{.*\}', contenido, re.DOTALL)
+        if m_json:
+            contenido = m_json.group()
+        # Intentos de parse en orden de confianza
+        data = None
+        for intento in (
+            lambda c: json.loads(c),
+            lambda c: json.loads(c.replace("'", '"')),
+            lambda c: json.loads(re.sub(r',\s*}', '}', re.sub(r',\s*]', ']', c))),
+        ):
+            try:
+                data = intento(contenido)
+                break
+            except Exception:
+                continue
+        if data is None:
+            return None
 
         pasos = [
             Paso(
@@ -288,77 +374,87 @@ def crear_plan(objetivo: str, url_actual: str = '', html_pagina: str = '') -> Pl
     Usa planes predefinidos cuando puede, Groq cuando es complejo.
     """
     tl = objetivo.lower()
-    sitio = detectar_sitio(objetivo)
+    intencion = detectar_intencion(objetivo)
 
-    # ── Plans predefinidos (sin Groq, más rápidos) ───────
+    # ── INTENCIÓN: reproducir / abrir un servicio ────────
+    # "ponme Crunchyroll", "abre Netflix", "quiero ver Spotify".
+    # Bell no necesita conocer el servicio — infiere su URL.
+    if intencion == 'reproducir_media':
+        _VERBOS = ['ponme', 'pon ', 'reproduce', 'abre la app', 'abre ',
+                   'quiero ver', 'muéstrame', 'muestrame', 'poner ']
+        nombre_servicio = tl
+        for v in _VERBOS:
+            nombre_servicio = nombre_servicio.replace(v, ' ')
+        # YouTube explícito → buscar video
+        if 'youtube' in nombre_servicio or any(k in tl for k in ['video de', 'tutorial de']):
+            query = re.sub(r'(?:en\s+youtube|video\s+de|tutorial\s+de)\s*', '', nombre_servicio).strip()
+            return plan_youtube_video(query or objetivo)
+        # Cualquier otro servicio → inferir URL universal y navegar
+        _fillers = {'la', 'el', 'los', 'las', 'de', 'del', 'app', 'en', 'un', 'una', 'mi'}
+        tokens = [w for w in nombre_servicio.split() if w not in _fillers]
+        servicio = tokens[-1] if tokens else nombre_servicio.strip()
+        url_destino = inferir_url_sitio(servicio)
+        if url_destino:
+            return Plan(
+                objetivo=f"Abrir {servicio}",
+                sitio=servicio,
+                pasos=[
+                    Paso(1, 'navegar', {'url': url_destino}, f'Ir a {servicio}'),
+                    Paso(2, 'esperar', {'tiempo': 3000}, 'Esperar carga'),
+                    Paso(3, 'leer',    {'tipo': 'pagina_completa'}, 'Leer estado de la página'),
+                ]
+            )
 
-    # YouTube
-    if sitio == 'youtube':
-        query = re.sub(r'(?:ponme|pon|reproduce|busca|encuentra|buscar|ver)\s+', '', tl)
-        query = re.sub(r'(?:en\s+youtube|el\s+video\s+de|un\s+video\s+de)\s*', '', query).strip()
+    # ── INTENCIÓN: buscar video ──────────────────────────
+    if intencion == 'buscar_video':
+        query = re.sub(r'(?:busca\s+en\s+youtube|busca\s+un\s+video|video\s+de|tutorial\s+de|canal\s+de)\s*',
+                       '', tl).strip()
         return plan_youtube_video(query or objetivo)
 
-    # Instagram — mensaje directo
-    if sitio == 'instagram' and any(p in tl for p in ['escríbele', 'escribele', 'mensaje a', 'manda un mensaje']):
-        # Extraer usuario y mensaje
+    # ── INTENCIÓN: mis datos (repos, mensajes, emails) ───
+    if intencion == 'mis_datos':
+        if 'github' in tl or 'repo' in tl:
+            return plan_github_repos(_obtener_usuario_github())
+        if 'gmail' in tl or 'correo' in tl or 'email' in tl:
+            return plan_gmail_buscar('')
+        if 'instagram' in tl and ('mensaje' in tl or 'dm' in tl):
+            return plan_leer_url('https://instagram.com/direct/inbox')
+
+    # ── INTENCIÓN: enviar mensaje ────────────────────────
+    if intencion == 'enviar_mensaje' and 'instagram' in tl:
         m = re.search(r'(?:a|@)\s*(\w+)', objetivo)
         usuario = m.group(1) if m else ''
-        # El mensaje es todo lo que viene después del usuario
-        partes = re.split(r'(?:dile|que diga|diciéndole|con el mensaje|mensaje:)\s*', objetivo, 1)
+        partes = re.split(r'(?:dile|que diga|diciéndole|mensaje:)\s*', objetivo, 1)
         mensaje = partes[1].strip() if len(partes) > 1 else 'Hola'
         return plan_instagram_mensaje(usuario, mensaje)
 
-    # GitHub — buscar repos
-    if sitio == 'github' and any(p in tl for p in ['repositorios', 'repos', 'mis repos']):
-        # Buscar "usuario X" o "@X" con soporte para guiones y números
-        m = re.search(r'(?:usuario\s+|@)([\w\-]+)', objetivo, re.IGNORECASE)
-        usuario = m.group(1) if m else ''
-        return plan_github_repos(usuario)
-
-    # GitHub — URL de repo específico
-    if sitio == 'github' and any(p in tl for p in ['url de', 'link de', 'enlace de',
-                                                      'url del', 'dame la url', 'dame url']):
-        m = re.search(r'(?:repo|repositorio)\s+([\w\-_\.]+)', objetivo, re.IGNORECASE)
-        repo = m.group(1) if m else ''
-        m2 = re.search(r'(?:usuario\s+|@)([\w\-]+)', objetivo, re.IGNORECASE)
-        usuario = m2.group(1) if m2 else ''
-        return plan_github_repo_url(usuario, repo)
-
-    # Leer una URL específica
-    if any(p in tl for p in ['lee ', 'leer ', 'analiza ', 'qué dice', 'que dice']) or \
-       re.search(r'https?://', objetivo):
+    # ── INTENCIÓN: abrir URL específica ──────────────────
+    if intencion == 'abrir_url' or re.search(r'https?://', objetivo):
         url_match = re.search(r'https?://\S+', objetivo)
         if url_match:
             return plan_leer_url(url_match.group())
 
-    # Gmail — buscar emails
-    if sitio == 'gmail':
-        query = re.sub(r'(?:busca|encuentra|emails de|correos de|mensajes de)\s*', '', tl).strip()
-        return plan_gmail_buscar(query)
+    # ── GitHub: URL de un repo específico ────────────────
+    if 'github' in tl and any(p in tl for p in ['url de', 'url del', 'dame la url',
+                                                 'link de', 'enlace de']):
+        m  = re.search(r'(?:repo|repositorio)\s+([\w\-_\.]+)', objetivo, re.IGNORECASE)
+        m2 = re.search(r'(?:usuario\s+|@)([\w\-]+)', objetivo, re.IGNORECASE)
+        return plan_github_repo_url(m2.group(1) if m2 else _obtener_usuario_github(),
+                                    m.group(1) if m else '')
 
-    # ── Groq para lo que no tiene plan predefinido ───────
-    print(f"  [Planificador] 🤖 Usando Groq para planificar: '{objetivo[:50]}'")
+    # ── Sin intención clara → Groq planifica ─────────────
+    print(f"  [Planificador] 🤖 Groq planifica: '{objetivo[:50]}'")
     plan_groq = planificar_con_groq(objetivo, url_actual, html_pagina)
     if plan_groq:
         return plan_groq
 
-    # Fallback: navegar si hay URL en el texto
-    url_match = re.search(r'https?://\S+', objetivo)
-    if url_match:
-        return plan_leer_url(url_match.group())
-
-    # Último fallback: buscador inteligente elige el mejor motor (no siempre Google)
-    try:
-        from biblioteca.habilidades.navegador.buscador_inteligente import elegir_motor
-        motor, url_busqueda = elegir_motor(objetivo)
-    except Exception:
-        from urllib.parse import quote
-        motor, url_busqueda = 'google', f'https://google.com/search?q={quote(objetivo)}'
+    # Último fallback universal: DuckDuckGo (no Google — CAPTCHA a bots)
+    from urllib.parse import quote
     return Plan(
         objetivo=objetivo,
-        sitio=motor,
+        sitio='general',
         pasos=[
-            Paso(1, 'navegar', {'url': url_busqueda}, f'Buscar ({motor})'),
+            Paso(1, 'navegar', {'url': f'https://html.duckduckgo.com/html/?q={quote(objetivo)}'}, 'Buscar información'),
             Paso(2, 'esperar', {'tiempo': 2000}, 'Esperar resultados'),
             Paso(3, 'leer',    {'tipo': 'pagina_completa'}, 'Leer resultados'),
         ]
