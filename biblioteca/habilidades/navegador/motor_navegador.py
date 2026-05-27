@@ -36,6 +36,11 @@ def ejecutar(texto: str, visible: bool = False) -> dict:
     Returns:
         dict con 'exitoso', 'respuesta', 'datos', 'url_final', 'pausado'
     """
+    # FIX 1: browser fresco en cada request — el del request anterior quedó
+    # en un thread muerto (Flask threading) → "cannot switch to a different thread".
+    from biblioteca.habilidades.navegador.sesion_manager import SesionManager
+    SesionManager.reiniciar()
+
     from biblioteca.habilidades.navegador.planificador import (
         crear_plan, necesita_pausa, EstadoPausa
     )

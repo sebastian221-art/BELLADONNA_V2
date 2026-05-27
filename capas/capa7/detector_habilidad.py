@@ -465,6 +465,23 @@ class DetectorHabilidad:
                  tipo_respuesta: str = 'conversacional') -> dict:
         texto_lower = texto.lower().strip()
 
+        # ── FIX 2: plan de navegación pausado → todo va al navegador ──
+        # Si Bell pausó esperando una respuesta (credenciales, confirmación),
+        # el siguiente mensaje retoma ese plan, sin reclasificar.
+        try:
+            from biblioteca.habilidades.navegador.planificador import EstadoPausa
+            if EstadoPausa.esta_activo():
+                return {
+                    'necesita_habilidad': True,
+                    'habilidad_id':       'NAVEGADOR_WEB',
+                    'disponible':         True,
+                    'texto_original':     texto,
+                    'verbosidad':         'normal',
+                    'fuente_deteccion':   'pausa_navegador',
+                }
+        except Exception:
+            pass
+
         # ── NAVEGADOR: contexto de navegación gana sobre Python/emocional ──
         # (FIX 1 + 2) Si hay sitio web + verbo de navegación (o C3 ya lo marcó),
         # va a NAVEGADOR_WEB antes de la detección de Python.

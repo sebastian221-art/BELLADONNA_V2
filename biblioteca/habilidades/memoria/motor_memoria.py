@@ -68,6 +68,14 @@ def procesar(texto: str) -> dict:
             'error':     str(e),
         }
 
+    # FIX 3: validar relevancia del conocimiento recuperado.
+    # Si la respuesta no menciona ninguna palabra clave de la pregunta,
+    # es un resultado irrelevante → ser honesta en vez de devolverlo.
+    if respuesta and tipo == CONOCIMIENTO:
+        palabras_clave = [w for w in texto.lower().split() if len(w) > 3]
+        if palabras_clave and not any(p in respuesta.lower() for p in palabras_clave):
+            respuesta = 'No tengo conocimiento guardado sobre eso todavía.'
+
     if not respuesta or not respuesta.strip():
         respuesta = 'No tengo registro de eso todavía.'
 
